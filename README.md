@@ -37,12 +37,12 @@ INSTALLATION
 ------------
 
 - clone from github
-```sh 
-git clone https://github.com/bara-artur/mailtousa
+```sh
+git clone https://github.com/bara-artur/mailtousacom
 ```
 - change dir
 ```sh
-cd mailtousa
+cd mailtousacom
 ```
 - install composer module
 ```sh
