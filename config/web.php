@@ -94,8 +94,19 @@ $config = [
         'beforeAction'=>null
       ],
       'user' => [
-            'class' => 'app\modules\user\Module',
-        ],
+        'class' => 'app\modules\user\Module',
+      ],
+      'order' => [
+          'class' => 'app\modules\order\Module',
+      ],
+      'gridview' =>  [
+        'class' => '\kartik\grid\Module'
+        // enter optional module parameters below - only if you need to
+        // use your own export download action or custom translation
+        // message source
+        // 'downloadAction' => 'gridview/export/download',
+        // 'i18n' => []
+      ]
     ]
 ];
 

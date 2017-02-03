@@ -5,9 +5,9 @@ Yii 2 mail to USA
 
 ### Участники проекта
 
-- 1
-- 2
-- 3
+- Артур Бараченя
+- Максим Матюхин
+- Анаталий (eastern1984)
 
 DIRECTORY STRUCTURE
 -------------------
@@ -38,11 +38,11 @@ INSTALLATION
 
 - clone from github
 ```sh 
-git clone https://github.com/bara-artur/mailtousa
+git clone https://github.com/bara-artur/mailtousacom
 ```
 - change dir
 ```sh
-cd mailtousa
+cd mailtousacom
 ```
 - install composer module
 ```sh
