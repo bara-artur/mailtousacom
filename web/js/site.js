@@ -1,15 +1,13 @@
 $(document).ready(function() {
-  $("#w0 button[name='signup-button']" ).hide().attr("disabled",true);;
-  $("input[name='I_accept']" ).on( "click", function() {
-    if($("input[name='I_accept']").attr("checked") != 'checked') {
-      $("#w0 button[name='signup-button']" ).show(500);
-      $("#w0 button[name='signup-button']").attr("disabled",false);
-      $("input[name='I_accept']").attr('checked', true);
+  $("#w0 button[name='signup-button']" ).prop("disabled",true);;
+  $("input[name='I_accept']" ).on( "change", function() {
+    if($("input[name='I_accept']").prop("checked")) {
+      $("#w0 button[name='signup-button']").prop("disabled",false);
+      //$("input[name='I_accept']").prop('checked', true);
     }
     else{
-      $("#w0 button[name='signup-button']" ).hide(500);
-      $("#w0 button[name='signup-button']").attr("disabled",true);
-      $("input[name='I_accept']").attr('checked', false);
+      $("#w0 button[name='signup-button']").prop("disabled",true);
+      //$("input[name='I_accept']").prop('checked', false);
     }
   });
 });
