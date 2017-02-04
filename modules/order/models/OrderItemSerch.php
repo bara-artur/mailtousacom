@@ -18,7 +18,7 @@ class OrderItemSerch extends OrderItems
     public function rules()
     {
         return [
-            [['id', 'order_id', 'quantity','status'], 'integer'],
+            [['id', 'order_id', 'quantity'], 'integer'],
             [['product_name'], 'safe'],
             [['item_price'], 'number'],
         ];

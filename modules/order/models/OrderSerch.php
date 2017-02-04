@@ -18,7 +18,7 @@ class OrderSerch extends OrderList
     public function rules()
     {
         return [
-            [['id', 'user_id', 'adress_id'], 'integer'],
+            [['id', 'user_id', 'adress_id','status'], 'integer'],
         ];
     }
 

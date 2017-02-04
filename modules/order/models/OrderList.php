@@ -27,7 +27,7 @@ class OrderList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'adress_id'], 'integer'],
+            [['user_id', 'adress_id','status'], 'integer'],
         ];
     }
 
@@ -40,6 +40,8 @@ class OrderList extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'adress_id' => 'Adress ID',
+            'status' => 'Status',
+
         ];
     }
 
