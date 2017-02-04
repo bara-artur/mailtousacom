@@ -17,6 +17,7 @@ class Profile extends User{
   public function rules()
   {
     $rule=parent::rules();
+
     return $rule;
   }
 

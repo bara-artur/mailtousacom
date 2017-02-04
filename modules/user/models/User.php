@@ -23,7 +23,7 @@ class User extends ActiveRecord  implements IdentityInterface
     const STATUS_ACTIVE = 1;    // активен
     const STATUS_WAIT = 2;      // ожидает подтверждения
 
-    const MAX_ONLINE_TIME = 10*60;//Время после последнего запроса которое считается что пользователь онлайн (в секундах)
+    const MAX_ONLINE_TIME = 600;//Время после последнего запроса которое считается что пользователь онлайн (в секундах)
 
     // Время действия токенов
     const EXPIRE = 3600;
@@ -48,9 +48,15 @@ class User extends ActiveRecord  implements IdentityInterface
     {
         return [
             [['email'], 'required'],
-            [['email', 'password_hash','first_name','last_name'], 'string', 'max' => 100],
+            [['email', 'password_hash','first_name','last_name','phone'], 'string', 'max' => 100],
             ['email', 'email'],
             ['password', 'string', 'min' => 6, 'max' => 61],
+            [['doc1','doc2'], 'image',
+              'minHeight' => 600,
+              'minWidth' => 600,
+              'maxSize' => 1024*1024*2,
+              'skipOnEmpty' => true
+            ],
            ];
     }
 
@@ -71,6 +77,8 @@ class User extends ActiveRecord  implements IdentityInterface
             'password_hash' => 'Хеш пароля',
             'ip' => 'Last IP',
             'fullName' => 'Full Name',
+            'doc1' => 'First document',
+            'doc2' => 'Second document',
         ];
     }
 
