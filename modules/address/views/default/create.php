@@ -9,13 +9,16 @@ use yii\helpers\Html;
 $this->title = 'Create Address';
 $this->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$user_ID = Yii::$app->request->get('user_id');
 ?>
 <div class="address-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php if ($user_ID!=null){?>
+    <p>Создайте свой первый адрес</p>
+    <?php  } ?>
 
     <?= $this->render('_form', [
         'model' => $model,
+        'user_ID' => $user_ID,
     ]) ?>
 
 </div>

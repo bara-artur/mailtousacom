@@ -60,6 +60,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (Yii::$app->session->hasFlash('toAddressCreate')){
+            return $this->redirect(['/address/default/create', 'user_id' => Yii::$app->session->getFlash('user_id')]);
+        }
         return $this->render('index');
     }
 
