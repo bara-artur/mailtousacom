@@ -96,6 +96,9 @@ $config = [
       'user' => [
             'class' => 'app\modules\user\Module',
         ],
+      'address' => [
+            'class' => 'app\modules\address\Module',
+        ],
     ]
 ];
 
