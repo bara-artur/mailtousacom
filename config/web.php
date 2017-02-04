@@ -58,12 +58,13 @@ $config = [
             'enableStrictParsing' => false,
             'rules' => [
                 //закрываем пямой доступ к /user/user
+                'user/default/<action>'=>'404',
                 'user/user/<action>'=>'404',
                 'user/user/<action>/<action2>'=>'404',
                 //получение города по стране
                 'city/get/<id:\d+>' => 'city/get',
                 //Взаимодействия с пользователем на сайте
-                '<action:(online|registration|logout|confirm|reset|profile|resetpassword)>' => 'user/user/<action>',
+                '<action:(online|registration|logout|confirm|reset|resetpassword)>' => 'user/user/<action>',
 
                 //закрываем прямой доступ к базовому контроллеру
                 'site/<action>'=>'404',
@@ -72,10 +73,8 @@ $config = [
                 '<action:(top|shop|about|blog|legends|mans|competitions|onlinehelp)>' => 'site/<action>',
                 //Страница пользователя
                 '<action:(user)>/<id:\d+>' => 'site/user/',
+                '<action:(profile)>' => 'user/default/<action>',
 
-                //страница сообщения
-                '<action:(chat)>/<id:\d+>' => 'chat/default/<action>',
-                'chat/<action:(get|send)>' => 'chat/default/<action>'
             ],
         ],
     ],

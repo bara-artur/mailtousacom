@@ -48,7 +48,7 @@ class User extends ActiveRecord  implements IdentityInterface
     {
         return [
             [['email'], 'required'],
-            [['email', 'password_hash'], 'string', 'max' => 100],
+            [['email', 'password_hash','first_name','last_name'], 'string', 'max' => 100],
             ['email', 'email'],
             ['password', 'string', 'min' => 6, 'max' => 61],
            ];
@@ -145,6 +145,7 @@ class User extends ActiveRecord  implements IdentityInterface
         };
         return $user;
     }
+
 
     /**
      * Поиск пользователя по Email

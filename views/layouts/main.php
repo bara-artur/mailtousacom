@@ -48,6 +48,9 @@ AppAsset::register($this);
                 )
                 . Html::endForm()
                 . '</li>'
+                . '<li>'
+                . Html::a('Profile', ['user/default/profile'], ['class' => 'profile-link'])
+                . '</li>'
             )
         ],
     ]);
