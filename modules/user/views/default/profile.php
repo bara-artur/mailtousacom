@@ -21,14 +21,15 @@ $form = ActiveForm::begin([
   'layout' => 'horizontal',
   'enableAjaxValidation' => false,
   'enableClientValidation' => true,
+  'options' => ['enctype'=>'multipart/form-data']
 ]); ?>
 
 <?= $form->field($model, 'username') ?>
 <?= $form->field($model, 'first_name') ?>
 <?= $form->field($model, 'last_name') ?>
 <?= $form->field($model, 'phone');?>
+<?= $form->field($model, 'doc0')->widget(FileInput::classname(),['hasDelate'=>true]);?>
 <?= $form->field($model, 'doc1')->widget(FileInput::classname(),['hasDelate'=>true]);?>
-<?= $form->field($model, 'doc2')->widget(FileInput::classname(),['hasDelate'=>true]);?>
 
 <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password']);?>
 

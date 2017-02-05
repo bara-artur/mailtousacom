@@ -32,7 +32,7 @@ class DefaultController extends Controller
 
   public function actionProfile(){
 
-    $model = Profile::findOne(Yii::$app->user->id);
+    $model = User::findIdentity(Yii::$app->user->id);
     if ($model === null) {
       throw new NotFoundHttpException('The requested page could not be found.');
     }

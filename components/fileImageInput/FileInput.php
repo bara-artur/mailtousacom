@@ -18,6 +18,7 @@ class FileInput extends InputWidget
   }
   public function run()
   {
+
     if ($this->hasModel()) {
       $this->name = !isset($this->options['name']) ? Html::getInputName($this->model, $this->attribute) : $this->options['name'];
       $this->value = !isset($this->options['value']) ? Html::getAttributeValue($this->model, $this->attribute) : $this->options['value'];
