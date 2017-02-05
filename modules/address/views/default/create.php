@@ -13,7 +13,7 @@ $user_ID = Yii::$app->request->get('user_id');
 ?>
 <div class="address-create">
     <?php if ($user_ID!=null){?>
-    <p><?=$user_ID?>! Создайте свой первый адрес </p>
+    <p> Создайте свой первый адрес </p>
     <?php  } ?>
 
     <?= $this->render('_form', [
