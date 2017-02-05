@@ -12,7 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'user_id')->textInput(['value' => $user_ID]) ?>
+
+    <?= $form->field($model, 'address_type')->checkbox(['label' => 'Персональная/корпоративная'])->label("Тип записи") ?>
 
     <?= $form->field($model, 'send_first_name')->textInput(['maxlength' => true]) ?>
 
@@ -26,20 +28,22 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'send_city')->textInput() ?>
 
-    <?= $form->field($model, 'return_first_name')->textInput(['maxlength' => true]) ?>
+    <?= Html::checkbox('need_return_address', true, ['label' => 'Need return address']) ?>
+    <div class='no_return_address'>
+        <?= $form->field($model, 'return_first_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'return_last_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'return_last_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'return_company_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'return_company_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'return_adress_1')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'return_adress_1')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'return_adress_2')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'return_adress_2')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'return_city')->textInput() ?>
-
+        <?= $form->field($model, 'return_city')->textInput() ?>
+    </div>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success add_new_address' : 'btn btn-primary add_new_address']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

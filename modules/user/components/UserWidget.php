@@ -29,7 +29,7 @@ class UserWidget extends Widget
         }
 
         $user_data=Yii::$app->user->identity->toArray();
-        $haveOneAddress = Address::find()->where('id = :id', [':id' => $user_data['id']])->one();;
+        $haveOneAddress = Address::find()->where('user_id = :id', [':id' => $user_data['id']])->one();
         if(strlen($user_data['photo'])<10){
             $user_data['photo']='/img/avatar.jpg';
         }
@@ -37,6 +37,7 @@ class UserWidget extends Widget
             return $this->render('onlineWidget', $user_data);
         }
         else {
+
             Yii::$app->session->setFlash('toAddressCreate','1');
             Yii::$app->session->setFlash('user_id',$user_data['id']);
             $this->view->context->redirect(['/']);
