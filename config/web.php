@@ -75,7 +75,8 @@ $config = [
 
                 //страница сообщения
                 '<action:(chat)>/<id:\d+>' => 'chat/default/<action>',
-                'chat/<action:(get|send)>' => 'chat/default/<action>'
+                'chat/<action:(get|send)>' => 'chat/default/<action>',
+                'address/<action>' => 'address/default/<action>'
             ],
         ],
     ],

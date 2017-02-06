@@ -18,28 +18,44 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Address', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'user_id',
-            'send_first_name',
-            'send_last_name',
-            'send_company_name',
-            // 'send_adress_1',
-            // 'send_adress_2',
-            // 'send_city',
-            // 'return_first_name',
-            // 'return_last_name',
-            // 'return_company_name',
-            // 'return_adress_1',
-            // 'return_adress_2',
-            // 'return_city',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+    <div class="row">
+        <?php foreach ($dataProvider->models as $arr) { ?>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <?php if ($arr->address_type == true) {?>
+                            <dl>Personal</dl>
+                        <?php }
+                            else{ ?>
+                                <dl>Corporate</dl>
+                        <?php } ?>
+                        <dl>
+                            <dt>Send section</dt>
+                            <dd class="send_name">- <?=$arr->send_first_name ?> <?=$arr->send_last_name ?></dd>
+                            <dd class="send_company_name">- <?=$arr->send_company_name?></dd>
+                            <dd class="send_adress_1">- <?=$arr->send_adress_1 ?></dd>
+                            <dd class="send_adress_2">- <?=$arr->send_adress_2 ?></dd>
+                            <dd class="send_city">- <?=$arr->send_city ?></dd>
+                        </dl>
+                        <dl>
+                            <dt>Return section</dt>
+                            <dd class="return_name">- <?=$arr->return_first_name ?> <?=$arr->return_last_name ?></dd>
+                            <dd class="return_company_name">- <?=$arr->return_company_name?></dd>
+                            <dd class="return_adress_1">- <?=$arr->return_adress_1 ?></dd>
+                            <dd class="return_adress_2">- <?=$arr->return_adress_2 ?></dd>
+                            <dd class="return_city">- <?=$arr->return_city ?></dd>
+                        </dl>
+                        <span><?= Html::a('Update', ['update', 'id' => $arr->id], ['class' => 'btn btn-primary']) ?>  </span>
+                        <span><?= Html::a('Delete', ['delete', 'id' => $arr->id], [
+                                    'class' => 'btn btn-danger',
+                                    'data' => [
+                                        'confirm' => 'Are you sure you want to delete this item?',
+                                        'method' => 'post',
+                                    ],
+                                ]) ?>  </span>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
 </div>

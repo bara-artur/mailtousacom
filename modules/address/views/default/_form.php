@@ -12,23 +12,21 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['options' => ['class'=>'add_new_address']]); ?>
 
-    <?= $form->field($model, 'user_id')->textInput(['value' => $user_ID]) ?>
-
     <?= $form->field($model, 'address_type')->checkbox(['label' => 'Персональная/корпоративная'])->label("Тип записи") ?>
 
-    <?= $form->field($model, 'send_first_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'send_first_name')->textInput(['maxlength' => true,'class' => 'send_first_name form-control']) ?>
 
-    <?= $form->field($model, 'send_last_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'send_last_name')->textInput(['maxlength' => true,'class' => 'send_last_name form-control']) ?>
 
-    <?= $form->field($model, 'send_company_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'send_company_name')->textInput(['maxlength' => true,'class' => 'send_company_name form-control']) ?>
 
-    <?= $form->field($model, 'send_adress_1')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'send_adress_1')->textInput(['maxlength' => true,'class' => 'send_adress_1 form-control']) ?>
 
-    <?= $form->field($model, 'send_adress_2')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'send_adress_2')->textInput(['maxlength' => true,'class' => 'send_adress_2 form-control']) ?>
 
-    <?= $form->field($model, 'send_city')->textInput() ?>
+    <?= $form->field($model, 'send_city')->textInput(['class' => 'send_city form-control']) ?>
 
-    <?= Html::checkbox('need_return_address', true, ['label' => 'Need return address']) ?>
+    <?= Html::checkbox('need_return_address', false, ['label' => 'Need return address']) ?>
     <div class='no_return_address'>
         <?= $form->field($model, 'return_first_name')->textInput(['maxlength' => true,'class' => 'return_first_name form-control']) ?>
 
@@ -38,7 +36,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'return_adress_1')->textInput(['maxlength' => true,'class' => 'return_adress_1 form-control']) ?>
 
-        <?= $form->field($model, 'return_adress_2')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'return_adress_2')->textInput(['maxlength' => true,'class' => 'return_adress_2 form-control']) ?>
 
         <?= $form->field($model, 'return_city')->textInput(['class' => 'return_city form-control']) ?>
     </div>
