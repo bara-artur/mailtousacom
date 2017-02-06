@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <dd class="send_adress_2">- <?=$arr->send_adress_2 ?></dd>
                             <dd class="send_city">- <?=$arr->send_city ?></dd>
                         </dl>
+                        <?php if ($arr->need_return == true) {?>
                         <dl>
                             <dt>Return section</dt>
                             <dd class="return_name">- <?=$arr->return_first_name ?> <?=$arr->return_last_name ?></dd>
@@ -45,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <dd class="return_adress_2">- <?=$arr->return_adress_2 ?></dd>
                             <dd class="return_city">- <?=$arr->return_city ?></dd>
                         </dl>
+                        <?php } else{?> <dl class="return_message"> Return Block is the same as Send</dl> <?php } ?>
                         <span><?= Html::a('Update', ['update', 'id' => $arr->id], ['class' => 'btn btn-primary']) ?>  </span>
                         <span><?= Html::a('Delete', ['delete', 'id' => $arr->id], [
                                     'class' => 'btn btn-danger',

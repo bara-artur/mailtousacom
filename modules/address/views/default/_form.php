@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['options' => ['class'=>'add_new_address']]); ?>
 
-    <?= $form->field($model, 'address_type')->checkbox(['label' => 'Персональная/корпоративная'])->label("Тип записи") ?>
+    <?= $form->field($model, 'address_type')->checkbox(['label' => 'Personal/Corporate'])->label("Type") ?>
 
     <?= $form->field($model, 'send_first_name')->textInput(['maxlength' => true,'class' => 'send_first_name form-control']) ?>
 
@@ -26,7 +26,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'send_city')->textInput(['class' => 'send_city form-control']) ?>
 
-    <?= Html::checkbox('need_return_address', false, ['label' => 'Need return address']) ?>
+    <?= $form->field($model, 'need_return')->checkbox(['class'=>'need_return_address', 'label'=>'Need return address']) ?>
+
     <div class='no_return_address'>
         <?= $form->field($model, 'return_first_name')->textInput(['maxlength' => true,'class' => 'return_first_name form-control']) ?>
 
