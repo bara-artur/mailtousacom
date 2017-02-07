@@ -28,6 +28,9 @@ $(document).ready(function() {
   });
   $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
     if ($(".need_return_address").attr("checked") != 'checked') {
+      $('.return_state').val($('.send_state').val());
+      $('.return_zip').val($('.send_zip').val());
+      $('.return_phone').val($('.send_phone').val());
       $('.return_first_name').val($('.send_first_name').val());
       $('.return_last_name').val($('.send_last_name').val());
       $('.return_company_name').val($('.send_company_name').val());
