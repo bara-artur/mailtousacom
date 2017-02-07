@@ -15,6 +15,8 @@ AppAsset::register($this);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
+
+    <base href="/"/>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
@@ -28,7 +30,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '<img src="img/mailtousa.png" alt="logo">',
+        'brandLabel' => '<img src="/img/mailtousa.png" alt="logo">',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar navbar-fixed-top',
@@ -37,10 +39,15 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Sign In', 'url' => ['/']],
-            ['label' => 'Registration', 'url' => ['/registration']],
             //['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? '' : (
+            Yii::$app->user->isGuest ?(
+              '<li>'
+              . Html::a('Sign In', ['/'])
+              . '</li>'
+              . '<li>'
+              . Html::a('Registration', ['/registration'])
+              . '</li>'
+            ):(
                 '<li>'
                 . Html::beginForm(['/logout'], 'post')
                 . Html::submitButton(
