@@ -23,7 +23,7 @@ class User extends ActiveRecord  implements IdentityInterface
     const STATUS_ACTIVE = 1;    // активен
     const STATUS_WAIT = 2;      // ожидает подтверждения
 
-    const MAX_ONLINE_TIME = 10*60;//Время после последнего запроса которое считается что пользователь онлайн (в секундах)
+    const MAX_ONLINE_TIME = 600;//Время после последнего запроса которое считается что пользователь онлайн (в секундах)
 
     // Время действия токенов
     const EXPIRE = 3600;

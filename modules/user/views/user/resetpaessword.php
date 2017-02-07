@@ -7,6 +7,7 @@
 
 ?>
 <div class="user-form">
+    <h4 class="modernui-neutral2">Reset Password</h4>
     <?php if ( Yii::$app->session->hasFlash('reset-success')) { ?>
         <p class="signup-success"> <?=Yii::$app->session->getFlash('reset-success');?></p>
         <script type='text/javascript'>
@@ -20,15 +21,16 @@
 <?=  $form->field($forget, 'email')->textInput(['maxlength' => true, 'placeholder' => $forget->getAttributeLabel('email')]);?>
 <?=  $form->field($forget, 'password')->passwordInput(['maxlength' => true, 'placeholder' => $forget->getAttributeLabel('password')]);?>
 
-    <p class="hint-block"> | Link to the activation of a new password will be sent to the Email, indicated during registration</p>
+   <div class="col-md-2"><h3 class="pred"><span class="glyphicon glyphicon-exclamation-sign"></span></h3>
+   </div><div class="col-md-10"><p class="hint-block">Reference for activation new password will be sent to Email specified at registration</p></div>
     <div class="form-group text-center">
         <?php
             $submitOption = [
-                'class' => 'btn btn-lg btn-primary',
+                'class' => 'btn btn-warning btn_all',
                 'name' => 'signup-button'
             ];
         ?>
-        <?=  Html::submitButton('<i class="glyphicon glyphicon-user"></i>Reset password', $submitOption ); ?>
+        <?=  Html::submitButton('RESET', $submitOption ); ?>
     </div>
     <?php ActiveForm::end();
 
