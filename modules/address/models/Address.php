@@ -38,12 +38,14 @@ class Address extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['send_first_name','address_type', 'send_last_name', 'send_company_name',
+            [['send_first_name','address_type','send_state','send_zip','send_phone','return_state','return_zip','return_phone',
+                'send_last_name', 'send_company_name',
                 'send_adress_1', 'send_city','need_return','return_adress_1', 'return_company_name',
                 'return_first_name', 'return_last_name', 'return_city'    ], 'required'],
             [['user_id'], 'integer'],
             [['send_first_name', 'send_last_name', 'return_first_name', 'return_last_name'], 'string', 'max' => 60],
             [['send_company_name', 'return_company_name'], 'string', 'max' => 128],
+            [['send_state','send_zip','send_phone','return_state','return_zip','return_phone'], 'string', 'max' => 32],
             [['send_city', 'return_city'], 'string', 'max' => 64],
             [['send_adress_1', 'send_adress_2', 'return_adress_1', 'return_adress_2'], 'string', 'max' => 256],
         ];
