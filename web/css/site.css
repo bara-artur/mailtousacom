@@ -204,10 +204,10 @@ a.desc:after {
     height:35px;
 }
 @media (max-width: 767px){
-.navbar-brand>img{
-    width:220px;
-    height:29px;
-}
+    .navbar-brand>img{
+        width:220px;
+        height:29px;
+    }
     .navbar-brand {
         padding: 12px 10px;
 
@@ -229,7 +229,7 @@ a.desc:after {
     padding-left: 10px;
 }
 .podcher{text-decoration: underline;
-font-weight:bold;
-float:right;
+    font-weight:bold;
+    float:right;
 }
 /*.marger{padding-top:50px !important;}*/
