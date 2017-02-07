@@ -29,6 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             else{ ?>
                                 <dl>Corporate</dl>
                         <?php } ?>
+                        <dd class="state">- <?=$arr->state ?></dd>
+                        <dd class="zip">- <?=$arr->zip ?></dd>
+                        <dd class="phone">- <?=$arr->phone ?></dd>
                         <dl>
                             <dt>Send section</dt>
                             <dd class="send_name">- <?=$arr->send_first_name ?> <?=$arr->send_last_name ?></dd>

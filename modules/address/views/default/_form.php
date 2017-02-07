@@ -14,6 +14,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'address_type')->checkbox(['label' => 'Personal/Corporate'])->label("Type") ?>
 
+    <?= $form->field($model, 'state')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'zip')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'send_first_name')->textInput(['maxlength' => true,'class' => 'send_first_name form-control']) ?>
 
     <?= $form->field($model, 'send_last_name')->textInput(['maxlength' => true,'class' => 'send_last_name form-control']) ?>
