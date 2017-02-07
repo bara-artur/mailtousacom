@@ -20,6 +20,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'send_company_name')->textInput(['maxlength' => true,'class' => 'send_company_name form-control']) ?>
 
+    <?= $form->field($model, 'send_state')->textInput(['maxlength' => true,'class' => 'send_state form-control']) ?>
+
+    <?= $form->field($model, 'send_zip')->textInput(['maxlength' => true,'class' => 'send_zip form-control']) ?>
+
+    <?= $form->field($model, 'send_phone')->textInput(['maxlength' => true,'class' => 'send_phone form-control']) ?>
+
     <?= $form->field($model, 'send_adress_1')->textInput(['maxlength' => true,'class' => 'send_adress_1 form-control']) ?>
 
     <?= $form->field($model, 'send_adress_2')->textInput(['maxlength' => true,'class' => 'send_adress_2 form-control']) ?>
@@ -34,6 +40,12 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'return_last_name')->textInput(['maxlength' => true,'class' => 'return_last_name form-control']) ?>
 
         <?= $form->field($model, 'return_company_name')->textInput(['maxlength' => true,'class' => 'return_company_name form-control']) ?>
+
+        <?= $form->field($model, 'return_state')->textInput(['maxlength' => true,'class' => 'return_state form-control']) ?>
+
+        <?= $form->field($model, 'return_zip')->textInput(['maxlength' => true,'class' => 'return_zip form-control']) ?>
+
+        <?= $form->field($model, 'return_phone')->textInput(['maxlength' => true,'class' => 'return_phone form-control']) ?>
 
         <?= $form->field($model, 'return_adress_1')->textInput(['maxlength' => true,'class' => 'return_adress_1 form-control']) ?>
 

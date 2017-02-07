@@ -36,6 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <dd class="send_adress_1">- <?=$arr->send_adress_1 ?></dd>
                             <dd class="send_adress_2">- <?=$arr->send_adress_2 ?></dd>
                             <dd class="send_city">- <?=$arr->send_city ?></dd>
+                            <dd class="send_state">- <?=$arr->send_state ?></dd>
+                            <dd class="send_zip">- <?=$arr->send_zip ?></dd>
+                            <dd class="send_phone">- <?=$arr->send_phone ?></dd>
                         </dl>
                         <?php if ($arr->need_return == true) {?>
                         <dl>
@@ -45,6 +48,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <dd class="return_adress_1">- <?=$arr->return_adress_1 ?></dd>
                             <dd class="return_adress_2">- <?=$arr->return_adress_2 ?></dd>
                             <dd class="return_city">- <?=$arr->return_city ?></dd>
+                            <dd class="return_state">- <?=$arr->return_state ?></dd>
+                            <dd class="return_zip">- <?=$arr->return_zip ?></dd>
+                            <dd class="return_phone">- <?=$arr->return_phone ?></dd>
                         </dl>
                         <?php } else{?> <dl class="return_message"> Return Block is the same as Send</dl> <?php } ?>
                         <span><?= Html::a('Update', ['update', 'id' => $arr->id], ['class' => 'btn btn-primary']) ?>  </span>
