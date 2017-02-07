@@ -74,7 +74,7 @@ $config = [
                 //Страница пользователя
                 '<action:(user)>/<id:\d+>' => 'site/user/',
                 '<action:(profile)>' => 'user/default/<action>',
-
+                'address/<action>' => 'address/default/<action>'
             ],
         ],
     ],
@@ -94,6 +94,9 @@ $config = [
       ],
       'user' => [
             'class' => 'app\modules\user\Module',
+        ],
+      'address' => [
+            'class' => 'app\modules\address\Module',
         ],
     ]
 ];
