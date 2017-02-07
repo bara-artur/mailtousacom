@@ -187,7 +187,7 @@ a.desc:after {
     -webkit-transform: scale(0.8);
     transform: scale(0.8);
     /*border-top: 1px solid #eee;*/
-
+}
 .notification_container {
     position: fixed;
     top: 0;
@@ -286,7 +286,6 @@ a.desc:after {
         opacity: 1;
     }
 }
-}
 .btn_all{width:100%;}
 .navbar {
     border: 1px solid #CCCCCC;
@@ -330,5 +329,4 @@ a.desc:after {
     font-weight:bold;
     float:right;
 }
-/*.marger{padding-top:50px !important;}*/
->>>>>>>>> Temporary merge branch 2
+
