@@ -54,8 +54,8 @@ class User extends ActiveRecord  implements IdentityInterface
             ['email', 'email'],
             ['password', 'string', 'min' => 6, 'max' => 61],
             [['doc1','doc2'], 'image',
-              //'minHeight' => 600,
-              //'minWidth' => 600,
+              'minHeight' => 600,
+              'minWidth' => 600,
               'maxSize' => 1024*1024*2,
               'skipOnEmpty' => true
             ],

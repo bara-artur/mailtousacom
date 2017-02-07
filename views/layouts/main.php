@@ -52,6 +52,9 @@ AppAsset::register($this);
                 . '<li>'
                 . Html::a('Profile', ['user/default/profile'], ['class' => 'profile-link'])
                 . '</li>'
+                . '<li>'
+                . Html::a('Address', ['/address/'], ['class' => 'profile-link'])
+                . '</li>'
             )
         ],
     ]);
