@@ -2,32 +2,26 @@
 
 namespace app\modules\payment;
 
+use Yii;
+
+
 /**
  * payment module definition class
  */
 class Module extends \yii\base\Module
 {
-    /**
-     * @inheritdoc
-     */
-    public $controllerNamespace = 'app\modules\payment\controllers';
 
-    //region API settings
-    public $clientId;
-    public $clientSecret;
-    public $isProduction = false;
-    public $currency = 'USD';
-    public $config = [];
-    /** @var ApiContext */
-    private $_apiContext = null;
+  /**
+   * @inheritdoc
+   */
+  public $controllerNamespace = 'app\modules\payment\controllers';
 
-    /**
-     * @inheritdoc
-     */
-    public function init()
-    {
-        parent::init();
+  /**
+   * @setConfig
+   * _apiContext in init() method
+   */
+  public function init()
+  {
 
-        // custom initialization code goes here
-    }
+  }
 }

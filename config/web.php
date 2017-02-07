@@ -101,7 +101,7 @@ $config = [
       ],
       'payment' => [
         'class' => 'app\modules\payment\Module',
-        'clientId'     => $personal['paypal_client_id'],
+        /*'clientId'     => $personal['paypal_client_id'],
         'clientSecret' => $personal['paypal_client_secret'],
         'isProduction' => false,
         // This is config file for the PayPal system
@@ -112,7 +112,7 @@ $config = [
           'log.LogEnabled'         => YII_DEBUG ? 1 : 0,
           'log.FileName'           => '@runtime/logs/paypal.log',
           'log.LogLevel'           => 'FINE', // 'FINE','INFO','WARN','ERROR';
-        ]
+        ]*/
       ],
     ]
 ];

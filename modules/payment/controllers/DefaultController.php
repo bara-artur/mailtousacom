@@ -45,6 +45,15 @@ class DefaultController extends Controller
     }
 
     /**
+     * Lists all PaymentsList models.
+     * @return mixed
+     */
+    public function actionTest()
+    {
+
+    }
+
+    /**
      * Displays a single PaymentsList model.
      * @param integer $id
      * @return mixed
