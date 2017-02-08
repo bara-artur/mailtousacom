@@ -68,7 +68,7 @@ class UserController extends Controller
     public function actionRegistration()
     {
         $model = new RegistrationForm();
-        $check_the_mail = 'Проверьте почту после регистрации';
+        $check_the_mail = 'Check mail after registration';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             //обработка поступивших данных
             Yii::$app

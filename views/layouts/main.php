@@ -33,7 +33,7 @@ AppAsset::register($this);
         'brandLabel' => '<img src="/img/mailtousa.png" alt="logo">',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-fixed-top',
+            'class' => 'navbar navbar-default navbar-fixed-top',
         ],
     ]);
     echo Nav::widget([
@@ -42,27 +42,28 @@ AppAsset::register($this);
             //['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ?(
               '<li>'
-              . Html::a('Sign In', ['/'])
+              . Html::a('<i class="icon-metro-enter"></i> Sign In', ['/'])
               . '</li>'
               . '<li>'
-              . Html::a('Registration', ['/registration'])
+              . Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration'])
               . '</li>'
             ):(
-                '<li>'
-                . Html::beginForm(['/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ') <i class="icon-metro-exit"></i>',
-                    ['class' => 'btn btn-link logout']
+                    '<li>'
+                    . Html::beginForm(['/logout'], 'post')
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ') <i class="icon-metro-exit"></i>',
+                        ['class' => 'btn btn-link logout']
+                    )
                 )
                 . Html::endForm()
                 . '</li>'
                 . '<li>'
-                . Html::a('Profile', ['user/default/profile'], ['class' => 'profile-link'])
+                . Html::a('<i class="icon-metro-user-2"></i> Profile', ['user/default/profile'], ['class' => 'profile-link'])
                 . '</li>'
                 . '<li>'
-                . Html::a('Address', ['/address/'], ['class' => 'profile-link'])
+                . Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])
                 . '</li>'
-            )
+
         ],
     ]);
     NavBar::end();
