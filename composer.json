@@ -20,7 +20,8 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "jbzoo/image": "^3.0",
         "johnitvn/yii2-rbac-plus": "*",
-        "omnilight/yii2-phonenumbers": "*"
+        "omnilight/yii2-phonenumbers": "*",
+        "kartik-v/yii2-grid": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
