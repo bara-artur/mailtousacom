@@ -12,15 +12,19 @@ $(document).ready(function() {
   });
 
   //$("input[name='need_return_address']").attr('checked', false);
-  if ($(".need_return_address").attr("checked") != 'checked')  $(".no_return_address").hide();  // скраваем.отображаем return поля по чекбоксу need_return_address
+  if ($(".need_return_address").attr("checked") != 'checked')  $(".no_return_address").hide();
+    $(".btn.add_new_address").removeClass("pull-left");
+  // скраваем.отображаем return поля по чекбоксу need_return_address
 
   $(".need_return_address" ).on( "click", function() {   // скраваем/отображаем return поля по чекбоксу need_return_address
     if($(".need_return_address").attr("checked") != 'checked') {
       $(".no_return_address").show(500);
+      $(".btn.add_new_address").addClass("pull-right");
       $(".need_return_address").attr('checked', true);
     }
     else{
       $(".no_return_address").hide(500);
+      $(".btn.add_new_address").removeClass("pull-right");
       $(".need_return_address").attr('checked', false);
     }
   });
