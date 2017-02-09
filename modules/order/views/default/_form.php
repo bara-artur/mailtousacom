@@ -23,12 +23,9 @@ use yii\widgets\ActiveForm;
 
 </div>
 
-
-    <table>
-        <tr>
-            <td> <input type="text" name="1" size="40"> </td>
-            <td><input type="text" name="2" size="40"> </td>
-        </tr>
-    </table>
+<button class="add_new_row">Add new row</button>
+<table id="itemTable">
+</table>
+<br>
 
 </div>
