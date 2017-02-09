@@ -9,6 +9,7 @@ $submitOption = [
     'name' => 'signup-button'
 ];
 ?>
+<?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
 <div class="user-form">
     <h4 class="modernui-neutral2">Registration <i class="icon-metro-clipboard-2"></i></h4>
      <?php $form = ActiveForm::begin(); ?>

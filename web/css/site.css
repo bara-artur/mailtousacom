@@ -367,7 +367,7 @@ a.desc:after {
 .use_comp{margin-top: 34px;}
 .no_return_address{border-left: 1px dotted rgb(204, 204, 204);}
 @media (max-width: 767px){
-.no_return_address{border-left: 0px dotted #FFFFFF;}
+    .no_return_address{border-left: 0px dotted #FFFFFF;}
 }
 input[type=checkbox]:checked+span::before {
     color: #199900;
@@ -380,4 +380,8 @@ input[type=checkbox]:checked+span::before {
     text-align: center;
     border-bottom: 1px solid #eee;
     text-align: center;
+}
+
+.gritter-close:after {
+    content: 'X';
 }

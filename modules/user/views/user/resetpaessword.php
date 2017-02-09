@@ -8,13 +8,9 @@
 ?>
 <div class="user-form">
     <h4 class="modernui-neutral2">Reset Password</h4>
+  <?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
     <?php if ( Yii::$app->session->hasFlash('reset-success')) { ?>
         <p class="signup-success"> <?=Yii::$app->session->getFlash('reset-success');?></p>
-        <script type='text/javascript'>
-            $(document).ready(function () {
-                popup.open({message: '<?=Yii::$app->session->getFlash('reset-success');?>', type: 'success'});
-            });
-        </script>
      <?php } else {
      $form = ActiveForm::begin(['id' => 'pass-form','fieldConfig' => ['template' => "{label}{input}{error}"]]);?>
 <?=  $form->field($forget, 'email')->textInput(['maxlength' => true, 'placeholder' => $forget->getAttributeLabel('email')]);?>

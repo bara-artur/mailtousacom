@@ -7,22 +7,15 @@ $submitOption = [
   'class' => 'btn btn-lg btn-success'
 ];
 
-if ( Yii::$app->session->hasFlash('success')) {
-  ?>
-  <script type='text/javascript'>
-    $(document).ready(function () {
-      popup.open({message: '<?=Yii::$app->session->getFlash('success');?>', type: 'success',time:10000});
-    });
-  </script>
-  <?php
-};
-
 $form = ActiveForm::begin([
   'layout' => 'horizontal',
   'enableAjaxValidation' => false,
   'enableClientValidation' => true,
   'options' => ['enctype'=>'multipart/form-data']
 ]); ?>
+
+<?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
+
 
 <?= $form->field($model, 'username') ?>
 <?= $form->field($model, 'first_name') ?>

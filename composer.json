@@ -12,7 +12,7 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "alpha",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0.5",
@@ -20,7 +20,9 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "jbzoo/image": "^3.0",
         "johnitvn/yii2-rbac-plus": "*",
-        "omnilight/yii2-phonenumbers": "*"
+        "omnilight/yii2-phonenumbers": "*",
+        "fxp/composer-asset-plugin": "^1.2",
+        "skinka/yii2-alert-gritter": "^1.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
