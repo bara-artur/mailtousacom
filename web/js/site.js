@@ -1,4 +1,10 @@
 $(document).ready(function() {
+  $(".order-item-form").on
+  name="1"
+
+
+
+
   $("#w0 button[name='signup-button']" ).hide().attr("disabled",true);;
   $("input[name='I_accept']" ).on( "click", function() {
     if($("input[name='I_accept']").attr("checked") != 'checked') {

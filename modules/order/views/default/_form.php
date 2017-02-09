@@ -9,19 +9,26 @@ use yii\widgets\ActiveForm;
 
 <div class="order-list-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' =>['default/update?id='.$model->id],]); ?>
 
     <?= $form->field($model, 'user_id')->textInput() ?>
 
     <?= $form->field($model, 'adress_id')->textInput() ?>
 
-  
-	<?php if (!Yii::$app->request->isAjax){ ?>
-	  	<div class="form-group">
-	        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-	    </div>
-	<?php } ?>
+    <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    </div>
 
     <?php ActiveForm::end(); ?>
-    
+
+</div>
+
+
+    <table>
+        <tr>
+            <td> <input type="text" name="1" size="40"> </td>
+            <td><input type="text" name="2" size="40"> </td>
+        </tr>
+    </table>
+
 </div>
