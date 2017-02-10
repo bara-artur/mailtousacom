@@ -11,9 +11,12 @@ use yii\rbac\Assignment;
 use yii\web\IdentityInterface;
 use \yii\db\ActiveRecord;
 use \yii\db\Query;
+use JBZoo\Image\Image;
 
 class User extends ActiveRecord  implements IdentityInterface
 {
+
+    public $doc0,$doc1,$doc2,$doc3,$doc4,$doc5;
 
     public $userDir;
     public $password;
@@ -23,11 +26,10 @@ class User extends ActiveRecord  implements IdentityInterface
     const STATUS_ACTIVE = 1;    // активен
     const STATUS_WAIT = 2;      // ожидает подтверждения
 
-    const MAX_ONLINE_TIME = 10*60;//Время после последнего запроса которое считается что пользователь онлайн (в секундах)
+    const MAX_ONLINE_TIME = 600;//Время после последнего запроса которое считается что пользователь онлайн (в секундах)
 
     // Время действия токенов
     const EXPIRE = 3600;
-
 
     /** @var string Default username regexp */
     public static $usernameRegexp = '/^[-a-zA-Z0-9_\.@]+$/';
@@ -48,9 +50,15 @@ class User extends ActiveRecord  implements IdentityInterface
     {
         return [
             [['email'], 'required'],
-            [['email', 'password_hash'], 'string', 'max' => 100],
+            [['email', 'password_hash','first_name','last_name','phone'], 'string', 'max' => 100],
             ['email', 'email'],
             ['password', 'string', 'min' => 6, 'max' => 61],
+            [['doc1','doc2'], 'image',
+              'minHeight' => 600,
+              'minWidth' => 600,
+              'maxSize' => 1024*1024*2,
+              'skipOnEmpty' => true
+            ],
            ];
     }
 
@@ -71,6 +79,8 @@ class User extends ActiveRecord  implements IdentityInterface
             'password_hash' => 'Хеш пароля',
             'ip' => 'Last IP',
             'fullName' => 'Full Name',
+            'doc0' => 'First document',
+            'doc1' => 'Second document',
         ];
     }
 
@@ -141,10 +151,17 @@ class User extends ActiveRecord  implements IdentityInterface
     {
         $user = static::findOne(['id' => $id]);
         if ($user) {
-            $user->userDir = $user->getUserPath($id);
+           $user->userDir = $user->getUserPath($id);
+
+          //готовим данные для вывода
+          $docs=explode(',',$user->docs);
+          foreach($docs as $i => $doc){
+            $user['doc'.$i]=$doc;
+          }
         };
         return $user;
     }
+
 
     /**
      * Поиск пользователя по Email
@@ -315,7 +332,7 @@ class User extends ActiveRecord  implements IdentityInterface
     {
         $oldValue = $this->getOldAttributes();
         //проверяем существовние пользователя
-        $pos      = strripos($this->email, '@');
+        $pos = strripos($this->email, '@');
         if ($pos) $this->username = substr($this->email, 0, $pos);;
         if ($oldValue && isset($oldValue['email']) && $oldValue['email'] != $this->email){
           if ($this->findByEmail($this->email)) {
@@ -323,6 +340,46 @@ class User extends ActiveRecord  implements IdentityInterface
               return false;
           }
         }
+
+        $docs=explode(',',$this->docs);
+        $fileToBd['docs']=array();
+
+        $request = Yii::$app->request;
+        $post = $request->post();
+
+        $class = $this::className();
+        $class = str_replace('\\', '/', $class);
+        $class = explode('/', $class);
+        $class = $class[count($class) - 1];
+        $post = $post[$class];
+
+        //print_r($docs);
+        //print_r($this);
+
+        for($i=0;$i<2;$i++){
+          if($file=$this->saveImage('doc'.$i,isset($docs[$i])?$docs[$i]:'-')){
+            $fileToBd['docs'][]=$file;
+            echo 0;
+          }else{
+            if(isset($docs[$i])) {
+              if ($docs[$i] != $post['doc' . $i]) {
+                $this->removeImage($docs[$i]);
+              } else {
+                $fileToBd['docs'][]=$docs[$i];
+              }
+            }
+          }
+        }
+
+        //print_r($post);
+        //exit();
+        $fileToBd['docs']=implode(',',$fileToBd['docs']);
+
+        //var_dump($fileToBd);
+        $this::getDb()
+          ->createCommand()
+          ->update($this->tableName(), $fileToBd, ['id' => $this->id])
+          ->execute();
 
         return true;
     }
@@ -334,7 +391,7 @@ class User extends ActiveRecord  implements IdentityInterface
      */
     public function afterSave($insert, $changedAttributes)
     {
-        $this->saveImage();
+        //$this->saveImage();
     }
 
     /**
@@ -359,39 +416,41 @@ class User extends ActiveRecord  implements IdentityInterface
      * Сохранение изображения (аватара)
      * пользвоателя
      */
-    public function saveImage()
+    public function saveImage($row_name='photo',$oldImage=false,$db_update=false)
     {
-        $photo = \yii\web\UploadedFile::getInstance($this, 'photo');
+      $doc = \yii\web\UploadedFile::getInstance($this, $row_name);
 
-        if ($photo) {
-            $path = $this->getUserPath($this->id);// Путь для сохранения аватаров
-            $oldImage = $this->photo;
+      if ($doc) {
+          $path = $this->getUserPath($this->id);// Путь для сохранения аватаров
+          if(!$oldImage) {
+            $oldImage = $this->$row_name;
+          }
 
-            $name = time() . '-' . $this->id; // Название файла
-            $exch = explode('.', $photo->name);
-            $exch = $exch[count($exch) - 1];
-            $name .= '.' . $exch;
-            $this->photo = $path . $name;   // Путь файла и название
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);   // Создаем директорию при отсутствии
-            }
+          $name = time() . '-' . $this->id; // Название файла
+          $exch = explode('.', $doc->name);
+          $exch = $exch[count($exch) - 1];
+          $name .= '.' . $exch;
+          $this->$row_name = $path . $name;   // Путь файла и название
+          if (!file_exists($path)) {
+              mkdir($path, 0777, true);   // Создаем директорию при отсутствии
+          }
 
-            $request = Yii::$app->request;
-            $post = $request->post();
+          $request = Yii::$app->request;
+          $post = $request->post();
 
-            $class = $this::className();
-            $class = str_replace('\\', '/', $class);
-            $class = explode('/', $class);
-            $class = $class[count($class) - 1];
-            $cropParam = array();
-            if (isset($post[$class])) {
-                $cropParam = explode('-', $post[$class]['photo']);
-            }
-            if (count($cropParam) != 4) {
-                $cropParam = array(0, 0, 100, 100);
-            }
+          $class = $this::className();
+          $class = str_replace('\\', '/', $class);
+          $class = explode('/', $class);
+          $class = $class[count($class) - 1];
+          $cropParam = array();
 
-            $img = (new Image($photo->tempName));
+          $img = (new Image($doc->tempName));
+          if (isset($post[$class])) {
+            $cropParam = explode('-', $post[$class][$row_name]);
+          }
+          if (count($cropParam) != 4) {
+            $cropParam = array(0, 0, 100, 100);
+          }else{
             $imgWidth = $img->getWidth();
             $imgHeight = $img->getHeight();
 
@@ -401,19 +460,26 @@ class User extends ActiveRecord  implements IdentityInterface
             $cropParam[2] = (int)($cropParam[2] * $imgWidth / 100);
             $cropParam[3] = (int)($cropParam[3] * $imgHeight / 100);
 
-            $img->crop($cropParam[0], $cropParam[1], $cropParam[2], $cropParam[3])
-                ->fitToWidth(500)
-                ->saveAs($this->photo);
+            $img->crop($cropParam[0], $cropParam[1], $cropParam[2], $cropParam[3]);
+          }
 
 
-            if ($img) {
-                $this->removeImage($oldImage);   // удаляем старое изображение
+          $img->fitToWidth(900)
+             ->saveAs($this->$row_name);
 
-                $this::getDb()
-                    ->createCommand()
-                    ->update($this->tableName(), ['photo' => $this->photo], ['id' => $this->id])
-                    ->execute();
+          if ($img) {
+              $this->removeImage($oldImage);   // удаляем старое изображение
+
+            if($db_update) {
+              $this::getDb()
+                ->createCommand()
+                ->update($this->tableName(), [$row_name => $this->$row_name], ['id' => $this->id])
+                ->execute();
             }
+            return $this->$row_name;
+          }
+
+          return $oldImage;
         }
     }
 

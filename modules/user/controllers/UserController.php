@@ -68,7 +68,7 @@ class UserController extends Controller
     public function actionRegistration()
     {
         $model = new RegistrationForm();
-        $check_the_mail = 'Проверьте почту после регистрации';
+        $check_the_mail = 'Check mail after registration';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             //обработка поступивших данных
             Yii::$app
@@ -141,86 +141,5 @@ class UserController extends Controller
         ], ['id' => Yii::$app->user->id])->execute();
         return 'is online';
     }
-    /**
-     * Профиль пользователя (личный кабинет)
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException
-     */
-    public function actionProfile()
-    {
-
-        $model = ProfileForm::findOne(Yii::$app->user->id);
-        if ($model === null) {
-            throw new NotFoundHttpException('The requested page could not be found.');
-        }
-
-        if($model->sex==0){
-             $profile=ProfileMale::findIdentity(Yii::$app->user->id);
-        }else{
-            $profile=ProfileFemale::findIdentity(Yii::$app->user->id);
-        }
-        if (!$profile) {
-            // INSERT
-            Yii::$app->db->createCommand()->insert('profile', [
-                'user_id' => Yii::$app->user->id
-            ])->execute();
-            if($model->sex==0){
-                $profile=ProfileMale::findIdentity(Yii::$app->user->id);
-            }else{
-                $profile=ProfileFemale::findIdentity(Yii::$app->user->id);
-            }
-        }
-
-        //return ;
-
-        $post=Yii::$app->request->post();
-        if(isset($post['ProfileForm'])){
-            //удаляем картинку до сохранения
-            $post['ProfileForm']['photo']=$model->photo;
-            //добавляем метку обновления
-            $post['ProfileForm']['updated_at'] = time();
-        }
-
-        $request = Yii::$app->request;
-        if($request->isPost) {
-            $to_save = false;
-
-            $post['ProfileForm']['moderate']=$model->moderate;
-            if(isset($post['moderate-button'])){
-                $post['ProfileForm']['moderate']=1;
-            }
-
-            //Готовим профиль к сохранению
-            if ($profile->load($post) && $profile->validate()) {
-                $to_save = true;
-            }
-
-            //Готовим пользователя к сохранению
-            if ($model->load($post) && $model->validate()) {
-                $to_save = true && $to_save;
-            } else {
-                $to_save = false;
-            }
-
-            //Если номально отвалидировало отправляем на сохранение
-            if($to_save && $profile->save() && $model->save()){
-                //При успешнос мохранении обновляем страницу и выводим сообщение
-                Yii::$app->getSession()->setFlash('success', 'The profile updated.');
-                return $this->redirect(['profile']);
-            }
-        }
-
-        // Преобразуем дату в понятный формат
-        if ($profile->birthday) {
-            $profile->birthday = Date('M  j,Y',$profile->birthday);
-        }
-
-        return $this->render('profile', [
-            'model' => $model,
-            'profile' =>$profile
-        ]);
-
-    }
-
 
 }
