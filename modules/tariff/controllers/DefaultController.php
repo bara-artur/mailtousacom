@@ -37,19 +37,76 @@ class DefaultController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {    
+    {
+
         $searchModel = new TariffsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $tarifs=Tariffs::find()->asArray();
-        //var_dump($dataProvider);
-        ddd($tarifs);
+        $tarifs=Tariffs::find()->asArray()->all();
 
+        $out=array();
+        $parcel_count=array();
+        $width=array();
+        foreach ($tarifs as $tarif){
+          if(!in_array($tarif['parcel_count'],$parcel_count)){
+            $parcel_count[]=$tarif['parcel_count'];
+            $out[$tarif['parcel_count']]=array();
+          }
+          if(!in_array($tarif['width'],$width)){
+            $width[]=$tarif['width'];
+          }
+          $out[$tarif['parcel_count']][$tarif['width']]=$tarif['price'];
+        }
+
+        sort($parcel_count);
+        sort($width);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'parcel_count'=>$parcel_count,
+            'widths'=>$width,
+            'tarifs'=>$out,
         ]);
+    }
+
+    public function actionSavePrice(){
+      $request = Yii::$app->request;
+      if(!$request->getIsPost()){
+        throw new \yii\web\NotFoundHttpException("Page not found.");
+      }
+      $post = $request->post();
+
+      $data=Tariffs::find()
+        ->where([
+        'width'=>$post['width'],
+        'parcel_count'=>$post['count']
+        ])
+        ->one();
+      if(!$data){
+        $data= new Tariffs();
+      }
+
+      $data->price=$post['value'];
+      $data->width=$post['width'];
+      $data->parcel_count=$post['count'];
+
+      if($data->save()){
+        $data=Tariffs::find()
+          ->where([
+            'width'=>$post['width'],
+            'parcel_count'=>$post['count']
+          ])
+          ->limit(1)
+          ->asArray()
+          ->all();
+        $data=$data[0];
+        $data['price']=number_format($data['price'],2,'.','');
+        return json_encode($data);
+      }
+
+      //~d($data);
+      return ;
     }
 
 

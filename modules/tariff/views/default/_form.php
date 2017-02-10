@@ -11,8 +11,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'parcel_count')->hiddenInput(['value'=> $width])->label(false); ?>
-		<?= $form->field($model, 'width')->textInput() ?>
+    <?= $form->field($model, 'parcel_count')->textInput()?>
+		<?= $form->field($model, 'width')->hiddenInput(['value'=> $width])->label(false); ?>
 
   
 	<?php if (!Yii::$app->request->isAjax){ ?>

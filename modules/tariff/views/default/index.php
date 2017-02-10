@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\tariff\models\TariffsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
+$this->registerAssetBundle(skinka\widgets\gritter\GritterAsset::className());
 $this->title = 'Tariffs';
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -32,34 +32,35 @@ CrudAsset::register($this);
     </div>
     <div id="crud-datatable-pjax">
         <?php Pjax::begin(); ?>
-        <table class="table table-inverse_ table-striped">
+        <table class="table table-inverse_ table-striped" href="/tariff/default/save-price">
             <thead>
-            <tr>
-                <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-            </tr>
+                <tr>
+                    <th>Shipping volume</th>
+                    <?php
+                        foreach ($parcel_count as $cnt){
+                            echo '<th>min count '.$cnt.'</th>';
+                        }
+                    ?>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-            </tr>
+                <?php
+                    foreach ($widths as $w){
+                        echo '<tr>';
+                        echo '<th scope="row">'.($w==-1?'Pickup':'Less then '.$w.'lb').'</th>';
+                        foreach ($parcel_count as $cnt){
+                            echo '<td class="td_wr_input">'.
+                              Html::input('text', 'tr_input', number_format((float)$tarifs[$cnt][$w],2,'.',''), [
+                                'class' => 'tr_input',
+                                'onchange'=>'table_change_input(this)',
+                                'width'=>$w,
+                                'count'=>$cnt
+                              ]).
+                              '</td>';
+                        }
+                        echo '</tr>';
+                    };
+                ?>
             </tbody>
         </table>
         <?php Pjax::end(); ?>
