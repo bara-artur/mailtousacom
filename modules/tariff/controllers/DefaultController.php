@@ -41,6 +41,11 @@ class DefaultController extends Controller
         $searchModel = new TariffsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $tarifs=Tariffs::find()->asArray();
+        //var_dump($dataProvider);
+        ddd($tarifs);
+
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
