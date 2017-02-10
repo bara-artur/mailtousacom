@@ -209,7 +209,6 @@
 
   Inputmask.prototype.blurEvent = function() {
     this.checkVal()
-    this.$element[0].value=this.focusText
     if (this.$element.val() !== this.focusText)
       this.$element.trigger('change')
   }

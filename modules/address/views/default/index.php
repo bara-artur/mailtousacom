@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\modules\address\models\AddressSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Addresses';
+$this->title = 'My addresses';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="address-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Address', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('CREATE NEW ADDRESS', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div class="row">
         <?php foreach ($dataProvider->models as $arr) { ?>
@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <dd class="return_phone">- <?=$arr->return_phone ?></dd>
                         </dl>
                         <?php } else{?> <dl class="return_message"> Return Block is the same as Send</dl> <?php } ?>
-                        <span><?= Html::a('Update', ['update', 'id' => $arr->id], ['class' => 'btn btn-primary']) ?>  </span>
+                        <span><?= Html::a('Edit', ['update', 'id' => $arr->id], ['class' => 'btn btn-science-blue']) ?>  </span>
                         <span><?= Html::a('Delete', ['delete', 'id' => $arr->id], [
                                     'class' => 'btn btn-danger',
                                     'data' => [
