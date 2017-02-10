@@ -11,6 +11,9 @@ use Yii;
 class Module extends \yii\base\Module
 {
 
+  public $clientId;
+  public $clientSecret;
+  public $baseUrl;
   /**
    * @inheritdoc
    */

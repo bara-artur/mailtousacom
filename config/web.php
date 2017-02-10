@@ -100,9 +100,10 @@ $config = [
       ],
       'payment' => [
         'class' => 'app\modules\payment\Module',
-        /*'clientId'     => $personal['paypal_client_id'],
+        'clientId'     => $personal['paypal_client_id'],
         'clientSecret' => $personal['paypal_client_secret'],
-        'isProduction' => false,
+        'baseUrl' => 'http://127.0.0.1:8080/',
+        /*'isProduction' => false,
         // This is config file for the PayPal system
         'config'       => [
           'http.ConnectionTimeOut' => 30,
