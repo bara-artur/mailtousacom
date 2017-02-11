@@ -49,6 +49,16 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionAddressusa()
+    {
+        $request = Yii::$app->request;
+        $address_id = $request->post( 'id' );
+
+        return $this->render('usaAddress', [
+            'address_id' => $address_id,
+        ]);
+    }
+
 
     /**
      * Displays a single Address model.
@@ -269,5 +279,15 @@ class DefaultController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function beforeAction($action)
+    {
+        // ...set `$this->enableCsrfValidation` here based on some conditions...
+        // call parent method that will check CSRF if such property is true.
+        if ($action->id === 'addressusa') {
+            # code...
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
     }
 }

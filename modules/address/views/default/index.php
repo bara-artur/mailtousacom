@@ -50,7 +50,12 @@ CrudAsset::register($this);
                                 'method' => 'post',
                             ],
                         ]) ?>  </span>
-                    <span><button type="button" class="btn btn-info show_all_addresses go_to_order">Next</button></span>
+                    <span>
+                         <form action="address/addressusa" method="post">
+                           <input type="hidden" name="id" value="<?=$arr->id?>">
+                           <input type="submit" class="btn btn-info show_all_addresses go_to_order" value="Next">
+                          </form>
+                    </span>
                 </div>
             </div>
         </div>

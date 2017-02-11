@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $(".show_all_addresses").on("click", function(){
     $(".hidden_address").removeClass('hidden_address');
-    $(".go_to_order").text("Choose this address");
+    $(".go_to_order").val("Choose this address");
   });
 
   $("#w0 button[name='signup-button']" ).prop("disabled",true);;
