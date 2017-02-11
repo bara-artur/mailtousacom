@@ -75,6 +75,11 @@ $config = [
                 '<action:(user)>/<id:\d+>' => 'site/user/',
                 '<action:(profile)>' => 'user/default/<action>',
 
+                'address/<action>'=>'address/default/<action>',
+                'order/<action>'=>'order/default/<action>',
+                'orderElement/<action>'=>'orderElement/default/<action>',
+                'orderInclude/<action>'=>'orderInclude/default/<action>',
+
             ],
         ],
     ],
@@ -94,6 +99,21 @@ $config = [
       ],
       'user' => [
             'class' => 'app\modules\user\Module',
+        ],
+      'address' => [
+            'class' => 'app\modules\address\Module',
+        ],
+      'order' => [
+            'class' => 'app\modules\order\Module',
+        ],
+      'orderElement' => [
+            'class' => 'app\modules\orderElement\Module',
+        ],
+      'orderInclude' => [
+            'class' => 'app\modules\orderInclude\Module',
+        ],
+      'gridview' => [
+            'class' => '\kartik\grid\Module',
         ],
     ]
 ];
