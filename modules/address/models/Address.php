@@ -36,7 +36,7 @@ class Address extends \yii\db\ActiveRecord
             [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2',
               'zip','phone','state','city', 'address_type'], 'required'],
             [['user_id',  'address_type'], 'integer'],
-            [['zip','phone','state','first_name','city', 'last_name'], 'string', 'max' => 60],
+            [['first_name','city', 'last_name'], 'string', 'max' => 60],
             [['company_name'], 'string', 'max' => 128],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
         ];

@@ -55,6 +55,8 @@ class AddressSearch extends Address
             return $dataProvider;
         }
 
+        $this->user_id = Yii::$app->user->id;
+
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,

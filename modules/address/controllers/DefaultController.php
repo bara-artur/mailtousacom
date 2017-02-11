@@ -40,10 +40,12 @@ class DefaultController extends Controller
     {    
         $searchModel = new AddressSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $mainBillingAddress = 0;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'mainBillingAddress' => $mainBillingAddress
         ]);
     }
 
@@ -124,7 +126,7 @@ class DefaultController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['/']);
+                return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
