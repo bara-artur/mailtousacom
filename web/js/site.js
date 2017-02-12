@@ -163,3 +163,35 @@ $(function(){
         "transition": ".5s"
     });
 });
+
+function table_change_input(el){
+  $el=$(el)
+  $el
+    .addClass('saving')
+    .prop('disabled',true)
+  post={
+    'width':$el.attr('width'),
+    'count':$el.attr('count'),
+    'value':$el.val(),
+  };
+  var f_ok=table_change_ok.bind($el);
+  var f_fail=table_change_fail.bind($el);
+  $.post($el.closest('[href]').attr('href'),post,f_ok,'json').fail(f_fail);
+}
+function table_change_ok(data){
+  $el=this;
+  $el
+    .removeClass('saving')
+    .prop('disabled',false);
+  $el.val(data.price);
+  gritterAdd('Saving', 'Saving successful', 'gritter-success');
+}
+
+function table_change_fail(){
+  $el=this;
+  $el
+    .removeClass('saving')
+    .addClass('error')
+    .prop('disabled',false);
+  gritterAdd('Saving', 'Saving error', 'gritter-danger');
+}
