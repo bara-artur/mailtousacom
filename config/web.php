@@ -111,7 +111,10 @@ $config = [
         // message source
         // 'downloadAction' => 'gridview/export/download',
         // 'i18n' => []
-      ]
+      ],
+      'claim' => [
+        'class' => 'app\modules\claim\Module',
+      ],
     ]
 ];
 

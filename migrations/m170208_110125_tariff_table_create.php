@@ -30,9 +30,9 @@ class m170208_110125_tariff_table_create extends Migration
         ],
         [
           2,
-          -1,
-          2,
           0,
+          2,
+          -1,
         ],
       ]);
     }
