@@ -63,15 +63,22 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+        $request = Yii::$app->request;
+        $address_id = $request->post( 'id' );
         $model = new Order();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        $model->user_id = Yii::$app->user->id;
+        $model->billing_address_id = $address_id;
+        $model->order_status = 0;
+        $model->order_type = 0;
+        $model->user_id_750 = $model->user_id + 750;
+        $model->created_at = time();
+        $model->transport_data = time();
+        $model->save();
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -120,5 +127,15 @@ class DefaultController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function beforeAction($action)
+    {
+        // ...set `$this->enableCsrfValidation` here based on some conditions...
+        // call parent method that will check CSRF if such property is true.
+        if ($action->id === 'create') {
+            # code...
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
     }
 }

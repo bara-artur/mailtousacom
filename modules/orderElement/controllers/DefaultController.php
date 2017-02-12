@@ -8,6 +8,7 @@ use app\modules\orderElement\models\OrderElementSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\modules\order\models\Order;
 
 /**
  * DefaultController implements the CRUD actions for OrderElement model.
@@ -65,8 +66,12 @@ class DefaultController extends Controller
     {
         $model = new OrderElement();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post(),'')) {
+            $model->save();
+            $order = Order::findOne($model->order_id);
+            $order->order_status = 1;
+            $order->save();
+            return $this->redirect(['/','message'=>'Order success']);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -120,5 +125,15 @@ class DefaultController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function beforeAction($action)
+    {
+        // ...set `$this->enableCsrfValidation` here based on some conditions...
+        // call parent method that will check CSRF if such property is true.
+        if ($action->id === 'create') {
+            # code...
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
     }
 }

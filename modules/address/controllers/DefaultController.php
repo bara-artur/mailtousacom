@@ -53,9 +53,11 @@ class DefaultController extends Controller
     {
         $request = Yii::$app->request;
         $address_id = $request->post( 'id' );
+        $model = Address::find()->where('id = :id', [':id' => $address_id])->one();
 
         return $this->render('usaAddress', [
             'address_id' => $address_id,
+            'name' => $model->first_name.' '.$model->last_name ,
         ]);
     }
 

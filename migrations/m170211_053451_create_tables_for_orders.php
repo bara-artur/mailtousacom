@@ -19,6 +19,7 @@ class m170211_053451_create_tables_for_orders extends Migration
         ]);
         $this->createTable('order_element', [
         'id' => Schema::TYPE_PK,
+            'order_id'        => Schema::TYPE_INTEGER . ' NOT NULL',
             'first_name'      => Schema::TYPE_STRING . '(60) NOT NULL',
             'last_name'       => Schema::TYPE_STRING . '(60) NOT NULL',
             'company_name'    => Schema::TYPE_STRING . '(128) NOT NULL',
@@ -31,6 +32,7 @@ class m170211_053451_create_tables_for_orders extends Migration
     ]);
         $this->createTable('order_include', [
         'id' => Schema::TYPE_PK,
+        'order_id' => Schema::TYPE_INTEGER . ' NOT NULL',
         'name'      => Schema::TYPE_STRING . '(60) NOT NULL',
         'price'     => Schema::TYPE_DOUBLE . ' NOT NULL',
         'weight'     => Schema::TYPE_INTEGER . ' NOT NULL',

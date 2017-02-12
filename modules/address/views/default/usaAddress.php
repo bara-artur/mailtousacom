@@ -12,8 +12,8 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 
 ?>
 <p> Here will be some informations about return adress in USA</p>
-<p></p>
-<form action="/order/create" method="post">
-    <input type="hidden" name="id" value="<?=$arr->id?>">
-    <input type="submit" class="btn btn-info show_all_addresses go_to_order" value="Create order">
+<p> <?= $name ?></p>
+<form action="/orderInclude/index" method="post">
+    <input type="hidden" name="id" value="<?=$address_id?>">
+    <input type="submit" class="btn btn-info" value="Create order">
 </form>
