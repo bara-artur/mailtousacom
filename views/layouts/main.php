@@ -48,20 +48,20 @@ AppAsset::register($this);
               . Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration'])
               . '</li>'
             ):(
-                    '<li>'
-                    . Html::beginForm(['/logout'], 'post')
-                    . Html::submitButton(
-                        'Logout [' . Yii::$app->user->identity->username . '] <i class="icon-metro-exit"></i>',
-                        ['class' => 'btn btn-link logout']
-                    )
-                )
-                . Html::endForm()
-                . '</li>'
-                . '<li>'
+                '<li>'
                 . Html::a('<i class="icon-metro-user-2"></i> Profile', ['/profile/'], ['class' => 'profile-link'])
                 . '</li>'
                 . '<li>'
                 . Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])
+                . '</li>'.
+                                  '<li>'
+                                  . Html::beginForm(['/logout'], 'post')
+                                  . Html::submitButton(
+                                    'Logout [' . Yii::$app->user->identity->username . '] <i class="icon-metro-exit"></i>',
+                                    ['class' => 'btn btn-link logout']
+                                  )
+                )
+                . Html::endForm()
                 . '</li>'
 
         ],
