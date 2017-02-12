@@ -13,7 +13,7 @@ $first_address = Yii::$app->request->get('first_address');
 ?>
 <div class="address-create">
     <?php if (isset($first_address)){?>
-        <h4 class="modernui-neutral2">Create first address <i class="fa fa-map-marker"></i> <font class="requir">*</font>
+        <h4 class="modernui-neutral2">Create billing address <i class="fa fa-map-marker"></i> <font class="requir">*</font>
             <div class="podcast">Please add your shipping address where you ship from</div></h4>
     <?php  } ?>
 

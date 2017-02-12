@@ -7,15 +7,14 @@ use yii\widgets\DetailView;
 /* @var $model app\modules\address\models\Address */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Addresses', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'My addresses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="address-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Edit', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [

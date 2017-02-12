@@ -51,14 +51,14 @@ AppAsset::register($this);
                     '<li>'
                     . Html::beginForm(['/logout'], 'post')
                     . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ') <i class="icon-metro-exit"></i>',
+                        'Logout [' . Yii::$app->user->identity->username . '] <i class="icon-metro-exit"></i>',
                         ['class' => 'btn btn-link logout']
                     )
                 )
                 . Html::endForm()
                 . '</li>'
                 . '<li>'
-                . Html::a('<i class="icon-metro-user-2"></i> Profile', ['user/default/profile'], ['class' => 'profile-link'])
+                . Html::a('<i class="icon-metro-user-2"></i> Profile', ['/profile/'], ['class' => 'profile-link'])
                 . '</li>'
                 . '<li>'
                 . Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])

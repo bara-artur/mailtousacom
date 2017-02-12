@@ -19,7 +19,7 @@ $submitOption = [
      <?php if (Yii::$app->user->isGuest) {?>
          <?= Html::submitButton('SIGN UP', $submitOption ); ?>
      <?php } else {?>
-         <?= Html::submitButton('Create', $submitOption ); }?>
+         <?= Html::submitButton('CREATE', $submitOption ); }?>
      <?php ActiveForm::end();  ?>
 </div>
 
