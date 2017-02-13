@@ -19,20 +19,35 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Claim', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'user_id',
-            'subject',
-            'text',
-            'status',
-            // 'created',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
+    <div class="row">
+        <?php
+        foreach ($dataProvider->models as $arr) {
+            ?>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <dl>
+                            <dt class="claim_subject"> Subject </dt>
+                            <dl class="claim_subject"> <?=$subjectList[$arr->subject] ?></dl>
+                            <dt class="claim_text"> Text</dt>
+                            <dd class="claim_text"> <?=$arr->text ?></dd>
+                            <dt class="claim_status">Status</dt>
+                            <dd class="claim_status"><?=$arr->status?> </dd>
+                            <dt class="claim_created">Data  </dt>
+                            <dd class="claim_created"><?=date("d.m.y  h:m:s", $arr->created)?> </dd>
+                        </dl>
+                        <span><?= Html::a('Update', ['update', 'id' => $arr->id], ['class' => 'btn btn-primary']) ?>  </span>
+                        <span><?= Html::a('Delete', ['delete', 'id' => $arr->id], [
+                                'class' => 'btn btn-danger',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to delete this item?',
+                                    'method' => 'post',
+                                ],
+                            ]) ?>  </span>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
 </div>

@@ -55,10 +55,11 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
-      $dataProvider = Claim::find()->where(['user_id'=>1])->asArray()->all();
-
-      return $this->render('index', [
+        $searchModel = new ClaimSearch();
+        $dataProvider = $searchModel->search(['user_id' => Yii::$app->user->id]);
+        return $this->render('index', [
         'dataProvider' => $dataProvider,
+        'subjectList' => $this->subjectList,
       ]);
     }
     /**
@@ -103,7 +104,7 @@ class DefaultController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
               'model' => $model,
