@@ -1,4 +1,6 @@
 $(document).ready(function() {
+  $('.secundar_address').hide();
+  $('.show_after_all_button').hide();
   init_address_edit();
 
 
@@ -200,13 +202,8 @@ function table_change_fail(){
 }
 
 function init_address_edit(){
-  $('.secundar_address').hide();
-  $('.show_after_all_button').hide();
-  console.log("4");
   $('.add_new_address').submit(function(){  // действия перед submit формы
-    console.log("5");
     if ($(".show_company").prop('checked')==false) {
-      console.log("6");
       $('.company_name').val('Personal address');
     }
     return true;

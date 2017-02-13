@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 
+
 /**
  * DefaultController implements the CRUD actions for Address model.
  */
@@ -39,7 +40,7 @@ class DefaultController extends Controller
     public function actionCreateOrderBilling()
     {
         $searchModel = new AddressSearch();
-
+        //$states = new State();
         $dataProvider = $searchModel->search(['user_id' => Yii::$app->user->id]);
         $mainBillingAddress = 0;
 
@@ -48,7 +49,8 @@ class DefaultController extends Controller
           'searchModel' => $searchModel,
           'dataProvider' => $dataProvider,
           'mainBillingAddress' => $mainBillingAddress,
-          'createNewAddress'=>!$haveOneAddress
+          'createNewAddress'=>!$haveOneAddress,
+          'state_names' => $state_names,
         ]);
     }
 

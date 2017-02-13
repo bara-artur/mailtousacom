@@ -1,10 +1,15 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\modules\state\models\State;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\address\models\Address */
 /* @var $form yii\widgets\ActiveForm */
+// формируем массив, с ключем равным полю 'id' и значением равным полю 'name'
+$states = State::find()->all();
+$state_names = ArrayHelper::map($states,'name','name');
 ?>
 
 <div class="address-form">
@@ -33,7 +38,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'state')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'state')->dropDownList($state_names) ?>
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">

@@ -25,7 +25,7 @@ CrudAsset::register($this);
         <div class="col-sm-6 col-md-4 <?php if($i!=$mainBillingAddress) {?> hidden_address <?php } ?>">
             <div class="thumbnail">
                 <div class="caption">
-                    <?php if ($arr->address_type == true) {?>
+                    <?php if ($arr->address_type == false) {?>
                         <dl>Personal</dl>
                     <?php }
                     else{ ?>
