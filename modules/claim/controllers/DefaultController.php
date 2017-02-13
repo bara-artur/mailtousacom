@@ -55,11 +55,9 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
-      $searchModel = new ClaimSearch();
-      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+      $dataProvider = Claim::find()->where(['user_id'=>1])->asArray()->all();
 
       return $this->render('index', [
-        'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
       ]);
     }
