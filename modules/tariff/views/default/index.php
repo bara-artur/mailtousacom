@@ -11,12 +11,13 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\modules\tariff\models\TariffsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->registerAssetBundle(skinka\widgets\gritter\GritterAsset::className());
-$this->title = 'Tariffs';
+$this->title = 'Configuration of tariffs';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
 
 ?>
+
 <div class="tariffs-index">
     <div id="ajaxCrudDatatable">
         <div class="btn-group">

@@ -53,7 +53,14 @@ AppAsset::register($this);
                 . '</li>'
                 . '<li>'
                 . Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])
-                . '</li>'.
+                . '</li>'
+                .'<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-wrench"></i> Configuration <span class="caret"></span></a>
+          <ul class="dropdown-menu">'
+                . Html::a('Tariffs', ['/tariff/'], ['class' => 'profile-link'])
+                .'</ul>'
+                .'</li>'.
+
                                   '<li>'
                                   . Html::beginForm(['/logout'], 'post')
                                   . Html::submitButton(
