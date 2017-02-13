@@ -10,7 +10,7 @@ $first_address = Yii::$app->request->get('first_address');
 ?>
 <div class="address-create">
     <?php if (isset($first_address)){?>
-        <p> Создайте свой первый адрес </p>
+        <p>Create your first address</p>
     <?php  } ?>
     <?= $this->render('_form', [
         'model' => $model,

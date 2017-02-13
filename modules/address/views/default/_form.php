@@ -9,7 +9,11 @@ use yii\widgets\ActiveForm;
 
 <div class="address-form">
 
-    <?php $form = ActiveForm::begin(['options' => ['class'=>'add_new_address']]); ?>
+    <?php $form = ActiveForm::begin([
+      'options' => ['class'=>'add_new_address'],
+      'id'=>'created_address',
+      'validateOnChange' => true,
+    ]); ?>
 
     <?= $form->field($model, 'address_type')->checkbox(['label' => 'Personal/Corporate', 'class'=>'show_company'])->label("Type") ?>
 
@@ -40,3 +44,6 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
     
 </div>
+<script>
+  init_address_edit();
+</script>

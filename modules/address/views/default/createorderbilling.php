@@ -5,7 +5,9 @@ use yii\bootstrap\Modal;
 use kartik\grid\GridView;
 use johnitvn\ajaxcrud\CrudAsset;
 use johnitvn\ajaxcrud\BulkButtonWidget;
+use yii\widgets\Pjax;
 
+CrudAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\address\models\AddressSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -16,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 CrudAsset::register($this);
 
 ?>
-<div class="row">
+<div class="row" id="crud-datatable-pjax">
+  <?php Pjax::begin(); ?>
     <?php
     $i=-1;
     foreach ($dataProvider->models as $arr) {
@@ -60,9 +63,15 @@ CrudAsset::register($this);
             </div>
         </div>
     <?php } ?>
+  <?php Pjax::end(); ?>
 </div>
 <?=Html::a('Add billing address', ['create'],
-    ['role'=>'modal-remote','title'=> 'Create Address','class'=>'btn btn-default show_after_all_button'])?>
+    [
+      'role'=>'modal-remote',
+      'title'=> 'Create Address',
+      'class'=>'btn btn-default show_after_all_button',
+      'id' => 'open_add_adress',
+    ])?>
 <?= Html::a('Create billing address', ['create'], ['class' => 'btn btn-success show_after_all_button']) ?>
 <button type="button" class="btn btn-info show_all_addresses">Chose another billing address</button>
 <span>
@@ -76,3 +85,14 @@ CrudAsset::register($this);
     "footer"=>"",// always need it for jquery plugin
 ])?>
 <?php Modal::end(); ?>
+<?php
+  if($createNewAddress){
+    echo '
+    <script>
+      $(document).ready(function() {
+        setTimeout( "$(\'#open_add_adress\').click();",200);
+      })
+    </script>
+    ';
+  }
+?>

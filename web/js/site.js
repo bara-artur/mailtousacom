@@ -1,25 +1,6 @@
 $(document).ready(function() {
-    $('.secundar_address').hide();
-    $('.show_after_all_button').hide();
-    $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
-        if ($(".show_company").prop('checked')==false) {
-            $('.company_name').val('Personal address');
-        }
-        return true;
-    });
+  init_address_edit();
 
-  if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
-  $('.show_company').on("click", function(){
-      console.log("2");
-      if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
-        else $('.field-address-company_name').show(500);
-    });
-  $(".show_all_addresses").on("click", function(){
-      $('.secundar_address').show(500);
-      $('.show_after_all_button').show();
-      $(".show_all_addresses").hide();
-      $(".main_address_button").hide();
-  });
 
   $("#w0 button[name='signup-button']" ).prop("disabled",true);;
   $("input[name='I_accept']" ).on( "change", function() {
@@ -216,4 +197,28 @@ function table_change_fail(){
     .addClass('error')
     .prop('disabled',false);
   gritterAdd('Saving', 'Saving error', 'gritter-danger');
+}
+
+function init_address_edit(){
+  $('.secundar_address').hide();
+  $('.show_after_all_button').hide();
+  $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
+    if ($(".show_company").prop('checked')==false) {
+      $('.company_name').val('Personal address');
+    }
+    return true;
+  });
+
+  if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
+  $('.show_company').on("click", function(){
+    console.log("2");
+    if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
+    else $('.field-address-company_name').show(500);
+  });
+  $(".show_all_addresses").on("click", function(){
+    $('.secundar_address').show(500);
+    $('.show_after_all_button').show();
+    $(".show_all_addresses").hide();
+    $(".main_address_button").hide();
+  });
 }
