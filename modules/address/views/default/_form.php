@@ -9,15 +9,15 @@ use yii\widgets\ActiveForm;
 
 <div class="address-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['class'=>'add_new_address']]); ?>
 
-    <?= $form->field($model, 'address_type')->checkbox(['label' => 'Personal/Corporate'])->label("Type") ?>
+    <?= $form->field($model, 'address_type')->checkbox(['label' => 'Personal/Corporate', 'class'=>'show_company'])->label("Type") ?>
 
     <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'company_name form-control']) ?>
 
     <?= $form->field($model, 'adress_1')->textInput(['maxlength' => true]) ?>
 

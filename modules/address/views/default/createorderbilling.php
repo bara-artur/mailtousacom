@@ -22,7 +22,7 @@ CrudAsset::register($this);
     foreach ($dataProvider->models as $arr) {
         $i++;
         ?>
-        <div class="col-sm-6 col-md-4 <?php if($i!=$mainBillingAddress) {?> hidden_address <?php } ?>">
+        <div class="col-sm-6 col-md-4 <?php if($i!=$mainBillingAddress) {?> secundar_address <?php } ?>">
             <div class="thumbnail">
                 <div class="caption">
                     <?php if ($arr->address_type == true) {?>
@@ -42,19 +42,21 @@ CrudAsset::register($this);
                         <dd class="zip">- <?=$arr->zip ?></dd>
                         <dd class="phone">- <?=$arr->phone ?></dd>
                     </dl>
-                    <span><?= Html::a('Update', ['update', 'id' => $arr->id], ['class' => 'btn btn-primary']) ?>  </span>
-                    <span><?= Html::a('Delete', ['delete', 'id' => $arr->id], [
-                            'class' => 'btn btn-danger',
-                            'data' => [
-                                'confirm' => 'Are you sure you want to delete this item?',
-                                'method' => 'post',
-                            ],
-                        ]) ?>  </span>
+                    <span>
+                         <form action="/address/addressusa" method="post" class="choose_button">
+                           <input type="hidden" name="id" value="<?=$arr->id?>">
+                           <input type="submit" class="btn btn-info go_to_order" value="Choose this address">
+                          </form>
+                    </span>
                 </div>
             </div>
         </div>
     <?php } ?>
 </div>
-<p>
-    <?= Html::a('Create billing address', ['create'], ['class' => 'btn btn-success']) ?>
-</p>
+<button type="button" class="btn btn-info show_all_addresses">Chose another billing address</button>
+<span>
+     <form action="/address/addressusa" method="post" class="main_address_button">
+       <input type="hidden" name="id" value="<?=$mainBillingAddress?>">
+       <input type="submit" class="btn btn-info go_to_order" value="Next">
+      </form>
+</span>

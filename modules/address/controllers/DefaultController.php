@@ -36,8 +36,21 @@ class DefaultController extends Controller
      * Lists all Address models.
      * @return mixed
      */
+    public function actionCreateorderbilling()
+    {
+        $searchModel = new AddressSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $mainBillingAddress = 0;
+
+        return $this->render('createorderbilling', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'mainBillingAddress' => $mainBillingAddress
+        ]);
+    }
+
     public function actionIndex()
-    {    
+    {
         $searchModel = new AddressSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $mainBillingAddress = 0;
@@ -138,7 +151,7 @@ class DefaultController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['/address']);
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -199,7 +212,7 @@ class DefaultController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['/address']);
             } else {
                 return $this->render('update', [
                     'model' => $model,

@@ -1,7 +1,24 @@
 $(document).ready(function() {
+    $('.secundar_address').hide();
+    $('.choose_button').hide();
+    $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
+        if ($(".show_company").prop('checked')==false) {
+            $('.company_name').val('Personal address');
+        }
+        return true;
+    });
+
+  if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
+  $('.show_company').on("click", function(){
+      console.log("2");
+      if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
+        else $('.field-address-company_name').show(500);
+    });
   $(".show_all_addresses").on("click", function(){
-    $(".hidden_address").removeClass('hidden_address');
-    $(".go_to_order").val("Choose this address");
+      $('.secundar_address').show(500);
+      $('.choose_button').show();
+      $(".show_all_addresses").hide();
+      $(".main_address_button").hide();
   });
 
   $("#w0 button[name='signup-button']" ).prop("disabled",true);;
