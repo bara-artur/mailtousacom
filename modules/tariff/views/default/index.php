@@ -38,7 +38,21 @@ CrudAsset::register($this);
                     <th>Shipping volume</th>
                     <?php
                         foreach ($parcel_count as $cnt){
-                            echo '<th>min count '.$cnt.'</th>';
+                            echo '<th>
+                                min count '.$cnt.'
+                                <a
+                                    class="crud-datatable-action-del"
+                                    href="/tariff/default/delete?count='.$cnt.'" 
+                                    title="Delete" data-pjax="false"
+                                    data-pjax-container="crud-datatable-pjax"
+                                    role="modal-remote"
+                                    data-request-method="post"
+                                    data-toggle="tooltip"
+                                    data-confirm-title="Are you sure?"
+                                    data-confirm-message="Are you sure want to delete this column">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                              </th>';
                         }
                     ?>
                 </tr>
@@ -47,7 +61,21 @@ CrudAsset::register($this);
                 <?php
                     foreach ($widths as $w){
                         echo '<tr>';
-                        echo '<th scope="row">'.($w==-1?'Pickup':'Less then '.$w.'lb').'</th>';
+                        echo '<th scope="row">
+                            '.($w==-1?'Pickup':'Less then '.$w.'lb').'
+                                                            <a
+                                    class="crud-datatable-action-del"
+                                    href="/tariff/default/delete?width='.$w.'" 
+                                    title="Delete" data-pjax="false"
+                                    data-pjax-container="crud-datatable-pjax"
+                                    role="modal-remote"
+                                    data-request-method="post"
+                                    data-toggle="tooltip"
+                                    data-confirm-title="Are you sure?"
+                                    data-confirm-message="Are you sure want to delete this line">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </th>';
                         foreach ($parcel_count as $cnt){
                             echo '<td class="td_wr_input">'.
                               Html::input('text', 'tr_input', number_format((float)$tarifs[$cnt][$w],2,'.',''), [
