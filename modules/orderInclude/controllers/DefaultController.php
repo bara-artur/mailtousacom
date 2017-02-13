@@ -107,7 +107,7 @@ class DefaultController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new OrderInclude",
+                    'title'=> "Create",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),

@@ -22,7 +22,7 @@ CrudAsset::register($this);
     foreach ($dataProvider->models as $arr) {
         $i++;
         ?>
-        <div class="col-sm-6 col-md-4 <?php if($i!=$mainBillingAddress) {?> secundar_address <?php } ?>">
+        <div class="col-sm-6 col-md-4 <?php if($i!=$mainBillingAddress) {?> secundar_address <?php } else { $mainAddressID = $arr->id; }?>">
             <div class="thumbnail">
                 <div class="caption">
                     <?php if ($arr->address_type == true) {?>
@@ -42,21 +42,37 @@ CrudAsset::register($this);
                         <dd class="zip">- <?=$arr->zip ?></dd>
                         <dd class="phone">- <?=$arr->phone ?></dd>
                     </dl>
-                    <span>
-                         <form action="/address/addressusa" method="post" class="choose_button">
+                    <span class="show_after_all_button">
+                         <form action="/address/addressusa" method="post" >
                            <input type="hidden" name="id" value="<?=$arr->id?>">
                            <input type="submit" class="btn btn-info go_to_order" value="Choose this address">
                           </form>
                     </span>
+                    <span class="show_after_all_button"><?= Html::a('Update', ['update', 'id' => $arr->id], ['class' => 'btn btn-primary']) ?>  </span>
+                    <span class="show_after_all_button"><?= Html::a('Delete', ['delete', 'id' => $arr->id], [
+                            'class' => 'btn btn-danger',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to delete this item?',
+                                'method' => 'post',
+                            ],
+                        ]) ?>  </span>
                 </div>
             </div>
         </div>
     <?php } ?>
 </div>
+<?=Html::a('Add billing address', ['create'],
+    ['role'=>'modal-remote','title'=> 'Create Address','class'=>'btn btn-default show_after_all_button'])?>
+<?= Html::a('Create billing address', ['create'], ['class' => 'btn btn-success show_after_all_button']) ?>
 <button type="button" class="btn btn-info show_all_addresses">Chose another billing address</button>
 <span>
      <form action="/address/addressusa" method="post" class="main_address_button">
-       <input type="hidden" name="id" value="<?=$mainBillingAddress?>">
+       <input type="hidden" name="id" value="<?=$mainAddressID?>">
        <input type="submit" class="btn btn-info go_to_order" value="Next">
       </form>
 </span>
+<?php Modal::begin([
+    "id"=>"ajaxCrudModal",
+    "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>

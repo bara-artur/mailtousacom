@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('.secundar_address').hide();
-    $('.choose_button').hide();
+    $('.show_after_all_button').hide();
     $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
         if ($(".show_company").prop('checked')==false) {
             $('.company_name').val('Personal address');
@@ -16,7 +16,7 @@ $(document).ready(function() {
     });
   $(".show_all_addresses").on("click", function(){
       $('.secundar_address').show(500);
-      $('.choose_button').show();
+      $('.show_after_all_button').show();
       $(".show_all_addresses").hide();
       $(".main_address_button").hide();
   });
