@@ -7,16 +7,6 @@ $submitOption = [
   'class' => 'btn btn-lg btn-success'
 ];
 
-if ( Yii::$app->session->hasFlash('success')) {
-  ?>
-  <script type='text/javascript'>
-    $(document).ready(function () {
-      popup.open({message: '<?=Yii::$app->session->getFlash('success');?>', type: 'success',time:10000});
-    });
-  </script>
-  <?php
-};
-
 $form = ActiveForm::begin([
   'layout' => 'horizontal',
   'enableAjaxValidation' => false,
@@ -24,6 +14,9 @@ $form = ActiveForm::begin([
   'options' => ['enctype'=>'multipart/form-data']
 ]); ?>
 
+<?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
+<h4 class="modernui-neutral2">Profile <i class="icon-metro-user-2"></i></h4>
+<div class="container">
 <?= $form->field($model, 'username') ?>
 <?= $form->field($model, 'first_name') ?>
 <?= $form->field($model, 'last_name') ?>
@@ -36,9 +29,9 @@ $form = ActiveForm::begin([
 
 
   <div class="form-group">
-    <div class="col-lg-offset-3 col-lg-9">
-      <?= Html::submitButton('Update', $submitOption) ?>
+    <div class="col-xs-offset-3 col-xs-9">
+      <?= Html::submitButton('UPDATE PROFILE', $submitOption) ?>
     </div>
   </div>
-
+</div>
 <?php ActiveForm::end(); ?>

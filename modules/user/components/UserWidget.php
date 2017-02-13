@@ -8,6 +8,7 @@ use app\modules\address\models\Address;
 use yii\base\Widget;
 use yii\helpers\Url;
 use Yii;
+use yii\web\Controller;
 
 class UserWidget extends Widget
 {
@@ -26,6 +27,7 @@ class UserWidget extends Widget
                 ]);
             }
         }
+
         $user_data=Yii::$app->user->identity->toArray();
         $haveOneAddress = Address::find()->where('user_id = :id', [':id' => $user_data['id']])->one();
         if(strlen($user_data['photo'])<10){

@@ -15,6 +15,8 @@ AppAsset::register($this);
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
+
+    <base href="/"/>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
@@ -28,31 +30,40 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => '<img src="/img/mailtousa.png" alt="logo">',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar navbar-default navbar-fixed-top',
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? '' : (
+            //['label' => 'Contact', 'url' => ['/site/contact']],
+            Yii::$app->user->isGuest ?(
+              '<li>'
+              . Html::a('<i class="icon-metro-enter"></i> Sign In', ['/'])
+              . '</li>'
+              . '<li>'
+              . Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration'])
+              . '</li>'
+            ):(
                 '<li>'
-                . Html::beginForm(['/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
+                . Html::a('<i class="icon-metro-user-2"></i> Profile', ['/profile/'], ['class' => 'profile-link'])
+                . '</li>'
+                . '<li>'
+                . Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])
+                . '</li>'.
+                                  '<li>'
+                                  . Html::beginForm(['/logout'], 'post')
+                                  . Html::submitButton(
+                                    'Logout [' . Yii::$app->user->identity->username . '] <i class="icon-metro-exit"></i>',
+                                    ['class' => 'btn btn-link logout']
+                                  )
                 )
                 . Html::endForm()
                 . '</li>'
-                . '<li>'
-                . Html::a('Profile', ['user/default/profile'], ['class' => 'profile-link'])
-                . '</li>'
-            )
+
         ],
     ]);
     NavBar::end();
@@ -68,9 +79,8 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left"></p>
+        <p class="pull-right">&copy; MailToUSA <?= date('Y') ?></p>
     </div>
 </footer>
 

@@ -103,6 +103,12 @@ $config = [
       'address' => [
             'class' => 'app\modules\address\Module',
         ],
+      'tariff' => [
+        'class' => 'app\modules\tariff\Module',
+      ],
+      'state' => [
+        'class' => 'app\modules\state\Module',
+      ],
       'order' => [
             'class' => 'app\modules\order\Module',
         ],
