@@ -72,7 +72,6 @@ CrudAsset::register($this);
       'class'=>'btn btn-default show_after_all_button',
       'id' => 'open_add_adress',
     ])?>
-<?= Html::a('Create billing address', ['create'], ['class' => 'btn btn-success show_after_all_button']) ?>
 <button type="button" class="btn btn-info show_all_addresses">Chose another billing address</button>
 <span>
      <form action="/address/addressusa" method="post" class="main_address_button">

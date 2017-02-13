@@ -118,6 +118,7 @@ class DefaultController extends Controller
             /*
             *   Process for ajax request
             */
+
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
@@ -129,15 +130,19 @@ class DefaultController extends Controller
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post())  ){
+                if ($model->address_type==0) $model->company_name = "Personal address";
+                if($model->save())
+                {
                 return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new Address",
-                    'content'=>'<span class="text-success">Create Address success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "Create new Address",
+                    'content' => '<span class="text-success">Create Address success</span>',
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                        Html::a('Create More', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+
+                ];
+            }
             }else{           
                 return [
                     'title'=> "Create new Address",

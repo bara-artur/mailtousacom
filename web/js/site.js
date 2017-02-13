@@ -202,8 +202,11 @@ function table_change_fail(){
 function init_address_edit(){
   $('.secundar_address').hide();
   $('.show_after_all_button').hide();
-  $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
+  console.log("4");
+  $('.add_new_address').submit(function(){  // действия перед submit формы
+    console.log("5");
     if ($(".show_company").prop('checked')==false) {
+      console.log("6");
       $('.company_name').val('Personal address');
     }
     return true;
@@ -211,7 +214,6 @@ function init_address_edit(){
 
   if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
   $('.show_company').on("click", function(){
-    console.log("2");
     if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
     else $('.field-address-company_name').show(500);
   });
