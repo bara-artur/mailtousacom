@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "order_include".
  *
  * @property integer $id
+ * @property integer $order_id
  * @property string $name
  * @property double $price
  * @property integer $weight
@@ -29,9 +30,9 @@ class OrderInclude extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'price', 'weight', 'quantity'], 'required'],
+            [['order_id', 'name', 'price', 'weight', 'quantity'], 'required'],
+            [['order_id', 'weight', 'quantity'], 'integer'],
             [['price'], 'number'],
-            [['weight', 'quantity','order_id'], 'integer'],
             [['name'], 'string', 'max' => 60],
         ];
     }
@@ -43,6 +44,7 @@ class OrderInclude extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'order_id' => 'Order ID',
             'name' => 'Name',
             'price' => 'Price',
             'weight' => 'Weight',

@@ -9,9 +9,6 @@ return [
          [
          'class'=>'\kartik\grid\DataColumn',
          'attribute'=>'order_id',
-         'content' => function ($data){
-             return 999;//$order->id;
-         },
      ],
     [
         'class'=>'\kartik\grid\DataColumn',

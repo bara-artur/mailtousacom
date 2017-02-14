@@ -39,21 +39,33 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $request = Yii::$app->request;
-        $address_id = $request->post( 'id' );
-        $model = new Order();
-        $model->user_id = Yii::$app->user->id;
-        $model->billing_address_id = $address_id;
-        $model->order_status = 0;
-        $model->order_type = 0;
-        $model->user_id_750 = $model->user_id + 750;
-        $model->created_at = time();
-        $model->transport_data = time();
-        $model->save();
 
-        $searchModel = new OrderIncludeSearch();
-        //$dataProvider = OrderInclude::find()->where('order_id = :id', [':id' => $model->id]);
-        $dataProvider = $searchModel->search(['order_id'=> $model->id]);
+        $request = Yii::$app->request;
+
+        if(!$request->isAjax) {
+            $address_id = $request->post('id');
+            $model = new Order();
+            $model->user_id = Yii::$app->user->id;
+            $model->billing_address_id = $address_id;
+            $model->order_status = 0;
+            $model->order_type = 0;
+            $model->user_id_750 = $model->user_id + 750;
+            $model->created_at = time();
+            $model->transport_data = time();
+            $model->save();
+            $searchModel = new OrderIncludeSearch();
+            $dataProvider = $searchModel->search(null,$model->id);
+        }
+        else {
+            $model1 = Order::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->all();
+            foreach ($model1 as $key => $m)
+                if (!next($model1)) {
+                    $q= $m->id;
+                }
+            $searchModel = new OrderIncludeSearch();
+            $dataProvider = $searchModel->search(null,$q);
+        }
+
 
 
         return $this->render('index', [
@@ -110,14 +122,14 @@ class DefaultController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create111",
+                    'title'=> "Create",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
+                                Html::button('Save',['class'=>'btn btn-primary ','type'=>"submit"])
+
+                ];
             }else if($model->load($request->post())){
                 //$model->order_id = $request->post('order_id');
                 $model->save();
@@ -126,11 +138,11 @@ class DefaultController extends Controller
                     'title'=> "Create new OrderInclude",
                     'content'=>'<span class="text-success">Create OrderInclude success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                            Html::a('Create More',['create?order-id='.$model->order_id],['class'=>'btn btn-primary','role'=>'modal-remote'])
 
                 ];
             }else{
-                return [
+                 return [
                     'title'=> "Create new OrderInclude",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
@@ -166,7 +178,6 @@ class DefaultController extends Controller
     {
         $request = Yii::$app->request;
         $model = $this->findModel($id);       
-
         if($request->isAjax){
             /*
             *   Process for ajax request

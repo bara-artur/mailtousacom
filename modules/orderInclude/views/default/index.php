@@ -5,6 +5,7 @@ use yii\bootstrap\Modal;
 use kartik\grid\GridView;
 use johnitvn\ajaxcrud\CrudAsset; 
 use johnitvn\ajaxcrud\BulkButtonWidget;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
@@ -22,6 +23,9 @@ CrudAsset::register($this);
 ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>
 <div class="order-include-index">
     <div id="ajaxCrudDatatable">
+        <div class="row" id="crud-datatable-pjax">
+            <?php Pjax::begin(); ?>
+
         <?=GridView::widget([
             'id'=>'crud-datatable',
             'dataProvider' => $dataProvider,
@@ -35,6 +39,8 @@ CrudAsset::register($this);
 
             ]
         ])?>
+            <?php Pjax::end(); ?>
+        </div>
     </div>
 </div>
 <?php Modal::begin([
