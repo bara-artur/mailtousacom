@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $model app\modules\orderInclude\models\OrderInclude */
 ?>
 <div class="order-include-view">
- 
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -17,5 +17,6 @@ use yii\widgets\DetailView;
             'quantity',
         ],
     ]) ?>
+    <?=$test?> fdewfew
 
 </div>

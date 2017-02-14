@@ -50,7 +50,6 @@ class DefaultController extends Controller
         $model->created_at = time();
         $model->transport_data = time();
         $model->save();
-
         $searchModel = new OrderIncludeSearch();
         $dataProvider = $searchModel->search($model->id);
 
@@ -70,12 +69,13 @@ class DefaultController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {   
+    {
+
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "OrderInclude #".$id,
+                    'title'=> "OrderInclude",
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -101,13 +101,15 @@ class DefaultController extends Controller
         $model = new OrderInclude();  
 
         if($request->isAjax){
+            $data = Yii::$app->request->get('order-id');
             /*
             *   Process for ajax request
             */
+            $model->order_id = $data;
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create",
+                    'title'=> "Create111",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
                     ]),
@@ -115,7 +117,9 @@ class DefaultController extends Controller
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post())){
+                //$model->order_id = $request->post('order_id');
+                $model->save();
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new OrderInclude",
@@ -124,7 +128,7 @@ class DefaultController extends Controller
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
         
                 ];         
-            }else{           
+            }else{
                 return [
                     'title'=> "Create new OrderInclude",
                     'content'=>$this->renderAjax('create', [

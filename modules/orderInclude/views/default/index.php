@@ -28,7 +28,7 @@ CrudAsset::register($this);
             'columns' => require(__DIR__.'/_columns.php'),
             'toolbar'=> [
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
+                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create?order-id='.$order->id],
                     ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])
                 ],
             ],          

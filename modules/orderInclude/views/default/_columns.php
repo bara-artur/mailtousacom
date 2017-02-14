@@ -6,10 +6,13 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-        // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'id',
-    // ],
+         [
+         'class'=>'\kartik\grid\DataColumn',
+         'attribute'=>'order_id',
+         'content' => function ($data){
+             return 999;//$order->id;
+         },
+     ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'name',
@@ -29,7 +32,7 @@ return [
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
-        'vAlign'=>'middle',
+       // 'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },
