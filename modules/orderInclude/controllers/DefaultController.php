@@ -50,9 +50,10 @@ class DefaultController extends Controller
         $model->created_at = time();
         $model->transport_data = time();
         $model->save();
-        $searchModel = new OrderIncludeSearch();
-        $dataProvider = $searchModel->search($model->id);
 
+        $searchModel = new OrderIncludeSearch();
+        //$dataProvider = OrderInclude::find()->where('order_id = :id', [':id' => $model->id]);
+        $dataProvider = $searchModel->search(['order_id'=> $model->id]);
 
 
         return $this->render('index', [
@@ -126,8 +127,8 @@ class DefaultController extends Controller
                     'content'=>'<span class="text-success">Create OrderInclude success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
+
+                ];
             }else{
                 return [
                     'title'=> "Create new OrderInclude",

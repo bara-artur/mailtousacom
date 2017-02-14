@@ -18,7 +18,8 @@ CrudAsset::register($this);
 ?>
 
 
-
+<?=Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create?order-id='.$order->id],
+['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>
 <div class="order-include-index">
     <div id="ajaxCrudDatatable">
         <?=GridView::widget([
@@ -26,12 +27,6 @@ CrudAsset::register($this);
             'dataProvider' => $dataProvider,
             'pjax'=>true,
             'columns' => require(__DIR__.'/_columns.php'),
-            'toolbar'=> [
-                ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create?order-id='.$order->id],
-                    ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])
-                ],
-            ],          
             'striped' => true,
             'condensed' => true,
             'responsive' => true,          
