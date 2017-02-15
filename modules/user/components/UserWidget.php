@@ -39,7 +39,7 @@ class UserWidget extends Widget
         else {
             Yii::$app->session->setFlash('toAddressCreate','1');
             Yii::$app->session->setFlash('user_id',$user_data['id']);
-            $this->view->context->redirect(['/address/create','first_address'=>'1']);
+            $this->view->context->redirect(['address/create-order-billing']);
         }
     }
 
