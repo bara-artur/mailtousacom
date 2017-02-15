@@ -18,7 +18,7 @@ class OrderElementSearch extends OrderElement
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'order_id'], 'integer'],
             [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2', 'city', 'zip', 'phone', 'state'], 'safe'],
         ];
     }
@@ -43,8 +43,6 @@ class OrderElementSearch extends OrderElement
     {
         $query = OrderElement::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,9 +55,9 @@ class OrderElementSearch extends OrderElement
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'order_id' => $this->order_id,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])

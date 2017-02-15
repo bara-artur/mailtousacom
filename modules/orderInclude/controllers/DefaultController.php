@@ -43,7 +43,7 @@ class DefaultController extends Controller
     {
         $request = Yii::$app->request;
         if(!Yii::$app->user->isGuest && !$request->isAjax && $request->post('id')) {
-            $address_id = $request->get('id');
+            $address_id = $request->post('id');
             $model = new Order();
             $model->user_id = Yii::$app->user->id;
             $model->billing_address_id = $address_id;
@@ -53,8 +53,9 @@ class DefaultController extends Controller
             $model->created_at = time();
             $model->transport_data = time();
             if($model->save()) {
-              return $this->redirect('orderInclude/create-order/'.$model->id);
+              return $this->redirect('/orderInclude/create-order/'.$model->id);
             }
+            //return ddd($model);
         }
 
         if(Yii::$app->user->isGuest){
@@ -96,7 +97,6 @@ class DefaultController extends Controller
     public function actionCreateOrder2($id){
       //получаем посылки в заказе
       $model = OrderElement::find()->where(['order_id'=>$id])->with('includes')->all();
-
       return $this->render('createOrder', [
         'order_elements' => $model,
         'createNewAddress'=>!$model,
@@ -334,7 +334,7 @@ class DefaultController extends Controller
     {
         // ...set `$this->enableCsrfValidation` here based on some conditions...
         // call parent method that will check CSRF if such property is true.
-        if ($action->id === 'index') {
+        if (($action->id === 'index')||($action->id === 'create-order')) {
             # code...
             $this->enableCsrfValidation = false;
         }

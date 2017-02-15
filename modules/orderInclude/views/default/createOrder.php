@@ -27,8 +27,11 @@ $form = ActiveForm::begin([
   'enableAjaxValidation' => false,
   'enableClientValidation' => true
 ]); ?>
-?>
 
+
+<?php
+if($model)
+foreach ($model as $percel) {?>
 
 <div class="col-sm-6 col-md-4">
     <h4>Delivery address</h4>
@@ -56,7 +59,7 @@ $form = ActiveForm::begin([
 
         <?=GridView::widget([
             'id'=>'crud-datatable',
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $model->includes,
             'pjax'=>true,
             'columns' => require(__DIR__.'/_columns.php'),
             'striped' => true,
@@ -71,6 +74,7 @@ $form = ActiveForm::begin([
         </div>
     </div>
 </div>
+<?php } ?>
 <?php Modal::begin([
     "id"=>"ajaxCrudModal",
     "footer"=>"",// always need it for jquery plugin
@@ -85,14 +89,13 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 
 
-<?=Html::a('Add another order', ['create'],
+<?=Html::a('Add another order', ['/orderElement/create'],
   [
     'role'=>'modal-remote',
-    'title'=> 'Create Address',
+    'title'=> 'Create Element of Order',
     'class'=>'btn btn-default show_after_all_button',
     'id' => 'open_add_adress',
   ])?>
-
 
 <?php
 if($createNewAddress){
