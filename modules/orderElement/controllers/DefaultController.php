@@ -1,19 +1,18 @@
 <?php
 
-namespace app\modules\address\controllers;
+namespace app\modules\orderElement\controllers;
 
 use Yii;
-use app\modules\address\models\Address;
-use app\modules\address\models\AddressSearch;
+use app\modules\orderElement\models\OrderElement;
+use app\modules\orderElement\models\OrderElementSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 
-
 /**
- * DefaultController implements the CRUD actions for Address model.
+ * DefaultController implements the CRUD actions for OrderElement model.
  */
 class DefaultController extends Controller
 {
@@ -34,54 +33,23 @@ class DefaultController extends Controller
     }
 
     /**
-     * Lists all Address models.
+     * Lists all OrderElement models.
      * @return mixed
      */
-    public function actionCreateOrderBilling()
-    {
-        $searchModel = new AddressSearch();
-        //$states = new State();
-        $dataProvider = $searchModel->search(['user_id' => Yii::$app->user->id]);
-        $mainBillingAddress = 0;
-
-        $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
-        return $this->render('createorderbilling', [
-          'searchModel' => $searchModel,
-          'dataProvider' => $dataProvider,
-          'mainBillingAddress' => $mainBillingAddress,
-          'createNewAddress'=>!$haveOneAddress,
-          'state_names' => $state_names,
-        ]);
-    }
-
     public function actionIndex()
-    {
-        $searchModel = new AddressSearch();
+    {    
+        $searchModel = new OrderElementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $mainBillingAddress = 0;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'mainBillingAddress' => $mainBillingAddress
-        ]);
-    }
-
-    public function actionAddressusa()
-    {
-        $request = Yii::$app->request;
-        $address_id = $request->post( 'id' );
-        $model = Address::find()->where('id = :id', [':id' => $address_id])->one();
-
-        return $this->render('usaAddress', [
-            'address_id' => $address_id,
-            'name' => $model->first_name.' '.$model->last_name ,
         ]);
     }
 
 
     /**
-     * Displays a single Address model.
+     * Displays a single OrderElement model.
      * @param integer $id
      * @return mixed
      */
@@ -91,7 +59,7 @@ class DefaultController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "Address #".$id,
+                    'title'=> "OrderElement #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($id),
                     ]),
@@ -106,50 +74,47 @@ class DefaultController extends Controller
     }
 
     /**
-     * Creates a new Address model.
+     * Creates a new OrderElement model.
      * For ajax request will return json object
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $request = Yii::$app->request;
-        $model = new Address();  
+        $model = new OrderElement();  
 
         if($request->isAjax){
+
             /*
             *   Process for ajax request
             */
-
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new Address",
+                    'title'=> "Create new OrderElement",
                     'content'=>$this->renderAjax('create', [
-                        'model' => $model,
+                      'model' => $model,
+                      'order_id'=>$id,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post())  ){
-                if ($model->address_type==0) $model->company_name = "Personal address";
-                if($model->save())
-                {
-                return [
-                    'forceReload' => '#crud-datatable-pjax',
-                    'title' => "Create new Address",
-                    'content' => '<span class="text-success">Create Address success</span>',
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                        Html::a('Create More', ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+            }else if($model->load($request->post()) && $model->save()){
 
+                return [
+                    'forceReload'=>'#crud-datatable-pjax',
+                    'title'=> "Create new OrderElement",
+                    'content'=>'<span class="text-success">Create Order Element success</span>',
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
                 ];
-            }
             }else{           
                 return [
-                    'title'=> "Create new Address",
+                    'title'=> "Create new OrderElement",
                     'content'=>$this->renderAjax('create', [
-                        'model' => $model,
+                      'model' => $model,
+                      'order_id'=>$id,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -157,22 +122,13 @@ class DefaultController extends Controller
                 ];         
             }
         }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['/address']);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
+          throw new NotFoundHttpException('Invalid request.');
         }
        
     }
 
     /**
-     * Updates an existing Address model.
+     * Updates an existing OrderElement model.
      * For ajax request will return json object
      * and for non-ajax request if update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -190,7 +146,7 @@ class DefaultController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update Address #".$id,
+                    'title'=> "Update OrderElement #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -200,7 +156,7 @@ class DefaultController extends Controller
             }else if($model->load($request->post()) && $model->save()){
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Address #".$id,
+                    'title'=> "OrderElement #".$id,
                     'content'=>$this->renderAjax('view', [
                         'model' => $model,
                     ]),
@@ -209,7 +165,7 @@ class DefaultController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Update Address #".$id,
+                    'title'=> "Update OrderElement #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -222,7 +178,7 @@ class DefaultController extends Controller
             *   Process for non-ajax request
             */
             if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['/address']);
+                return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
@@ -232,7 +188,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * Delete an existing Address model.
+     * Delete an existing OrderElement model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -260,7 +216,7 @@ class DefaultController extends Controller
     }
 
      /**
-     * Delete multiple existing Address model.
+     * Delete multiple existing OrderElement model.
      * For ajax request will return json object
      * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -291,25 +247,26 @@ class DefaultController extends Controller
     }
 
     /**
-     * Finds the Address model based on its primary key value.
+     * Finds the OrderElement model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Address the loaded model
+     * @return OrderElement the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Address::findOne($id)) !== null) {
+        if (($model = OrderElement::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
     public function beforeAction($action)
     {
         // ...set `$this->enableCsrfValidation` here based on some conditions...
         // call parent method that will check CSRF if such property is true.
-        if ($action->id === 'addressusa') {
+        if ($action->id === 'create') {
             # code...
             $this->enableCsrfValidation = false;
         }

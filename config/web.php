@@ -74,7 +74,13 @@ $config = [
                 //Страница пользователя
                 '<action:(user)>/<id:\d+>' => 'site/user/',
                 '<action:(profile)>' => 'user/default/<action>',
-                'address/<action>' => 'address/default/<action>'
+
+                'address/<action>'=>'address/default/<action>',
+                'order/<action>'=>'order/default/<action>',
+                'orderElement/<action>'=>'orderElement/default/<action>',
+                'orderElement/create/<id:\d+>'=>'orderElement/default/create',
+                'orderInclude/<action>'=>'orderInclude/default/<action>',
+                'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
             ],
         ],
     ],
@@ -97,21 +103,25 @@ $config = [
         ],
       'address' => [
             'class' => 'app\modules\address\Module',
-      ],
+        ],
       'tariff' => [
         'class' => 'app\modules\tariff\Module',
       ],
       'state' => [
         'class' => 'app\modules\state\Module',
       ],
-      'gridview' =>  [
-        'class' => '\kartik\grid\Module'
-        // enter optional module parameters below - only if you need to
-        // use your own export download action or custom translation
-        // message source
-        // 'downloadAction' => 'gridview/export/download',
-        // 'i18n' => []
-      ]
+      'order' => [
+            'class' => 'app\modules\order\Module',
+        ],
+      'orderElement' => [
+            'class' => 'app\modules\orderElement\Module',
+        ],
+      'orderInclude' => [
+            'class' => 'app\modules\orderInclude\Module',
+        ],
+      'gridview' => [
+            'class' => '\kartik\grid\Module',
+        ],
     ]
 ];
 

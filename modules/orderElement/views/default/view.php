@@ -3,22 +3,24 @@
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\address\models\Address */
+/* @var $model app\modules\orderElement\models\OrderElement */
 ?>
-<div class="address-view">
+<div class="order-element-view">
  
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
-            'user_id',
+            'order_id',
             'first_name',
             'last_name',
             'company_name',
             'adress_1',
             'adress_2',
             'city',
-            'address_type',
+            'zip',
+            'phone',
+            'state',
         ],
     ]) ?>
 

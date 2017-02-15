@@ -2,13 +2,13 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\address\models\Address */
-?>
-<div class="address-update">
 
+/* @var $this yii\web\View */
+/* @var $model app\modules\orderInclude\models\OrderInclude */
+
+?>
+<div class="order-include-create">
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
 </div>

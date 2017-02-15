@@ -1,4 +1,9 @@
 $(document).ready(function() {
+  $('.secundar_address').hide();
+  $('.show_after_all_button').hide();
+  init_address_edit();
+
+
   $("#w0 button[name='signup-button']" ).prop("disabled",true);;
   $("input[name='I_accept']" ).on( "change", function() {
     if($("input[name='I_accept']").prop("checked")) {
@@ -194,4 +199,25 @@ function table_change_fail(){
     .addClass('error')
     .prop('disabled',false);
   gritterAdd('Saving', 'Saving error', 'gritter-danger');
+}
+
+function init_address_edit(){
+  $('.add_new_address').submit(function(){  // действия перед submit формы
+    if ($(".show_company").prop('checked')==false) {
+      $('.company_name').val('Personal address');
+    }
+    return true;
+  });
+
+  if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
+  $('.show_company').on("click", function(){
+    if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
+    else $('.field-address-company_name').show(500);
+  });
+  $(".show_all_addresses").on("click", function(){
+    $('.secundar_address').show(500);
+    $('.show_after_all_button').show();
+    $(".show_all_addresses").hide();
+    $(".main_address_button").hide();
+  });
 }

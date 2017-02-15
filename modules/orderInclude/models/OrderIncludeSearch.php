@@ -1,16 +1,16 @@
 <?php
 
-namespace app\modules\address\models;
+namespace app\modules\orderInclude\models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\address\models\Address;
+use app\modules\orderInclude\models\OrderInclude;
 
 /**
- * AddressSearch represents the model behind the search form about `app\modules\address\models\Address`.
+ * OrderIncludeSearch represents the model behind the search form about `app\modules\orderInclude\models\OrderInclude`.
  */
-class AddressSearch extends Address
+class OrderIncludeSearch extends OrderInclude
 {
     /**
      * @inheritdoc
@@ -18,8 +18,9 @@ class AddressSearch extends Address
     public function rules()
     {
         return [
-            [['id', 'user_id', 'city', 'address_type'], 'integer'],
-            [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2'], 'safe'],
+            [['id', 'order_id', 'weight', 'quantity'], 'integer'],
+            [['name'], 'safe'],
+            [['price'], 'number'],
         ];
     }
 
@@ -39,9 +40,11 @@ class AddressSearch extends Address
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$order_id)
     {
-        $query = Address::find();
+        $query = OrderInclude::find();
+
+        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -54,21 +57,18 @@ class AddressSearch extends Address
             // $query->where('0=1');
             return $dataProvider;
         }
+        $this->order_id = $order_id;
 
-        $this->user_id = Yii::$app->user->id;
-
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'city' => $this->city,
-            'address_type' => $this->address_type,
+            'order_id' => $this->order_id,
+            'price' => $this->price,
+            'weight' => $this->weight,
+            'quantity' => $this->quantity,
         ]);
 
-        $query->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'last_name', $this->last_name])
-            ->andFilterWhere(['like', 'company_name', $this->company_name])
-            ->andFilterWhere(['like', 'adress_1', $this->adress_1])
-            ->andFilterWhere(['like', 'adress_2', $this->adress_2]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

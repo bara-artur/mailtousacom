@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\address\models\Address */
+/* @var $model app\modules\orderElement\models\OrderElement */
 ?>
-<div class="address-update">
+<div class="order-element-update">
 
     <?= $this->render('_form', [
         'model' => $model,
