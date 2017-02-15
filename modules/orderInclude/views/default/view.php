@@ -17,6 +17,6 @@ use yii\widgets\DetailView;
             'quantity',
         ],
     ]) ?>
-    <?=$test?> fdewfew
+    <?=$test?>
 
 </div>

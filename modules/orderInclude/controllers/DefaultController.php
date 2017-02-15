@@ -5,6 +5,8 @@ namespace app\modules\orderInclude\controllers;
 use Yii;
 use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderInclude\models\OrderIncludeSearch;
+use app\modules\orderInclude\models\OrderAddItems;
+use app\modules\orderElement\models\OrderElement;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,13 +39,11 @@ class DefaultController extends Controller
      * Lists all OrderInclude models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionCreateOrder()
     {
-
         $request = Yii::$app->request;
-
-        if(!$request->isAjax) {
-            $address_id = $request->post('id');
+        if(!Yii::$app->user->isGuest && !$request->isAjax && $request->post('id')) {
+            $address_id = $request->get('id');
             $model = new Order();
             $model->user_id = Yii::$app->user->id;
             $model->billing_address_id = $address_id;
@@ -52,11 +52,29 @@ class DefaultController extends Controller
             $model->user_id_750 = $model->user_id + 750;
             $model->created_at = time();
             $model->transport_data = time();
-            $model->save();
-            $searchModel = new OrderIncludeSearch();
-            $dataProvider = $searchModel->search(null,$model->id);
+            if($model->save()) {
+              return $this->redirect('orderInclude/create-order/'.$model->id);
+            }
         }
-        else {
+
+        if(Yii::$app->user->isGuest){
+          Yii::$app
+            ->getSession()
+            ->setFlash(
+              'error',
+              'You must login.'
+            );
+          return $this->redirect('/');
+        }else {
+          Yii::$app
+            ->getSession()
+            ->setFlash(
+              'error',
+              'An error has occurred. Try to create order again.'
+            );
+          return $this->redirect('address/create-order-billing');
+        }
+          /*else {
             $model1 = Order::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->all();
             foreach ($model1 as $key => $m)
                 if (!next($model1)) {
@@ -66,15 +84,27 @@ class DefaultController extends Controller
             $dataProvider = $searchModel->search(null,$q);
         }
 
-
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'order' => $model
-        ]);
+            'order' => $model,
+        ]);*/
     }
 
+    //id  - № заказа
+    //посылка = 1 строка order_element
+    public function actionCreateOrder2($id){
+      //получаем посылки в заказе
+      $model = OrderElement::find()->where(['order_id'=>$id])->with('includes')->all();
+
+      return $this->render('createOrder', [
+        'order_elements' => $model,
+        'createNewAddress'=>!$model,
+        /*'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+        'order' => $model,*/
+      ]);
+    }
 
     /**
      * Displays a single OrderInclude model.

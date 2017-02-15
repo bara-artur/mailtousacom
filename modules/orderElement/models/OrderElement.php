@@ -3,7 +3,7 @@
 namespace app\modules\orderElement\models;
 
 use Yii;
-
+use app\modules\orderInclude\models\OrderInclude;
 /**
  * This is the model class for table "order_element".
  *
@@ -60,4 +60,8 @@ class OrderElement extends \yii\db\ActiveRecord
             'state' => 'State',
         ];
     }
+
+  public function getIncludes(){
+    return $this->hasMany(OrderInclude::className(), ['order_id' => 'id']);
+  }
 }

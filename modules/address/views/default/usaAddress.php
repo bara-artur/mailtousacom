@@ -13,7 +13,7 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 ?>
 <p> Here will be some informations about return adress in USA</p>
 <p> <?= $name ?></p>
-<form action="/orderInclude/index" method="post">
+<form action="/orderInclude/create-order" method="post">
     <input type="hidden" name="id" value="<?=$address_id?>">
     <input type="submit" class="btn btn-info" value="Create order">
 </form>

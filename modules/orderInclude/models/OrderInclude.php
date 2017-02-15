@@ -3,7 +3,6 @@
 namespace app\modules\orderInclude\models;
 
 use Yii;
-
 /**
  * This is the model class for table "order_include".
  *
@@ -51,4 +50,5 @@ class OrderInclude extends \yii\db\ActiveRecord
             'quantity' => 'Quantity',
         ];
     }
+
 }
