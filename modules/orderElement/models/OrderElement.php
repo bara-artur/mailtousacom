@@ -4,6 +4,7 @@ namespace app\modules\orderElement\models;
 
 use Yii;
 use app\modules\orderInclude\models\OrderInclude;
+use yii\data\ActiveDataProvider;
 /**
  * This is the model class for table "order_element".
  *
@@ -61,7 +62,15 @@ class OrderElement extends \yii\db\ActiveRecord
         ];
     }
 
-  public function getIncludes(){
-    return $this->hasMany(OrderInclude::className(), ['order_id' => 'id']);
+  public function getIncludesSearch(){
+    $query = OrderInclude::find();
+    $dataProvider = new ActiveDataProvider([
+      'query' => $query,
+    ]);
+    $query->andFilterWhere([
+      'order_id'=>$this->id
+    ]);
+    return $dataProvider;
+
   }
 }

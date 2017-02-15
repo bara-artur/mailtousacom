@@ -9,9 +9,13 @@ use yii\widgets\ActiveForm;
 
 <div class="order-element-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+      'options' => ['class'=>'add_new_address'],
+      'id'=>'created_address',
+      'validateOnChange' => true,
+    ]); ?>
 
-    <?= $form->field($model, 'order_id')->textInput() ?>
+    <?= $form->field($model, 'order_id')->hiddenInput(['value' => $order_id])->label(false); ?>
 
     <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
 

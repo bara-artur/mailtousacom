@@ -75,31 +75,18 @@ class DefaultController extends Controller
             );
           return $this->redirect('address/create-order-billing');
         }
-          /*else {
-            $model1 = Order::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->all();
-            foreach ($model1 as $key => $m)
-                if (!next($model1)) {
-                    $q= $m->id;
-                }
-            $searchModel = new OrderIncludeSearch();
-            $dataProvider = $searchModel->search(null,$q);
-        }
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'order' => $model,
-        ]);*/
     }
 
     //id  - № заказа
     //посылка = 1 строка order_element
     public function actionCreateOrder2($id){
       //получаем посылки в заказе
-      $model = OrderElement::find()->where(['order_id'=>$id])->with('includes')->all();
+      $model = OrderElement::find()->where(['order_id'=>$id])->all();
+
       return $this->render('createOrder', [
         'order_elements' => $model,
         'createNewAddress'=>!$model,
+        'order_id'=>$id,
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/

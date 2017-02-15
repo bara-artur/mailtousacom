@@ -79,7 +79,7 @@ class DefaultController extends Controller
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
         $request = Yii::$app->request;
         $model = new OrderElement();  
@@ -94,7 +94,8 @@ class DefaultController extends Controller
                 return [
                     'title'=> "Create new OrderElement",
                     'content'=>$this->renderAjax('create', [
-                        'model' => $model,
+                      'model' => $model,
+                      'order_id'=>$id,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -105,16 +106,15 @@ class DefaultController extends Controller
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new OrderElement",
-                    'content'=>'<span class="text-success">Create OrderElement success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-
+                    'content'=>'<span class="text-success">Create Order Element success</span>',
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
                 ];
             }else{           
                 return [
                     'title'=> "Create new OrderElement",
                     'content'=>$this->renderAjax('create', [
-                        'model' => $model,
+                      'model' => $model,
+                      'order_id'=>$id,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -122,20 +122,7 @@ class DefaultController extends Controller
                 ];         
             }
         }else{
-
-            $model = new OrderElement();
-
-            if ($model->load(Yii::$app->request->post(),'')) {
-                $model->save();
-             //   $order = Order::findOne($model->order_id);
-             //   $order->order_status = 1;
-             //   $order->save();
-                return $this->redirect(['/','message'=>'Order success']);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
-            }
+          throw new NotFoundHttpException('Invalid request.');
         }
        
     }
