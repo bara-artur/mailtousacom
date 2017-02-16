@@ -13,7 +13,6 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use app\modules\order\models\Order;
-
 /**
  * DefaultController implements the CRUD actions for OrderInclude model.
  */
@@ -154,9 +153,7 @@ class DefaultController extends Controller
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new OrderInclude",
                     'content'=>'<span class="text-success">Create OrderInclude success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create?order-id='.$model->order_id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
                 ];
             }else{
                  return [
@@ -271,36 +268,6 @@ class DefaultController extends Controller
 
     }
 
-     /**
-     * Delete multiple existing OrderInclude model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionBulkDelete()
-    {        
-        $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            $model->delete();
-        }
-
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
-        }
-       
-    }
 
     /**
      * Finds the OrderInclude model based on its primary key value.

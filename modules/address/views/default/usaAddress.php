@@ -11,9 +11,18 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
-<p> Here will be some informations about return adress in USA</p>
-<p> <?= $name ?></p>
+<p> Please set up your US return adress</p>
+<p><b>PortamleBay</b> ID<?=$user->id+750;?></p>
+<p><b>First name</b> ID<?=$user->first_name;?></p>
+<p><b>Last name</b> ID<?=$user->last_name;?></p>
+<p>100 Walnut ST</p>
+<p>Door 18</p>
+<p>Champlain NY 12919</p>
+<p><?=$user->phone;?></p>
+
+
+<p> <?= $user->first_name.' '.$user->last_name ?></p>
 <form action="/orderInclude/create-order" method="post">
     <input type="hidden" name="id" value="<?=$address_id?>">
-    <input type="submit" class="btn btn-info" value="Create order">
+    <input type="submit" class="btn btn-info" value="Next">
 </form>

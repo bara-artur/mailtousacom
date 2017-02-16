@@ -3,6 +3,7 @@
 namespace app\modules\orderElement\controllers;
 
 use Yii;
+use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderElement\models\OrderElement;
 use app\modules\orderElement\models\OrderElementSearch;
 use yii\web\Controller;
@@ -60,9 +61,7 @@ class DefaultController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
                     'title'=> "OrderElement #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($id),
-                    ]),
+                    'content'=>'<span class="text-success">Create OrderInclude success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
@@ -92,7 +91,7 @@ class DefaultController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Create new OrderElement",
+                    'title'=> "Adding new packages",
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
@@ -105,13 +104,13 @@ class DefaultController extends Controller
 
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new OrderElement",
-                    'content'=>'<span class="text-success">Create Order Element success</span>',
+                    'title'=> "Adding new packages",
+                    'content'=>'<span class="text-success">Create packages success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
                 ];
             }else{           
                 return [
-                    'title'=> "Create new OrderElement",
+                    'title'=> "Adding new packages",
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
@@ -146,7 +145,7 @@ class DefaultController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if($request->isGet){
                 return [
-                    'title'=> "Update OrderElement #".$id,
+                    'title'=> "Change the recipient data #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -157,15 +156,13 @@ class DefaultController extends Controller
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "OrderElement #".$id,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
+                    'content'=>'<span class="text-success">Create OrderInclude success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
                 ];    
             }else{
                  return [
-                    'title'=> "Update OrderElement #".$id,
+                    'title'=> "Change the recipient data #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),
@@ -174,16 +171,7 @@ class DefaultController extends Controller
                 ];        
             }
         }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+          throw new NotFoundHttpException('Invalid request.');
         }
     }
 
@@ -198,6 +186,7 @@ class DefaultController extends Controller
     {
         $request = Yii::$app->request;
         $this->findModel($id)->delete();
+        OrderInclude::deleteAll(['order_id'=>$id]);
 
         if($request->isAjax){
             /*
@@ -213,37 +202,6 @@ class DefaultController extends Controller
         }
 
 
-    }
-
-     /**
-     * Delete multiple existing OrderElement model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionBulkDelete()
-    {        
-        $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            $model->delete();
-        }
-
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
-        }
-       
     }
 
     /**

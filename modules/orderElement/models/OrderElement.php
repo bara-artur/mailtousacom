@@ -73,4 +73,8 @@ class OrderElement extends \yii\db\ActiveRecord
     return $dataProvider;
 
   }
+  public function getIncludes(){
+    $query = OrderInclude::find()->where(['order_id'=>$this->id])->asArray()->all();
+    return $query;
+  }
 }

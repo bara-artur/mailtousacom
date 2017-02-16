@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
 		<?= $form->field($model, 'parcel_count')->hiddenInput(['value'=> $count])->label(false); ?>
-    <?= $form->field($model, 'width')->textInput() ?>
+    <?= $form->field($model, 'weight')->textInput() ?>
 
 
   

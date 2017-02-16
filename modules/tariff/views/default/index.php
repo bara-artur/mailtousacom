@@ -25,9 +25,9 @@ CrudAsset::register($this);
                 <i class="glyphicon glyphicon-plus"></i>
                 Add min parcels discount
             </a>
-            <a class="btn btn-default" href="/tariff/default/create_width" title="Create new max parcel width" role="modal-remote">
+            <a class="btn btn-default" href="/tariff/default/create_weight" title="Create new max parcel weight" role="modal-remote">
                 <i class="glyphicon glyphicon-plus"></i>
-                Add max parcel width
+                Add max parcel weight
             </a>
         </div>
     </div>
@@ -60,13 +60,13 @@ CrudAsset::register($this);
             </thead>
             <tbody>
                 <?php
-                    foreach ($widths as $w){
+                    foreach ($weights as $w){
                         echo '<tr>';
                         echo '<th scope="row">
                             '.($w==-1?'Pickup':'Less then '.$w.'lb').'
                                                             <a
                                     class="crud-datatable-action-del"
-                                    href="/tariff/default/delete?width='.$w.'" 
+                                    href="/tariff/default/delete?weight='.$w.'" 
                                     title="Delete" data-pjax="false"
                                     data-pjax-container="crud-datatable-pjax"
                                     role="modal-remote"
@@ -82,7 +82,7 @@ CrudAsset::register($this);
                               Html::input('text', 'tr_input', number_format((float)$tarifs[$cnt][$w],2,'.',''), [
                                 'class' => 'tr_input',
                                 'onchange'=>'table_change_input(this)',
-                                'width'=>$w,
+                                'weight'=>$w,
                                 'count'=>$cnt
                               ]).
                               '</td>';

@@ -75,7 +75,7 @@ class DefaultController extends Controller
 
         return $this->render('usaAddress', [
             'address_id' => $address_id,
-            'name' => $model->first_name.' '.$model->last_name ,
+            'user' => $model,
         ]);
     }
 

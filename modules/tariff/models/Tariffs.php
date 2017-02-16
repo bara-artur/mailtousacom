@@ -27,9 +27,9 @@ class Tariffs extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parcel_count','width'], 'required'],
+            [['parcel_count','weight'], 'required'],
             [['parcel_count'], 'integer'],
-            [['price','width'], 'number'],
+            [['price','weight'], 'number'],
         ];
     }
 

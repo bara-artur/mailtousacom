@@ -3,6 +3,13 @@ $(document).ready(function() {
   $('.show_after_all_button').hide();
   init_address_edit();
 
+  //в модалках запрет отправки по Enter
+  $('body').on('keydown','.modal-content input',function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
 
   $("#w0 button[name='signup-button']" ).prop("disabled",true);;
   $("input[name='I_accept']" ).on( "change", function() {
@@ -175,7 +182,7 @@ function table_change_input(el){
     .addClass('saving')
     .prop('disabled',true)
   post={
-    'width':$el.attr('width'),
+    'weight':$el.attr('weight'),
     'count':$el.attr('count'),
     'value':$el.val(),
   };

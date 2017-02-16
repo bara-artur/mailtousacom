@@ -8,6 +8,7 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 use yii\widgets\Pjax;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\DetailView;
+use app\components\ParcelPrice;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
@@ -46,19 +47,83 @@ foreach ($order_elements as $percel) {
 
     <div class="order-include-index col-sm-6 col-md-6">
         <div id="ajaxCrudDatatable_<?=$percel-id;?>">
-            <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add item to parcel', ['create?order-id='.$percel->id],
-              ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>
             <div class="row" id="crud-datatable-pjax">
                 <?php Pjax::begin(); ?>
 
-                <?= GridView::widget([
-                  'dataProvider' => $percel->getIncludesSearch(),
-                    'pjax'=>true,
-                    'columns' => require(__DIR__.'/_columns.php'),
-                    'striped' => true,
-                    'condensed' => true,
-                    'responsive' => true,
-                  ]); ?>
+                <table class="table">
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Item Price</th>
+                        <th>Item Width</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                    <?php $includes=$percel->getIncludes();?>
+                    <?php $total_weight=0;?>
+                    <?php foreach ($includes as $i => $item){
+                        $total_weight+=$item['weight']*$item['quantity'];
+                        ?>
+                        <tr>
+                            <td><?=$i+1?></td>
+                            <td><?=$item['name'];?></td>
+                            <td><?=$item['price'];?></td>
+                            <td><?=$item['weight'];?></td>
+                            <td><?=$item['quantity'];?></td>
+
+                            <td>
+                                <?=Html::a('<i class="glyphicon glyphicon-pencil"></i>', ['/orderInclude/update?id='.$item['id']],
+                                  ['role'=>'modal-remote','title'=> 'Update','data-pjax'=>0,'class'=>''])?>
+                                <?=Html::a('<i class="glyphicon glyphicon-trash"></i>', ['/orderInclude/delete?id='.$item['id']],
+                                  [
+                                    'role'=>'modal-remote',
+                                    'title'=> 'Delete',
+                                    'data-pjax'=>0,
+                                    'class'=>'w0-action-del',
+                                    'data-request-method'=>"post",
+                                    'data-confirm-title'=>"Are you sure?",
+                                    'data-confirm-message'=>"Are you sure want to delete this item",
+                                  ])?>
+
+                            </td>
+                        </tr>
+                    <?php }?>
+                </table>
+                <div>
+                    <h4>Total</h4>
+                    <p><b>Weight </b><?=$total_weight;?>lb</p>
+                    <?php
+                        $ParcelPrice=ParcelPrice::widget(['weight'=>$total_weight]);
+                        if($ParcelPrice!=false){
+                            $ParcelPrice.=' $ (without tax)';
+                        }else{
+                            $ParcelPrice='Exceeded weight of a parcel.';
+                        }
+                    ?>
+                    <p><b>Cost of delivery</b> <?=$ParcelPrice;?></p>
+                </div>
+                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add item to parcel', ['create?order-id='.$percel->id],
+                  ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>
+
+                <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit delivery address', ['/orderElement/update?id='.$percel->id],
+                  [
+                    'role'=>'modal-remote',
+                    'title'=> 'Create Element of Order',
+                    'class'=>'btn btn-default',
+                    'id' => 'open_add_order_address',
+                  ])?>
+
+                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete packages', ['/orderElement/delete?id='.$item['id']],
+                  [
+                    'role'=>'modal-remote',
+                    'title'=> 'Delete',
+                    'data-pjax'=>0,
+                    'class'=>'btn btn-default',
+                    'data-request-method'=>"post",
+                    'data-confirm-title'=>"Are you sure?",
+                    'data-confirm-message'=>"Are you sure want to delete this packages",
+                  ])?>
+
                 <?php Pjax::end(); ?>
             </div>
         </div>
@@ -83,6 +148,11 @@ foreach ($order_elements as $percel) {
     'title'=> 'Create Element of Order',
     'class'=>'btn btn-default',
     'id' => 'open_add_order_address',
+  ])?>
+
+<?=Html::a('Next', ['/orderElement/border-form/'.$order_id],
+  [
+    'class'=>'btn btn-info go_to_order'
   ])?>
 
 <?php

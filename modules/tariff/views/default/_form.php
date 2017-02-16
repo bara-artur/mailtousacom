@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'parcel_count')->textInput()?>
-		<?= $form->field($model, 'width')->hiddenInput(['value'=> $width])->label(false); ?>
+		<?= $form->field($model, 'weight')->hiddenInput(['value'=> $weight])->label(false); ?>
 
   
 	<?php if (!Yii::$app->request->isAjax){ ?>

@@ -10,6 +10,6 @@ use yii\helpers\Html;
 <div class="tariffs-create">
     <?= $this->render('_form', [
         'model' => $model,
-        'width'=>$width,
+        'weight'=>$weight,
     ]) ?>
 </div>
