@@ -55,7 +55,7 @@ foreach ($order_elements as $percel) {
                         <th>#</th>
                         <th>Product Name</th>
                         <th>Item Price</th>
-                        <th>Item Width</th>
+                        <th>Item Weight</th>
                         <th>Quantity</th>
                         <th>Action</th>
                     </tr>
