@@ -80,8 +80,10 @@ $config = [
 
                 'orderElement/<action>'=>'orderElement/default/<action>',
                 'orderElement/create/<id:\d+>'=>'orderElement/default/create',
+
                 'orderInclude/<action>'=>'orderInclude/default/<action>',
                 'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
+                'orderInclude/<action:border-form>/<id:\d+>'=>'orderInclude/default/<action>/',
             ],
         ],
     ],

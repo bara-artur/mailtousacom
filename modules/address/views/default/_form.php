@@ -20,8 +20,7 @@ $state_names = ArrayHelper::map($states,'name','name');
       'validateOnChange' => true,
     ]); ?>
 
-    <?= $form->field($model, 'address_type')->checkbox(['label' => 'Personal/Corporate', 'class'=>'show_company'])->label("Type") ?>
-
+    <?= $form->field($model, 'address_type')->checkbox(['label' => ' I will use my company address', 'class'=>'show_company'])->label("") ?>
     <div class="row">
         <div class="col-md-6">
         <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
@@ -51,7 +50,7 @@ $state_names = ArrayHelper::map($states,'name','name');
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">
-	        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	        <?= Html::submitButton('Next', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 	    </div>
 	<?php } ?>
 

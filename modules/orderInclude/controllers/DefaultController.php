@@ -7,12 +7,15 @@ use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderInclude\models\OrderIncludeSearch;
 use app\modules\orderInclude\models\OrderAddItems;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\address\models\Address;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use app\modules\order\models\Order;
+use yii\db\Query;
+
 /**
  * DefaultController implements the CRUD actions for OrderInclude model.
  */
@@ -41,8 +44,10 @@ class DefaultController extends Controller
     public function actionCreateOrder()
     {
         $request = Yii::$app->request;
-        if(!Yii::$app->user->isGuest && !$request->isAjax && $request->post('id')) {
-            $address_id = $request->post('id');
+        if(!Yii::$app->user->isGuest && !$request->isAjax && $request->getIsGet()) {
+            $address = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
+
+            $address_id = $address->id;
             $model = new Order();
             $model->user_id = Yii::$app->user->id;
             $model->billing_address_id = $address_id;
@@ -268,6 +273,63 @@ class DefaultController extends Controller
 
     }
 
+    public function actionBorderForm($id){
+      $model = OrderElement::find()->where(['order_id'=>$id])->all();
+
+      $total=array(
+        'price'=>0,
+        'weight'=>0,
+        'quantity'=>0,
+      );
+
+      $query = new Query;
+      $query->select('weight')
+        ->from('tariffs')
+        ->orderBy([
+          'weight' => SORT_DESC
+        ]);
+      $row = $query->one();
+      $max_weight=$row['weight'];
+
+      foreach ($model as &$pac) {
+        $pac->includes_packs = $pac->getIncludes();
+        if (count($pac->includes_packs) == 0) {
+          Yii::$app
+            ->getSession()
+            ->setFlash(
+              'error',
+              'The package must have at least one attachment.'
+            );
+          return $this->redirect('/orderInclude/create-order/' . $id);
+        }
+        $this_weight = 0;
+        foreach ($pac->includes_packs as $pack) {
+          $total['price'] += $pack['price'] * $pack['quantity'];
+          $total['weight'] += $pack['weight'] * $pack['quantity'];
+          $total['quantity'] += $pack['quantity'];
+          $this_weight += $pack['weight'] * $pack['quantity'];
+        }
+        if($this_weight>$max_weight){
+          Yii::$app
+            ->getSession()
+            ->setFlash(
+              'error',
+              'Allowable weight of the parcel is '.$max_weight.'lb.'
+            );
+          return $this->redirect('/orderInclude/create-order/' . $id);
+        }
+      }
+
+      return $this->render('BorderForm', [
+        'order_elements' => $model,
+        'createNewAddress'=>!$model,
+        'order_id'=>$id,
+        'total'=>$total,
+        /*'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+        'order' => $model,*/
+      ]);
+    }
 
     /**
      * Finds the OrderInclude model based on its primary key value.

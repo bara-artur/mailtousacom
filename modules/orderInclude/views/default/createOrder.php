@@ -97,7 +97,7 @@ foreach ($order_elements as $percel) {
                         if($ParcelPrice!=false){
                             $ParcelPrice.=' $ (without tax)';
                         }else{
-                            $ParcelPrice='Exceeded weight of a parcel.';
+                            $ParcelPrice='<b style="color: red;">Exceeded weight of a parcel.</b>';
                         }
                     ?>
                     <p><b>Cost of delivery</b> <?=$ParcelPrice;?></p>
@@ -129,10 +129,10 @@ foreach ($order_elements as $percel) {
         </div>
     </div>
 </div>
+<hr>
 <?php } ?>
 <?php } ?>
 <?php Pjax::end(); ?>
-    <hr>
 </div>
 <?php Modal::begin([
     "id"=>"ajaxCrudModal",
@@ -150,7 +150,7 @@ foreach ($order_elements as $percel) {
     'id' => 'open_add_order_address',
   ])?>
 
-<?=Html::a('Next', ['/orderElement/border-form/'.$order_id],
+<?=Html::a('Next', ['/orderInclude/border-form/'.$order_id],
   [
     'class'=>'btn btn-info go_to_order'
   ])?>

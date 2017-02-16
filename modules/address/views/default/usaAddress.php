@@ -19,10 +19,9 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 <p>Door 18</p>
 <p>Champlain NY 12919</p>
 <p><?=$user->phone;?></p>
-
-
 <p> <?= $user->first_name.' '.$user->last_name ?></p>
-<form action="/orderInclude/create-order" method="post">
-    <input type="hidden" name="id" value="<?=$address_id?>">
-    <input type="submit" class="btn btn-info" value="Next">
-</form>
+
+<?=Html::a('Next', ['/orderInclude/create-order'],
+  [
+    'class'=>'btn btn-info go_to_order'
+  ])?>

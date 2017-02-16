@@ -21,6 +21,7 @@ use yii\data\ActiveDataProvider;
  */
 class OrderElement extends \yii\db\ActiveRecord
 {
+    public $includes_packs;
     /**
      * @inheritdoc
      */

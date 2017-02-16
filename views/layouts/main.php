@@ -25,6 +25,7 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body>
+<?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
 <?php $this->beginBody() ?>
 
 <div class="wrap">

@@ -155,10 +155,10 @@ a.desc:after {
     margin-top: 9px;
 }
 .nav li > form > button.logout:hover{
-     color:#FFFFFF !important;
-     border: 1px solid #E51400;
-     background-color:#E51400;
- }
+    color:#FFFFFF !important;
+    border: 1px solid #E51400;
+    background-color:#E51400;
+}
 
 
 @media(max-width:767px) {
@@ -174,7 +174,7 @@ a.desc:after {
 
 .navbar-default .navbar-nav> li > a:focus,
 .navbar-default .navbar-nav> li > a:hover{border-bottom: 4px solid #FFC800;
-background-color: #FFFFFF;color:#354346;}
+    background-color: #FFFFFF;color:#354346;}
 
 .nav > li > form > button.logout:focus,
 .nav > li > form > button.logout:hover {
@@ -445,3 +445,7 @@ input[type=checkbox]:checked+span::before {
 .dropdown-menu>li>a:hover {
     border-bottom:4px solid #FFC800;
 }
+
+.modal-backdrop, .modal-backdrop.fade.in {    opacity: .4;    filter: alpha(opacity=80);    background: #000;    position: fixed;}
+
+.modal-dialog {max-height: calc(100vh - 50px);overflow: auto;}
