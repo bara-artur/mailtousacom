@@ -58,7 +58,7 @@ body {
 }
 .modal{z-index:30000;}
 .modal.fade.in {
-    top: 30%;
+    top: 10%;
 }
 .wrap {
     min-height: 100%;
@@ -187,8 +187,8 @@ background-color: #FFFFFF;color:#354346;}
 /*art bara*/
 @media (min-width: 768px) {
     .navbar-nav > li > a {
-        padding-top: 13.5px;
-        padding-bottom: 50px;
+        padding-top: 5px;
+        padding-bottom: 5px;
         margin-bottom: 6.5px;
         margin-top: 8.5px;
         margin-right: 8px;
@@ -433,7 +433,7 @@ input[type=checkbox]:checked+span::before {
     padding: 8px;
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
-    background-color: #FFC800;
+    background-color: #FFC800 ;
     color: #354346;
     border: 0px;}
 .navbar-nav > li >.dropdown-menu > a:hover{text-decoration: none;border-bottom:4px solid #FFC800;}

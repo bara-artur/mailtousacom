@@ -22,22 +22,31 @@ $state_names = ArrayHelper::map($states,'name','name');
 
     <?= $form->field($model, 'address_type')->checkbox(['label' => 'Personal/Corporate', 'class'=>'show_company'])->label("Type") ?>
 
-    <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
-
+    <div class="row">
+        <div class="col-md-6">
+        <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-6">
     <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
 
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'company_name form-control']) ?>
 
     <?= $form->field($model, 'adress_1')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'adress_2')->textInput(['maxlength' => true]) ?>
-
+    <div class="row">
+        <div class="col-md-4">
     <?= $form->field($model, 'city')->textInput() ?>
-
+        </div>
+        <div class="col-md-4">
     <?= $form->field($model, 'zip')->textInput(['maxlength' => true]) ?>
-
+        </div>
+        <div class="col-md-4">
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
-
+    </div>
+    </div>
     <?= $form->field($model, 'state')->dropDownList($state_names) ?>
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
