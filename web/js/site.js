@@ -1,4 +1,16 @@
 $(document).ready(function() {
+  $('.secundar_address').hide();
+  $('.show_after_all_button').hide();
+  init_address_edit();
+
+  //в модалках запрет отправки по Enter
+  $('body').on('keydown','.modal-content input',function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
   $("#w0 button[name='signup-button']" ).prop("disabled",true);;
   $("input[name='I_accept']" ).on( "change", function() {
     if($("input[name='I_accept']").prop("checked")) {
@@ -43,14 +55,110 @@ $(document).ready(function() {
     return true;
 
   });
-
-  $('body').on('keydown','.modal-body input',function(event){
-    if(event.keyCode == 13) {
-      event.preventDefault();
-      return false;
-    }
-  });
 });
+
+var popup = (function() {
+  var conteiner;
+  var mouseOver = 0;
+  var timerClearAll = null;
+  var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+  var time = 3000;
+
+  var _setUpListeners = function() {
+    $('body').on('click', '.notification_close', _closePopup);
+    $('body').on('mouseenter', '.notification_container', _onEnter);
+    $('body').on('mouseleave', '.notification_container', _onLeave);
+  };
+
+  var _onEnter = function(event) {
+    if(event)event.preventDefault();
+    if (timerClearAll!=null) {
+      clearTimeout(timerClearAll);
+      timerClearAll = null;
+    }
+    conteiner.find('.notification_item').each(function(i){
+      var option=$(this).data('option');
+      if(option.timer) {
+        clearTimeout(option.timer);
+      }
+    });
+    mouseOver = 1;
+  };
+
+  var _onLeave = function() {
+    conteiner.find('.notification_item').each(function(i){
+      $this=$(this);
+      var option=$this.data('option');
+      if(option.time>0) {
+        option.timer = setTimeout(_closePopup.bind(option.close), option.time - 1500 + 100 * i);
+        $this.data('option',option)
+      }
+    });
+    mouseOver = 0;
+  };
+
+  var _closePopup = function(event) {
+    if(event)event.preventDefault();
+
+    var $this = $(this).parent();
+    $this.on(animationEnd, function() {
+      $(this).remove();
+    });
+    $this.addClass('notification_hide')
+  };
+
+  var open = function(data) {
+    var option = {time : (data.time||data.time===0)?data.time:time};
+    if (!conteiner) {
+      conteiner = $('<ul/>', {
+        'class': 'notification_container'
+      });
+
+      $('body').append(conteiner);
+      _setUpListeners();
+    }
+
+    var li = $('<li/>', {
+      class: 'notification_item'
+    });
+
+    if (data.type){
+      li.addClass('notification_item-' + data.type);
+    }
+
+    var close=$('<span/>',{
+      class:'notification_close'
+    });
+    option.close=close;
+    li.append(close);
+
+    if(data.title && data.title.length>0) {
+      var title = $('<p/>', {
+        class: "notification_title"
+      });
+      title.html(data.title);
+      li.append(title);
+    }
+
+    var content = $('<div/>',{
+      class:"notification_content"
+    });
+    content.html(data.message);
+
+    li.append(content);
+
+    conteiner.append(li);
+
+    if(option.time>0){
+      option.timer=setTimeout(_closePopup.bind(close), option.time);
+    }
+    li.data('option',option)
+  };
+
+  return {
+    open: open
+  };
+}());
 
 function onlineTrace() {
   $.get('/online');
@@ -74,7 +182,7 @@ function table_change_input(el){
     .addClass('saving')
     .prop('disabled',true)
   post={
-    'width':$el.attr('width'),
+    'weight':$el.attr('weight'),
     'count':$el.attr('count'),
     'value':$el.val(),
   };
@@ -98,4 +206,50 @@ function table_change_fail(){
     .addClass('error')
     .prop('disabled',false);
   gritterAdd('Saving', 'Saving error', 'gritter-danger');
+}
+
+function init_address_edit(){
+  $('.add_new_address').submit(function(){  // действия перед submit формы
+    if ($(".show_company").prop('checked')==false) {
+      $('.company_name').val('Personal address');
+    }
+    return true;
+  });
+
+  company_blk=$('.company_name.form-control').parent();
+  if ($('.show_company').prop('checked')==false){
+    company_blk.hide(500);
+  }
+  $('.show_company').on("click", function(){
+    company_blk=$('.company_name.form-control').parent()
+    if ($('.show_company').prop('checked')==false)
+      company_blk.hide(500);
+    else
+      company_blk.show(500);
+  });
+  $(".show_all_addresses").on("click", function(){
+    $('.secundar_address').show(500);
+    $('.show_after_all_button').show();
+    $(".show_all_addresses").hide();
+    $(".main_address_button").hide();
+  });
+}
+
+function init_order_border(){
+  $('.order_agreement').submit(function(){  // действия перед submit формы
+    if ($("#order-agreement").prop('checked')==false) {
+      gritterAdd('Error','you must agree','gritter-danger');
+      return false;
+    }
+    return true;
+  });
+
+  if ($("#order-agreement").prop('checked')==false) {
+    $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',true)
+  }
+
+  $("#order-agreement").on("change", function(){
+    $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',!this.checked)
+  });
+
 }

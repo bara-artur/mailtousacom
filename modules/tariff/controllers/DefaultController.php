@@ -46,26 +46,26 @@ class DefaultController extends Controller
 
         $out=array();
         $parcel_count=array();
-        $width=array();
+        $weight=array();
         foreach ($tarifs as $tarif){
           if(!in_array($tarif['parcel_count'],$parcel_count)){
             $parcel_count[]=$tarif['parcel_count'];
             $out[$tarif['parcel_count']]=array();
           }
-          if(!in_array($tarif['width'],$width)){
-            $width[]=$tarif['width'];
+          if(!in_array($tarif['weight'],$weight)){
+            $weight[]=$tarif['weight'];
           }
-          $out[$tarif['parcel_count']][$tarif['width']]=$tarif['price'];
+          $out[$tarif['parcel_count']][$tarif['weight']]=$tarif['price'];
         }
 
         sort($parcel_count);
-        sort($width);
+        sort($weight);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'parcel_count'=>$parcel_count,
-            'widths'=>$width,
+            'weights'=>$weight,
             'tarifs'=>$out,
         ]);
     }
@@ -79,7 +79,7 @@ class DefaultController extends Controller
 
       $data=Tariffs::find()
         ->where([
-        'width'=>$post['width'],
+        'weight'=>$post['weight'],
         'parcel_count'=>$post['count']
         ])
         ->one();
@@ -88,13 +88,13 @@ class DefaultController extends Controller
       }
 
       $data->price=$post['value'];
-      $data->width=$post['width'];
+      $data->weight=$post['weight'];
       $data->parcel_count=$post['count'];
 
       if($data->save()){
         $data=Tariffs::find()
           ->where([
-            'width'=>$post['width'],
+            'weight'=>$post['weight'],
             'parcel_count'=>$post['count']
           ])
           ->limit(1)
@@ -146,8 +146,8 @@ class DefaultController extends Controller
         $request = Yii::$app->request;
         $model = new Tariffs();
 
-        $width = Tariffs::find()->one();
-        $width=$width->width;
+        $weight = Tariffs::find()->one();
+        $weight=$weight->weight;
 
         if($request->isAjax){
             /*
@@ -159,7 +159,7 @@ class DefaultController extends Controller
                     'title'=> "Create new min parcel count",
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
-                      'width' => $width,
+                      'weight' => $weight,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -179,7 +179,7 @@ class DefaultController extends Controller
                     'title'=> "Create new Tariffs",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
-                        'width' => $width,
+                        'weight' => $weight,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -196,7 +196,7 @@ class DefaultController extends Controller
    * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
    * @return mixed
    */
-  public function actionCreate_width()
+  public function actionCreate_weight()
   {
     $request = Yii::$app->request;
     $model = new Tariffs();
@@ -212,7 +212,7 @@ class DefaultController extends Controller
       if($request->isGet){
         return [
           'title'=> "Create new min parcel count",
-          'content'=>$this->renderAjax('create_width', [
+          'content'=>$this->renderAjax('create_weight', [
             'model' => $model,
             'count'=>$count,
           ]),
@@ -224,7 +224,7 @@ class DefaultController extends Controller
         return [
           'forceReload'=>'#crud-datatable-pjax',
           'title'=> "Create new min parcel count",
-          'content'=>'<span class="text-success">Create new width success</span>',
+          'content'=>'<span class="text-success">Create new weight success</span>',
           'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
             Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
 
@@ -232,7 +232,7 @@ class DefaultController extends Controller
       }else{
         return [
           'title'=> "Create new min parcel count",
-          'content'=>$this->renderAjax('create_width', [
+          'content'=>$this->renderAjax('create_weight', [
             'model' => $model,
             'count'=>$count,
           ]),
@@ -311,57 +311,29 @@ class DefaultController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete()
     {
-        $request = Yii::$app->request;
-        $this->findModel($id)->delete();
-
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
+      $request = Yii::$app->request;
+      if($request->isAjax){
+        $w=array();
+        if($request->get('count')){
+          $w['parcel_count']=$request->get('count');
         }
+        if($request->get('weight')){
+          $w['weight']=$request->get('weight');
+        }
+        Tariffs::deleteAll($w);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+      }else{
 
-
+          return $this->redirect(['index']);
+      }
     }
 
-     /**
-     * Delete multiple existing Tariffs model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionBulkDelete()
-    {        
-        $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
-        foreach ( $pks as $pk ) {
-            $model = $this->findModel($pk);
-            $model->delete();
-        }
 
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
-        }else{
-            /*
-            *   Process for non-ajax request
-            */
-            return $this->redirect(['index']);
-        }
-       
-    }
+
+
 
     /**
      * Finds the Tariffs model based on its primary key value.

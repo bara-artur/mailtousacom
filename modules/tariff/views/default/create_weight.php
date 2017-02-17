@@ -8,7 +8,7 @@ use yii\helpers\Html;
 
 ?>
 <div class="tariffs-create">
-  <?= $this->render('_form_width', [
+  <?= $this->render('_form_weight', [
     'model' => $model,
     'count'=>$count,
   ]) ?>

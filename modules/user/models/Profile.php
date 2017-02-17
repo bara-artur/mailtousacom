@@ -63,7 +63,7 @@ class Profile extends User{
   public function passwordValidate()
   {
     if ($this->password_hash === null && !$this->password && !UserOauthKey::isOAuth($this->id)) {
-      $this->addError('password', Yii::t('user', 'Необходимо указать пароль.'));
+      $this->addError('password', Yii::t('user', 'Necessary to specify  password.'));
     }
   }
 }

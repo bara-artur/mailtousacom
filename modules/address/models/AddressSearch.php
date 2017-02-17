@@ -18,8 +18,8 @@ class AddressSearch extends Address
     public function rules()
     {
         return [
-            [['id', 'user_id', 'send_city', 'return_city'], 'integer'],
-            [['send_first_name', 'send_last_name', 'send_company_name', 'send_adress_1', 'send_adress_2', 'return_first_name', 'return_last_name', 'return_company_name', 'return_adress_1', 'return_adress_2'], 'safe'],
+            [['id', 'user_id', 'city', 'address_type'], 'integer'],
+            [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2'], 'safe'],
         ];
     }
 
@@ -43,8 +43,6 @@ class AddressSearch extends Address
     {
         $query = Address::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,24 +55,20 @@ class AddressSearch extends Address
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        $this->user_id = Yii::$app->user->id;
+
         $query->andFilterWhere([
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'send_city' => $this->send_city,
-            'return_city' => $this->return_city,
+            'city' => $this->city,
+            'address_type' => $this->address_type,
         ]);
 
-        $query->andFilterWhere(['like', 'send_first_name', $this->send_first_name])
-            ->andFilterWhere(['like', 'send_last_name', $this->send_last_name])
-            ->andFilterWhere(['like', 'send_company_name', $this->send_company_name])
-            ->andFilterWhere(['like', 'send_adress_1', $this->send_adress_1])
-            ->andFilterWhere(['like', 'send_adress_2', $this->send_adress_2])
-            ->andFilterWhere(['like', 'return_first_name', $this->return_first_name])
-            ->andFilterWhere(['like', 'return_last_name', $this->return_last_name])
-            ->andFilterWhere(['like', 'return_company_name', $this->return_company_name])
-            ->andFilterWhere(['like', 'return_adress_1', $this->return_adress_1])
-            ->andFilterWhere(['like', 'return_adress_2', $this->return_adress_2]);
+        $query->andFilterWhere(['like', 'first_name', $this->first_name])
+            ->andFilterWhere(['like', 'last_name', $this->last_name])
+            ->andFilterWhere(['like', 'company_name', $this->company_name])
+            ->andFilterWhere(['like', 'adress_1', $this->adress_1])
+            ->andFilterWhere(['like', 'adress_2', $this->adress_2]);
 
         return $dataProvider;
     }

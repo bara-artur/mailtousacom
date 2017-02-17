@@ -37,10 +37,9 @@ class UserWidget extends Widget
             return $this->render('onlineWidget', $user_data);
         }
         else {
-
             Yii::$app->session->setFlash('toAddressCreate','1');
             Yii::$app->session->setFlash('user_id',$user_data['id']);
-            $this->view->context->redirect(['/']);
+            $this->view->context->redirect(['address/create-order-billing']);
         }
     }
 

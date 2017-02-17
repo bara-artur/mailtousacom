@@ -8,6 +8,9 @@ use app\modules\address\models\AddressSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use \yii\web\Response;
+use yii\helpers\Html;
+
 
 /**
  * DefaultController implements the CRUD actions for Address model.
@@ -23,7 +26,8 @@ class DefaultController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['post'],
+                    'bulk-delete' => ['post'],
                 ],
             ],
         ];
@@ -33,78 +37,57 @@ class DefaultController extends Controller
      * Lists all Address models.
      * @return mixed
      */
+    public function actionCreateOrderBilling()
+    {
+
+      $model = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
+      if(!$model){
+        $model= new Address();
+      }
+
+      $request = Yii::$app->request;
+      if($request->getIsPost()){
+        if($model->load($request->post()) && $model->save()){
+          return $this->redirect(['addressusa']);
+        }
+        \Yii::$app->getSession()->setFlash('error', 'Error saving. Check the correctness of filling');
+
+      }
+
+      return $this->render('createorderbilling', [
+        //'searchModel' => $searchModel,
+        'model' => $model,
+        //'mainBillingAddress' => $mainBillingAddress,
+        //'state_names' => $state_names,
+      ]);
+    }
+
     public function actionIndex()
     {
         $searchModel = new AddressSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $mainBillingAddress = 0;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'mainBillingAddress' => $mainBillingAddress
         ]);
     }
 
-    /**
-     * Displays a single Address model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
+    public function actionAddressusa()
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+      $model = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
+      if(!$model) {
+        \Yii::$app->getSession()->setFlash('error', 'First you need to fill in billing address.');
+        return $this->redirect(['create-order-billing']);
+      }
+
+      return $this->render('usaAddress', [
+          'user' => $model,
+      ]);
     }
 
-    /**
-     * Creates a new Address model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Address();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Address model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Address model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
 
     /**
      * Finds the Address model based on its primary key value.
@@ -120,5 +103,15 @@ class DefaultController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    public function beforeAction($action)
+    {
+        // ...set `$this->enableCsrfValidation` here based on some conditions...
+        // call parent method that will check CSRF if such property is true.
+        if ($action->id === 'addressusa') {
+            # code...
+            $this->enableCsrfValidation = false;
+        }
+        return parent::beforeAction($action);
     }
 }
