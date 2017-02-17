@@ -40,6 +40,7 @@ class OrderElement extends \yii\db\ActiveRecord
             [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
             [['company_name'], 'string', 'max' => 128],
             [['order_id','address_type'], 'integer'],
+            [['price','qst','gst'], 'number'],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
         ];
     }

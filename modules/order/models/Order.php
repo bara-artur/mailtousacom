@@ -33,7 +33,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status'], 'required'],
-            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status','agreement'], 'integer'],
+            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status','agreement','payment_type','payment_state'], 'integer'],
             [['created_at', 'transport_data'], 'safe'],
         ];
     }
@@ -54,4 +54,12 @@ class Order extends \yii\db\ActiveRecord
             'transport_data' => 'Transport Data',
         ];
     }
+
+  public function beforeSave($insert)
+  {
+    if (strlen($this->transport_data) > 0 && !ctype_digit($this->transport_data)) {
+      $this->transport_data = strtotime($this->transport_data);
+    }
+    return true;
+  }
 }

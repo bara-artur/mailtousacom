@@ -19,7 +19,7 @@ class PaymentsList extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'payments_list';
+        return 'payments';
     }
 
     /**
@@ -28,7 +28,10 @@ class PaymentsList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'order_id', 'status'], 'integer'],
+          [['type', 'order_id', 'price', 'code','client_id'], 'required'],
+          [['type', 'order_id', 'status','client_id','pay_time','create_time'], 'integer'],
+          [['price','qst','gst'], 'number'],
+          [['code'], 'string', 'max' => 100],
         ];
     }
 

@@ -1,5 +1,6 @@
 <?php
 use kartik\mpdf\Pdf;
+use yii\helpers\Url;
 
 $params = require(__DIR__ . '/params.php');
 $personal = require(__DIR__ . '/personal.php');
@@ -93,6 +94,10 @@ $config = [
                 'orderInclude/<action>'=>'orderInclude/default/<action>',
                 'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
                 'orderInclude/<action:border-form|border-form-pdf>/<id:\d+>'=>'orderInclude/default/<action>/',
+
+
+                'payment/<action:order>/<id:\d+>'=>'payment/default/<action>/',
+                'payment/<action:finish>'=>'payment/default/<action>/',
             ],
         ],
     ],
@@ -120,7 +125,7 @@ $config = [
         'class' => 'app\modules\payment\Module',
         'clientId'     => $personal['paypal_client_id'],
         'clientSecret' => $personal['paypal_client_secret'],
-        'baseUrl' => 'http://127.0.0.1:8080/payment/default/finish',
+        'baseUrl' => $personal['site_url'].'payment/finish',
         //'isProduction' => false,
         // This is config file for the PayPal system
         'config'       => [

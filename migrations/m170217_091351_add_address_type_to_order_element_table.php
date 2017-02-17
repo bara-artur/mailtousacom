@@ -8,13 +8,17 @@ class m170217_091351_add_address_type_to_order_element_table extends Migration
     {
       $this->addColumn('order_element', 'address_type', $this->integer(1)->defaultValue(0));
       $this->addColumn('order', 'agreement', $this->integer(1)->defaultValue(0));
+      $this->addColumn('order', 'payment_type', $this->integer(2)->defaultValue(0));
+      $this->addColumn('order', 'payment_state', $this->integer(2)->defaultValue(0));
     }
 
     public function down()
     {
-        echo "m170217_091351_add_address_type_to_order_element_table cannot be reverted.\n";
+      echo "m170217_091351_add_address_type_to_order_element_table cannot be reverted.\n";
       $this->dropColumn('order_element', 'address_type');
       $this->dropColumn('order', 'agreement');
+      $this->dropColumn('order', 'payment_type');
+      $this->dropColumn('order', 'payment_state');
         return false;
     }
 

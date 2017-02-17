@@ -3,17 +3,17 @@
 namespace app\modules\orderInclude\controllers;
 
 use Yii;
+use app\modules\order\models\Order;
 use app\modules\orderInclude\models\OrderInclude;
+use app\modules\orderElement\models\OrderElement;
 use app\modules\orderInclude\models\OrderIncludeSearch;
 use app\modules\orderInclude\models\OrderAddItems;
-use app\modules\orderElement\models\OrderElement;
 use app\modules\address\models\Address;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
-use app\modules\order\models\Order;
 use yii\db\Query;
 use kartik\mpdf\Pdf;
 
@@ -277,6 +277,13 @@ class DefaultController extends Controller
     public function actionBorderForm($id){
 
       $order = Order::findOne($id);
+      $request = Yii::$app->request;
+      if($request->isPost){
+        if($order->load($request->post()) && $order->save()){
+          return $this->redirect(['/payment/order/'.$id]);
+        }
+      }
+
       if($order->transport_data<time())$order->transport_data=strtotime('+1 days');
       $order->transport_data=date('d-M-Y', $order->transport_data);
 

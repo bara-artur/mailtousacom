@@ -99,7 +99,7 @@ class DoPayment extends Model
         ->setPrice($item['price']);
 
       $subTotal+=$item['quantity']*$item['price'];
-      $vat+=$item['vat']*$item['price'];
+      $vat+=$item['vat']*$item['quantity'];
 
       $itemList->addItem($item1);
     }
