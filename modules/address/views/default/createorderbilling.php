@@ -12,7 +12,7 @@ CrudAsset::register($this);
 /* @var $searchModel app\modules\address\models\AddressSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Addresses';
+$this->title = 'Billing address';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
