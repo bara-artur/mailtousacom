@@ -21,6 +21,7 @@ $state_names = ArrayHelper::map($states,'name','name');
     ]); ?>
 
     <?= $form->field($model, 'address_type')->checkbox(['label' => ' I will use my company address', 'class'=>'show_company'])->label("") ?>
+
     <div class="row">
         <div class="col-md-6">
         <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>

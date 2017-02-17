@@ -35,7 +35,9 @@ foreach ($order_elements as $percel) {
         <h4>Delivery address</h4>
             <p><b>First name</b>  <?=$percel->first_name;?></p>
             <p><b>Last name</b>  <?=$percel->last_name;?></p>
-            <p><b>Company name</b>  <?=$percel->company_name;?></p>
+            <?php if($percel->address_type==1){
+                echo '<p><b>Company name</b>  '.$percel->company_name.'</p>';
+            };?>
             <p><b>Addres 1</b>  <?=$percel->adress_1;?></p>
             <p><b>Addres 2</b>  <?=$percel->adress_2;?></p>
             <p><b>City</b>  <?=$percel->city;?></p>
@@ -113,7 +115,7 @@ foreach ($order_elements as $percel) {
                     'id' => 'open_add_order_address',
                   ])?>
 
-                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete packages', ['/orderElement/delete?id='.$item['id']],
+                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete packages', ['/orderElement/delete?id='.$percel->id],
                   [
                     'role'=>'modal-remote',
                     'title'=> 'Delete',

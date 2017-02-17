@@ -33,7 +33,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status'], 'required'],
-            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status'], 'integer'],
+            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status','agreement'], 'integer'],
             [['created_at', 'transport_data'], 'safe'],
         ];
     }

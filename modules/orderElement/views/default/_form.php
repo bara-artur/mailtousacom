@@ -15,13 +15,16 @@ use yii\widgets\ActiveForm;
       'validateOnChange' => true,
     ]); ?>
 
+  <?= $form->field($model, 'address_type')->checkbox(['label' => ' I will use my company address', 'class'=>'show_company'])->label("") ?>
+
+
     <?= $form->field($model, 'order_id')->hiddenInput(['value' => $order_id])->label(false); ?>
 
     <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'company_name form-control']) ?>
 
     <?= $form->field($model, 'adress_1')->textInput(['maxlength' => true]) ?>
 
@@ -45,3 +48,7 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
     
 </div>
+
+<script>
+  init_address_edit();
+</script>

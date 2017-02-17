@@ -216,10 +216,16 @@ function init_address_edit(){
     return true;
   });
 
-  if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
+  company_blk=$('.company_name.form-control').parent();
+  if ($('.show_company').prop('checked')==false){
+    company_blk.hide(500);
+  }
   $('.show_company').on("click", function(){
-    if ($('.show_company').prop('checked')==false) $('.field-address-company_name').hide(500);
-    else $('.field-address-company_name').show(500);
+    company_blk=$('.company_name.form-control').parent()
+    if ($('.show_company').prop('checked')==false)
+      company_blk.hide(500);
+    else
+      company_blk.show(500);
   });
   $(".show_all_addresses").on("click", function(){
     $('.secundar_address').show(500);
@@ -227,4 +233,23 @@ function init_address_edit(){
     $(".show_all_addresses").hide();
     $(".main_address_button").hide();
   });
+}
+
+function init_order_border(){
+  $('.order_agreement').submit(function(){  // действия перед submit формы
+    if ($("#order-agreement").prop('checked')==false) {
+      gritterAdd('Error','you must agree','gritter-danger');
+      return false;
+    }
+    return true;
+  });
+
+  if ($("#order-agreement").prop('checked')==false) {
+    $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',true)
+  }
+
+  $("#order-agreement").on("change", function(){
+    $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',!this.checked)
+  });
+
 }
