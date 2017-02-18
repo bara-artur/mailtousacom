@@ -209,23 +209,34 @@ function table_change_fail(){
 }
 
 function init_address_edit(){
-  $('.add_new_address').submit(function(){  // действия перед submit формы
+  function on_address_submit(){
     if ($(".show_company").prop('checked')==false) {
       $('.company_name').val('Personal address');
     }
     return true;
-  });
+  }
+
+  $('.add_new_address').submit(on_address_submit);
 
   company_blk=$('.company_name.form-control').parent();
   if ($('.show_company').prop('checked')==false){
+    $('.company_name')
+      .val('Personal address')
+      .data('val', '');
     company_blk.hide(500);
   }
   $('.show_company').on("click", function(){
-    company_blk=$('.company_name.form-control').parent()
-    if ($('.show_company').prop('checked')==false)
+    company_blk=$('.company_name.form-control').parent();
+    if ($('.show_company').prop('checked')==false) {
+      v = $('.company_name').val();
+      $('.company_name')
+        .val('Personal address')
+        .data('val', v);
       company_blk.hide(500);
-    else
+    }else{
+      $('.company_name').val($('.company_name').data('val'));
       company_blk.show(500);
+    }
   });
   $(".show_all_addresses").on("click", function(){
     $('.secundar_address').show(500);
