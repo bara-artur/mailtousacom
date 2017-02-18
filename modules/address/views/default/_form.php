@@ -19,9 +19,7 @@ $state_names = ArrayHelper::map($states,'name','name');
       'id'=>'created_address',
       'validateOnChange' => true,
     ]); ?>
-
-    <?= $form->field($model, 'address_type')->checkbox(['label' => ' I will use my company address', 'class'=>'show_company'])->label("") ?>
-
+    <h4 class="modernui-neutral2 margin-bottom-10">Please add your billing address <font class="text-danger">*</font> <i class="icon-metro-location"></i></h4>
     <div class="row">
         <div class="col-md-6">
         <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
@@ -30,7 +28,7 @@ $state_names = ArrayHelper::map($states,'name','name');
     <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
-
+    <?= $form->field($model, 'address_type')->checkbox(['label' => '<span class="fa fa-check otst"></span> I will use my company address', 'class'=>'show_company'])->label("") ?>
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'company_name form-control']) ?>
 
     <?= $form->field($model, 'adress_1')->textInput(['maxlength' => true]) ?>
@@ -41,17 +39,17 @@ $state_names = ArrayHelper::map($states,'name','name');
     <?= $form->field($model, 'city')->textInput() ?>
         </div>
         <div class="col-md-4">
-    <?= $form->field($model, 'zip')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'state')->dropDownList($state_names) ?>
         </div>
         <div class="col-md-4">
+            <?= $form->field($model, 'zip')->textInput(['maxlength' => true]) ?>
+    </div>
+    </div>
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
-    </div>
-    </div>
-    <?= $form->field($model, 'state')->dropDownList($state_names) ?>
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">
-	        <?= Html::submitButton('Next', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	        <?= Html::submitButton('NEXT<i class="icon-metro-arrow-right-5"></i>', ['class' => $model->isNewRecord ? 'btn btn-success push-down-margin-thin width_but pull-right' : 'btn btn-success push-down-margin-thin width_but pull-right']) ?>
 	    </div>
 	<?php } ?>
 

@@ -7,9 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\modules\orderElement\models\OrderElement */
 
 ?>
-<p>
-    Enter the recipient's address
-</p>
+<h5 class="modernui-neutral4">Please enter recipient's address <i class="icon-metro-location"></i></h5>
 <div class="order-element-create">
     <?= $this->render('_form', [
         'model' => $model,

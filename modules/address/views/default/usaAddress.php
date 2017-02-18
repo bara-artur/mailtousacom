@@ -9,19 +9,45 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\address\models\AddressSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
+$this->title = 'Return address';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<p> Please set up your US return adress</p>
-<p><b>PortamleBay</b> ID<?=$user->id+750;?></p>
-<p><b>First name</b> ID<?=$user->first_name;?></p>
-<p><b>Last name</b> ID<?=$user->last_name;?></p>
-<p>100 Walnut ST</p>
-<p>Door 18</p>
-<p>Champlain NY 12919</p>
-<p><?=$user->phone;?></p>
-<p> <?= $user->first_name.' '.$user->last_name ?></p>
+<div id="return_address">
+    <form role="form" class="form-control-2x">
+    <div class="form-group">
+<h4 class="modernui-neutral2 margin-bottom-10">Please set your return address <i class="fa fa-undo"></i></h4>
 
-<?=Html::a('Next', ['/orderInclude/create-order'],
+<h5 class="modernui-neutral4">PortableBay : ID<?=$user->id+750;?></h5>
+        <div class="row">
+            <div class="col-md-6">
+        <div class="form-group">
+        <label>First name</label>
+        <input class="form-control" placeholder="<?=$user->first_name;?>" disabled>
+        </div>
+            </div>
+            <div class="col-md-6">
+        <div class="form-group">
+        <label>Last name</label>
+        <input class="form-control" placeholder="<?=$user->last_name;?>" disabled>
+        </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <input class="form-control" placeholder="100 Walnut St, Door 18, Champlain, NY, 12919" disabled>
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input class="form-control" placeholder="<?=$user->phone;?>" disabled>
+        </div>
+<!--<p> <?= $user->first_name.' '.$user->last_name ?></p>-->
+        <div class="col-md-2"><h3 class="pred2"><span class="glyphicon glyphicon-info-sign"></span></h3>
+        </div>
+        <div class="col-md-10"><p class="hint-block">Data are output automatically and serve only for informing you</p></div>
+<?=Html::a('NEXT<i class="icon-metro-arrow-right-5"></i>', ['/orderInclude/create-order'],
   [
-    'class'=>'btn btn-info go_to_order'
+    'class'=>'btn btn-success push-down-margin-thin width_but pull-right go_to_order'
   ])?>
+    </div>
+    </form>
+</div>
