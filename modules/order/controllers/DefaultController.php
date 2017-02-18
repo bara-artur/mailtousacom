@@ -36,7 +36,9 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $searchModel = new OrderSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(['OrderSearch' => [
+            'user_id' => Yii::$app->user->id,
+        ]]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

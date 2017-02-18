@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\modules\order\models\OrderSearch;
+use app\modules\payment\models\PaymentSearch;
 
 class SiteController extends Controller
 {
@@ -63,7 +65,19 @@ class SiteController extends Controller
         if (Yii::$app->session->hasFlash('toAddressCreate')){
             return $this->redirect(['/address/create', 'first_address'=>'1']);
         }
-        return $this->render('index');
+        $orderSearchModel = new OrderSearch();
+        $orders = $orderSearchModel->search(['OrderSearch' => [
+            'user_id' => Yii::$app->user->id,
+        ]]);
+        $paymentSearchModel = new PaymentSearch();
+        $payments = $paymentSearchModel->search(['PaymentSearch' => [
+            'client_id' => Yii::$app->user->id,
+        ]]);
+
+        return $this->render('index',[
+            'orders' => $orders,
+            'payments' => $payments
+        ]);
     }
 
     /**

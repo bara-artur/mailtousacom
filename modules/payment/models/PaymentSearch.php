@@ -18,7 +18,7 @@ class PaymentSearch extends PaymentsList
     public function rules()
     {
         return [
-            [['id', 'user_id', 'order_id', 'status'], 'integer'],
+            [['id', 'client_id', 'order_id', 'status'], 'integer'],
         ];
     }
 
@@ -59,7 +59,7 @@ class PaymentSearch extends PaymentsList
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'client_id' => $this->client_id,
             'order_id' => $this->order_id,
             'status' => $this->status,
         ]);

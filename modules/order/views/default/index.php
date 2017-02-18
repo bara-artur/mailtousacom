@@ -33,7 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_at',
             // 'transport_data',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{update}'],
         ],
     ]); ?>
 </div>
