@@ -31,8 +31,8 @@ if($order_elements){
 foreach ($order_elements as $percel) {
 ?>
 <div class="row">
-    <div class="col-sm-6 col-md-4">
-        <h4>Delivery address</h4>
+    <div class="col-md-3">
+        <h4 class="deliv_address">Delivery address</h4>
             <p><b>First name</b>  <?=$percel->first_name;?></p>
             <p><b>Last name</b>  <?=$percel->last_name;?></p>
             <?php if($percel->address_type==1){
@@ -47,7 +47,7 @@ foreach ($order_elements as $percel) {
     </div>
 
 
-    <div class="order-include-index col-sm-6 col-md-6">
+    <div class="order-include-index col-md-9">
         <div id="ajaxCrudDatatable_<?=$percel-id;?>">
             <div class="row" id="crud-datatable-pjax">
                 <?php Pjax::begin(); ?>

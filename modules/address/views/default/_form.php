@@ -39,13 +39,13 @@ $state_names = ArrayHelper::map($states,'name','name');
     <?= $form->field($model, 'city')->textInput() ?>
         </div>
         <div class="col-md-4">
-    <?= $form->field($model, 'zip')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'state')->dropDownList($state_names) ?>
         </div>
         <div class="col-md-4">
+            <?= $form->field($model, 'zip')->textInput(['maxlength' => true]) ?>
+    </div>
+    </div>
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
-    </div>
-    </div>
-    <?= $form->field($model, 'state')->dropDownList($state_names) ?>
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">
