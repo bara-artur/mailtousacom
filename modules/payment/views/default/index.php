@@ -23,12 +23,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'user_id',
             'order_id',
             'status',
-
+            ['attribute'=> 'type',
+                'content' => function($data){
+                    switch ($data->type) {
+                        case '0' : return "Paypal"; break;
+                        case '1' : return "On the delivery address";break;
+                        case '2' : return "System 2";break;
+                        case '3' : return "System 3";break;
+                        default: return "Unknown System type - ".$data->type;
+                    }
+                }
+            ],
+            'price',
+            'qst',
+            'gst',
+            ['attribute'=> 'pay_time',
+                'content' => function($data){
+                    if ($data->pay_time  == 0 ) return 'Expected...';
+                    else return $data->pay_time;
+                }],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

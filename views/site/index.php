@@ -24,36 +24,38 @@ $this->title = 'Shipping to USA and Canada';
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'billing_address_id',
-            'order_type',
-            'user_id',
-            'user_id_750',
+            ['attribute'=> 'order_status',
+             'content'=> function($data){
+                switch ($data->order_status) {
+                    case '0' : return "Text for status 0"; break;
+                    case '1' : return "Text for status 1";break;
+                    case '2' : return "Text for status 2";break;
+                    case '3' : return "Text for status 3";break;
+                    default: return "Unknown status - ".$data->order_status;
+                }
+                return "value";
+            }],
+            'created_at',
+            'transport_data',
+            'payment_type',
+            'payment_state',
+            'price',
+            'qst',
+            'gst',
             // 'order_status',
             // 'created_at',
             // 'transport_data',
 
-            ['class' => 'yii\grid\ActionColumn',
-                'template' => '{update}'],
+            ['content' => function($data){
+                switch ($data->order_status) {
+                    case '0' : return  Html::a('Update Order', ['/order/update/'.$data->id], ['class' => 'btn btn-success']); break;
+                    case '1' : return Html::a('Show me the money', ['/payment/index'], ['class' => 'btn btn-danger']);break;
+                    case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-warning']);break;
+                    case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-info']);break;
+                    default: return "Unknown status - ".$data->order_status;
+                }
+                }],
+
         ],
     ]); ?>
-</div>
-<p>
-    Payments
-</p>
-<div>
-    <?= GridView::widget([
-        'dataProvider' => $payments,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'client_id',
-            'order_id',
-            'status',
-
-         //   ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
 </div>
