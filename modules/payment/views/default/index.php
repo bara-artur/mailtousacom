@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\modules\payment\models\PaymentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Payments Lists';
+$this->title = 'Personal Payments Lists';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payments-list-index">
@@ -15,16 +15,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Payments List', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'order_id',
-            'status',
+            ['attribute'=> 'status',
+                'content' => function($data){
+                    switch ($data->status) {
+                        case '0' : return "Text for status 0"; break;
+                        case '1' : return "Text for status 1";break;
+                        case '2' : return "Text for status 2";break;
+                        case '3' : return "Text for status 3";break;
+                        default: return "Unknown status - ".$data->status;
+                    }
+                },
+                'filter' => array('' => 'All',0 => "Text for status 0", 1 => "Text for status 1", 2 => "Text for status 2", 3 => "Text for status 3"),
+              ],
             ['attribute'=> 'type',
                 'content' => function($data){
                     switch ($data->type) {
@@ -34,7 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         case '3' : return "System 3";break;
                         default: return "Unknown System type - ".$data->type;
                     }
-                }
+                },
+                'filter' => array('' => 'All',0 => "Paypal", 1 => "On the delivery address", 2 => "System 2", 3 => "System 3"),
             ],
             'price',
             'qst',
@@ -42,9 +50,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute'=> 'pay_time',
                 'content' => function($data){
                     if ($data->pay_time  == 0 ) return 'Expected...';
-                    else return $data->pay_time;
+                    else return date("j-M-Y H:i:s",$data->pay_time);
                 }],
-            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

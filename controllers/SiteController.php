@@ -69,14 +69,9 @@ class SiteController extends Controller
         $orders = $orderSearchModel->search(['OrderSearch' => [
             'user_id' => Yii::$app->user->id,
         ]]);
-        $paymentSearchModel = new PaymentSearch();
-        $payments = $paymentSearchModel->search(['PaymentSearch' => [
-            'client_id' => Yii::$app->user->id,
-        ]]);
 
         return $this->render('index',[
             'orders' => $orders,
-            'payments' => $payments
         ]);
     }
 

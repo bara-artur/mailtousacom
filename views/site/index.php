@@ -35,8 +35,14 @@ $this->title = 'Shipping to USA and Canada';
                 }
                 return "value";
             }],
-            'created_at',
-            'transport_data',
+            ['attribute'=> 'created_at',
+                'content'=> function($data){
+                    return date("j-M-Y H:i:s",$data->created_at);
+                }],
+            ['attribute'=> 'transport_data',
+            'content'=> function($data){
+                    return date("j-M-Y H:i:s",$data->transport_data);
+            }],
             'payment_type',
             'payment_state',
             'price',
@@ -49,7 +55,7 @@ $this->title = 'Shipping to USA and Canada';
             ['content' => function($data){
                 switch ($data->order_status) {
                     case '0' : return  Html::a('Update Order', ['/order/update/'.$data->id], ['class' => 'btn btn-success']); break;
-                    case '1' : return Html::a('Show me the money', ['/payment/index'], ['class' => 'btn btn-danger']);break;
+                    case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-danger']);break;
                     case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-warning']);break;
                     case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-info']);break;
                     default: return "Unknown status - ".$data->order_status;

@@ -18,7 +18,7 @@ class PaymentSearch extends PaymentsList
     public function rules()
     {
         return [
-            [['id', 'client_id', 'order_id', 'status'], 'integer'],
+            [['id', 'client_id', 'order_id', 'status','type'], 'integer'],
         ];
     }
 
@@ -62,6 +62,7 @@ class PaymentSearch extends PaymentsList
             'client_id' => $this->client_id,
             'order_id' => $this->order_id,
             'status' => $this->status,
+            'type' => $this->type,
         ]);
 
         return $dataProvider;
