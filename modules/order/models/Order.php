@@ -52,6 +52,8 @@ class Order extends \yii\db\ActiveRecord
             'order_status' => 'Order Status',
             'created_at' => 'Created At',
             'transport_data' => 'Transport Data',
+            'qst' => 'QST/HST (%)',
+            'gst' => 'PST (%)',
         ];
     }
 
