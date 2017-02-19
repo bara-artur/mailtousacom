@@ -33,88 +33,19 @@ class DefaultController extends Controller
      * Lists all Order models.
      * @return mixed
      */
-    public function actionIndex()
+    /*    public function actionIndex()
     {
-        $searchModel = new OrderSearch();
-        $dataProvider = $searchModel->search(['OrderSearch' => [
-            'user_id' => Yii::$app->user->id,
-        ]]);
+          $searchModel = new OrderSearch();
+          $dataProvider = $searchModel->search(['OrderSearch' => [
+              'user_id' => Yii::$app->user->id,
+          ]]);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Order model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Order model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $request = Yii::$app->request;
-        $address_id = $request->post( 'id' );
-        $model = new Order();
-
-        $model->user_id = Yii::$app->user->id;
-        $model->billing_address_id = $address_id;
-        $model->order_status = 0;
-        $model->order_type = 0;
-        $model->user_id_750 = $model->user_id + 750;
-        $model->created_at = time();
-        $model->transport_data = time();
-        $model->save();
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Order model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Order model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
+          return $this->render('index', [
+              'searchModel' => $searchModel,
+              'dataProvider' => $dataProvider,
+          ]);
+      }
+  */
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -129,15 +60,5 @@ class DefaultController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-    public function beforeAction($action)
-    {
-        // ...set `$this->enableCsrfValidation` here based on some conditions...
-        // call parent method that will check CSRF if such property is true.
-        if ($action->id === 'create') {
-            # code...
-            $this->enableCsrfValidation = false;
-        }
-        return parent::beforeAction($action);
     }
 }

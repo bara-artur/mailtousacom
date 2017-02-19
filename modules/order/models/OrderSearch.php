@@ -18,7 +18,7 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status'], 'integer'],
+            [['id', 'billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status','payment_state','payment_type'], 'integer'],
             [['created_at', 'transport_data'], 'safe'],
         ];
     }
@@ -66,6 +66,8 @@ class OrderSearch extends Order
             'order_status' => $this->order_status,
             'created_at' => $this->created_at,
             'transport_data' => $this->transport_data,
+            'payment_state' => $this->payment_state,
+            'payment_type' => $this->payment_type,
         ]);
 
         return $dataProvider;

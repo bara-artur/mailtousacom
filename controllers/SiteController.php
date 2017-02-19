@@ -66,12 +66,14 @@ class SiteController extends Controller
             return $this->redirect(['/address/create', 'first_address'=>'1']);
         }
         $orderSearchModel = new OrderSearch();
-        $orders = $orderSearchModel->search(['OrderSearch' => [
-            'user_id' => Yii::$app->user->id,
-        ]]);
+        $query = Yii::$app->request->queryParams;
+        if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['client_id' => Yii::$app->user->id];
+        else $query['OrderSearch'] = ['client_id' => Yii::$app->user->id];
+        $orders = $orderSearchModel->search($query);
 
         return $this->render('index',[
             'orders' => $orders,
+            'searchModel' => $orderSearchModel,
         ]);
     }
 

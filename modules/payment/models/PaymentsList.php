@@ -14,6 +14,26 @@ use Yii;
  */
 class PaymentsList extends \yii\db\ActiveRecord
 {
+    public static function getTextStatus(){
+        return array('Text for status 0000','Text for status 1111','Text for status 2222','Text for status 3333');
+    }
+
+    public static function statusText($param)
+    {
+        $textForStatus = PaymentsList::getTextStatus();
+        if ($param < count($textForStatus)) return  $textForStatus[$param];
+        else return 'Unknown status';
+    }
+    public static function getPayStatus(){
+        return array('Paypal','On the delivery address','System 2','System 3');
+    }
+
+    public static function statusPayText($param)
+    {
+        $textForStatus = PaymentsList::getPayStatus();
+        if ($param < count($textForStatus)) return  $textForStatus[$param];
+        else return 'Unknown pay system';
+    }
     /**
      * @inheritdoc
      */

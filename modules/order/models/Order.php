@@ -18,6 +18,16 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+    public static function getTextStatus(){
+        return array('Text for status 0000','Text for status 1111','Text for status 2222','Text for status 3333');
+    }
+
+    public static function orderStatusText($param)
+    {
+        $textForStatus =  Order::getTextStatus();
+        if ($param < count($textForStatus)) return  $textForStatus[$param];
+        else return 'Unknown status';
+    }
     /**
      * @inheritdoc
      */
