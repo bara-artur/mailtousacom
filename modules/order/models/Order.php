@@ -44,7 +44,7 @@ class Order extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Order id',
             'billing_address_id' => 'Billing Address ID',
             'order_type' => 'Order Type',
             'user_id' => 'User ID',

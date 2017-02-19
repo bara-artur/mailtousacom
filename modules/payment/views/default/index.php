@@ -20,18 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['attribute'=> 'status',
-                'content' => function($data){
-                    switch ($data->status) {
-                        case '0' : return "Text for status 0"; break;
-                        case '1' : return "Text for status 1";break;
-                        case '2' : return "Text for status 2";break;
-                        case '3' : return "Text for status 3";break;
-                        default: return "Unknown status - ".$data->status;
-                    }
-                },
-                'filter' => array('' => 'All',0 => "Text for status 0", 1 => "Text for status 1", 2 => "Text for status 2", 3 => "Text for status 3"),
-              ],
             ['attribute'=> 'type',
                 'content' => function($data){
                     switch ($data->type) {
@@ -47,6 +35,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'price',
             'qst',
             'gst',
+          ['attribute'=> 'status',
+            'content' => function($data){
+              switch ($data->status) {
+                case '0' : return "Text for status 0"; break;
+                case '1' : return "Text for status 1";break;
+                case '2' : return "Text for status 2";break;
+                case '3' : return "Text for status 3";break;
+                default: return "Unknown status - ".$data->status;
+              }
+            },
+            'filter' => array('' => 'All',0 => "Text for status 0", 1 => "Text for status 1", 2 => "Text for status 2", 3 => "Text for status 3"),
+          ],
             ['attribute'=> 'pay_time',
                 'content' => function($data){
                     if ($data->pay_time  == 0 ) return 'Expected...';

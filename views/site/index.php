@@ -14,7 +14,7 @@ $this->title = 'Shipping to USA and Canada';
 
 </div>
 <p>
-    <?= Html::a('Create Order', ['/order/create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Create Order', ['/address/create-order-billing'], ['class' => 'btn btn-success']) ?>
 </p>
 <div>
     <?= GridView::widget([
