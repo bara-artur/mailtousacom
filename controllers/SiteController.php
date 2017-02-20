@@ -69,6 +69,7 @@ class SiteController extends Controller
         $query = Yii::$app->request->queryParams;
         if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['client_id' => Yii::$app->user->id];
         else $query['OrderSearch'] = ['client_id' => Yii::$app->user->id];
+
         $orders = $orderSearchModel->search($query);
 
         return $this->render('index',[

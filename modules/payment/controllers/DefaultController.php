@@ -67,7 +67,8 @@ class DefaultController extends Controller
         else {
             $searchModel = new PaymentSearch();
             $query = Yii::$app->request->queryParams;
-            $query['PaymentSearch'] += ['client_id' => Yii::$app->user->id];
+            if (array_key_exists('PaymentSearch', $query)) $query['PaymentSearch'] += ['client_id' => Yii::$app->user->id];
+            else $query['PaymentSearch'] = ['client_id' => Yii::$app->user->id];
             $dataProvider = $searchModel->search($query);
 
             return $this->render('index', [

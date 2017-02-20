@@ -3,6 +3,9 @@ use app\modules\user\components\UserWidget;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\modules\payment\models\PaymentsList;
+use yii\jui\DatePicker;
+use kartik\daterange\DateRangePicker;
+
 /* @var $this yii\web\View */
 $this->title = 'Shipping to USA and Canada';
 ?>
@@ -18,7 +21,7 @@ $this->title = 'Shipping to USA and Canada';
 if (!Yii::$app->user->isGuest) {
 ?>
 <p>
-    <?= Html::a('Create Order', ['/order/create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a('Create Order', ['/address/create-order-billing'], ['class' => 'btn btn-success']) ?>
 </p>
 <div>
     <?= GridView::widget([
@@ -38,7 +41,21 @@ if (!Yii::$app->user->isGuest) {
                 'content'=> function($data){
                     if ($data->created_at == 0) return '-';
                     else return date("j-M-Y H:i:s",$data->created_at);
-                }],
+                },
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute'=>'created_at',
+                  //  'convertFormat'=>true,
+               //     'pluginOptions'=>[
+                 //       'timePicker'=>true,
+                   //     'timePickerIncrement'=>30,
+                     //   'locale'=>[
+                       //     'format'=>'Y-m-d'
+                        //]
+                   // ]
+                ]),
+            'format' => 'raw',
+          ],
             ['attribute'=> 'transport_data',
             'content'=> function($data){
                 if ($data->transport_data == 0) return '-';
@@ -85,7 +102,7 @@ if (!Yii::$app->user->isGuest) {
 
             ['content' => function($data){
                 switch ($data->order_status) {
-                    case '0' : return  Html::a('Update Order', ['/orderInclude/update/'.$data->id], ['class' => 'btn btn-success']); break;
+                    case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-success']); break;
                     case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-danger']);break;
                     case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-warning']);break;
                     case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-info']);break;
@@ -97,3 +114,4 @@ if (!Yii::$app->user->isGuest) {
     ]); ?>
 </div>
 <?php }?>
+
