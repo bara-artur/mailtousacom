@@ -472,3 +472,22 @@ input[type=checkbox]:checked+span::before {
 input::-webkit-input-placeholder {color:#737373 !important;}
 input:-moz-placeholder {color:!important;}
 /*end_art_bara17022017*/
+/*begin_art_bara20022017*/
+h5.deliv_address,h5.order_include
+{
+font-weight: 600;
+border-bottom: 1px dotted #ccc;
+margin-top: 4px;
+padding-bottom: 8px;
+color: #05389F;
+}
+.table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+    border: 1px solid #ccc;
+}
+.border_right{border-right:1px solid #eeeeee;}
+.bottom_pars{
+    font-size:18px;
+    letter-spacing: 2px;
+    font- : ;
+}
+/*end_art_bara20022017*/
