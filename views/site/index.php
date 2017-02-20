@@ -24,10 +24,9 @@ if (!Yii::$app->user->isGuest) {
     <?= Html::a('Create Order', ['/address/create-order-billing'], ['class' => 'btn btn-success']) ?>
 </p>
 <div>
+    <?= $this->render('orderFilterForm', ['model' => $filterForm]);?>
     <?= GridView::widget([
         'dataProvider' => $orders,
-
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -42,18 +41,7 @@ if (!Yii::$app->user->isGuest) {
                     if ($data->created_at == 0) return '-';
                     else return date("j-M-Y H:i:s",$data->created_at);
                 },
-                'filter' => DatePicker::widget([
-                    'model' => $searchModel,
-                    'attribute'=>'created_at',
-                  //  'convertFormat'=>true,
-               //     'pluginOptions'=>[
-                 //       'timePicker'=>true,
-                   //     'timePickerIncrement'=>30,
-                     //   'locale'=>[
-                       //     'format'=>'Y-m-d'
-                        //]
-                   // ]
-                ]),
+
             'format' => 'raw',
           ],
             ['attribute'=> 'transport_data',
@@ -71,7 +59,7 @@ if (!Yii::$app->user->isGuest) {
             'content' => function($data){
                 return PaymentsList::getTextStatus()[$data->payment_state];
             },
-            'filter' => PaymentsList::getTextStatus(),],
+            ],
             [
                 'attribute' => 'price',
                 'content'=> function($data){

@@ -10,6 +10,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\modules\order\models\OrderSearch;
 use app\modules\payment\models\PaymentSearch;
+use  app\modules\order\models\OrderFilterForm;
 
 class SiteController extends Controller
 {
@@ -65,16 +66,28 @@ class SiteController extends Controller
         if (Yii::$app->session->hasFlash('toAddressCreate')){
             return $this->redirect(['/address/create', 'first_address'=>'1']);
         }
-        $orderSearchModel = new OrderSearch();
-        $query = Yii::$app->request->queryParams;
-        if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['client_id' => Yii::$app->user->id];
-        else $query['OrderSearch'] = ['client_id' => Yii::$app->user->id];
 
-        $orders = $orderSearchModel->search($query);
+// Загружаем фильтр из формы
+        $filterForm = new OrderFilterForm();
+        if(Yii::$app->request->post()) {
+            $filterForm = new OrderFilterForm();
+            $filterForm->load(Yii::$app->request->post());
+            $query['OrderSearch'] = $filterForm->toArray();
+            $time_to = ['created_at_to' => $filterForm->created_at_to];
+            $time_to += ['transport_date_to' => $filterForm->transport_data_to];
+        }
+
+        $orderSearchModel = new OrderSearch();
+        //$query = Yii::$app->request->queryParams;
+        //if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['client_id' => Yii::$app->user->id];
+        //else $query['OrderSearch'] = ['client_id' => Yii::$app->user->id];
+
+        $orders = $orderSearchModel->search($query,$time_to);
 
         return $this->render('index',[
             'orders' => $orders,
             'searchModel' => $orderSearchModel,
+            'filterForm' => $filterForm,
         ]);
     }
 
@@ -93,6 +106,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
+
         return $this->render('login', [
             'model' => $model,
         ]);

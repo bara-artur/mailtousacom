@@ -15,7 +15,13 @@ use Yii;
 class PaymentsList extends \yii\db\ActiveRecord
 {
     public static function getTextStatus(){
-        return array('Text for status 0000','Text for status 1111','Text for status 2222','Text for status 3333');
+        return array(
+            '' => 'All',
+            '0'=>'Text for status 0000',
+            '1'=>'Text for status 1111',
+            '2'=>'Text for status 2222',
+            '3'=>'Text for status 3333'
+        );
     }
 
     public static function statusText($param)
@@ -25,7 +31,13 @@ class PaymentsList extends \yii\db\ActiveRecord
         else return 'Unknown status';
     }
     public static function getPayStatus(){
-        return array('Paypal','On the delivery address','System 2','System 3');
+        return array(
+            ''=>'All',
+            '0'=>'Paypal',
+            '1'=>'On the delivery address',
+            '2'=>'System 2',
+            '3'=>'System 3'
+        );
     }
 
     public static function statusPayText($param)

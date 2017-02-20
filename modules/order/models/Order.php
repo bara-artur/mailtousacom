@@ -19,7 +19,13 @@ use Yii;
 class Order extends \yii\db\ActiveRecord
 {
     public static function getTextStatus(){
-        return array('Text for status 0000','Text for status 1111','Text for status 2222','Text for status 3333');
+        return array(
+            ''=>'All',
+            '0'=>'Text for status 0000',
+            '1'=>'Text for status 1111',
+            '2'=>'Text for status 2222',
+            '3'=>'Text for status 3333'
+        );
     }
 
     public static function orderStatusText($param)
