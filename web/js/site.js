@@ -264,3 +264,6 @@ function init_order_border(){
   });
 
 }
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})

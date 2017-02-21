@@ -10,7 +10,7 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 /* @var $searchModel app\modules\state\models\StateSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'States';
+$this->title = 'Taxes configuration';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);

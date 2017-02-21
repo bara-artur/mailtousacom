@@ -11,38 +11,47 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\modules\tariff\models\TariffsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->registerAssetBundle(skinka\widgets\gritter\GritterAsset::className());
-$this->title = 'Configuration of tariffs';
+$this->title = 'Tariffs configuration';
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
 
 ?>
-
+<h4 class="modernui-neutral2">Tariffs configuration</h4>
 <div class="tariffs-index">
+    <div class="row">
+        <div class="col-md-12 padding-bottom-10 push-up-margin-tiny">
     <div id="ajaxCrudDatatable">
-        <div class="btn-group">
-            <a class="btn btn-default" href="/tariff/default/create" title="Create new min parcels count" role="modal-remote">
+        <div class="btn-group pull-right">
+            <a class="btn btn-info margin-right-10" href="/tariff/default/create" title="Create new min parcels count" role="modal-remote">
                 <i class="glyphicon glyphicon-plus"></i>
-                Add min parcels discount
+                Add column min qty parcels
             </a>
-            <a class="btn btn-default" href="/tariff/default/create_weight" title="Create new max parcel weight" role="modal-remote">
+            <a class="btn btn-info" href="/tariff/default/create_weight" title="Create new max parcel weight" role="modal-remote">
                 <i class="glyphicon glyphicon-plus"></i>
-                Add max parcel weight
+                Add line max parcel weight
             </a>
         </div>
     </div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
     <div id="crud-datatable-pjax">
         <?php Pjax::begin(); ?>
-        <table class="table table-inverse_ table-striped" href="/tariff/default/save-price">
+        <div class="table-responsive">
+        <!--<table class="table table-inverse_ table-striped" href="/tariff/default/save-price">-->
+            <table class="table table-bordered" href="/tariff/default/save-price">
             <thead>
                 <tr>
-                    <th>Shipping volume</th>
+                    <th class="tar_big max_width">Shipping volume<div class="tar_small">per month</div></th>
                     <?php
                         foreach ($parcel_count as $cnt){
                             echo '<th>
-                                min count '.$cnt.'
+                                <center><span class="tar_middle">'.$cnt.'+</span></br>
+                                <span class="tar_small">quantity parcels</span>
                                 <a
-                                    class="crud-datatable-action-del"
+                                    class="crud-datatable-action-del pull-right"
                                     href="/tariff/default/delete?count='.$cnt.'" 
                                     title="Delete" data-pjax="false"
                                     data-pjax-container="crud-datatable-pjax"
@@ -51,8 +60,8 @@ CrudAsset::register($this);
                                     data-toggle="tooltip"
                                     data-confirm-title="Are you sure?"
                                     data-confirm-message="Are you sure want to delete this column">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                </a>
+                                    <span class="glyphicon glyphicon-trash but_del" data-toggle="tooltip" data-placement="right" title="Delete column"></span>
+                                </a></center>
                               </th>';
                         }
                     ?>
@@ -65,7 +74,7 @@ CrudAsset::register($this);
                         echo '<th scope="row">
                             '.($w==-1?'Pickup':'Less then '.$w.'lb').'
                                                             <a
-                                    class="crud-datatable-action-del"
+                                    class="crud-datatable-action-del pull-right"
                                     href="/tariff/default/delete?weight='.$w.'" 
                                     title="Delete" data-pjax="false"
                                     data-pjax-container="crud-datatable-pjax"
@@ -74,7 +83,7 @@ CrudAsset::register($this);
                                     data-toggle="tooltip"
                                     data-confirm-title="Are you sure?"
                                     data-confirm-message="Are you sure want to delete this line">
-                                        <span class="glyphicon glyphicon-trash"></span>
+                                        <span class="glyphicon glyphicon-trash but_del" data-toggle="tooltip" data-placement="right" title="Delete line"></span>
                                 </a>
                             </th>';
                         foreach ($parcel_count as $cnt){
@@ -92,7 +101,10 @@ CrudAsset::register($this);
                 ?>
             </tbody>
         </table>
+        </div>
         <?php Pjax::end(); ?>
+    </div>
+    </div>
     </div>
 </div>
 <?php Modal::begin([

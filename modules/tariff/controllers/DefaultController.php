@@ -126,7 +126,7 @@ class DefaultController extends Controller
                         'model' => $this->findModel($id),
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                            Html::a('Edit',['Update','id'=>$id],['class'=>'btn btn-science-blue','role'=>'modal-remote'])
                 ];    
         }else{
             return $this->render('view', [
@@ -162,7 +162,7 @@ class DefaultController extends Controller
                       'weight' => $weight,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
+                                Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
 
                 ];
             }else if($model->load($request->post()) && $model->save()){
@@ -171,7 +171,7 @@ class DefaultController extends Controller
                     'title'=> "Create new min parcel count",
                     'content'=>'<span class="text-success">Create Tariffs success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                            Html::a('Create More',['create'],['class'=>'btn btn-science-blue','role'=>'modal-remote'])
         
                 ];         
             }else{           
