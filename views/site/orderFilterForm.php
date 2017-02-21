@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\payment\models\PaymentsList;
 use app\modules\order\models\Order;
+use kartik\daterange\DateRangePicker;
+use kartik\widgets\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\order\models\orderFilterForm */
@@ -14,18 +16,19 @@ use app\modules\order\models\Order;
     <?php $form = ActiveForm::begin(); ?>
        <?= $form->field($model, 'id')->textInput () ?>
        <?= $form->field($model, 'order_status')->dropDownList( Order::getTextStatus()) ?>
-       <?= $form->field($model, 'created_at')->widget(\yii\jui\DatePicker::classname(), [
-           'dateFormat' => 'yyyy-MM-dd',
-       ]) ?>
-       <?= $form->field($model, 'created_at_to')->widget(\yii\jui\DatePicker::classname(), [
-           'dateFormat' => 'yyyy-MM-dd',
-       ]) ?>
-       <?= $form->field($model, 'transport_data')->widget(\yii\jui\DatePicker::classname(), [
-           'dateFormat' => 'yyyy-MM-dd',
-       ]) ?>
-       <?= $form->field($model, 'transport_data_to')->widget(\yii\jui\DatePicker::classname(), [
-           'dateFormat' => 'yyyy-MM-dd',
-       ]) ?>
+
+  <?= $form->field($model,'created_at')->widget(DatePicker::className(),[
+    'name' => 'created_at',
+    'type' => DatePicker::TYPE_RANGE,
+    'name2' => 'created_at_to',
+    'attribute2' => 'created_at_to',
+    'pluginOptions' => [
+      'autoclose'=>true,
+      'format' => \Yii::$app->params['data_format_js']
+    ]
+  ]);?>
+
+
        <?= $form->field($model, 'payment_type')->dropDownList(PaymentsList::getPayStatus()) ?>
        <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
 

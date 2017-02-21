@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\modules\state\models\State;
 
 /**
- * StateSearch represents the model behind the search form about `app\modules\state\models\State`.
+ * StateSearch represents the model behind the search form of `app\modules\state\models\State`.
  */
 class StateSearch extends State
 {
@@ -44,6 +44,8 @@ class StateSearch extends State
     {
         $query = State::find();
 
+        // add conditions that should always apply here
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -56,6 +58,7 @@ class StateSearch extends State
             return $dataProvider;
         }
 
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'qst' => $this->qst,

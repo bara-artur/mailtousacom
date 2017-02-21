@@ -39,7 +39,7 @@ if (!Yii::$app->user->isGuest) {
             ['attribute'=> 'created_at',
                 'content'=> function($data){
                     if ($data->created_at == 0) return '-';
-                    else return date("j-M-Y H:i:s",$data->created_at);
+                    else return date(\Yii::$app->params['data_time_format_php'],$data->created_at);
                 },
 
             'format' => 'raw',
@@ -47,7 +47,7 @@ if (!Yii::$app->user->isGuest) {
             ['attribute'=> 'transport_data',
             'content'=> function($data){
                 if ($data->transport_data == 0) return '-';
-                else return date("j-M-Y H:i:s",$data->transport_data);
+                else return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
             }],
             ['attribute'=> 'payment_type',
                 'content' => function($data){

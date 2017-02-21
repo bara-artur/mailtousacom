@@ -63,9 +63,9 @@ class OrderSearch extends Order
         }
         // grid filtering conditions
         if ($date_from!=null) $query->andFilterWhere(['>=', 'created_at', $date_from]);
-        if ($date_to!=null) $query->andFilterWhere(['<=', 'created_at', $date_to]);
+        if ($date_to!=null) $query->andFilterWhere(['<=', 'created_at', $date_to+24*3600]);
         if ($transport_date_from!=null) $query->andFilterWhere(['>=', 'transport_data', $transport_date_from]);
-        if ($transport_date_to!=null) $query->andFilterWhere(['<=', 'transport_data', $transport_date_to]);
+        if ($transport_date_to!=null) $query->andFilterWhere(['<=', 'transport_data', $transport_date_to+24*3600]);
         $query->andFilterWhere([
             'id' => $this->id,
             'billing_address_id' => $this->billing_address_id,

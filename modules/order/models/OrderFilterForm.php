@@ -41,26 +41,5 @@ class OrderFilterForm extends Order
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'billing_address_id' => 'Billing Address ID',
-            'order_type' => 'Order Type',
-            'user_id' => 'User ID',
-            'user_id_750' => 'User Id 750',
-            'order_status' => 'Order Status',
-            'created_at' => 'Created At From',
-            'transport_data' => 'Transport Data From',
-            'agreement' => 'Agreement',
-            'payment_type' => 'Payment Type',
-            'payment_state' => 'Payment State',
-            'price' => 'Price',
-            'qst' => 'Qst',
-            'gst' => 'Gst',
-        ];
-    }
+
 }

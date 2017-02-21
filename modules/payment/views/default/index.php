@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute'=> 'pay_time',
                 'content' => function($data){
                     if ($data->pay_time  == 0 ) return 'Expected...';
-                    else return date("j-M-Y H:i:s",$data->pay_time);
+                    else return date(\Yii::$app->params['data_time_format_php'],$data->pay_time);
                 },
             ],
         ],

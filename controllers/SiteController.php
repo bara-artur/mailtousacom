@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\modules\order\models\OrderSearch;
+use app\modules\order\models\Order;
 use app\modules\payment\models\PaymentSearch;
 use  app\modules\order\models\OrderFilterForm;
 

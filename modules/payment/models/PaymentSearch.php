@@ -59,7 +59,7 @@ class PaymentSearch extends PaymentsList
         }
 
         if ($date_from!=null) $query->andFilterWhere(['>=', 'pay_time', $date_from]);
-        if ($date_to!=null) $query->andFilterWhere(['<=', 'pay_time', $date_to]);
+        if ($date_to!=null) $query->andFilterWhere(['<=', 'pay_time', $date_to+24*3600]);
         // grid filtering conditions
         $query->andFilterWhere([
             'status' => $this->status,
