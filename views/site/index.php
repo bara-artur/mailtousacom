@@ -37,11 +37,11 @@ $this->title = 'Shipping to USA and Canada';
             }],
             ['attribute'=> 'created_at',
                 'content'=> function($data){
-                    return date("j-M-Y H:i:s",$data->created_at);
+                    return date(\Yii::$app->params['data_time_format_php'],$data->created_at);
                 }],
             ['attribute'=> 'transport_data',
             'content'=> function($data){
-                    return date("j-M-Y H:i:s",$data->transport_data);
+                    return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
             }],
             'payment_type',
             'payment_state',
