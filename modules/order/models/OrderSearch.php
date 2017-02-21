@@ -18,8 +18,10 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['id', 'billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status'], 'integer'],
-            [['created_at', 'transport_data'], 'safe'],
+            [['id', 'billing_address_id', 'order_type',
+                'user_id', 'user_id_750', 'order_status',
+                'payment_state','payment_type'], 'integer'],
+            [['created_at', 'transport_data','transport_data_to','created_at_to'], 'safe'],
         ];
     }
 
@@ -39,7 +41,7 @@ class OrderSearch extends Order
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $time_to)
     {
         $query = Order::find();
         // add conditions that should always apply here
@@ -49,14 +51,21 @@ class OrderSearch extends Order
         ]);
 
         $this->load($params);
-
+        $date_from = strtotime($this['created_at']);
+        $date_to =   strtotime($time_to['created_at_to']);
+        $transport_date_from = strtotime($this['transport_data']);
+        $transport_date_to = strtotime($time_to['transport_date_to']);
+            //var_dump('---'.$date_to);
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
-
         // grid filtering conditions
+        if ($date_from!=null) $query->andFilterWhere(['>=', 'created_at', $date_from]);
+        if ($date_to!=null) $query->andFilterWhere(['<=', 'created_at', $date_to+24*3600]);
+        if ($transport_date_from!=null) $query->andFilterWhere(['>=', 'transport_data', $transport_date_from]);
+        if ($transport_date_to!=null) $query->andFilterWhere(['<=', 'transport_data', $transport_date_to+24*3600]);
         $query->andFilterWhere([
             'id' => $this->id,
             'billing_address_id' => $this->billing_address_id,
@@ -64,8 +73,8 @@ class OrderSearch extends Order
             'user_id' => $this->user_id,
             'user_id_750' => $this->user_id_750,
             'order_status' => $this->order_status,
-            'created_at' => $this->created_at,
-            'transport_data' => $this->transport_data,
+            'payment_state' => $this->payment_state,
+            'payment_type' => $this->payment_type,
         ]);
 
         return $dataProvider;

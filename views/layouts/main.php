@@ -49,7 +49,10 @@ AppAsset::register($this);
               . Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration'])
               . '</li>'
             ):(
-                '<li>'
+              '<li>'
+              . Html::a('<i class="icon-metro-user-2"></i> Payment', ['/payment/'], ['class' => 'profile-link'])
+              . '</li>'
+                .'<li>'
                 . Html::a('<i class="icon-metro-user-2"></i> Profile', ['/profile/'], ['class' => 'profile-link'])
                 . '</li>'
                 . '<li>'

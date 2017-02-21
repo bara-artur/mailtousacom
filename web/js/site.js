@@ -55,6 +55,13 @@ $(document).ready(function() {
     return true;
 
   });
+  $('[name="Order[transport_data]"]').on('change',function () {
+    post={
+      value:this.value,
+      order:odrer_id
+    };
+    $.post('/orderInclude/border-save',post)
+  })
 });
 
 var popup = (function() {

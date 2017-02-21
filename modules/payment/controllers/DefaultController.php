@@ -15,6 +15,7 @@ use app\modules\order\models\Order;
 use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderElement\models\OrderElement;
 use yii\db\Query;
+use app\modules\payment\models\PaymentFilterForm;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,13 +64,25 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PaymentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $filterForm = new PaymentFilterForm();
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if (Yii::$app->user->isGuest) return $this->redirect(['/']);
+        else {
+
+            if(Yii::$app->request->post()) {
+                $filterForm->load(Yii::$app->request->post());
+                $query['PaymentSearch'] = $filterForm->toArray();
+                $time_to = ['pay_time_to' => $filterForm->pay_time_to];
+            }
+
+            $searchModel = new PaymentSearch();
+            $dataProvider = $searchModel->search($query,$time_to);
+
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+                'filterForm' => $filterForm,
+            ]);
+        }
     }
 
     /**
@@ -80,7 +93,7 @@ class DefaultController extends Controller
       $order = Order::findOne($id);
 
       if($order->payment_state!=0){
-        \Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
+        Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
         return $this->redirect(['/']);
       }
 
@@ -224,67 +237,6 @@ class DefaultController extends Controller
       }
       throw new NotFoundHttpException('Error payment. Contact your administrator.');
 
-    }
-    /**
-     * Displays a single PaymentsList model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new PaymentsList model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new PaymentsList();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing PaymentsList model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing PaymentsList model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**

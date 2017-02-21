@@ -22,8 +22,6 @@ body {margin-top: 0px;margin-left: 0px;}
 #page_2 #p2dimg1 #p2img1 {width:758px;height:71px;}
 
 
-
-
 .ft0{font: italic 11px 'Arial';line-height: 14px;}
 .ft1{font: 13px 'Arial';line-height: 16px;}
 .ft2{font: 16px 'Arial';line-height: 18px;}
@@ -153,12 +151,17 @@ body {margin-top: 0px;margin-left: 0px;}
 .tr10{height: 8px;}
 .tr11{height: 7px;}
 .tr12{height: 3px;}
-.tr13{height: 446px;}
-.tr14{height: 447px;}
+.tr13{height: 350px;}
+.tr14{height: 400px;}
 .tr15{height: 23px;}
 .tr16{height: 31px;}
 .tr17{height: 19px;}
 
 .t0{width: 762px;font: 11px 'Arial';}
 .t1{width: 553px;margin-left: 6px;margin-top: 1px;font: 13px 'Arial';}
-.t2{width: 752px;font: 11px 'Arial';}
+.t2{width: 700px;font: 11px 'Arial';}
+
+.border{border:1px solid;height: 52px;width: 50%;padding: 5px;vertical-align: top;}
+.border_h{width: 25%;}
+.user_inp{margin:0;font-size:1.5em;vertical-align: top;}
+.user_inp td{vertical-align:top;font-size:16px}

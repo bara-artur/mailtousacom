@@ -18,7 +18,7 @@ class PaymentSearch extends PaymentsList
     public function rules()
     {
         return [
-            [['id', 'client_id', 'order_id', 'status'], 'integer'],
+            [['status','type','pay_time'], 'safe'],
         ];
     }
 
@@ -38,7 +38,7 @@ class PaymentSearch extends PaymentsList
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$time_to)
     {
         $query = PaymentsList::find();
 
@@ -49,6 +49,8 @@ class PaymentSearch extends PaymentsList
         ]);
 
         $this->load($params);
+        $date_from = strtotime($this['pay_time']);
+        $date_to =   strtotime($time_to['pay_time_to']);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -56,12 +58,12 @@ class PaymentSearch extends PaymentsList
             return $dataProvider;
         }
 
+        if ($date_from!=null) $query->andFilterWhere(['>=', 'pay_time', $date_from]);
+        if ($date_to!=null) $query->andFilterWhere(['<=', 'pay_time', $date_to+24*3600]);
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'client_id' => $this->client_id,
-            'order_id' => $this->order_id,
             'status' => $this->status,
+            'type' => $this->type,
         ]);
 
         return $dataProvider;

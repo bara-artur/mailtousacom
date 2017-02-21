@@ -1,4 +1,3 @@
-<DIV id="page_1">
   <DIV id="id_1">
     <DIV id="id_1_1">
       <P class="p0 ft0">(INSTRUCTIONS ON REVERSE)</P>
@@ -19,78 +18,40 @@
   <DIV id="id_2">
     <TABLE cellpadding=0 cellspacing=0 class="t0">
       <TR>
-        <TD class="tr0 td0"><P class="p9 ft5">1.</P></TD>
-        <TD colspan=3 class="tr0 td1"><P class="p10 ft5">Name or Number and Description of Importing Conveyance</P></TD>
-        <TD class="tr0 td2"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr0 td3"><P class="p12 ft5">2.</P></TD>
-        <TD colspan=4 class="tr0 td4"><P class="p11 ft5">Name of Master or Person in Charge</P></TD>
-        <TD class="tr0 td5"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr0 td6"><P class="p11 ft6">&nbsp;</P></TD>
+        <TD class="border">
+          1. Name or Number and Description of Importing Conveyance
+          <P class="user_inp">Mersedes-Bens sprinter FKM947  PQ Canada</P>
+        </TD>
+        <TD class="border" colspan="2">
+          2. Name of Master or Person in Charge
+        </TD>
       </TR>
       <TR>
-        <TD class="tr1 td7"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td8"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td9"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td10"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td11"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td12"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td13"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td14"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td15"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td16"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr1 td17"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td18"><P class="p11 ft6">&nbsp;</P></TD>
+        <TD class="border">
+          3. Name and Address of Owner
+          <P class="user_inp">8469512 Inc 294 Rue Ste-Catherine West Monteal QC H2X 2A1 Canada</P>
+        </TD>
+        <TD class="border border_h">
+          4. Foreign Port of Lading
+          <P class="user_inp">MTL</P>
+        </TD>
+        <TD class="border border_h">
+          5. U.S. Port of Destination
+          <P class="user_inp">CHM</P>
+        </TD>
       </TR>
       <TR>
-        <TD class="tr3 td19"><P class="p9 ft5">3.</P></TD>
-        <TD colspan=2 class="tr3 td20"><P class="p10 ft5">Name and Address of Owner</P></TD>
-        <TD class="tr3 td21"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td22"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td23"><P class="p12 ft5">4.</P></TD>
-        <TD colspan=2 class="tr3 td24"><P class="p11 ft5">Foreign Port of Lading</P></TD>
-        <TD class="tr3 td25"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD colspan=3 class="tr3 td26"><P class="p13 ft5">5. U.S. Port of Destination</P></TD>
+        <TD class="border">
+          6. Port of Arrival
+          <P class="user_inp">07 12/CHM</P>
+        </TD>
+        <TD class="border" colspan="2">
+          7. Date of Arrival
+          <P class="user_inp"><?=date('d-m-Y',$order->transport_data);?></P>
+        </TD>
       </TR>
-      <TR>
-        <TD class="tr2 td7"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td8"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td9"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td10"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td11"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td12"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td13"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td14"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td27"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td16"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td17"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td28"><P class="p11 ft6">&nbsp;</P></TD>
-      </TR>
-      <TR>
-        <TD class="tr3 td19"><P class="p9 ft5">6.</P></TD>
-        <TD class="tr3 td29"><P class="p10 ft5">Port of Arrival</P></TD>
-        <TD class="tr3 td30"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td21"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td22"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td23"><P class="p12 ft5">7.</P></TD>
-        <TD colspan=2 class="tr3 td24"><P class="p11 ft5">Date of Arrival</P></TD>
-        <TD class="tr3 td31"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td32"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td33"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr3 td18"><P class="p11 ft6">&nbsp;</P></TD>
-      </TR>
-      <TR>
-        <TD class="tr2 td7"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td8"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td9"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td10"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td11"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td12"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td13"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td14"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td15"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr2 td16"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD colspan=2 class="tr2 td34"><P class="p11 ft6">&nbsp;</P></TD>
-      </TR>
+    </TABLE>
+    <table>
       <TR>
         <TD class="tr4 td7"><P class="p11 ft7">&nbsp;</P></TD>
         <TD class="tr4 td35"><P class="p14 ft8">Column No. 1</P></TD>
@@ -104,7 +65,7 @@
         <TD class="tr5 td18"><P class="p11 ft9">&nbsp;</P></TD>
       </TR>
       <TR>
-        <TD colspan=2 class="tr6 td40"><P class="p15 ft5">Bill of Lading or Marks &</P></TD>
+        <TD colspan=2 class="tr6 td40"><P class="p15 ft5">Bill of Lading or Marks & </TD>
         <TD rowspan=2 class="tr7 td41"><P class="p19 ft5">Car Number</P></TD>
         <TD colspan=4 rowspan=2 class="tr7 td42"><P class="p20 ft10">Number and Gross Weight (in kilos or pounds) of</P></TD>
         <TD class="tr6 td43"><P class="p11 ft6">&nbsp;</P></TD>
@@ -156,19 +117,20 @@
         <TD class="tr12 td17"><P class="p11 ft15">&nbsp;</P></TD>
         <TD class="tr9 td18"><P class="p11 ft11">&nbsp;</P></TD>
       </TR>
-      <TR>
-        <TD class="tr13 td7"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td35"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td36"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td10"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td50"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td12"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td38"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td14"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td15"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td51"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr13 td17"><P class="p11 ft6">&nbsp;</P></TD>
-        <TD class="tr14 td18"><P class="p11 ft6">&nbsp;</P></TD>
+      <TR class="user_inp">
+        <TD class="tr13 td35" colspan="2">
+          <?=count($order_elements);?> individually packaged packages
+        </TD>
+        <TD class="tr13 td36 td12">
+
+        </TD>
+        <TD class="tr13 td38" colspan="4">
+          <?=count($order_elements);?> packages, total amount <?=$total['price'];?>
+        </TD>
+        <TD class="tr13 td51" colspan="3">
+          various consignees
+        </TD>
+        <TD class="tr13 td17" colspan="2"><P class="p11 ft6">&nbsp;</P></TD>
       </TR>
     </TABLE>
     <TABLE cellpadding=0 cellspacing=0 class="t1">
@@ -200,19 +162,3 @@
       </TR>
     </TABLE>
   </DIV>
-</DIV>
-
-<pagebreak />
-
-<DIV id="page_2">
-  <DIV id="id_1">
-    <P class="p30 ft17">Block No. 4</P>
-    <P class="p31 ft18">Insert the word ''various'' if more than one foreign port of lading is involved, and show the individual ports of lading by name immediately below the description of goods in vertical column number 3.</P>
-    <P class="p32 ft17">Column No. 3</P>
-    <P class="p33 ft18">If used as entry pursuant to Section 123.7, Customs Regulations, as amended, prepare form in duplicate and show name of shipper, value, and tariff item number immediately below description of goods in vertical column number 3.</P>
-    <P class="p34 ft19">Paperwork Reduction Act Statement: An agency may not conduct or sponsor an information collection and a person is not required to respond to this information unless it displays a current valid OMB control number and an expiration date. The control number for this collection is <NOBR>1651-0001.</NOBR> The estimated average time to complete this application is 6 minutes. If you have any comments regarding the burden estimate you can write to U.S. Customs and Border Protection, Office of Regulations and Rulings, 799 9th Street, NW., Washington DC 20229.</P>
-  </DIV>
-  <DIV id="id_2">
-    <P class="p0 ft4">CBP Form 7533 (06/09)</P>
-  </DIV>
-</DIV>

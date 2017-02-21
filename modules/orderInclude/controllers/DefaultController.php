@@ -285,7 +285,7 @@ class DefaultController extends Controller
       }
 
       if($order->transport_data<time())$order->transport_data=strtotime('+1 days');
-      $order->transport_data=date('d-M-Y', $order->transport_data);
+      $order->transport_data=date(\Yii::$app->params['data_format_php'], $order->transport_data);
 
       $model = OrderElement::find()->where(['order_id'=>$id])->all();
 
@@ -345,6 +345,20 @@ class DefaultController extends Controller
       ]);
     }
 
+  public function actionBorderSave(){
+    $request = Yii::$app->request;
+    if(!Yii::$app->user->isGuest && !$request->isAjax && !$request->post()){
+      throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    $order = Order::findOne($request->post('order'));
+    if($order->user_id!=Yii::$app->user->id){
+      throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    $order->transport_data=strtotime($request->post('value'));
+    $order->save();
+    return ;
+  }
+
   public function actionBorderFormPdf($id){
     $this->layout = 'pdf';
     Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
@@ -353,7 +367,6 @@ class DefaultController extends Controller
 
     $order = Order::findOne($id);
     if($order->transport_data<time())$order->transport_data=strtotime('+1 days');
-    $order->transport_data=date('d-M-Y', $order->transport_data);
 
     $model = OrderElement::find()->where(['order_id'=>$id])->all();
 
@@ -403,11 +416,13 @@ class DefaultController extends Controller
 
     $content = $this->renderPartial('borderFormPdf',[
       'order_elements' => $model,
-      'createNewAddress'=>!$model,
+      'order'=>$order,
       'order_id'=>$id,
       'total'=>$total,
     ]);
 
+    //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
+    //return $content;
     // setup kartik\mpdf\Pdf component
     $pdf = new Pdf([
       'content' => $content,

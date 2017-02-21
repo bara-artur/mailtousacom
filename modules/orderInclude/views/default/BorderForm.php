@@ -72,4 +72,5 @@ $form = ActiveForm::begin([
   $(document).ready(function() {
     init_order_border()
   })
+  var odrer_id=<?=$order_id;?>;
 </script>
