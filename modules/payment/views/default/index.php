@@ -14,44 +14,43 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <?= $this->render('paymentFilterForm', ['model' => $filterForm]);?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            ['attribute'=> 'status',
+                'content' => function($data){
+                    return $data::statusText($data->status);
+                },
+                'filter' => PaymentsList::getTextStatus(),
+              ],
             ['attribute'=> 'type',
                 'content' => function($data){
-                    switch ($data->type) {
-                        case '0' : return "Paypal"; break;
-                        case '1' : return "On the delivery address";break;
-                        case '2' : return "System 2";break;
-                        case '3' : return "System 3";break;
-                        default: return "Unknown System type - ".$data->type;
-                    }
+                    return $data::statusPayText($data->status);
                 },
-                'filter' => array('' => 'All',0 => "Paypal", 1 => "On the delivery address", 2 => "System 2", 3 => "System 3"),
+                'filter' => PaymentsList::getPayStatus(),
             ],
-            'price',
-            'qst',
-            'gst',
-          ['attribute'=> 'status',
-            'content' => function($data){
-              switch ($data->status) {
-                case '0' : return "Text for status 0"; break;
-                case '1' : return "Text for status 1";break;
-                case '2' : return "Text for status 2";break;
-                case '3' : return "Text for status 3";break;
-                default: return "Unknown status - ".$data->status;
-              }
-            },
-            'filter' => array('' => 'All',0 => "Text for status 0", 1 => "Text for status 1", 2 => "Text for status 2", 3 => "Text for status 3"),
-          ],
-            ['attribute'=> 'pay_time',
+            [
+                'attribute' => 'price',
+                'format'=>['decimal',2]
+            ],
+                [
+                    'attribute' => 'qst',
+                    'format'=>['decimal',2]
+                ],
+            [
+                'attribute' => 'gst',
+                'format'=>['decimal',2]
+            ],
+            [
+                'attribute'=> 'pay_time',
                 'content' => function($data){
                     if ($data->pay_time  == 0 ) return 'Expected...';
-                    else return date("j-M-Y H:i:s",$data->pay_time);
-                }],
+                    else return date(\Yii::$app->params['data_time_format_php'],$data->pay_time);
+                },
+            ],
         ],
     ]); ?>
 </div>

@@ -18,6 +18,22 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+    public static function getTextStatus(){
+        return array(
+            ''=>'All',
+            '0'=>'Text for status 0000',
+            '1'=>'Text for status 1111',
+            '2'=>'Text for status 2222',
+            '3'=>'Text for status 3333'
+        );
+    }
+
+    public static function orderStatusText($param)
+    {
+        $textForStatus =  Order::getTextStatus();
+        if ($param < count($textForStatus)) return  $textForStatus[$param];
+        else return 'Unknown status';
+    }
     /**
      * @inheritdoc
      */
@@ -33,7 +49,8 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status'], 'required'],
-            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status','agreement','payment_type','payment_state'], 'integer'],
+            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status','agreement',
+                'payment_type','payment_state'], 'integer'],
             [['created_at', 'transport_data'], 'safe'],
         ];
     }
@@ -44,13 +61,14 @@ class Order extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'Order id',
+            'id' => 'Order ID',
             'billing_address_id' => 'Billing Address ID',
             'order_type' => 'Order Type',
             'user_id' => 'User ID',
             'user_id_750' => 'User Id 750',
             'order_status' => 'Order Status',
             'created_at' => 'Created At',
+            'created_at_to' => 'Created At To',
             'transport_data' => 'Transport Data',
             'qst' => 'QST/HST (%)',
             'gst' => 'PST (%)',

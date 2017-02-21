@@ -15,6 +15,7 @@ use app\modules\order\models\Order;
 use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderElement\models\OrderElement;
 use yii\db\Query;
+use app\modules\payment\models\PaymentFilterForm;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,14 +64,25 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PaymentSearch();
-        $dataProvider = $searchModel->search(['PaymentSearch' => [
-            'client_id' => Yii::$app->user->id,
-        ]]);
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        $filterForm = new PaymentFilterForm();
+
+        if (Yii::$app->user->isGuest) return $this->redirect(['/']);
+        else {
+
+            if(Yii::$app->request->post()) {
+                $filterForm->load(Yii::$app->request->post());
+                $query['PaymentSearch'] = $filterForm->toArray();
+                $time_to = ['pay_time_to' => $filterForm->pay_time_to];
+            }
+
+            $searchModel = new PaymentSearch();
+            $dataProvider = $searchModel->search($query,$time_to);
+
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+                'filterForm' => $filterForm,
+            ]);
+        }
     }
 
     /**
@@ -81,7 +93,7 @@ class DefaultController extends Controller
       $order = Order::findOne($id);
 
       if($order->payment_state!=0){
-        \Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
+        Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
         return $this->redirect(['/']);
       }
 

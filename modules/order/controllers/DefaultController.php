@@ -30,31 +30,22 @@ class DefaultController extends Controller
     }
 
     /**
-     * Creates a new Order model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Lists all Order models.
      * @return mixed
      */
-    public function actionCreate()
+    /*    public function actionIndex()
     {
-        $request = Yii::$app->request;
-        $address_id = $request->post( 'id' );
-        $model = new Order();
+          $searchModel = new OrderSearch();
+          $dataProvider = $searchModel->search(['OrderSearch' => [
+              'user_id' => Yii::$app->user->id,
+          ]]);
 
-        $model->user_id = Yii::$app->user->id;
-        $model->billing_address_id = $address_id;
-        $model->order_status = 0;
-        $model->order_type = 0;
-        $model->user_id_750 = $model->user_id + 750;
-        $model->created_at = time();
-        $model->transport_data = time();
-        $model->save();
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-
+          return $this->render('index', [
+              'searchModel' => $searchModel,
+              'dataProvider' => $dataProvider,
+          ]);
+      }
+  */
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -72,8 +63,10 @@ class DefaultController extends Controller
     }
     public function beforeAction($action)
     {
+        // ...set `$this->enableCsrfValidation` here based on some conditions...
         // call parent method that will check CSRF if such property is true.
         if ($action->id === 'create') {
+            # code...
             $this->enableCsrfValidation = false;
         }
         return parent::beforeAction($action);
