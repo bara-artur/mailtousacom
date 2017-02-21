@@ -15,6 +15,7 @@ use app\modules\order\models\Order;
 use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderElement\models\OrderElement;
 use yii\db\Query;
+use app\modules\payment\models\PaymentFilterForm;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -63,17 +64,23 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+        $filterForm = new PaymentFilterForm();
+
         if (Yii::$app->user->isGuest) return $this->redirect(['/']);
         else {
+
+            if(Yii::$app->request->post()) {
+                $filterForm->load(Yii::$app->request->post());
+                $query['PaymentSearch'] = $filterForm->toArray();
+                $time_to = ['pay_time_to' => $filterForm->pay_time_to];
+            }
+
             $searchModel = new PaymentSearch();
-            $query = Yii::$app->request->queryParams;
-            if (array_key_exists('PaymentSearch', $query)) $query['PaymentSearch'] += ['client_id' => Yii::$app->user->id];
-            else $query['PaymentSearch'] = ['client_id' => Yii::$app->user->id];
-            $dataProvider = $searchModel->search($query);
+            $dataProvider = $searchModel->search($query,$time_to);
 
             return $this->render('index', [
-                'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'filterForm' => $filterForm,
             ]);
         }
     }

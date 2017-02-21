@@ -61,11 +61,6 @@ class OrderSearch extends Order
             // $query->where('0=1');
             return $dataProvider;
         }
-        var_dump($time_to);
-        var_dump('  1 - '.$date_from);
-        var_dump('  1 - '.$date_to);
-        var_dump('  1 - '.$transport_date_from);
-        var_dump('  1 - '.$transport_date_to);
         // grid filtering conditions
         if ($date_from!=null) $query->andFilterWhere(['>=', 'created_at', $date_from]);
         if ($date_to!=null) $query->andFilterWhere(['<=', 'created_at', $date_to]);
