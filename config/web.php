@@ -174,4 +174,6 @@ if (YII_ENV_DEV) {
     ];
 }
 
+\Yii::$container->set('skinka\widgets\gritter\AlertGritterWidget', ['enableIcon' => false]);
+
 return $config;
