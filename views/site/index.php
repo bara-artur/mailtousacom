@@ -61,7 +61,7 @@ if (!Yii::$app->user->isGuest) {
               'attribute' => 'price',
               'content'=> function($data){
                   if ($data->price == 0) return '-';
-                  else return $data->price;
+                  else return number_format($data->price,2);
               },
               'format'=>['decimal',2]
             ],
@@ -69,7 +69,7 @@ if (!Yii::$app->user->isGuest) {
               'attribute' => 'qst',
               'content'=> function($data){
                   if ($data->qst == 0) return '-';
-                  else return $data->qst;
+                  else return number_format($data->qst,2);
               },
               'format'=>['decimal',2]
             ],
@@ -77,7 +77,15 @@ if (!Yii::$app->user->isGuest) {
               'attribute' => 'gst',
               'content'=> function($data){
                   if ($data->gst == 0) return '-';
-                  else return $data->gst;
+                  else return number_format($data->gst,2);
+              },
+              'format'=>['decimal',2]
+            ],
+            [
+              'attribute' => 'total',
+              'content'=> function($data){
+                if ($data->gst == 0) return '-';
+                else return number_format($data->gst+$data->qst+$data->price,2);
               },
               'format'=>['decimal',2]
             ],

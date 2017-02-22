@@ -92,6 +92,9 @@ class DefaultController extends Controller
     public function actionOrder($id){
       $order = Order::findOne($id);
 
+      $session = Yii::$app->session;
+      $session->set('last_order',$id);
+
       if($order->payment_state!=0){
         Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
         return $this->redirect(['/']);
@@ -216,11 +219,16 @@ class DefaultController extends Controller
       try {
         $payment=$pay->finishPayment();
       } catch (Exception $e) {
-        throw new NotFoundHttpException('Error payment. Contact your administrator.');
+        return $this->return_last_order('Error payment. Try later or contact your administrator.');
       }
+
+      if(!$payment){
+        return $this->return_last_order();
+      };
+
       $pay=PaymentsList::find()->where(['code'=>$payment->getId(),'status'=>0])->one();
       if(!$pay){
-        throw new NotFoundHttpException('Error payment. Contact your administrator.');
+        return $this->return_last_order('Error payment. Try later or contact your administrator.');
       }
       if($payment->getState()=='approved') {
         $pay->status = 1;
@@ -235,8 +243,7 @@ class DefaultController extends Controller
         \Yii::$app->getSession()->setFlash('success', 'Payment for your order was successful.');
         return $this->redirect(['/']);
       }
-      throw new NotFoundHttpException('Error payment. Contact your administrator.');
-
+      return $this->return_last_order('Try later or contact your administrator.');
     }
 
     /**
@@ -253,5 +260,19 @@ class DefaultController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    private function return_last_order($msg=false){
+
+      if($msg){
+        \Yii::$app->getSession()->setFlash('error', $msg);
+      }
+      $session = Yii::$app->session;
+      $last_order=$session->get('last_order');
+      if(!$last_order){
+        return $this->redirect(['/']);
+      }else{
+        return $this->redirect(['/payment/order/'.$last_order]);
+      }
     }
 }

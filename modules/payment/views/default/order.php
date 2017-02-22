@@ -33,7 +33,9 @@ $form = ActiveForm::begin([
 <p>
   Please pay your MailToUSA fees
 </p>
-
+<p>
+  Sum to pay <?=number_format($total['sum']+$total['gst']+$total['qst'],2);?>$ (Included vat <?=number_format($total['gst']+$total['qst']);?>$)
+</p>
 <?= $form->field($model, 'payment_type')->radioList(
   [
     1 => 'PayPal',

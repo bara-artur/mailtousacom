@@ -28,10 +28,11 @@ $submitOption = [
 <?php
 Pjax::begin();
 if($order_elements){
-foreach ($order_elements as $percel) {
+foreach ($order_elements as $percl_nom => $percel) {
 ?>
 <div class="row">
     <div class="col-md-3">
+        <h3>Parcel <?=$percl_nom+1;?></h3>
         <h4 class="deliv_address">Delivery address</h4>
             <p><b>First name</b>  <?=$percel->first_name;?></p>
             <p><b>Last name</b>  <?=$percel->last_name;?></p>
@@ -95,14 +96,16 @@ foreach ($order_elements as $percel) {
                     <h4>Total</h4>
                     <p><b>Weight </b><?=$total_weight;?>lb</p>
                     <?php
-                        $ParcelPrice=ParcelPrice::widget(['weight'=>$total_weight]);
-                        if($ParcelPrice!=false){
-                            $ParcelPrice.=' $ (without tax)';
-                        }else{
-                            $ParcelPrice='<b style="color: red;">Exceeded weight of a parcel.</b>';
+                        if($total_weight>0) {
+                            $ParcelPrice = ParcelPrice::widget(['weight' => $total_weight]);
+                            if ($ParcelPrice != false) {
+                                $ParcelPrice ='<b>Cost of crossboard delivery </b>'.$ParcelPrice.' $ (without tax)';
+                            } else {
+                                $ParcelPrice = '<b style="color: red;">Exceeded weight of a parcel.</b>';
+                            }
                         }
                     ?>
-                    <p><b>Cost of delivery</b> <?=$ParcelPrice;?></p>
+                    <p><?=$ParcelPrice;?></p>
                 </div>
                 <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add item to parcel', ['create?order-id='.$percel->id],
                   ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>

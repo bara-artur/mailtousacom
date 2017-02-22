@@ -171,6 +171,7 @@ class DoPayment extends Model
           /*echo "Get Payment";
           d($ex);
           exit(1);*/
+          \Yii::$app->getSession()->setFlash('error', 'Error payment. Try later or contact your administrator.');
           return false;
         }
       } catch (Exception $ex) {
@@ -178,6 +179,7 @@ class DoPayment extends Model
         /*echo "Executed Payment";
         d($ex);
         exit(1);*/
+        \Yii::$app->getSession()->setFlash('error', 'Executed Payment. Try later or contact your administrator.');
         return false;
       }
 
@@ -187,6 +189,7 @@ class DoPayment extends Model
       return $payment;
 
     }else {
+      \Yii::$app->getSession()->setFlash('error', 'You canceled the payment. You can change the payment method or repeat the current.');
       // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
       return false;
     }

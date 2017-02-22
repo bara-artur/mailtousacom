@@ -77,8 +77,8 @@ class PaymentsList extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'order_id' => 'Order ID',
             'status' => 'Status',
-          'qst' => 'QST/HST (%)',
-          'gst' => 'PST (%)',
+          'qst' => 'PST (%)',
+          'gst' => 'GST/HST (%)',
         ];
     }
 }
