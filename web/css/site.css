@@ -491,10 +491,9 @@ color: #05389F;
 .tar_small{font-size:14px;font-weight:400;text-align:center;}
 td.td_wr_input,input.tr_input{text-align:center;}
 a.gritter-close::after{font-weight:400;font-family: 'Tahoma',sans-serif !important;}
-.but_del
-{
-    padding: 4px;
-    border: 1px solid #B01E00;
-    color: #B01E00;
+.but_del {
+    padding: 6px;
+    border: 2px solid #D13700;
+    color: #D13700;
 }
 /*end_art_bara20022017*/

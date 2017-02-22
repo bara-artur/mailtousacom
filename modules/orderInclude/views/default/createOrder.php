@@ -31,28 +31,30 @@ if($order_elements){
 foreach ($order_elements as $percel) {
 ?>
 <div class="row">
-    <div class="col-md-3">
-        <h4 class="deliv_address">Delivery address</h4>
-            <p><b>First name</b>  <?=$percel->first_name;?></p>
-            <p><b>Last name</b>  <?=$percel->last_name;?></p>
+    <div class="col-md-12"><h4 class="modernui-neutral2">Please add items to shipping package</h4></div>
+    <div class="col-md-3 border_right">
+        <h5 class="deliv_address">Delivery address</h5>
+            <p><b>First name:</b>  <?=$percel->first_name;?></p>
+            <p><b>Last name:</b>  <?=$percel->last_name;?></p>
             <?php if($percel->address_type==1){
                 echo '<p><b>Company name</b>  '.$percel->company_name.'</p>';
             };?>
-            <p><b>Addres 1</b>  <?=$percel->adress_1;?></p>
-            <p><b>Addres 2</b>  <?=$percel->adress_2;?></p>
-            <p><b>City</b>  <?=$percel->city;?></p>
-            <p><b>ZIP</b>  <?=$percel->zip;?></p>
-            <p><b>Phone</b>  <?=$percel->phone;?></p>
-            <p><b>State</b>  <?=$percel->state;?></p>
+            <p><b>Addres 1:</b>  <?=$percel->adress_1;?></p>
+            <p><b>Addres 2:</b>  <?=$percel->adress_2;?></p>
+            <p><b>City:</b>  <?=$percel->city;?></p>
+            <p><b>ZIP:</b>  <?=$percel->zip;?></p>
+            <p><b>Phone:</b>  <?=$percel->phone;?></p>
+            <p><b>State:</b>  <?=$percel->state;?></p>
     </div>
 
 
     <div class="order-include-index col-md-9">
+        <h5 class="order_include">What is inside</h5>
         <div id="ajaxCrudDatatable_<?=$percel-id;?>">
-            <div class="row" id="crud-datatable-pjax">
+            <div class="" id="crud-datatable-pjax">
                 <?php Pjax::begin(); ?>
-
-                <table class="table">
+                <div class="table-responsive">
+                <table class="table table-bordered">
                     <tr>
                         <th>#</th>
                         <th>Product Name</th>
@@ -91,6 +93,7 @@ foreach ($order_elements as $percel) {
                         </tr>
                     <?php }?>
                 </table>
+            </div>
                 <div>
                     <h4>Total</h4>
                     <p><b>Weight </b><?=$total_weight;?>lb</p>

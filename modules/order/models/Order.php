@@ -70,8 +70,8 @@ class Order extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'created_at_to' => 'Created At To',
             'transport_data' => 'Transport Data',
-            'qst' => 'PST (%)',
-            'gst' => 'GST/HST (%)',
+            'qst' => 'QST/HST (%)',
+            'gst' => 'PST (%)',
             'total'=>"Total"
         ];
     }

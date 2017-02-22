@@ -176,7 +176,6 @@ class DefaultController extends Controller
               $pay->addItem($item);
             }
 
-            $pay->addCardData();
             $payment= $pay->make_payment();
 
             $customer = new PaymentsList();

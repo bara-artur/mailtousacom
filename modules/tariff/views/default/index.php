@@ -53,14 +53,15 @@ CrudAsset::register($this);
                                 <a
                                     class="crud-datatable-action-del pull-right"
                                     href="/tariff/default/delete?count='.$cnt.'" 
-                                    title="Delete" data-pjax="false"
+                                    title="Delete column" data-pjax="false"
                                     data-pjax-container="crud-datatable-pjax"
                                     role="modal-remote"
                                     data-request-method="post"
                                     data-toggle="tooltip"
+                                    data-placement="bottom"
                                     data-confirm-title="Are you sure?"
                                     data-confirm-message="Are you sure want to delete this column">
-                                    <span class="glyphicon glyphicon-trash but_del" data-toggle="tooltip" data-placement="right" title="Delete column"></span>
+                                    <span class="glyphicon glyphicon-trash but_del"></span>
                                 </a></center>
                               </th>';
                         }
@@ -76,14 +77,15 @@ CrudAsset::register($this);
                                                             <a
                                     class="crud-datatable-action-del pull-right"
                                     href="/tariff/default/delete?weight='.$w.'" 
-                                    title="Delete" data-pjax="false"
+                                    title="Delete line" data-pjax="false"
                                     data-pjax-container="crud-datatable-pjax"
                                     role="modal-remote"
                                     data-request-method="post"
                                     data-toggle="tooltip"
+                                    data-placement="right"
                                     data-confirm-title="Are you sure?"
                                     data-confirm-message="Are you sure want to delete this line">
-                                        <span class="glyphicon glyphicon-trash but_del" data-toggle="tooltip" data-placement="right" title="Delete line"></span>
+                                        <span class="glyphicon glyphicon-trash but_del"></span>
                                 </a>
                             </th>';
                         foreach ($parcel_count as $cnt){
