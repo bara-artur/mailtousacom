@@ -43,6 +43,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'format'=>['decimal',2]
       ],
       [
+        'attribute' => 'total',
+        'content'=> function($data){
+          return number_format($data->gst+$data->qst+$data->price,2);
+        },
+        'format'=>['decimal',2]
+      ],
+      [
         'attribute'=> 'pay_time',
         'content' => function($data){
           if ($data->pay_time  == 0 ) return 'Expected...';

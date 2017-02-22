@@ -21,6 +21,7 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Rest\ApiContext;
 use PayPal\Api\ExecutePayment;
 use PayPal\Api\PaymentExecution;
+use PayPal\Api\PaymentCard;
 
 /**
  * This is the model class for table "payments_list".
@@ -64,6 +65,24 @@ class DoPayment extends Model
 
     $this->payer = new Payer();
     $this->payer->setPaymentMethod($this->paymentType);
+  }
+
+  public function addCardData($cardData=false){
+    if($this->paymentType!='credit_card') return false;
+    $card = new PaymentCard();
+    $card->setType("visa")
+      ->setNumber("4669424246660779")
+      ->setExpireMonth("11")
+      ->setExpireYear("2019")
+      ->setCvv2("012")
+      ->setFirstName("Joe")
+      ->setBillingCountry("US")
+      ->setLastName("Shopper");
+
+    $fi = new FundingInstrument();
+    $fi->setPaymentCard($card);
+
+    $this->payer->setFundingInstruments(array($fi));
   }
 
   public function addItem($item){
@@ -120,15 +139,24 @@ class DoPayment extends Model
       ->setDescription($this->paymentDescription)
       ->setInvoiceNumber(uniqid());
 
-    $redirectUrls = new RedirectUrls();
-    $redirectUrls->setReturnUrl($this->Module->baseUrl."?success=true")
-      ->setCancelUrl($this->Module->baseUrl."?success=false");
+    if($this->paymentType=='paypal') {
+      $redirectUrls = new RedirectUrls();
+      $redirectUrls->setReturnUrl($this->Module->baseUrl . "?success=true")
+        ->setCancelUrl($this->Module->baseUrl . "?success=false");
 
-    $payment = new Payment();
-    $payment->setIntent('order')
-      ->setPayer($this->payer)
-      ->setRedirectUrls($redirectUrls)
-      ->setTransactions(array($transaction));
+      $payment = new Payment();
+      $payment->setIntent('order')
+        ->setPayer($this->payer)
+        ->setRedirectUrls($redirectUrls)
+        ->setTransactions(array($transaction));
+    }
+    if($this->paymentType=='credit_card'){
+      $payment = new Payment();
+      $payment->setIntent("sale")
+        ->setPayer($this->payer)
+        ->setTransactions(array($transaction));
+
+    }
 
     $request = clone $payment;
 
@@ -139,7 +167,6 @@ class DoPayment extends Model
       exit(1);
     }
     //$approvalUrl = $payment->getApprovalLink();
-
     return $payment;
   }
 
@@ -171,6 +198,7 @@ class DoPayment extends Model
           /*echo "Get Payment";
           d($ex);
           exit(1);*/
+          \Yii::$app->getSession()->setFlash('error', 'Error payment. Try later or contact your administrator.');
           return false;
         }
       } catch (Exception $ex) {
@@ -178,6 +206,7 @@ class DoPayment extends Model
         /*echo "Executed Payment";
         d($ex);
         exit(1);*/
+        \Yii::$app->getSession()->setFlash('error', 'Executed Payment. Try later or contact your administrator.');
         return false;
       }
 
@@ -187,6 +216,7 @@ class DoPayment extends Model
       return $payment;
 
     }else {
+      \Yii::$app->getSession()->setFlash('error', 'You canceled the payment. You can change the payment method or repeat the current.');
       // NOTE: PLEASE DO NOT USE RESULTPRINTER CLASS IN YOUR ORIGINAL CODE. FOR SAMPLE ONLY
       return false;
     }

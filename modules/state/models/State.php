@@ -42,8 +42,8 @@ class State extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Provinces and Territories',
-            'qst' => 'QST/HST (%)',
-            'gst' => 'PST (%)',
+            'qst' => 'PST (%)',
+            'gst' => 'GST/HST (%)',
         ];
     }
 }
