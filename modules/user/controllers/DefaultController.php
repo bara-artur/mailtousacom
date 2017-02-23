@@ -49,7 +49,7 @@ class DefaultController extends Controller
     $request = Yii::$app->request;
     if($request->isPost) {
       if($model->load($post) && $model->validate() && $model->save()){
-        Yii::$app->getSession()->setFlash('success', 'The profile updated.');
+        Yii::$app->getSession()->setFlash('success', 'Profile updated.');
         return $this->redirect(['profile']);
       }
     }

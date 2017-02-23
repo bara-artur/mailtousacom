@@ -16,7 +16,7 @@
 <?=  $form->field($forget, 'email')->textInput(['maxlength' => true, 'placeholder' => $forget->getAttributeLabel('email')]);?>
 <?=  $form->field($forget, 'password')->passwordInput(['maxlength' => true, 'placeholder' => $forget->getAttributeLabel('password')]);?>
    <div class="col-md-2"><h3 class="pred"><span class="glyphicon glyphicon-exclamation-sign"></span></h3>
-   </div><div class="col-md-10"><p class="hint-block">Reference for activation new password will be sent to Email specified at registration</p></div>
+   </div><div class="col-md-10"><p class="hint-block">Instruction for activation new password will be sent to Email specified at registration</p></div>
     <div class="form-group text-center">
         <?php
             $submitOption = [

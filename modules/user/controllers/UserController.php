@@ -75,7 +75,7 @@ class UserController extends Controller
                 ->getSession()
                 ->setFlash(
                     'signup-success',
-                    'Link to the registration confirmation sent to the Email.'
+                    'Please, confirm your account,instruction for activation sent on your specified Email.'
                 );
             //Yii::$app->user->login(User::findByUsername($model- // login после регистрации. Пока убрали
             return $this->redirect(array('/'));
@@ -103,7 +103,7 @@ class UserController extends Controller
         $forget = new PasswordResetForm();
         if ($forget->load(Yii::$app->request->post()) && $forget->validate()) {
             if ($forget->sendEmail()) { // Отправлено подтверждение по Email
-                Yii::$app->getSession()->setFlash('reset-success', 'Link to the activation of a new password sent to the Email.');
+                Yii::$app->getSession()->setFlash('reset-success', 'Instruction for activation password sent to your Email.');
             }
             return $this->goHome();
         }

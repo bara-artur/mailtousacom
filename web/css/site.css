@@ -351,12 +351,12 @@ a.desc:after {
 
 .site-index p {
     text-align: center;
-    background-color: #7BAD18;
+    background-color: #ffffff;
     padding: 10px;
     z-index: 2;
+    border:2px solid #199900;
     position: relative;
-    color: #fff;
-    /* font-weight: bold; */
+    color: #199900;
     font-size: 18px;
 }
 .navbar .navbar-toggle {
@@ -497,3 +497,4 @@ a.gritter-close::after{font-weight:400;font-family: 'Tahoma',sans-serif !importa
     color: #D13700;
 }
 /*end_art_bara20022017*/
+/*begin_art_bara23022017*/
