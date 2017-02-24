@@ -3,12 +3,15 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
+use johnitvn\ajaxcrud\CrudAsset;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\state\models\StateSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Taxes configuration';
 $this->params['breadcrumbs'][] = $this->title;
+CrudAsset::register($this);
 ?>
 <div class="state-index">
 
@@ -47,11 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'delete' => function ($url)
                     { return Html::a( '<button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</button>',
                         $url, [
-                            'title' => 'Delete',
-                            'data-confirm' =>
-                                \Yii::t('yii', 'Are you sure to delete this item?'),
-                            'data-method' => 'post',
-                            'data-pjax' => '0',
+                            'data' => [
+                              'confirm-message' => 'Are you sure to delete this item?',
+                              'confirm-title'=>"Delete column",
+                              'pjax'=>'false',
+                              'toggle'=>"tooltip",
+                              'request-method'=>"post",
+                            ],
+                            'role'=>"modal-remote",
                         ] ); },
 
 
@@ -64,3 +70,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
+
+<?php Modal::begin([
+  "id"=>"ajaxCrudModal",
+  "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>
