@@ -65,7 +65,7 @@ AppAsset::register($this);
                             . Html::a('Tariffs', ['/tariff/'], ['class' => 'profile-link'])
                         .'</li>
                         <li>'
-                            . Html::a('State and tax', ['/state/'], ['class' => 'profile-link'])
+                            . Html::a('Taxes', ['/state/'], ['class' => 'profile-link'])
                         .'</li>'
                     .'</ul>'
                 .'</li>'.

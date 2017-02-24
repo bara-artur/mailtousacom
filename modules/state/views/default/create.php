@@ -6,13 +6,13 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\state\models\State */
 
-$this->title = 'Create State';
-$this->params['breadcrumbs'][] = ['label' => 'States', 'url' => ['index']];
+$this->title = 'Create Tax';
+$this->params['breadcrumbs'][] = ['label' => 'Taxes configuration', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="state-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
         'model' => $model,

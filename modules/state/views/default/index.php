@@ -12,16 +12,22 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="state-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create State', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
+    <div class="row">
+        <div class="col-md-12">
+        <?= Html::a('<i class="glyphicon glyphicon-plus"></i> Add Tax', ['create'], ['class' => 'btn btn-info pull-right push-up-margin-tiny']) ?>
+        </div>
+    </div>
+    <div class="table-responsive">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'summary' => '',
+        'tableOptions' => [
+            'class' => 'table table-bordered',
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'name',
@@ -30,9 +36,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
               'class' => 'yii\grid\ActionColumn',
-              'template' =>'{update}{delete}'
+              'header' => 'Actions',
+              'template' =>'{update}{delete}',
+                'buttons' => ['update' => function ($url)
+                { return Html::a( '<button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</button>',
+                    $url, [
+                            'title' => 'Edit',
+                            'data-pjax' => '0',
+                    ] ); },
+                    'delete' => function ($url)
+                    { return Html::a( '<button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</button>',
+                        $url, [
+                            'title' => 'Delete',
+                            'data-confirm' =>
+                                \Yii::t('yii', 'Are you sure to delete this item?'),
+                            'data-method' => 'post',
+                            'data-pjax' => '0',
+                        ] ); },
+
+
+                ],
             ],
         ],
+
     ]); ?>
+    </div>
     <?php Pjax::end(); ?>
+
 </div>
