@@ -3,6 +3,22 @@ $(document).ready(function() {
   $('.show_after_all_button').hide();
   init_address_edit();
 
+  $( ".lb-oz-tn-onChange" ).change(function() {
+      var msg   = $(this).parents('form:first').serialize();
+      $.ajax({
+        type: 'POST',
+        url: 'orderElement/create-order',
+        data: msg,
+        success: function(data) {
+          $('#results').html(data);
+        },
+        error:  function(xhr, str){
+          alert('Возникла ошибка: ' + xhr.responseCode);
+        }
+      });
+  });
+
+
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
     if(event.keyCode == 13) {

@@ -78,6 +78,28 @@ class DefaultController extends Controller
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
+    public function actionCreateOrder(){
+        //получаем посылки в заказе
+        $percel_id = $_POST['percel_id'];
+        $order_id = $_POST['order_id'];
+        $request = Yii::$app->request;
+        if($request->isAjax){
+                $oldModel = OrderElement::find()
+                    ->where(['order_id'=> $order_id])
+                    ->andWhere(['id'=>$percel_id ])
+                    ->one();
+            if ($oldModel) {
+                if ($_POST['lb'] != null) $oldModel->lb = $_POST['lb'];
+                if ($_POST['oz'] != null) $oldModel->oz = $_POST['oz'];
+                if ($_POST['track_number'] != null) $oldModel->track_number = $_POST['track_number'];
+                $oldModel->save();
+            }
+        }
+       // $model = OrderElement::find()->where(['order_id'=>$id])->all();
+
+        return $_POST['lb'];
+    }
+
     public function actionCreate($id)
     {
         $request = Yii::$app->request;

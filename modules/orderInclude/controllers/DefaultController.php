@@ -46,7 +46,6 @@ class DefaultController extends Controller
         $request = Yii::$app->request;
         if(!Yii::$app->user->isGuest && !$request->isAjax && $request->getIsGet()) {
             $address = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
-
             $address_id = $address->id;
             $model = new Order();
             $model->user_id = Yii::$app->user->id;

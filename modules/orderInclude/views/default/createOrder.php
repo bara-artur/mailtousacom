@@ -46,7 +46,7 @@ foreach ($order_elements as $percel) {
 
 
     <div class="order-include-index col-sm-6 col-md-6">
-        <div id="ajaxCrudDatatable_<?=$percel-id;?>">
+        <div id="ajaxCrudDatatable_<?=$percel->id;?>">
             <div class="row" id="crud-datatable-pjax">
                 <?php Pjax::begin(); ?>
 
@@ -55,14 +55,13 @@ foreach ($order_elements as $percel) {
                         <th>#</th>
                         <th>Product Name</th>
                         <th>Item Price</th>
-                        <th>Item Width</th>
                         <th>Quantity</th>
                         <th>Action</th>
                     </tr>
                     <?php $includes=$percel->getIncludes();?>
                     <?php $total_weight=0;?>
                     <?php foreach ($includes as $i => $item){
-                        $total_weight+=$item['weight']*$item['quantity'];
+                         $total_weight+=$item['weight']*$item['quantity'];
                         ?>
                         <tr>
                             <td><?=$i+1?></td>
@@ -91,6 +90,24 @@ foreach ($order_elements as $percel) {
                 </table>
                 <div>
                     <h4>Total</h4>
+                    <form id="lb-oz-tn-form" title="" method="post">
+                        <div>
+                            <label class="title">Lb</label>
+                            <input type="text" id="lb" class="lb-oz-tn-onChange" name="lb" >
+                        </div>
+                        <div>
+                            <label class="title">Oz</label>
+                            <input type="text" id="oz" class="lb-oz-tn-onChange" name="oz" >
+                        </div>
+                        <div>
+                            <label class="title">Track Number</label>
+                            <input type="text" id="track_number" class="lb-oz-tn-onChange" name="track_number" >
+                        </div>
+                        <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
+                        <input type="hidden" name = "order_id" value=<?=$order_id?>>
+                        <div id="results">вывод</div>
+                     </form>
+
                     <p><b>Weight </b><?=$total_weight;?>lb</p>
                     <?php
                         $ParcelPrice=ParcelPrice::widget(['weight'=>$total_weight]);
