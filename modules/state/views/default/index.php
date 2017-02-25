@@ -40,19 +40,20 @@ CrudAsset::register($this);
             [
               'class' => 'yii\grid\ActionColumn',
               'header' => 'Actions',
-              'template' =>'{update}{delete}',
+              'template' =>'<div class="but_tab_style"> {update}{delete}</div>',
+
                 'buttons' => ['update' => function ($url)
-                { return Html::a( '<button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</button>',
+                { return Html::a( '<button class="btn btn-info btn-sm but_tab_marg"><span class="glyphicon glyphicon-pencil"></span> Edit</button>',
                     $url, [
                             'title' => 'Edit',
                             'data-pjax' => '0',
                     ] ); },
                     'delete' => function ($url)
-                    { return Html::a( '<button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span> Delete</button>',
+                    { return Html::a( '<button class="btn btn-danger btn-sm but_tab_marg"><span class="glyphicon glyphicon-trash"></span> Delete</button>',
                         $url, [
                             'data' => [
                               'confirm-message' => 'Are you sure to delete this item?',
-                              'confirm-title'=>"Delete column",
+                              'confirm-title'=>"Delete line",
                               'pjax'=>'false',
                               'toggle'=>"tooltip",
                               'request-method'=>"post",

@@ -436,7 +436,6 @@ input[type=checkbox]:checked+span::before {
     background-color: #FFC800 ;
     color: #354346;
     border: 0px;}
-.navbar-nav > li >.dropdown-menu > a:hover{text-decoration: none;border-bottom:4px solid #FFC800;}
 
 .dropdown-menu>li>a {
     color: #354346!important;
@@ -444,6 +443,7 @@ input[type=checkbox]:checked+span::before {
 }
 .dropdown-menu > li >a:hover {
     border-bottom:4px solid #FFC800;
+    display:inline-block;
 }
 
 .modal-backdrop, .modal-backdrop.fade.in {    opacity: .9;    filter: alpha(opacity=90);    background: #ffffff;    position: fixed;}
@@ -484,7 +484,7 @@ color: #05389F;
 .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
     border: 1px solid #ccc;
 }
-.border_right{border-right:1px solid #eeeeee;}
+.border_left{border-left:1px solid #eeeeee;min-height: 350px;position:relative;}
 .tar_big{font-size:25px;text-align:center;}
 .table>thead>tr>th.tar_big{line-height: 23px !important;vertical-align: middle !important;min-width: 200px;}
 .table>thead>tr>th span.tar_middle{line-height: 23px !important;vertical-align: middle !important;font-size:25px;}
@@ -504,4 +504,44 @@ a.gritter-close::after{font-weight:400;font-family: 'Tahoma',sans-serif !importa
     margin-right: 0px;
 }
 }
-div.summary_none{display:none;}
+/*end_art_bara23022017*/
+/*begin_art_bara25022017*/
+.but_tab_style{text-align: left;}
+.but_tab_marg{margin: 0px 2px;}
+h5.total_package{
+font-weight: 600;
+border-bottom: 1px solid #ccc;
+margin-top: 4px;
+padding-bottom: 8px;
+color: #454545;}
+.total_price{text-align:left;margin-top:20px;position:absolute;
+    bottom:0;}
+.margin_top_total{margin-top:16px;}
+.border_bot{
+    border-bottom:1px dotted #CCCCCC;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+}
+.bord_butt{margin-top: 60px;}
+.marg_p p{margin: 0 0 8px;}
+.btn-success-border:hover{
+    color: #354346;
+    background-color: #fff;
+    border-color: #354346;}
+.modern_border
+{
+    color: #000;
+margin-bottom: 10px;
+padding-bottom: 10px;
+text-align: center;
+border-bottom: 1px dotted #CCCCCC;
+text-align: center;
+font-weight: 600;
+}
+.btn-xs2 {
+    padding: 2px 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 0;
+}
+
