@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
-
+use app\components\ParcelPrice;
 /**
  * DefaultController implements the CRUD actions for OrderElement model.
  */
@@ -82,22 +82,32 @@ class DefaultController extends Controller
         //получаем посылки в заказе
         $percel_id = $_POST['percel_id'];
         $order_id = $_POST['order_id'];
+
         $request = Yii::$app->request;
-        if($request->isAjax){
-                $oldModel = OrderElement::find()
-                    ->where(['order_id'=> $order_id])
-                    ->andWhere(['id'=>$percel_id ])
-                    ->one();
+        if($request->isAjax) {
+            $oldModel = OrderElement::find()
+                ->where(['order_id' => $order_id])
+                ->andWhere(['id' => $percel_id])
+                ->one();
             if ($oldModel) {
-                if ($_POST['lb'] != null) $oldModel->lb = $_POST['lb'];
-                if ($_POST['oz'] != null) $oldModel->oz = $_POST['oz'];
+                if ($_POST['lb'] != null) $weight = $_POST['lb'];
+                if ($_POST['oz'] != null) $weight += '0.'.$_POST['oz'];//oldModel->oz = $_POST['oz'];
+                $oldModel->weight = $weight;
+                // $weight = $_POST['lb'] + $oz;
                 if ($_POST['track_number'] != null) $oldModel->track_number = $_POST['track_number'];
                 $oldModel->save();
+            }
+            $ParcelPrice=ParcelPrice::widget(['weight'=>$weight]);
+            if($ParcelPrice!=false){
+                $ParcelPrice.=' $ (without tax)';
+            }else{
+                $ParcelPrice='<b style="color: red;">Exceeded weight of a parcel.</b>';
             }
         }
        // $model = OrderElement::find()->where(['order_id'=>$id])->all();
 
-        return $_POST['lb'];
+        return $ParcelPrice;
+
     }
 
     public function actionCreate($id)
