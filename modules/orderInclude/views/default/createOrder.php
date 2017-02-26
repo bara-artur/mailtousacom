@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\DetailView;
 use app\components\ParcelPrice;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
@@ -55,21 +56,19 @@ foreach ($order_elements as $percel) {
                         <th>#</th>
                         <th>Product Name</th>
                         <th>Item Price</th>
+                        <th>Country</th>
                         <th>Quantity</th>
                         <th>Action</th>
                     </tr>
                     <?php $includes=$percel->getIncludes();?>
-                    <?php $total_weight=0;?>
                     <?php foreach ($includes as $i => $item){
-                         $total_weight+=$item['weight']*$item['quantity'];
                         ?>
                         <tr>
                             <td><?=$i+1?></td>
                             <td><?=$item['name'];?></td>
                             <td><?=$item['price'];?></td>
-                            <td><?=$item['weight'];?></td>
+                            <td><?=Yii::$app->params['country'][$item['country']]?></td>
                             <td><?=$item['quantity'];?></td>
-
                             <td>
                                 <?=Html::a('<i class="glyphicon glyphicon-pencil"></i>', ['/orderInclude/update?id='.$item['id']],
                                   ['role'=>'modal-remote','title'=> 'Update','data-pjax'=>0,'class'=>''])?>
@@ -174,3 +173,4 @@ if($createNewAddress){
     ';
 }
 ?>
+
