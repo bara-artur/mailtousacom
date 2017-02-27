@@ -28,17 +28,26 @@ $form = ActiveForm::begin([
   'validateOnChange' => true,
 ]);
 ?>
+<h4 class="modernui-neutral2">Print Border Form</h4>
+<div class="row">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="trans_text">You added <span class="trans_count"><?=count($order_elements);?> order</span>, value <span class="trans_count"><?=$total['price'];?>$</span> , width <span class="trans_count"><?=$total['weight'];?>lb</span></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-offset-4 col-md-4">
 
-<p>
-  You added <?=count($order_elements);?> order, value <?=$total['price'];?>$, width <?=$total['weight'];?>lb
-</p>
-<p>
-  When you nead us to transport your orders to The US
-  <?=$form->field($model, 'transport_data')->widget(DatePicker::className(),[
+    <div class="trans_text">When you need us to transport your orders to The US :</div>
+
+
+
+    <div class="row">
+    <div class="col-md-12">
+    <?=$form->field($model, 'transport_data')->widget(DatePicker::className(),[
     'name' => 'check_issue_date',
     'removeButton' => false,
     //'value' => date('d-M-Y', strtotime('+1 days')),
-    'options' => [],
+    'options' => ['placeholder' => 'Choose date'],
     'pluginOptions' => [
       'startDate' => date('d-M-Y', strtotime('+5 hours')),
       'format' => 'dd-M-yyyy',
@@ -47,12 +56,18 @@ $form = ActiveForm::begin([
     ]
   ]);
 ?>
-</p>
-<p>
-  <?= $form->field($model, 'agreement')->checkbox(['label' => ' I certify..,my undefstanding..Im responsible for cross-bording, law, etc'])->label("") ?>
+    </div>
+    </div>
+    </div>
+</div>
+<div class="row">
+<div class="col-md-12 padding-top-10 text-center text_certif" >
+  <?= $form->field($model, 'agreement')->checkbox(['label' => '<span class="fa fa-check otst"></span> I certify..,my undefstanding..Im responsible for cross-bording, law, etc'])->label("") ?>
 
-</p>
-
+</div>
+</div>
+<hr>
+<div class="form-group">
 <?=Html::a('Print Border Form ABC123', ['/orderInclude/border-form-pdf/'.$order_id],
   [
     'class'=>'btn btn-info on_agreement',
@@ -62,8 +77,7 @@ $form = ActiveForm::begin([
   ])?>
 
 
-<div class="form-group">
-  <?= Html::submitButton('Next', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+  <?= Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i> ', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-success pull-right']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>
