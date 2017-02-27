@@ -317,10 +317,14 @@ class DefaultController extends Controller
         $this_weight = 0;
         foreach ($pac->includes_packs as $pack) {
           $total['price'] += $pack['price'] * $pack['quantity'];
-          $total['weight'] += $pack['weight'] * $pack['quantity'];
           $total['quantity'] += $pack['quantity'];
-          $this_weight += $pack['weight'] * $pack['quantity'];
         }
+        $this_weight =  $pac->weight;
+        $total['weight']+=$this_weight;
+
+        $total['weight_lb']=floor($total['weight']);
+        $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
+
         if($this_weight>$max_weight){
           Yii::$app
             ->getSession()
@@ -395,13 +399,12 @@ class DefaultController extends Controller
           );
         return $this->redirect('/orderInclude/create-order/' . $id);
       }
-      $this_weight = 0;
       foreach ($pac->includes_packs as $pack) {
         $total['price'] += $pack['price'] * $pack['quantity'];
-        $total['weight'] += $pack['weight'] * $pack['quantity'];
         $total['quantity'] += $pack['quantity'];
-        $this_weight += $pack['weight'] * $pack['quantity'];
       }
+      $this_weight=$pac->weight;
+      $total['weight']+=$this_weight;
       if($this_weight>$max_weight){
         Yii::$app
           ->getSession()
@@ -412,6 +415,9 @@ class DefaultController extends Controller
         return $this->redirect('/orderInclude/create-order/' . $id);
       }
     }
+
+    $total['weight_lb']=floor($total['weight']);
+    $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
 
     $content = $this->renderPartial('borderFormPdf',[
       'order_elements' => $model,

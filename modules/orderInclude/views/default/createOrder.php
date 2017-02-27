@@ -107,22 +107,39 @@ foreach ($order_elements as $percel) {
                 <div>
                     <h4>Total</h4>
                     <form id="lb-oz-tn-form" title="" method="post">
-                        <label>Weight : </label>
-                        <span>
-                            <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb" name="lb" maxlength="3" >
-                            <label class="title">Lb</label>
-                        </span>
-                        <span>
-                            <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz" name="oz" maxlength="2">
-                            <label class="title">Oz</label>
-                        </span>
-                        <div>
-                            <label class="title">Track Number</label>
-                            <input type="text" id="track_number" class="lb-oz-tn-onChange num form_tn" name="track_number" maxlength="9" >
+                        <div class="label_valid">
+                            <span class="control-label">Weight :</span>
+                            <span>
+                                <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
+                                <label class="title control-label">Lb</label>
+                            </span>
+                            <span>
+                                <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
+                                <label class="title control-label">Oz</label>
+                            </span>
+                        </div>
+                        <div class="label_valid">
+                            <label class="title control-label">Track Number</label>
+                            <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
                         </div>
                         <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
                         <input type="hidden" name = "order_id" value=<?=$order_id?>>
-                        <p><b>Cost of delivery : </b> <span id="results">0</span></p>
+                        <p><b>Cost of delivery : </b>
+                            <span id="results">
+                                <?php
+                                    if($percel->weight>0) {
+                                        $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
+                                        if ($ParcelPrice != false) {
+                                            $ParcelPrice = 'Cost of crossboard delivery ' . $ParcelPrice . ' $ (without tax)';
+                                        } else {
+                                            $ParcelPrice = '<b style="color: red;">Exceeded weight of a parcel.</b>';
+                                        }
+                                    }else{
+                                        $ParcelPrice="-";
+                                    }
+                                    echo $ParcelPrice;
+                                ?>
+                            </span></p>
                      </form>
 
                 </div>

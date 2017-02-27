@@ -58,7 +58,74 @@ $(document).ready(function() {
     return true;
 
   });
+
+  $('.go_to_order').on('click',function(){
+    if (!valid_order_create()){
+      gritterAdd('Error','Missing a required field. ','gritter-danger');
+      return false;
+    }
+    return true;
+  })
 });
+
+function show_err(el,txt){
+  if(!el.hasClass('has-error')) {
+    el.addClass('has-error')
+    el.append("<div class=\"help-block\">"+txt+"</div>")
+  }
+}
+function hide_err(el){
+
+}
+function valid_order_create(){
+  valid=true
+  lb=$('[name=lb]');
+  oz=$('[name=oz]');
+  for(i=0;i<lb.length;i++){
+    el=$(lb[i]).closest('.label_valid');
+    if(!lb[i].value ||
+      !oz[i].value ||
+      (parseInt(lb[i].value)+parseInt(oz[i].value)/16)==0
+    ){
+      valid=false;
+      show_err(el,"Field scale required.");
+    }else{
+      if(
+        parseInt(oz[i].value)>16 ||
+        parseInt(oz[i].value)<0
+      ){
+        valid=false;
+        show_err(el,"The value of Oz can not be more than 15.");
+      }else {
+        if(
+          parseInt(lb[i].value)>101 ||
+          parseInt(lb[i].value)<0
+        ){
+          valid=false;
+          show_err(el,"The value of Lb can not be more than 100.");
+        }else {
+          hide_err(el);
+        }
+      }
+    }
+  }
+
+  els=$('[name=track_number]');
+  for(i=0;i<els.length;i++){
+    el=$(els[i]).closest('.label_valid')
+    if(!els[i].value ||
+      els[i].value.length<4
+    ){
+      valid=false;
+      show_err(el,"Track number is required.");
+    }else{
+      hide_err(el);
+    }
+  }
+
+
+  return valid;
+}
 
 var popup = (function() {
   var conteiner;
@@ -270,6 +337,7 @@ function  no_letters_in_input(){
 
 function ajax_send_lb_oz_tn_onchange(){
   $( ".lb-oz-tn-onChange" ).change(function() {
+    if(!valid_order_create())return false;
     var msg   = $(this).parents('form:first').serialize();
     $.ajax({
       type: 'POST',
@@ -279,7 +347,7 @@ function ajax_send_lb_oz_tn_onchange(){
         $('#results').html(data);
       },
       error:  function(xhr, str){
-        alert('Возникла ошибка: ' + xhr.responseCode);
+        gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
       }
     });
   });

@@ -14,7 +14,7 @@ class m170225_095522_add_lb_oz_column_to_orderElement_table extends Migration
     {
         $this->addColumn('order_element', 'lb', $this->integer()->defaultValue(0));
         $this->addColumn('order_element', 'oz', $this->integer()->defaultValue(0));
-        $this->addColumn('order_element', 'track_number', $this->integer()->defaultValue(0));
+        $this->addColumn('order_element', 'track_number', $this->string(15)->defaultValue(""));
     }
 
     /**
