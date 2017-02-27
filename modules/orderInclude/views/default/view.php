@@ -13,7 +13,6 @@ use yii\widgets\DetailView;
             'id',
             'name',
             'price',
-            'weight',
             'quantity',
         ],
     ]) ?>

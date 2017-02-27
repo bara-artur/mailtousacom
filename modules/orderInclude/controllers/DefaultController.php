@@ -115,7 +115,7 @@ class DefaultController extends Controller
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
+                ];
         }else{
             return $this->render('view', [
                 'model' => $this->findModel($id),
@@ -151,9 +151,9 @@ class DefaultController extends Controller
                                 Html::button('Save',['class'=>'btn btn-primary ','type'=>"submit"])
 
                 ];
-            }else if($model->load($request->post())){
+            }else if($model->load($request->post())&&($model->save())){
                 //$model->order_id = $request->post('order_id');
-                $model->save();
+
                 return [
                     'forceReload'=>'#crud-datatable-pjax',
                     'title'=> "Create new OrderInclude",
@@ -220,7 +220,7 @@ class DefaultController extends Controller
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Edit',['update','id'=>$id],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
+                ];
             }else{
                  return [
                     'title'=> "Update OrderInclude #".$id,
@@ -274,7 +274,6 @@ class DefaultController extends Controller
     }
 
     public function actionBorderForm($id){
-
       $order = Order::findOne($id);
       $request = Yii::$app->request;
       if($request->isPost){
@@ -303,7 +302,7 @@ class DefaultController extends Controller
       $row = $query->one();
       $max_weight=$row['weight'];
 
-      foreach ($model as &$pac) {
+      foreach ($model as $pac) {
         $pac->includes_packs = $pac->getIncludes();
         if (count($pac->includes_packs) == 0) {
           Yii::$app

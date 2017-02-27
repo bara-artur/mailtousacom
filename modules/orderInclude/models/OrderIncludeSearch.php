@@ -18,7 +18,7 @@ class OrderIncludeSearch extends OrderInclude
     public function rules()
     {
         return [
-            [['id', 'order_id', 'weight', 'quantity'], 'integer'],
+            [['id', 'order_id', 'quantity'], 'integer'],
             [['name'], 'safe'],
             [['price'], 'number'],
         ];
@@ -64,7 +64,6 @@ class OrderIncludeSearch extends OrderInclude
             'id' => $this->id,
             'order_id' => $this->order_id,
             'price' => $this->price,
-            'weight' => $this->weight,
             'quantity' => $this->quantity,
         ]);
 
