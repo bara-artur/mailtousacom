@@ -90,8 +90,8 @@ class DefaultController extends Controller
                 ->andWhere(['id' => $percel_id])
                 ->one();
             if ($oldModel) {
-                if ($_POST['lb'] != null) $weight = $_POST['lb'];
-                if ($_POST['oz'] != null) $weight += '0.'.$_POST['oz'];//oldModel->oz = $_POST['oz'];
+                if ($_POST['lb'] != null) $weight = (int)$_POST['lb'];
+                if ($_POST['oz'] != null) $weight += ((int)$_POST['oz'])/16;//oldModel->oz = $_POST['oz'];
                 $oldModel->weight = $weight;
                 // $weight = $_POST['lb'] + $oz;
                 if ($_POST['track_number'] != null) $oldModel->track_number = $_POST['track_number'];
