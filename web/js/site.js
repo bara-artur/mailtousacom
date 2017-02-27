@@ -2,6 +2,9 @@ $(document).ready(function() {
   $('.secundar_address').hide();
   $('.show_after_all_button').hide();
   init_address_edit();
+  no_letters_in_input();
+  ajax_send_lb_oz_tn_onchange();
+
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -55,13 +58,6 @@ $(document).ready(function() {
     return true;
 
   });
-  $('[name="Order[transport_data]"]').on('change',function () {
-    post={
-      value:this.value,
-      order:odrer_id
-    };
-    $.post('/orderInclude/border-save',post)
-  })
 });
 
 var popup = (function() {
@@ -250,6 +246,42 @@ function init_address_edit(){
     $('.show_after_all_button').show();
     $(".show_all_addresses").hide();
     $(".main_address_button").hide();
+  });
+}
+
+function  no_letters_in_input(){
+  $("input.num").keydown(function(event) {
+    // Разрешаем нажатие клавиш backspace, Del, Tab и Esc
+    if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
+        // Разрешаем выделение: Ctrl+A
+        (event.keyCode == 65 && event.ctrlKey === true) ||
+        // Разрешаем клавиши навигации: Home, End, Left, Right
+        (event.keyCode >= 35 && event.keyCode <= 39)) {
+      return;
+    }
+    else {
+      // Запрещаем всё, кроме клавиш цифр на основной клавиатуре, а также Num-клавиатуре
+      if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+        event.preventDefault();
+      }
+    }
+  });
+}
+
+function ajax_send_lb_oz_tn_onchange(){
+  $( ".lb-oz-tn-onChange" ).change(function() {
+    var msg   = $(this).parents('form:first').serialize();
+    $.ajax({
+      type: 'POST',
+      url: 'orderElement/create-order',
+      data: msg,
+      success: function(data) {
+        $('#results').html(data);
+      },
+      error:  function(xhr, str){
+        alert('Возникла ошибка: ' + xhr.responseCode);
+      }
+    });
   });
 }
 

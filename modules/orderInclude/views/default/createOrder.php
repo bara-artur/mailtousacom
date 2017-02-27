@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\DetailView;
 use app\components\ParcelPrice;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
@@ -69,7 +70,7 @@ foreach ($order_elements as $percel) {
                         <th>#</th>
                         <th>Product Name</th>
                         <th>Item Price</th>
-                        <th>Item Weight</th>
+                        <th>Country</th>
                         <th>Quantity</th>
                         <th>Action</th>
                     </tr>
@@ -82,7 +83,7 @@ foreach ($order_elements as $percel) {
                             <td><?=$i+1?></td>
                             <td><?=$item['name'];?></td>
                             <td><?=$item['price'];?></td>
-                            <td><?=$item['weight'];?></td>
+                            <td><?=Yii::$app->params['country'][$item['country']]?></td>
                             <td><?=$item['quantity'];?></td>
 
                             <td><div class="but_tab_style">
@@ -103,22 +104,30 @@ foreach ($order_elements as $percel) {
                         </tr>
                     <?php }?>
                 </table>
-            </div>
-                <div class="row margin_top_total">
+                <div>
+                    <h4>Total</h4>
+                    <form id="lb-oz-tn-form" title="" method="post">
+                        <label>Weight : </label>
+                        <span>
+                            <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb" name="lb" maxlength="3" >
+                            <label class="title">Lb</label>
+                        </span>
+                        <span>
+                            <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz" name="oz" maxlength="2">
+                            <label class="title">Oz</label>
+                        </span>
+                        <div>
+                            <label class="title">Track Number</label>
+                            <input type="text" id="track_number" class="lb-oz-tn-onChange num form_tn" name="track_number" maxlength="9" >
+                        </div>
+                        <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
+                        <input type="hidden" name = "order_id" value=<?=$order_id?>>
+                        <p><b>Cost of delivery : </b> <span id="results">0</span></p>
+                     </form>
 
-                    <div class="col-md-6">
-                    <h5 class="total_package">Total</h5>
-                   <div class="border_bot"><b>Weight: </b><div class="pull-right"><b><?=$total_weight;?>lb</b></div></div>
-                    <?php
-                        $ParcelPrice=ParcelPrice::widget(['weight'=>$total_weight]);
-                        if($ParcelPrice!=false){
-                            $ParcelPrice.=' $ (without tax)';
-                        }else{
-                            $ParcelPrice='<b style="color: red;">Exceeded weight of a parcel.</b>';
-                        }
-                    ?>
-                <div class="border_bot"><b>Cost of delivery:</b><div class="pull-right"> <?=$ParcelPrice;?></div></div>
-                    </div>
+                </div>
+                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add item to parcel', ['create?order-id='.$percel->id],
+                  ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>
 
 
 
