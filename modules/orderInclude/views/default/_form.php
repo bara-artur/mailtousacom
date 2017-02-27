@@ -20,7 +20,7 @@ use yii\bootstrap\Modal;
    <?= $form->field($model, 'country')->widget(Select2::classname(), [
         'data' => Yii::$app->params['country'],
         'language' => 'de',
-        'options' => ['placeholder' => 'Select the country'],
+        'options' => ['placeholder' => 'Select the country','tabindex'=>false],
         'pluginOptions' => [
             'allowClear' => false
         ],

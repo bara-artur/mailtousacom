@@ -75,7 +75,8 @@ function show_err(el,txt){
   }
 }
 function hide_err(el){
-
+  el.removeClass('has-error')
+  el.find('.help-block').remove()
 }
 function valid_order_create(){
   valid=true

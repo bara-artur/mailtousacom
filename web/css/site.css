@@ -475,11 +475,11 @@ input:-moz-placeholder {color:!important;}
 /*begin_art_bara20022017*/
 h5.deliv_address,h5.order_include
 {
-font-weight: 600;
-border-bottom: 1px dotted #ccc;
-margin-top: 4px;
-padding-bottom: 8px;
-color: #05389F;
+    font-weight: 600;
+    border-bottom: 1px dotted #ccc;
+    margin-top: 4px;
+    padding-bottom: 8px;
+    color: #05389F;
 }
 .table-bordered, .table-bordered>tbody>tr>td, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
     border: 1px solid #ccc;
@@ -499,21 +499,21 @@ a.gritter-close::after{font-weight:400;font-family: 'Tahoma',sans-serif !importa
 /*end_art_bara20022017*/
 /*begin_art_bara23022017*/
 @media (min-width: 768px){
-.navbar-right {
-    float: right!important;
-    margin-right: 0px;
-}
+    .navbar-right {
+        float: right!important;
+        margin-right: 0px;
+    }
 }
 /*end_art_bara23022017*/
 /*begin_art_bara25022017*/
 .but_tab_style{text-align: left;}
 .but_tab_marg{margin: 0px 2px;}
 h5.total_package{
-font-weight: 600;
-border-bottom: 1px solid #ccc;
-margin-top: 4px;
-padding-bottom: 8px;
-color: #454545;}
+    font-weight: 600;
+    border-bottom: 1px solid #ccc;
+    margin-top: 4px;
+    padding-bottom: 8px;
+    color: #454545;}
 .total_price{text-align:left;margin-top:20px;position:absolute;
     bottom:0;}
 .margin_top_total{margin-top:16px;}
@@ -531,12 +531,12 @@ color: #454545;}
 .modern_border
 {
     color: #000;
-margin-bottom: 10px;
-padding-bottom: 10px;
-text-align: center;
-border-bottom: 1px dotted #CCCCCC;
-text-align: center;
-font-weight: 600;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border-bottom: 1px dotted #CCCCCC;
+    text-align: center;
+    font-weight: 600;
 }
 .btn-xs2 {
     padding: 2px 8px;
@@ -567,6 +567,26 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
 }
 .datepicker table tr td.active:active, .datepicker table tr td.active.highlighted:active, .datepicker table tr td.active.active, .datepicker table tr td.active.highlighted.active {
     background-color: #05389F;
-    border-color: # #05389F;
+    border-color:#05389F;
 }
 .field-order-agreement label{padding-left: 0px !important;}
+.input-daterange input:first-child,.input-daterange input:last-child {
+    border-radius: 0px 0 0 0px;
+}
+.form-control {
+    padding: 6px 10px;
+}
+.but_top
+{
+    margin-top: 28px;
+    width: 100%;
+}
+.panel .panel-body {
+    background-color: #FAFAFA;
+}
+.panel-body {
+    padding: 15px 0px;
+}
+.select2-container{
+    z-index: 99999;
+}
