@@ -30,7 +30,7 @@ $form = ActiveForm::begin([
 ?>
 
 <p>
-  You added <?=count($order_elements);?> order, value <?=$total['price'];?>$, width <?=$total['weight'];?>lb
+  You added <?=count($order_elements);?> order, value <?=$total['price'];?>$, width <?=$total['weight_lb'];?>lb <?=$total['weight_oz'];?>oz
 </p>
 <p>
   When you nead us to transport your orders to The US
