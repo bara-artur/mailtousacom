@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use yii\bootstrap\Modal;
 use kartik\grid\GridView;
 use johnitvn\ajaxcrud\CrudAsset; 
@@ -175,11 +176,30 @@ foreach ($order_elements as $percel) {
 </div>
 <?php Modal::begin([
     "id"=>"ajaxCrudModal",
-    "footer"=>"",// always need it for jquery plugin
+    "footer"=>"",
+
 ])?>
 <?php Modal::end(); ?>
 
-
+// Using a select2 widget inside a modal dialog
+<?php // Using a select2 widget inside a modal dialog
+Modal::begin([
+    'options' => [
+        'id' => 'kartik-modal',
+        'tabindex' => false // important for Select2 to work properly
+    ],
+    'header' => '<h4 style="margin:0; padding:0">Select2 Inside Modal</h4>',
+    'toggleButton' => ['label' => 'Show Modal', 'class' => 'btn btn-lg btn-primary'],
+]);
+echo Select2::widget([
+    'name' => 'state_40',
+    'data' => ['111','2222','3333','11223344'],
+    'options' => ['placeholder' => 'Select a state ...'],
+    'pluginOptions' => [
+        'allowClear' => true
+    ],
+]);
+Modal::end();?>
 
 <?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
   [
@@ -195,12 +215,27 @@ foreach ($order_elements as $percel) {
   ])?>
 
 <?php
+echo '
+    <script>
+      $(document).ready(function() {
+     $(".btn-science-blue").on("click", function (){
+         setTimeout(function(){
+             $("#ajaxCrudModal").removeAttr("tabindex");
+                  console.log("444");
+         },1000);
+     }); 
+
+      });
+  
+    </script>
+';
+
 if($createNewAddress){
     echo '
     <script>
       $(document).ready(function() {
         setTimeout( "$(\'#open_add_order_address\').click();",200);
-      })
+        
     </script>
     ';
 }
