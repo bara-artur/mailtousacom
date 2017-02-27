@@ -20,10 +20,6 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'weight',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'quantity',
     ],
     [
