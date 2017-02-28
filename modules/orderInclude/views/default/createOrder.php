@@ -218,13 +218,9 @@ Modal::end();?>
 echo '
     <script>
       $(document).ready(function() {
-     $(".btn-science-blue").on("click", function (){
-         setTimeout(function(){
-             $("#ajaxCrudModal").removeAttr("tabindex");
-                  console.log("444");
-         },1000);
-     }); 
-
+           $(".btn-science-blue").on("click", function (){
+               $("#ajaxCrudModal").attr("tabindex",-1); 
+            });
       });
   
     </script>

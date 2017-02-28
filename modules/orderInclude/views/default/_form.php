@@ -37,3 +37,17 @@ use yii\bootstrap\Modal;
     <?php ActiveForm::end(); ?>
     
 </div>
+<?php
+echo '
+    <script>
+      $(document).ready(function() {
+         setTimeout(function(){
+             $("#ajaxCrudModal").removeAttr("tabindex");
+         },1000);
+     
+
+      });
+  
+    </script>
+';
+?>
