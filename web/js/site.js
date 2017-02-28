@@ -75,7 +75,7 @@ function show_err(el,txt){
   }
 }
 function hide_err(el){
-
+  el.find(".help-block").hide();
 }
 function valid_order_create(){
   valid=true
@@ -83,23 +83,23 @@ function valid_order_create(){
   oz=$('[name=oz]');
   for(i=0;i<lb.length;i++){
     el=$(lb[i]).closest('.label_valid');
-    if(!lb[i].value ||
-      !oz[i].value ||
+    if((!lb[i].value) ||
+        (!oz[i].value) ||
       (parseInt(lb[i].value)+parseInt(oz[i].value)/16)==0
     ){
       valid=false;
       show_err(el,"Field scale required.");
     }else{
       if(
-        parseInt(oz[i].value)>16 ||
-        parseInt(oz[i].value)<0
+          (parseInt(oz[i].value)>16) ||
+          (parseInt(oz[i].value)<0)
       ){
         valid=false;
         show_err(el,"The value of Oz can not be more than 15.");
       }else {
         if(
-          parseInt(lb[i].value)>101 ||
-          parseInt(lb[i].value)<0
+            (parseInt(lb[i].value)>101) ||
+            (parseInt(lb[i].value))<0
         ){
           valid=false;
           show_err(el,"The value of Lb can not be more than 100.");
@@ -112,10 +112,8 @@ function valid_order_create(){
 
   els=$('[name=track_number]');
   for(i=0;i<els.length;i++){
-    el=$(els[i]).closest('.label_valid')
-    if(!els[i].value ||
-      els[i].value.length<4
-    ){
+    el=$(els[i]).closest('.label_valid');
+    if((!els[i].value) ||  (els[i].value.length<4)){
       valid=false;
       show_err(el,"Track number is required.");
     }else{
@@ -282,6 +280,7 @@ function init_address_edit(){
   function on_address_submit(){
     if ($(".show_company").prop('checked')==false) {
       $('.company_name').val('Personal address');
+      console.log("789");
     }
     return true;
   }
@@ -293,6 +292,7 @@ function init_address_edit(){
     $('.company_name')
       .val('Personal address')
       .data('val', '');
+    console.log("123");
     company_blk.hide(500);
   }
   $('.show_company').on("click", function(){
@@ -302,6 +302,7 @@ function init_address_edit(){
       $('.company_name')
         .val('Personal address')
         .data('val', v);
+      console.log("456");
       company_blk.hide(500);
     }else{
       $('.company_name').val($('.company_name').data('val'));

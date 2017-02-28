@@ -36,11 +36,12 @@ class OrderElement extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'last_name', 'company_name', 'adress_1','city', 'zip', 'phone', 'state'], 'required'],
+            [['first_name', 'last_name','company_name', 'adress_1','city', 'zip', 'phone', 'state'], 'required'],
             [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
             [['company_name','track_number'], 'string', 'max' => 128],
             [['order_id'], 'integer'],
             [['weight'], 'double'],
+            [['address_type','weight','track_number'], 'safe'],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
         ];
     }

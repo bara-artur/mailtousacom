@@ -55,7 +55,7 @@ foreach ($order_elements as $percel) {
             [
                 'role'=>'modal-remote',
                 'title'=> 'Create Element of Order',
-                'class'=>'btn btn-info btn-xs2',
+                'class'=>'btn btn-info btn-xs2 show_modal',
                 'id' => 'open_add_order_address',
             ])?>
     </div>
@@ -144,8 +144,6 @@ foreach ($order_elements as $percel) {
                      </form>
 
                 </div>
-                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add item to parcel', ['create?order-id='.$percel->id],
-                  ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>
 
 
 
@@ -185,7 +183,7 @@ foreach ($order_elements as $percel) {
   [
     'role'=>'modal-remote',
     'title'=> 'Add another attached order',
-    'class'=>'btn btn-default',
+    'class'=>'btn btn-default show_modal',
     'id' => 'open_add_order_address',
   ])?>
 
@@ -198,9 +196,16 @@ foreach ($order_elements as $percel) {
 echo '
     <script>
       $(document).ready(function() {
-           $(".btn-science-blue").on("click", function (){
-               $("#ajaxCrudModal").attr("tabindex",-1); 
-            });
+         $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
+             $("#ajaxCrudModal").removeAttr("tabindex");
+        });
+         $( "#crud-datatable-pjax" ).on( "click", ".btn-science-blue", function( event ) { // делегируем событие для динамической кнопки добавить
+              $("#ajaxCrudModal").attr("tabindex",-1);
+        })
+        $(".show_modal").on("click", function() {
+          $("#ajaxCrudModal").attr("tabindex",-1);
+        })
+
       });
   
     </script>
