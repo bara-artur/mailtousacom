@@ -44,8 +44,6 @@ echo '
          setTimeout(function(){
              $("#ajaxCrudModal").removeAttr("tabindex");
          },1000);
-     
-
       });
   
     </script>

@@ -181,26 +181,6 @@ foreach ($order_elements as $percel) {
 ])?>
 <?php Modal::end(); ?>
 
-// Using a select2 widget inside a modal dialog
-<?php // Using a select2 widget inside a modal dialog
-Modal::begin([
-    'options' => [
-        'id' => 'kartik-modal',
-        'tabindex' => false // important for Select2 to work properly
-    ],
-    'header' => '<h4 style="margin:0; padding:0">Select2 Inside Modal</h4>',
-    'toggleButton' => ['label' => 'Show Modal', 'class' => 'btn btn-lg btn-primary'],
-]);
-echo Select2::widget([
-    'name' => 'state_40',
-    'data' => ['111','2222','3333','11223344'],
-    'options' => ['placeholder' => 'Select a state ...'],
-    'pluginOptions' => [
-        'allowClear' => true
-    ],
-]);
-Modal::end();?>
-
 <?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
   [
     'role'=>'modal-remote',
