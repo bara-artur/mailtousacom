@@ -16,11 +16,12 @@ class PaymentsList extends \yii\db\ActiveRecord
 {
     public static function getTextStatus(){
         return array(
-            '' => 'All',
-            '0'=>'Text for status 0000',
-            '1'=>'Text for status 1111',
-            '2'=>'Text for status 2222',
-            '3'=>'Text for status 3333'
+            ''=>'All',
+            '0'=>"Don't paid",
+            '1'=>'Throught Paypal',
+            '1'=>'On the delivery address',
+            '2'=>'Per Month',
+            '3'=>'Unknown'
         );
     }
 
@@ -33,10 +34,11 @@ class PaymentsList extends \yii\db\ActiveRecord
     public static function getPayStatus(){
         return array(
             ''=>'All',
-            '0'=>'Paypal',
-            '1'=>'On the delivery address',
-            '2'=>'System 2',
-            '3'=>'System 3'
+            '0'=>"0t",
+            '1'=>'1t',
+            '1'=>'2t',
+            '2'=>'3t',
+            '3'=>'Unknown'
         );
     }
 
