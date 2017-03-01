@@ -27,6 +27,9 @@ $submitOption = [
 ?>
 <div class="row">
     <div class="col-md-12"><h4 class="modernui-neutral2">Order #<?=$order_id;?> for Transportation</h4></div>
+    <?php if (!$edit_not_prohibited) {?>
+      <div class="prohibit_editing"><p><?=$message_for_edit_prohibited_order?> </p></div>
+    <? } ?>
 </div>
 <div id=crud-datatable-pjax>
 

@@ -2,6 +2,9 @@
 
 namespace app\modules\orderInclude\controllers;
 
+use app\modules\payment\models\PaymentsList;
+use Codeception\Lib\Console\Message;
+use Faker\Provider\ar_SA\Payment;
 use Yii;
 use app\modules\order\models\Order;
 use app\modules\orderInclude\models\OrderInclude;
@@ -98,13 +101,23 @@ class DefaultController extends Controller
       //получаем посылки в заказе
       $model = OrderElement::find()->where(['order_id'=>$id])->all();
       $order = Order::find()->where(['id'=>$id])->one();
-      if ($order->order_status > 1) $edit_not_prohibited = 0;
-      else $edit_not_prohibited = 1;
+      $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
+      $message_for_edit_prohibited_order = " ";
+      $edit_not_prohibited = 1;
+      if ($payment->status > 0) {
+          $edit_not_prohibited = 0;
+          $message_for_edit_prohibited_order = "Editing order prohibited, because the order has been paid.";
+      }
+      if ($order->order_status > 1) {
+          $edit_not_prohibited = 0;
+          $message_for_edit_prohibited_order = $message_for_edit_prohibited_order."<br>Editing order prohibited, because the order has been received at MailtoUSA facility.";
+      }
       return $this->render('createOrder', [
         'edit_not_prohibited' => $edit_not_prohibited,
         'order_elements' => $model,
         'createNewAddress'=>!$model,
         'order_id'=>$id,
+        'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
