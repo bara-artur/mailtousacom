@@ -44,10 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-2"><h3 class="pred2"><span class="glyphicon glyphicon-info-sign"></span></h3>
         </div>
         <div class="col-md-10"><p class="hint-block">Data are output automatically and serve only for informing you</p></div>
-<?=Html::a('NEXT<i class="icon-metro-arrow-right-5"></i>', ['/orderInclude/create-order'],
-  [
-    'class'=>'btn btn-success push-down-margin-thin width_but pull-right go_to_order'
-  ])?>
+        <?php if ($show_button) { ?>
+        <?=Html::a('NEXT<i class="icon-metro-arrow-right-5"></i>', ['/orderInclude/create-order'],
+          [
+            'class'=>'btn btn-success push-down-margin-thin width_but pull-right go_to_order'
+          ])?>
+        <?php } ?>
     </div>
     </form>
 </div>

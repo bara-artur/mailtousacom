@@ -49,8 +49,10 @@ $state_names = ArrayHelper::map($states,'name','name');
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">
+          <?php if ($show_button) { ?>
 	        <?= Html::submitButton('NEXT<i class="icon-metro-arrow-right-5"></i>', ['class' => $model->isNewRecord ? 'btn btn-success push-down-margin-thin width_but pull-right' : 'btn btn-success push-down-margin-thin width_but pull-right']) ?>
-	    </div>
+          <?php } ?>
+ 	    </div>
 	<?php } ?>
 
     <?php ActiveForm::end(); ?>

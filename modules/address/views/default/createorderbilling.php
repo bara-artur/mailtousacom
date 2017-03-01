@@ -18,4 +18,5 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?= $this->render('_form', [
   'model' => $model,
+  'show_button' => $show_button,
 ]) ?>
