@@ -50,7 +50,7 @@ foreach ($order_elements as $percel) {
             <p><b>ZIP:</b>  <?=$percel->zip;?></p>
             <p><b>Phone:</b>  <?=$percel->phone;?></p>
             <p><b>State:</b>  <?=$percel->state;?></p>
-
+    <?php if ($edit_not_prohibited) {?>
         <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$percel->id],
             [
                 'role'=>'modal-remote',
@@ -58,6 +58,7 @@ foreach ($order_elements as $percel) {
                 'class'=>'btn btn-info btn-xs2 show_modal',
                 'id' => 'open_add_order_address',
             ])?>
+        <?php } ?>
     </div>
 
     <div class="order-include-index col-md-9 border_left">
@@ -88,18 +89,20 @@ foreach ($order_elements as $percel) {
                             <td><?=$item['quantity'];?></td>
 
                             <td><div class="but_tab_style">
-                                <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit', ['/orderInclude/update?id='.$item['id']],
-                                  ['role'=>'modal-remote','title'=> 'Edit','data-pjax'=>0,'class'=>'btn btn-info btn-sm '])?>
-                                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderInclude/delete?id='.$item['id']],
-                                  [
-                                    'role'=>'modal-remote',
-                                    'title'=> 'Delete',
-                                    'data-pjax'=>0,
-                                    'class'=>'btn btn-danger btn-sm w0-action-del',
-                                    'data-request-method'=>"post",
-                                    'data-confirm-title'=>"Are you sure?",
-                                    'data-confirm-message'=>"Are you sure want to delete this item",
-                                  ])?>
+                                <?php if ($edit_not_prohibited) {?>
+                                    <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit', ['/orderInclude/update?id='.$item['id']],
+                                      ['role'=>'modal-remote','title'=> 'Edit','data-pjax'=>0,'class'=>'btn btn-info btn-sm '])?>
+                                    <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderInclude/delete?id='.$item['id']],
+                                      [
+                                        'role'=>'modal-remote',
+                                        'title'=> 'Delete',
+                                        'data-pjax'=>0,
+                                        'class'=>'btn btn-danger btn-sm w0-action-del',
+                                        'data-request-method'=>"post",
+                                        'data-confirm-title'=>"Are you sure?",
+                                        'data-confirm-message'=>"Are you sure want to delete this item",
+                                      ])?>
+                                <?php } ?>
                                 </div>
                             </td>
                         </tr>
@@ -148,18 +151,20 @@ foreach ($order_elements as $percel) {
 
 
                     <div class="col-md-6 bord_butt text-right">
-                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Package', ['create?order-id='.$percel->id],
-                  ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
-                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
-                  [
-                    'role'=>'modal-remote',
-                    'title'=> 'Delete',
-                    'data-pjax'=>0,
-                    'class'=>'btn btn-danger',
-                    'data-request-method'=>"post",
-                    'data-confirm-title'=>"Are you sure?",
-                    'data-confirm-message'=>"Are you sure want to delete this packages",
-                  ])?>
+                        <?php if ($edit_not_prohibited) {?>
+                            <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Package', ['create?order-id='.$percel->id],
+                              ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
+                            <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
+                              [
+                                'role'=>'modal-remote',
+                                'title'=> 'Delete',
+                                'data-pjax'=>0,
+                                'class'=>'btn btn-danger',
+                                'data-request-method'=>"post",
+                                'data-confirm-title'=>"Are you sure?",
+                                'data-confirm-message'=>"Are you sure want to delete this packages",
+                              ])?>
+                        <?php } ?>
                     </div>
                    </div>
                 <?php Pjax::end(); ?>
@@ -178,20 +183,20 @@ foreach ($order_elements as $percel) {
 
 ])?>
 <?php Modal::end(); ?>
+<?php if ($edit_not_prohibited) {?>
+    <?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
+      [
+        'role'=>'modal-remote',
+        'title'=> 'Add another attached order',
+        'class'=>'btn btn-default show_modal',
+        'id' => 'open_add_order_address',
+      ])?>
 
-<?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
-  [
-    'role'=>'modal-remote',
-    'title'=> 'Add another attached order',
-    'class'=>'btn btn-default show_modal',
-    'id' => 'open_add_order_address',
-  ])?>
-
-<?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
-  [
-    'class'=>'btn btn-success pull-right go_to_order'
-  ])?>
-
+    <?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
+      [
+        'class'=>'btn btn-success pull-right go_to_order'
+      ])?>
+<?php } ?>
 <?php
 echo '
     <script>

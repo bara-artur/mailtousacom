@@ -31,7 +31,7 @@ class Log extends \yii\db\ActiveRecord
         return [
             [['user_id', 'order_id', 'description', 'created_at'], 'required'],
             [['user_id', 'order_id'], 'integer'],
-            [['description'], 'string', 'max' => 32],
+           // [['description'], 'string', 'max' => 32],
         ];
     }
 

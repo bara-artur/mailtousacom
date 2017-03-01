@@ -36,6 +36,7 @@ class DefaultController extends Controller
         $model->description = $description;
         $model->created_at = time();
         $model->save();
+
     }
 
     /**

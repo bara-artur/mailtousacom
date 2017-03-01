@@ -38,7 +38,7 @@ class DefaultController extends Controller
         ];
     }
 
-    /**
+/**
      * Lists all OrderInclude models.
      * @return mixed
      */
@@ -67,6 +67,7 @@ class DefaultController extends Controller
             $model->created_at = time();
             $model->transport_data = time();
             if($model->save()) {
+              $this->createLog($model->user_id,$model->id,"Draft");
               return $this->redirect('/orderInclude/create-order/'.$model->id);
             }
             //return ddd($model);
@@ -96,8 +97,11 @@ class DefaultController extends Controller
     public function actionCreateOrder2($id){
       //получаем посылки в заказе
       $model = OrderElement::find()->where(['order_id'=>$id])->all();
-
+      $order = Order::find()->where(['id'=>$id])->one();
+      if ($order->order_status > 1) $edit_not_prohibited = 0;
+      else $edit_not_prohibited = 1;
       return $this->render('createOrder', [
+        'edit_not_prohibited' => $edit_not_prohibited,
         'order_elements' => $model,
         'createNewAddress'=>!$model,
         'order_id'=>$id,
@@ -472,4 +476,9 @@ class DefaultController extends Controller
         }
         return parent::beforeAction($action);
     }
+
+    public function createLog($user_id,$order_id,$description){
+        \app\modules\logs\controllers\DefaultController::createLog($user_id,$order_id,$description);
+    }
 }
+
