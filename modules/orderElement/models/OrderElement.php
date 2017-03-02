@@ -65,6 +65,11 @@ class OrderElement extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getOrderInclude()
+    {
+        return $this->hasMany(OrderInclude::className(),['order_id' => 'id']);
+    }
+
   public function getWeight_lb(){
     return floor($this->weight);
   }

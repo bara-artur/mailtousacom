@@ -36,25 +36,25 @@ $submitOption = [
 <?php
 Pjax::begin();
 if($order_elements){
-foreach ($order_elements as $k => $percel) {
+foreach ($order_elements as $k => $parcel) {
 ?>
 <div class="row">
-    <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
+    <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$parcel->id;?> in Order </h5></div>
     <div class="col-md-3 marg_p">
         <h5 class="deliv_address">Delivery address</h5>
-            <p><b>First name:</b>  <?=$percel->first_name;?></p>
-            <p><b>Last name:</b>  <?=$percel->last_name;?></p>
-            <?php if($percel->address_type==1){
-                echo '<p><b>Company name:</b>  '.$percel->company_name.'</p>';
+            <p><b>First name:</b>  <?=$parcel->first_name;?></p>
+            <p><b>Last name:</b>  <?=$parcel->last_name;?></p>
+            <?php if($parcel->address_type==1){
+                echo '<p><b>Company name:</b>  '.$parcel->company_name.'</p>';
             };?>
-            <p><b>Addres 1:</b>  <?=$percel->adress_1;?></p>
-            <p><b>Addres 2:</b>  <?=$percel->adress_2;?></p>
-            <p><b>City:</b>  <?=$percel->city;?></p>
-            <p><b>ZIP:</b>  <?=$percel->zip;?></p>
-            <p><b>Phone:</b>  <?=$percel->phone;?></p>
-            <p><b>State:</b>  <?=$percel->state;?></p>
+            <p><b>Addres 1:</b>  <?=$parcel->adress_1;?></p>
+            <p><b>Addres 2:</b>  <?=$parcel->adress_2;?></p>
+            <p><b>City:</b>  <?=$parcel->city;?></p>
+            <p><b>ZIP:</b>  <?=$parcel->zip;?></p>
+            <p><b>Phone:</b>  <?=$parcel->phone;?></p>
+            <p><b>State:</b>  <?=$parcel->state;?></p>
     <?php if ($edit_not_prohibited) {?>
-        <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$percel->id],
+        <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$parcel->id],
             [
                 'role'=>'modal-remote',
                 'title'=> 'Create Element of Order',
@@ -66,9 +66,10 @@ foreach ($order_elements as $k => $percel) {
 
     <div class="order-include-index col-md-9 border_left">
         <h5 class="order_include">What is inside in shipping package</h5>
-        <div id="ajaxCrudDatatable_<?=$percel-id;?>">
+        <div id="ajaxCrudDatatable_<?=$parcel-id;?>">
             <div class="" id="crud-datatable-pjax">
-                <?php Pjax::begin(); ?>
+                <?php  Pjax::begin();?>
+
                 <div class="table-responsive">
                 <table class="table table-bordered">
                     <tr>
@@ -79,10 +80,10 @@ foreach ($order_elements as $k => $percel) {
                         <th>Quantity</th>
                         <th>Action</th>
                     </tr>
-                    <?php $includes=$percel->getIncludes();?>
+                    <?php $includes=$parcel->orderInclude   //  getIncludes();?>
                     <?php $total_weight=0;?>
                     <?php foreach ($includes as $i => $item){
-                        $total_weight+=$item['weight']*$item['quantity'];
+                       // $total_weight+=$item['weight']*$item['quantity'];
                         ?>
                         <tr>
                             <td><?=$i+1?></td>
@@ -112,30 +113,31 @@ foreach ($order_elements as $k => $percel) {
                     <?php }?>
                 </table>
                 <div>
-                    <h4>Total</h4>
+                    <h4>Total : <?= $totalPriceArray[$k]  ?> $ </h4>
+                    <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
                     <form id="lb-oz-tn-form" title="" method="post">
                         <div class="label_valid">
                             <span class="control-label">Weight :</span>
                             <span>
-                                <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
+                                <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$parcel->weight_lb;?>">
                                 <label class="title control-label">Lb</label>
                             </span>
                             <span>
-                                <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
+                                <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$parcel->weight_oz;?>">
                                 <label class="title control-label">Oz</label>
                             </span>
                         </div>
                         <div class="label_valid">
                             <label class="title control-label">Track Number</label>
-                            <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
+                            <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$parcel->track_number;?>">
                         </div>
-                        <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
+                        <input type="hidden" name = "percel_id" value=<?=$parcel->id?>>
                         <input type="hidden" name = "order_id" value=<?=$order_id?>>
                         <p><b>Cost of delivery : </b>
                             <span id="results" class="resInd<?= $k ?>">
                                 <?php
-                                    if($percel->weight>0) {
-                                        $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
+                                    if($parcel->weight>0) {
+                                        $ParcelPrice = ParcelPrice::widget(['weight' => $parcel->weight]);
                                         if ($ParcelPrice != false) {
                                             $ParcelPrice = 'Cost of crossboard delivery ' . $ParcelPrice . ' $ (without tax)';
                                         } else {
@@ -155,9 +157,9 @@ foreach ($order_elements as $k => $percel) {
 
                     <div class="col-md-6 bord_butt text-right">
                         <?php if ($edit_not_prohibited) {?>
-                            <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Package', ['create?order-id='.$percel->id],
+                            <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Package', ['create?order-id='.$parcel->id],
                               ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
-                            <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
+                            <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$parcel->id],
                               [
                                 'role'=>'modal-remote',
                                 'title'=> 'Delete',

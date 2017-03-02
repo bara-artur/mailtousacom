@@ -99,7 +99,17 @@ class DefaultController extends Controller
     //посылка = 1 строка order_element
     public function actionCreateOrder2($id){
       //получаем посылки в заказе
-      $model = OrderElement::find()->where(['order_id'=>$id])->all();
+      //  var_dump(Yii::$app->request);
+      //$totalPriceArray = [0];
+      $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
+      foreach($model as $percel)
+        {
+            $totalPrice = 0;
+            foreach ($percel->orderInclude as $ordInclude) {
+                $totalPrice += $ordInclude->price;
+            }
+            $totalPriceArray[] = $totalPrice;
+        }
       $order = Order::find()->where(['id'=>$id])->one();
       $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
       $message_for_edit_prohibited_order = " ";
@@ -118,6 +128,7 @@ class DefaultController extends Controller
         'createNewAddress'=>!$model,
         'order_id'=>$id,
         'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
+        'totalPriceArray' => $totalPriceArray,
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
@@ -176,7 +187,6 @@ class DefaultController extends Controller
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary ','type'=>"submit"])
-
                 ];
             }else if($model->load($request->post())&&($model->save())){
                 //$model->order_id = $request->post('order_id');
