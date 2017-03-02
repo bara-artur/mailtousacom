@@ -22,10 +22,10 @@ $state_names = ArrayHelper::map($states,'name','name');
     <h4 class="modernui-neutral2 margin-bottom-10">Please add your billing address <font class="text-danger">*</font> <i class="icon-metro-location"></i></h4>
     <div class="row">
         <div class="col-md-6">
-        <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'first_name')->textInput(['maxlength' => true, 'class'=>'first_name form-control']) ?>
         </div>
         <div class="col-md-6">
-    <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'last_name')->textInput(['maxlength' => true, 'class'=>'last_name form-control']) ?>
         </div>
     </div>
     <?= $form->field($model, 'address_type')->checkbox(['label' => '<span class="fa fa-check otst"></span> I will use my company address', 'class'=>'show_company'])->label("") ?>

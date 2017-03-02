@@ -283,6 +283,10 @@ function init_address_edit(){
     if ($(".show_company").prop('checked')==false) {
       $('.company_name').val('Personal address');
     }
+    else {
+      if ($('.first_name').val()=="") $('.first_name').val("-");
+      if ($('.last_name').val()=="") $('.last_name').val("-");
+    }
     return true;
   }
 
