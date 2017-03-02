@@ -36,7 +36,7 @@ $submitOption = [
 <?php
 Pjax::begin();
 if($order_elements){
-foreach ($order_elements as $percel) {
+foreach ($order_elements as $k => $percel) {
 ?>
 <div class="row">
     <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
@@ -132,7 +132,7 @@ foreach ($order_elements as $percel) {
                         <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
                         <input type="hidden" name = "order_id" value=<?=$order_id?>>
                         <p><b>Cost of delivery : </b>
-                            <span id="results">
+                            <span id="results" class="resInd<?= $k ?>">
                                 <?php
                                     if($percel->weight>0) {
                                         $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
