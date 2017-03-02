@@ -21,6 +21,10 @@ if (!Yii::$app->user->isGuest) {
     ?>
     <p>
         <?= Html::a('Create Order', ['/orderInclude/create-order'], ['class' => 'btn btn-success']) ?>
+        <?php if ($orders) { ?>
+            <?= Html::a('Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-info']) ?>
+            <?= Html::a('USA Address', ['/address/addressusa'], ['class' => 'btn btn-info']) ?>
+        <?php } ?>
     </p>
     <div>
         <?= $this->render('orderFilterForm', ['model' => $filterForm]);?>
