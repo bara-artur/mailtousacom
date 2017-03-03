@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use app\modules\order\models\Order;
 
 
 /**
@@ -39,6 +40,9 @@ class DefaultController extends Controller
      */
     public function actionCreateOrderBilling()
     {
+      $order = Order::find()->where(['user_id'=>Yii::$app->user->id])->one();
+      $show_button =1;
+      if ($order) $show_button = 0;
 
       $model = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
       if(!$model){
@@ -57,6 +61,7 @@ class DefaultController extends Controller
       return $this->render('createorderbilling', [
         //'searchModel' => $searchModel,
         'model' => $model,
+        'show_button' => $show_button,
         //'mainBillingAddress' => $mainBillingAddress,
         //'state_names' => $state_names,
       ]);
@@ -77,6 +82,10 @@ class DefaultController extends Controller
 
     public function actionAddressusa()
     {
+      $order = Order::find()->where(['user_id'=>Yii::$app->user->id])->one();
+      $show_button =1;
+      if ($order) $show_button = 0;
+
       $model = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
       if(!$model) {
         \Yii::$app->getSession()->setFlash('error', 'First you need to fill in billing address.');
@@ -85,6 +94,7 @@ class DefaultController extends Controller
 
       return $this->render('usaAddress', [
           'user' => $model,
+          'show_button' => $show_button
       ]);
     }
 

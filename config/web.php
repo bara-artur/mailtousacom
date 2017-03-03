@@ -166,6 +166,9 @@ $config = [
       'gridview' => [
             'class' => '\kartik\grid\Module',
         ],
+      'logs' => [
+            'class' => 'app\modules\logs\Module',
+        ],
     ]
 ];
 
