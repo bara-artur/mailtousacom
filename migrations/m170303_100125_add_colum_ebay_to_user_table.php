@@ -9,6 +9,7 @@ class m170303_100125_add_colum_ebay_to_user_table extends Migration
       $this->addColumn('user', 'ebay_account', $this->integer()->defaultValue(0));
       $this->addColumn('user', 'ebay_last_update', $this->integer()->defaultValue(0));
       $this->addColumn('user', 'ebay_token', $this->string(1000)->defaultValue(""));
+      $this->addColumn('order_element', 'source', $this->integer()->defaultValue(0));
     }
 
     public function down()
@@ -17,6 +18,7 @@ class m170303_100125_add_colum_ebay_to_user_table extends Migration
         $this->dropColumn('user', 'ebay_account');
         $this->dropColumn('user', 'ebay_last_update');
         $this->dropColumn('user', 'ebay_token');
+        $this->dropColumn('order_element', 'source');
         return false;
     }
 

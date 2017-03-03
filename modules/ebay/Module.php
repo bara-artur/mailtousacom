@@ -24,13 +24,17 @@ class Module extends \yii\base\Module
   {
     if($this->mode=='sandbox') {
       $config = [
+        'compatabilityLevel' => 717,
         'tradeUrl'=>'https://api.sandbox.ebay.com/ws/api.dll',
         'signinUrl' => 'https://signin.sandbox.ebay.com/ws/eBayISAPI.dll?SignIn&',
+        'orderStatus'=>'All',
       ];
     }else{
       $config = [
+        'compatabilityLevel' => 717,
         'tradeUrl'=>'https://api.ebay.com/ws/api.dll',
         'signinUrl' => 'https://signin.ebay.com/ws/eBayISAPI.dll?SignIn&',
+        'orderStatus'=>'All',
       ];
     }
     $this->config=ArrayHelper::merge($config,$this->config[\Yii::$app->user->identity->ebay_account]);
