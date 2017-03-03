@@ -63,7 +63,6 @@ AppAsset::register($this);
                 .'<li>'
                 . Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/'], ['class' => 'profile-link'])
                 .'</li>'
-
                 //. '<li>'
                 //. Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])
                 //. '</li>'
