@@ -73,6 +73,20 @@ $(document).ready(function() {
     }
     return true;
   })
+
+  $(".reset_filter").on("click", function (){
+    event.preventDefault();
+    elements = document.getElementsByTagName('input');
+    for (var i = 0; i < elements.length; i++) {
+      var input = elements[i];
+      if (input.type != 'hidden') input.value = '';
+    }
+    selects = document.getElementsByTagName('select');
+    for (var i = 0; i < selects.length; i++) {
+      var select = selects[i];
+      if (input.type != 'hidden') select.value = '';
+    }
+  });
 });
 
 function show_err(el,txt){
@@ -388,3 +402,4 @@ function init_order_border(){
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
+
