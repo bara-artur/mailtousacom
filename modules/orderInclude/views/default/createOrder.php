@@ -105,7 +105,9 @@ foreach ($order_elements as $percel) {
                     <?php }?>
                 </table>
                 <div>
-                    <h4>Total</h4>
+
+                    <h5 class="total_package padding-top-10">Total</h5>
+                    <div class="col-md-6">
                     <form id="lb-oz-tn-form" title="" method="post">
                         <div class="label_valid">
                             <span class="control-label">Weight :</span>
@@ -141,15 +143,14 @@ foreach ($order_elements as $percel) {
                                 ?>
                             </span></p>
                      </form>
-
+                    </div>
                 </div>
-                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add item to parcel', ['create?order-id='.$percel->id],
-                  ['role'=>'modal-remote','title'=> 'Create new Order Includes','class'=>'btn btn-default'])?>
+
 
 
 
                     <div class="col-md-6 bord_butt text-right">
-                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Package', ['create?order-id='.$percel->id],
+                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
                   ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
                 <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
                   [
