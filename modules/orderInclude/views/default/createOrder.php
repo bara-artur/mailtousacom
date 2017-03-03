@@ -60,7 +60,7 @@ foreach ($order_elements as $percel) {
     </div>
 
     <div class="order-include-index col-md-9 border_left">
-        <h5 class="order_include">What is inside in shipping package</h5>
+        <h5 class="order_include">What is inside in shipping parcel</h5>
         <div id="ajaxCrudDatatable_<?=$percel-id;?>">
             <div class="" id="crud-datatable-pjax">
                 <?php Pjax::begin(); ?>
@@ -104,52 +104,63 @@ foreach ($order_elements as $percel) {
                         </tr>
                     <?php }?>
                 </table>
+                </div>
                 <div>
 
+                   <div class="row">
+                    <div class="col-md-12">
                     <h5 class="total_package padding-top-10">Total</h5>
-                    <div class="col-md-6">
                     <form id="lb-oz-tn-form" title="" method="post">
-                        <div class="label_valid">
-                            <span class="control-label">Weight :</span>
-                            <span>
-                                <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
-                                <label class="title control-label">Lb</label>
-                            </span>
-                            <span>
+                        <div class="label_valid col-md-6 padding-off-left padding-off-right">
+                            <div class="form-control-addon-fill">
+                                <div class="input-group">
+                                    <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
+                                    <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
+                                    <span class="input-group-addon fint_input">lb</span>
+
+
                                 <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
-                                <label class="title control-label">Oz</label>
-                            </span>
+                                    <span class="input-group-addon fint_input">oz</span>
+
+                             </div>
+
                         </div>
-                        <div class="label_valid">
-                            <label class="title control-label">Track Number</label>
+                        </div>
+                        <div class="label_valid col-md-5 col-md-offset-1 padding-off-right padding-off-left bor">
+                            <div class="form-control-addon-fill">
+                                <div class="input-group">
+                                    <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
+
                             <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
                         </div>
+                            </div>
+                        </div>
+                    </div>
+                   </div>
+                    <hr class="bor_bottom">
                         <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
                         <input type="hidden" name = "order_id" value=<?=$order_id?>>
-                        <p><b>Cost of delivery : </b>
+                        <div class="row">
+                        <div class="col-md-6 cost_del">Cost of delivery :
                             <span id="results">
                                 <?php
                                     if($percel->weight>0) {
                                         $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
                                         if ($ParcelPrice != false) {
-                                            $ParcelPrice = 'Cost of crossboard delivery ' . $ParcelPrice . ' $ (without tax)';
+                                            $ParcelPrice = '' . $ParcelPrice . ' $ (without tax)';
                                         } else {
-                                            $ParcelPrice = '<b style="color: red;">Exceeded weight of a parcel.</b>';
+                                            $ParcelPrice = '<span style="color:#E51400;">Exceeded weight of a parcel.</span>';
                                         }
                                     }else{
                                         $ParcelPrice="-";
                                     }
                                     echo $ParcelPrice;
                                 ?>
-                            </span></p>
+                            </span></div>
                      </form>
-                    </div>
-                </div>
 
 
-
-
-                    <div class="col-md-6 bord_butt text-right">
+                    <div class="col-md-6 btn-group-md bord_butt text-right">
                 <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
                   ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
                 <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
@@ -162,13 +173,17 @@ foreach ($order_elements as $percel) {
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this packages",
                   ])?>
-                    </div>
-                   </div>
+
+
+            </div>
+                </div>
+            </div>
                 <?php Pjax::end(); ?>
             </div>
         </div>
      </div>
 </div>
+
 <hr>
 <?php } ?>
 <?php } ?>

@@ -510,10 +510,11 @@ a.gritter-close::after{font-weight:400;font-family: 'Tahoma',sans-serif !importa
 .but_tab_marg{margin: 0px 2px;}
 h5.total_package{
 font-weight: 600;
-border-bottom: 1px solid #ccc;
+border-bottom: 1px dotted #ccc;
 margin-top: 4px;
 padding-bottom: 8px;
-color: #454545;}
+color: #454545;
+margin-bottom: 15px;}
 .total_price{text-align:left;margin-top:20px;position:absolute;
     bottom:0;}
 .margin_top_total{margin-top:16px;}
@@ -522,7 +523,7 @@ color: #454545;}
     padding-bottom: 2px;
     margin-bottom: 4px;
 }
-.bord_butt{margin-top: 60px;}
+.bord_butt{margin-top: 8px;}
 .marg_p p{margin: 0 0 8px;}
 .btn-success-border:hover{
     color: #354346;
@@ -610,4 +611,26 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
     border: 0px;
     background-color: transparent;
     font-size: 20px;
+}
+/*03032017*/
+/*.label_valid{display:inline-block;}*/
+.col-md-3.marg_p{margin-bottom:20px;}
+.fint_input{
+    padding-left: 4px;
+    background: transparent !important;
+    border: 0px;
+    color: #565656 !important;
+}
+.label_valid{margin-bottom : 14px;}
+.cost_del {
+    font-weight: 600;
+    padding-top: 8px;
+    color: #454545;
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+.bor_bottom
+{
+border: 1px solid #eee;
+margin: 0px;
 }
