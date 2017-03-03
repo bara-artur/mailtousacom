@@ -53,6 +53,12 @@ foreach ($order_elements as $k => $parcel) {
             <p><b>ZIP:</b>  <?=$parcel->zip;?></p>
             <p><b>Phone:</b>  <?=$parcel->phone;?></p>
             <p><b>State:</b>  <?=$parcel->state;?></p>
+
+        <?php
+            if($parcel->source==1){
+                echo "<h4>Import from eBay</h4>";
+            }
+        ?>
     <?php if ($edit_not_prohibited) {?>
         <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$parcel->id],
             [
@@ -118,13 +124,11 @@ foreach ($order_elements as $k => $parcel) {
                     <form id="lb-oz-tn-form" title="" method="post">
                         <div class="label_valid">
                             <span class="control-label">Weight :</span>
-                            <span>
-                                <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$parcel->weight_lb;?>">
-                                <label class="title control-label">Lb</label>
-                            </span>
-                            <span>
-                                <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$parcel->weight_oz;?>">
-                                <label class="title control-label">Oz</label>
+                            <span class="row">
+                                <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control col-md-1" name="lb" maxlength="3" max=100 value="<?=$parcel->weight_lb;?>">
+                                <label class="title control-label col-md-1">Lb</label>
+                                <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control col-md-1" name="oz" maxlength="2" max=16 value="<?=$parcel->weight_oz;?>">
+                                <label class="title control-label col-md-1">Oz</label>
                             </span>
                         </div>
                         <div class="label_valid">
