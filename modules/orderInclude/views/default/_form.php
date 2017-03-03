@@ -19,8 +19,8 @@ use yii\bootstrap\Modal;
 
    <?= $form->field($model, 'country')->widget(Select2::classname(), [
         'data' => Yii::$app->params['country'],
-        'language' => 'de',
-        'options' => ['placeholder' => 'Select the country','tabindex'=>false],
+        'language' => 'en',
+        'options' => ['placeholder' => 'Select the country','tabindex'=>'10'],
         'pluginOptions' => [
             'allowClear' => false
         ],
@@ -37,3 +37,7 @@ use yii\bootstrap\Modal;
     <?php ActiveForm::end(); ?>
     
 </div>
+
+<script>
+  $('#ajaxCrudModal').removeAttr("tabindex")
+</script>

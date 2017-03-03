@@ -53,6 +53,8 @@ class User extends ActiveRecord  implements IdentityInterface
             [['email', 'password_hash','first_name','last_name','phone'], 'string', 'max' => 100],
             ['email', 'email'],
             ['password', 'string', 'min' => 6, 'max' => 61],
+            ['ebay_token', 'string'],
+            [['ebay_account','ebay_last_update'], 'integer'],
             [['doc1','doc2'], 'image',
               'minHeight' => 600,
               'minWidth' => 600,

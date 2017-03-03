@@ -43,6 +43,8 @@ class ResetPassword extends Model
         $user = $this->_user;
         $user->setPassword($this->password);
         $user->removePasswordResetToken();  // Удаление токена восстановления пароля
+        $user->status = User::STATUS_ACTIVE;
+        $user->removeEmailConfirmToken();
         return (($user->save())) ? $user->id : false;
     }
 }
