@@ -43,8 +43,8 @@ class DefaultController extends Controller
     $verb = 'GetOrders';
 
     //Time with respect to GMT
-    //by default retreive orders in last 30 minutes
-    $CreateTimeFrom = gmdate("Y-m-d\TH:i:s",((time()-18000000)||(\Yii::$app->user->identity->ebay_last_update))); //current time minus 30 minutes
+    //by default retreive orders in last 7 day
+    $CreateTimeFrom = gmdate("Y-m-d\TH:i:s",((time()-60*60*24*7)||(\Yii::$app->user->identity->ebay_last_update))); //current time minus 30 minutes
     $CreateTimeTo = gmdate("Y-m-d\TH:i:s");
 
     ///Build the request Xml string
@@ -168,6 +168,9 @@ class DefaultController extends Controller
           'successful',
           'Check imported from eBay'
         );
+      $user=User::findOne(\Yii::$app->user->identity->id);
+      $user->ebay_last_update=time();
+      $user->save();
     }
     return $this->redirect('/orderInclude/create-order/'.$id);
   }
