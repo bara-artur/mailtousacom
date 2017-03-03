@@ -19,7 +19,7 @@ use \yii\web\Response;
 use yii\helpers\Html;
 use yii\db\Query;
 use kartik\mpdf\Pdf;
-
+use app\modules\logs\models\Log;
 /**
  * DefaultController implements the CRUD actions for OrderInclude model.
  */
@@ -70,7 +70,8 @@ class DefaultController extends Controller
             $model->created_at = time();
             $model->transport_data = time();
             if($model->save()) {
-              $this->createLog($model->user_id,$model->id,"Draft");
+              $log= new Log;
+              $log->createLog($model->user_id,$model->id,"Draft");
               return $this->redirect('/orderInclude/create-order/'.$model->id);
             }
             //return ddd($model);
@@ -506,8 +507,8 @@ class DefaultController extends Controller
         return parent::beforeAction($action);
     }
 
-    public function createLog($user_id,$order_id,$description){
+    /*public function createLog($user_id,$order_id,$description){
         \app\modules\logs\controllers\DefaultController::createLog($user_id,$order_id,$description);
-    }
+    }*/
 }
 
