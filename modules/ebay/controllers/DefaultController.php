@@ -5,6 +5,7 @@ namespace app\modules\ebay\controllers;
 use Yii;
 use yii\web\Controller;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\orderInclude\models\OrderInclude;
 use app\modules\order\models\Order;
 use yii\web\NotFoundHttpException;
 
@@ -70,7 +71,13 @@ class DefaultController extends Controller
     //send the request and get response
     $responseXml = $session->sendHttpRequest($requestXmlBody);
     if (stristr($responseXml, 'HTTP 404') || $responseXml == '') {
-      throw new NotFoundHttpException("eBay not found!");
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'eBay not found'
+        );
+      return $this->redirect('/orderInclude/create-order/'.$id);
     }
 
     //Xml string is parsed and creates a DOM Document object
@@ -91,81 +98,78 @@ class DefaultController extends Controller
       $shortMsg = $errors->item(0)->getElementsByTagName('ShortMessage');
       $longMsg = $errors->item(0)->getElementsByTagName('LongMessage');
 
-      //Display code and shortmessage
-      throw new NotFoundHttpException("eBay returned error(s).\n");
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'eBay returned error(s)'
+        );
+      return $this->redirect('/orderInclude/create-order/'.$id);
     }else { //If there are no errors, continue
       if ($entries == 0) {
-        throw new NotFoundHttpException("Sorry No entries found in the Time period requested. Change CreateTimeFrom/CreateTimeTo and Try again");
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'Sorry No entries found in the Time period requested. Change CreateTimeFrom/CreateTimeTo and Try again'
+          );
+        return $this->redirect('/orderInclude/create-order/'.$id);
       }
       $orders = $response->OrderArray->Order;
       if ($orders == null){
-        throw new NotFoundHttpException("No Order Found.");
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'No Order Found.'
+          );
+        return $this->redirect('/orderInclude/create-order/'.$id);
       }
 
-      echo '<pre>';
       foreach ($orders as $order) {
-        // get the buyer's shipping address
+        $box = new OrderElement();
         $shippingAddress = $order->ShippingAddress;
-        $address = $shippingAddress->Name . ",\n";
-        if ($shippingAddress->Street1 != null) {
-          $address .=  $shippingAddress->Street1 . ",";
-        }
-        if ($shippingAddress->Street2 != null) {
-          $address .=  $shippingAddress->Street2 . "\n";
-        }
-        if ($shippingAddress->CityName != null) {
-          $address .=
-            $shippingAddress->CityName . ",\n";
-        }
-        if ($shippingAddress->StateOrProvince != null) {
-          $address .=
-            $shippingAddress->StateOrProvince . "-";
-        }
-        if ($shippingAddress->PostalCode != null) {
-          $address .=
-            $shippingAddress->PostalCode . ",\n";
-        }
-        if ($shippingAddress->CountryName != null) {
-          $address .=
-            $shippingAddress->CountryName . ".\n";
-        }
-        if ($shippingAddress->Phone != null) {
-          $address .=  $shippingAddress->Phone . "\n";
-        }
-        if($address){
-          echo "Shipping Address : " . $address;
-        }else echo "Shipping Address: Null" . "\n";
+        $name=explode(' ',$shippingAddress->Name );
+        $box->order_id=$id;
+        $box->first_name=$name[0];
+        unset($name[0]);
+        $box->last_name=implode(' ',$name);
+        $box->company_name='Personal address';
+        $box->adress_1=(String)$shippingAddress->Street1;
+        $box->adress_2=(String)$shippingAddress->Street2;
+        $box->city=(String)$shippingAddress->CityName;
+        $box->zip=(String)$shippingAddress->PostalCode;
+        $box->phone=(String)$shippingAddress->Phone;
+        $box->state=(String)$shippingAddress->StateOrProvince;
+        $box->address_type=0;
+        $box->source=1;
 
         $transactions = $order->TransactionArray;
-        if ($transactions) {
-          echo "\nTransaction Array \n";
-          // iterate through each transaction for the order
+
+        if($box->save() && $transactions){
           foreach ($transactions->Transaction as $transaction) {
-            // get the OrderLineItemID, Quantity, buyer's email and SKU
+            $item = new OrderInclude;
+            $item->order_id = $box->id;
+            $item->name = (String)$transaction->Item->Title;
+            $item->price = (String)$transaction->TransactionPrice;
+            $item->quantity = (int)$transaction->QuantityPurchased;
+            $item->country = "none";
 
-            echo "OrderLineItemID : " . $transaction->OrderLineItemID . "\n";
-            echo "QuantityPurchased  : " . $transaction->QuantityPurchased . "\n";
-            echo "Buyer Email : " . $transaction->Buyer->Email . "\n";
-            $SKU = $transaction->Item->SKU;
-            if ($SKU) {
-              echo "Transaction -> SKU  :" . $SKU ."\n";
-            }
-
-            // if the item is listed with variations, get the variation SKU
-            $VariationSKU = $transaction->Variation->SKU;
-            if ($VariationSKU != null) {
-              echo "Variation SKU  : " . $VariationSKU. "\n";
-            }
-            echo "TransactionID: " . $transaction->TransactionID . "\n";
-            $transactionPriceAttr = $transaction->TransactionPrice->attributes();
-            echo "TransactionPrice : " . $transaction->TransactionPrice . " " . $transactionPriceAttr["currencyID"] . "\n";
-            echo "Platform : " . $transaction->Platform . "\n";
+            /*d($transaction);
+            d($item);
+            d($transaction->Item);*/
+            $item->save();
           }
         }
       }
-      echo '</pre>';
-      ddd($response);
+      \Yii::$app
+        ->getSession()
+        ->setFlash(
+          'successful',
+          'Check imported from eBay'
+        );
     }
+    return $this->redirect('/orderInclude/create-order/'.$id);
   }
 
   private function getTocken($order){
