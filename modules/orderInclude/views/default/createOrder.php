@@ -36,23 +36,23 @@ $submitOption = [
 <?php
 Pjax::begin();
 if($order_elements){
-foreach ($order_elements as $k => $parcel) {
+foreach ($order_elements as $percel) {
 ?>
 <div class="row">
-    <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$parcel->id;?> in Order </h5></div>
+    <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
     <div class="col-md-3 marg_p">
         <h5 class="deliv_address">Delivery address</h5>
-            <p><b>First name:</b>  <?=$parcel->first_name;?></p>
-            <p><b>Last name:</b>  <?=$parcel->last_name;?></p>
-            <?php if($parcel->address_type==1){
-                echo '<p><b>Company name:</b>  '.$parcel->company_name.'</p>';
+            <p><b>First name:</b>  <?=$percel->first_name;?></p>
+            <p><b>Last name:</b>  <?=$percel->last_name;?></p>
+            <?php if($percel->address_type==1){
+                echo '<p><b>Company name:</b>  '.$percel->company_name.'</p>';
             };?>
-            <p><b>Addres 1:</b>  <?=$parcel->adress_1;?></p>
-            <p><b>Addres 2:</b>  <?=$parcel->adress_2;?></p>
-            <p><b>City:</b>  <?=$parcel->city;?></p>
-            <p><b>ZIP:</b>  <?=$parcel->zip;?></p>
-            <p><b>Phone:</b>  <?=$parcel->phone;?></p>
-            <p><b>State:</b>  <?=$parcel->state;?></p>
+            <p><b>Addres 1:</b>  <?=$percel->adress_1;?></p>
+            <p><b>Addres 2:</b>  <?=$percel->adress_2;?></p>
+            <p><b>City:</b>  <?=$percel->city;?></p>
+            <p><b>ZIP:</b>  <?=$percel->zip;?></p>
+            <p><b>Phone:</b>  <?=$percel->phone;?></p>
+            <p><b>State:</b>  <?=$percel->state;?></p>
 
         <?php
             if($parcel->source==1){
@@ -72,10 +72,9 @@ foreach ($order_elements as $k => $parcel) {
 
     <div class="order-include-index col-md-9 border_left">
         <h5 class="order_include">What is inside in shipping package</h5>
-        <div id="ajaxCrudDatatable_<?=$parcel-id;?>">
+        <div id="ajaxCrudDatatable_<?=$percel-id;?>">
             <div class="" id="crud-datatable-pjax">
-                <?php  Pjax::begin();?>
-
+                <?php Pjax::begin(); ?>
                 <div class="table-responsive">
                 <table class="table table-bordered">
                     <tr>
@@ -86,7 +85,7 @@ foreach ($order_elements as $k => $parcel) {
                         <th>Quantity</th>
                         <th>Action</th>
                     </tr>
-                    <?php $includes=$parcel->orderInclude   //  getIncludes();?>
+                    <?php $includes=$percel->getIncludes();?>
                     <?php $total_weight=0;?>
                     <?php foreach ($includes as $i => $item){
                        // $total_weight+=$item['weight']*$item['quantity'];
@@ -118,69 +117,86 @@ foreach ($order_elements as $k => $parcel) {
                         </tr>
                     <?php }?>
                 </table>
+                </div>
                 <div>
-                    <h4>Total : <?= $totalPriceArray[$k]  ?> $ </h4>
-                    <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
-                    <form id="lb-oz-tn-form" title="" method="post">
-                        <div class="label_valid">
-                            <span class="control-label">Weight :</span>
-                            <span class="row">
-                                <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control col-md-1" name="lb" maxlength="3" max=100 value="<?=$parcel->weight_lb;?>">
-                                <label class="title control-label col-md-1">Lb</label>
-                                <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control col-md-1" name="oz" maxlength="2" max=16 value="<?=$parcel->weight_oz;?>">
-                                <label class="title control-label col-md-1">Oz</label>
-                            </span>
+
+                   <div class="row">
+                    <div class="col-md-12">
+                    <h5 class="total_package padding-top-10">Total</h5>
+                      <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
+                      <form id="lb-oz-tn-form" title="" method="post">
+                        <div class="label_valid col-md-6 padding-off-left padding-off-right">
+                            <div class="form-control-addon-fill">
+                                <div class="input-group">
+                                    <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
+                                    <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
+                                    <span class="input-group-addon fint_input">lb</span>
+
+
+                                <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
+                                    <span class="input-group-addon fint_input">oz</span>
+
+                             </div>
+
                         </div>
-                        <div class="label_valid">
-                            <label class="title control-label">Track Number</label>
-                            <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$parcel->track_number;?>">
                         </div>
-                        <input type="hidden" name = "percel_id" value=<?=$parcel->id?>>
+                        <div class="label_valid col-md-5 col-md-offset-1 padding-off-right padding-off-left bor">
+                            <div class="form-control-addon-fill">
+                                <div class="input-group">
+                                    <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
+
+                            <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+                   </div>
+                    <hr class="bor_bottom">
+                        <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
                         <input type="hidden" name = "order_id" value=<?=$order_id?>>
                         <p><b>Cost of delivery : </b>
-                            <span id="results" class="resInd<?= $k ?>">
+                            <span id="results">
                                 <?php
                                     if($parcel->weight>0) {
                                         $ParcelPrice = ParcelPrice::widget(['weight' => $parcel->weight]);
                                         if ($ParcelPrice != false) {
-                                            $ParcelPrice = 'Cost of crossboard delivery ' . $ParcelPrice . ' $ (without tax)';
+                                            $ParcelPrice = '' . $ParcelPrice . ' $ (without tax)';
                                         } else {
-                                            $ParcelPrice = '<b style="color: red;">Exceeded weight of a parcel.</b>';
+                                            $ParcelPrice = '<span style="color:#E51400;">Exceeded weight of a parcel.</span>';
                                         }
                                     }else{
                                         $ParcelPrice="-";
                                     }
                                     echo $ParcelPrice;
                                 ?>
-                            </span></p>
+                            </span></div>
                      </form>
 
+
+                    <div class="col-md-6 btn-group-md bord_butt text-right">
+                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
+                  ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
+                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
+                  [
+                    'role'=>'modal-remote',
+                    'title'=> 'Delete',
+                    'data-pjax'=>0,
+                    'class'=>'btn btn-danger',
+                    'data-request-method'=>"post",
+                    'data-confirm-title'=>"Are you sure?",
+                    'data-confirm-message'=>"Are you sure want to delete this packages",
+                  ])?>
+
+
+            </div>
                 </div>
-
-
-
-                    <div class="col-md-6 bord_butt text-right">
-                        <?php if ($edit_not_prohibited) {?>
-                            <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Package', ['create?order-id='.$parcel->id],
-                              ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
-                            <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$parcel->id],
-                              [
-                                'role'=>'modal-remote',
-                                'title'=> 'Delete',
-                                'data-pjax'=>0,
-                                'class'=>'btn btn-danger',
-                                'data-request-method'=>"post",
-                                'data-confirm-title'=>"Are you sure?",
-                                'data-confirm-message'=>"Are you sure want to delete this packages",
-                              ])?>
-                        <?php } ?>
-                    </div>
-                   </div>
+            </div>
                 <?php Pjax::end(); ?>
             </div>
         </div>
      </div>
 </div>
+
 <hr>
 <?php } ?>
 <?php } ?>
@@ -188,8 +204,7 @@ foreach ($order_elements as $k => $parcel) {
 </div>
 <?php Modal::begin([
     "id"=>"ajaxCrudModal",
-    "footer"=>"",
-
+    "footer"=>"",// always need it for jquery plugin
 ])?>
 <?php Modal::end(); ?>
 <?php if ($edit_not_prohibited) {?>
@@ -230,7 +245,7 @@ if($createNewAddress){
     <script>
       $(document).ready(function() {
         setTimeout( "$(\'#open_add_order_address\').click();",200);
-        
+      })
     </script>
     ';
 }
