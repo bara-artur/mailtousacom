@@ -41,8 +41,8 @@ class DefaultController extends Controller
     public function actionCreateOrderBilling()
     {
       $order = Order::find()->where(['user_id'=>Yii::$app->user->id])->one();
-      $show_button =1;
-      if ($order) $show_button = 0;
+      $update_button =0;
+      if ($order) $update_button = 1;
 
       $model = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
       if(!$model){
@@ -52,7 +52,8 @@ class DefaultController extends Controller
       $request = Yii::$app->request;
       if($request->getIsPost()){
         if($model->load($request->post()) && $model->save()){
-          return $this->redirect(['addressusa']);
+            if ($update_button) return $this->redirect(['/']);
+            else return $this->redirect(['addressusa']);
         }
         \Yii::$app->getSession()->setFlash('error', 'Error saving. Check the correctness of filling');
 
@@ -61,7 +62,7 @@ class DefaultController extends Controller
       return $this->render('createorderbilling', [
         //'searchModel' => $searchModel,
         'model' => $model,
-        'show_button' => $show_button,
+        'update_button' => $update_button,
         //'mainBillingAddress' => $mainBillingAddress,
         //'state_names' => $state_names,
       ]);

@@ -19,5 +19,5 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= Html::a('Main menu', ['/'], ['class' => 'btn btn-success']) ?>
 <?= $this->render('_form', [
   'model' => $model,
-  'show_button' => $show_button,
+  'update_button' => $update_button,
 ]) ?>
