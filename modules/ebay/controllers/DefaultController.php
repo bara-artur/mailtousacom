@@ -15,7 +15,7 @@ use app\modules\user\models\User;
  */
 class DefaultController extends Controller
 {
-  public function actionGetOrder($id){
+  public function actionConnection($id){
     $order=Order::findOne($id);
 
     if($order->user_id!=\Yii::$app->user->identity->id){
@@ -29,6 +29,45 @@ class DefaultController extends Controller
     //Если нет то получаем новый токен
     if (strlen(\Yii::$app->user->identity->ebay_token)<30){
       return $this->getTocken($id);
+    }else{
+      return $this->redirect('/orderInclude/create-order/'.$id);
+    }
+
+  }
+
+  public function actionGetOrder($id){
+    $order=Order::findOne($id);
+
+    if($order->user_id!=\Yii::$app->user->identity->id){
+      throw new NotFoundHttpException('Order can editing only by creator.');
+    }
+
+    if($order->payment_state>0 || $order->order_status>1){
+      throw new NotFoundHttpException('You can not edit your order.');
+    }
+
+    $request = Yii::$app->request;
+    if($request->isPost){
+      if((int)$request->post('days')>0){
+        $user=User::findOne(\Yii::$app->user->identity->id);
+        $user->ebay_last_update=time()-(int)$request->post('days')*24*60*60;
+        if($user->save()){
+          return $this->getTocken($id);
+        };
+      }
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'The number of days should be a positive number.'
+        );
+    }
+
+    //Если нет то получаем новый токен
+    if (strlen(\Yii::$app->user->identity->ebay_token)<30){
+      return $this->render('view', [
+        'order_id' => $id
+      ]);
     };
 
     $model=\Yii::$app->getModule('ebay');;
@@ -44,7 +83,11 @@ class DefaultController extends Controller
 
     //Time with respect to GMT
     //by default retreive orders in last 7 day
-    $CreateTimeFrom = gmdate("Y-m-d\TH:i:s",((time()-60*60*24*7)||(\Yii::$app->user->identity->ebay_last_update))); //current time minus 30 minutes
+    $TimeFrom=
+      \Yii::$app->user->identity->ebay_last_update>100?
+        \Yii::$app->user->identity->ebay_last_update:
+        time()-60*60*24*7;
+    $CreateTimeFrom = gmdate("Y-m-d\TH:i:s",$TimeFrom); //current time minus 30 minutes
     $CreateTimeTo = gmdate("Y-m-d\TH:i:s");
 
     ///Build the request Xml string
@@ -110,8 +153,8 @@ class DefaultController extends Controller
         Yii::$app
           ->getSession()
           ->setFlash(
-            'error',
-            'Sorry No entries found in the Time period requested. Change CreateTimeFrom/CreateTimeTo and Try again'
+            'info',
+            'New orders were found'
           );
         return $this->redirect('/orderInclude/create-order/'.$id);
       }
@@ -120,7 +163,7 @@ class DefaultController extends Controller
         Yii::$app
           ->getSession()
           ->setFlash(
-            'error',
+            'info',
             'No Order Found.'
           );
         return $this->redirect('/orderInclude/create-order/'.$id);
@@ -165,7 +208,7 @@ class DefaultController extends Controller
       \Yii::$app
         ->getSession()
         ->setFlash(
-          'successful',
+          'success',
           'Check imported from eBay'
         );
       $user=User::findOne(\Yii::$app->user->identity->id);
