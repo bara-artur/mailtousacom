@@ -2,6 +2,9 @@
 
 namespace app\modules\orderInclude\controllers;
 
+use app\modules\payment\models\PaymentsList;
+use Codeception\Lib\Console\Message;
+use Faker\Provider\ar_SA\Payment;
 use Yii;
 use app\modules\order\models\Order;
 use app\modules\orderInclude\models\OrderInclude;
@@ -38,7 +41,7 @@ class DefaultController extends Controller
         ];
     }
 
-    /**
+/**
      * Lists all OrderInclude models.
      * @return mixed
      */
@@ -47,6 +50,7 @@ class DefaultController extends Controller
         $request = Yii::$app->request;
         if(!Yii::$app->user->isGuest && !$request->isAjax && $request->getIsGet()) {
             $address = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
+            $last_order = Order::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->orderBy('created_at DESC')->one();
             $address_id = $address->id;
             $model = new Order();
             $model->user_id = Yii::$app->user->id;
@@ -54,9 +58,19 @@ class DefaultController extends Controller
             $model->order_status = 0;
             $model->order_type = 0;
             $model->user_id_750 = $model->user_id + 750;
+            if ($last_order->userOrder_id != null) {
+                $tmp = strripos($last_order->userOrder_id, '_'); // ищем начало индекса номера заказа
+                if ($tmp) $tmp = substr($last_order->userOrder_id, $tmp+1); // если tmp не 0(не может быть заказа без юзера) и не false,  то берем индекс заказа
+                else $tmp = 0;
+                $model->userOrder_id = Yii::$app->user->id.'_'.((int)$tmp+1); // создаем новый номер
+            }
+            else {
+                $model->userOrder_id = Yii::$app->user->id.'_1'; // создаем первый номер
+            }
             $model->created_at = time();
             $model->transport_data = time();
             if($model->save()) {
+              $this->createLog($model->user_id,$model->id,"Draft");
               return $this->redirect('/orderInclude/create-order/'.$model->id);
             }
             //return ddd($model);
@@ -85,12 +99,36 @@ class DefaultController extends Controller
     //посылка = 1 строка order_element
     public function actionCreateOrder2($id){
       //получаем посылки в заказе
-      $model = OrderElement::find()->where(['order_id'=>$id])->all();
-
+      //  var_dump(Yii::$app->request);
+      //$totalPriceArray = [0];
+      $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
+      foreach($model as $percel)
+        {
+            $totalPrice = 0;
+            foreach ($percel->orderInclude as $ordInclude) {
+                $totalPrice += $ordInclude->price;
+            }
+            $totalPriceArray[] = $totalPrice;
+        }
+      $order = Order::find()->where(['id'=>$id])->one();
+      $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
+      $message_for_edit_prohibited_order = " ";
+      $edit_not_prohibited = 1;
+      if ($payment->status > 0) {
+          $edit_not_prohibited = 0;
+          $message_for_edit_prohibited_order = "Editing order prohibited, because the order has been paid.";
+      }
+      if ($order->order_status > 1) {
+          $edit_not_prohibited = 0;
+          $message_for_edit_prohibited_order = $message_for_edit_prohibited_order."<br>Editing order prohibited, because the order has been received at MailtoUSA facility.";
+      }
       return $this->render('createOrder', [
+        'edit_not_prohibited' => $edit_not_prohibited,
         'order_elements' => $model,
         'createNewAddress'=>!$model,
         'order_id'=>$id,
+        'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
+        'totalPriceArray' => $totalPriceArray,
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
@@ -149,7 +187,6 @@ class DefaultController extends Controller
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary ','type'=>"submit"])
-
                 ];
             }else if($model->load($request->post())&&($model->save())){
                 //$model->order_id = $request->post('order_id');
@@ -468,4 +505,9 @@ class DefaultController extends Controller
         }
         return parent::beforeAction($action);
     }
+
+    public function createLog($user_id,$order_id,$description){
+        \app\modules\logs\controllers\DefaultController::createLog($user_id,$order_id,$description);
+    }
 }
+

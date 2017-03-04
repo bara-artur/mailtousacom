@@ -140,7 +140,7 @@ class DefaultController extends Controller
                     'content'=>'<span class="text-success">Create packages success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
                 ];
-            }else{           
+            }else{
                 return [
                     'title'=> "Adding new packages",
                     'content'=>$this->renderAjax('create', [
@@ -168,7 +168,7 @@ class DefaultController extends Controller
     public function actionUpdate($id)
     {
         $request = Yii::$app->request;
-        $model = $this->findModel($id);       
+        $model = $this->findModel($id);
 
         if($request->isAjax){
             /*
@@ -194,7 +194,7 @@ class DefaultController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Change the recipient data #".$id,
+                    'title'=> "Chaaaa999ange the recipient data #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),

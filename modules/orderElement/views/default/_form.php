@@ -26,7 +26,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
-
+<?= $model->address_type?>
+<?= $model->company_name?>
    <div class="no_check"> <?= $form->field($model, 'address_type')->checkbox(['label' => '<span class="fa fa-check otst"></span> I will use company address', 'class'=>'show_company'])->label("") ?></div>
 
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'company_name form-control']) ?>

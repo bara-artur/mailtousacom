@@ -21,10 +21,13 @@ class Order extends \yii\db\ActiveRecord
     public static function getTextStatus(){
         return array(
             ''=>'All',
-            '0'=>'Text for status 0000',
-            '1'=>'Text for status 1111',
-            '2'=>'Text for status 2222',
-            '3'=>'Text for status 3333'
+            '0'=>'Draft',
+            '1'=>'Awaiting at MailtoUSA facility',
+            '2'=>'Received at MailtoUSA facility',
+            '3'=>'On route to USA border',
+            '4'=>'Transferred to XXX faclitity',
+            '5'=>'YYY status',
+            '6'=>'Returned at MailtoUSA facility',
         );
     }
 

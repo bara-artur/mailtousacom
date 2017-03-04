@@ -28,12 +28,12 @@ if (!Yii::$app->user->isGuest) {
         </div>
     </div>
     <div class="row">
-    <div class="col-md-12 scrit">
-        <?= $this->render('orderFilterForm', ['model' => $filterForm]);?>
-    </div>
+        <div class="col-md-12 scrit">
+            <?= $this->render('orderFilterForm', ['model' => $filterForm]);?>
+        </div>
     </div>
 
-        <div class="table-responsive">
+    <div class="table-responsive">
         <?= GridView::widget([
           'dataProvider' => $orders,
           'columns' => [
@@ -104,10 +104,10 @@ if (!Yii::$app->user->isGuest) {
               // 'transport_data',
             ['content' => function($data){
                 switch ($data->order_status) {
-                    case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-info']); break;
-                    case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-sm btn-danger']);break;
-                    case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-sm btn-warning']);break;
-                    case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-sm btn-info']);break;
+                    case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-success']); break;
+                    case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-danger']);break;
+                    case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-warning']);break;
+                    case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-info']);break;
                     default: return "Unknown status - ".$data->order_status;
                 }
             }],
