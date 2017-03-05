@@ -31,7 +31,11 @@ if (!Yii::$app->user->isGuest) {
 
   <div class="row">
     <div class="col-md-12">
-      <?= Html::a('<i class="fa fa-magic"></i> Create New Order', ['/orderInclude/create-order/'], ['class' => 'btn btn-success pull-right']) ?>
+        <?php if ($emptyOrder==null) { ?>
+             <?= Html::a('<i class="fa fa-magic"></i> Create New Order',['/orderInclude/create-order/'],['class' => 'btn btn-success pull-right'])?>
+        <?php } else { ?>
+        <?= Html::a('<i class="fa fa-magic"></i> Create New Order',['/orderInclude/create-order/'.$emptyOrder],['class' => 'btn btn-success pull-right']) ?>
+        <?php } ?>
       <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border','data-toggle' => 'collapse']) ?>
       <hr class="bottom_line">
     </div>

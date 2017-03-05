@@ -36,7 +36,7 @@ $submitOption = [
 <?php
 Pjax::begin();
 if($order_elements){
-foreach ($order_elements as $percel) {
+foreach ($order_elements as $k=>$percel) {
 ?>
 <div class="row">
     <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
@@ -94,9 +94,12 @@ foreach ($order_elements as $percel) {
                             <td><?=$i+1?></td>
                             <td><?=$item['name'];?></td>
                             <td><?=$item['price'];?></td>
-                            <td><?=Yii::$app->params['country'][$item['country']]?></td>
+                            <?php if (Yii::$app->params['country'][$item['country']] == '') { ?>
+                                <td><div class="has-error"><div class="help-block">Enter a country</div></div></td>
+                            <?php  } else {?>
+                                <td><?=Yii::$app->params['country'][$item['country']]?></td>
+                            <?php } ?>
                             <td><?=$item['quantity'];?></td>
-
                             <td><div class="but_tab_style">
                                 <?php if ($edit_not_prohibited) {?>
                                     <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit', ['/orderInclude/update?id='.$item['id']],
@@ -155,10 +158,10 @@ foreach ($order_elements as $percel) {
                         <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
                         <input type="hidden" name = "order_id" value=<?=$order_id?>>
                         <p><b>Cost of delivery : </b>
-                            <span id="results">
+                            <span id="results resInd<?=$k?>">
                                 <?php
-                                    if($parcel->weight>0) {
-                                        $ParcelPrice = ParcelPrice::widget(['weight' => $parcel->weight]);
+                                    if($percel->weight>0) {
+                                        $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
                                         if ($ParcelPrice != false) {
                                             $ParcelPrice = '' . $ParcelPrice . ' $ (without tax)';
                                         } else {

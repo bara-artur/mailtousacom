@@ -3,6 +3,7 @@
 namespace app\modules\order\models;
 
 use Yii;
+use app\modules\orderElement\models\OrderElement;
 
 /**
  * This is the model class for table "order".
@@ -45,6 +46,10 @@ class Order extends \yii\db\ActiveRecord
         return 'order';
     }
 
+    public function getOrderElement()
+    {
+        return $this->hasMany(OrderElement::className(),['order_id' => 'id']);
+    }
     /**
      * @inheritdoc
      */

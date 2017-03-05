@@ -352,9 +352,14 @@ class DefaultController extends Controller
           return $this->redirect('/orderInclude/create-order/' . $id);
         }
         $this_weight = 0;
+        $msg = '123';
+          $no_country = false;
         foreach ($pac->includes_packs as $pack) {
           $total['price'] += $pack['price'] * $pack['quantity'];
           $total['quantity'] += $pack['quantity'];
+          if (($pack['country']=='')||($pack['country'] >= count(Yii::$app->params['country']))) {
+              $no_country=true;
+          }
         }
         $this_weight =  $pac->weight;
         $total['weight']+=$this_weight;
@@ -362,6 +367,15 @@ class DefaultController extends Controller
         $total['weight_lb']=floor($total['weight']);
         $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
 
+        if($no_country==true){
+            Yii::$app
+                ->getSession()
+                ->setFlash(
+                    'error',
+                    'Enter a country in parcel-table'.$msg
+                );
+            return $this->redirect('/orderInclude/create-order/' . $id);
+        }
         if($this_weight>$max_weight){
           Yii::$app
             ->getSession()

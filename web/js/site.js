@@ -60,12 +60,33 @@ $(document).ready(function() {
   });
 
   $('.go_to_order').on('click',function(){
-    if (!valid_order_create()){
+    all_lb =  document.getElementsByName('lb');
+    all_valid = true;
+    for (i=0;i<all_lb.length;i++) {
+      if (valid_order_create(all_lb[i]) == false) all_valid = false;
+    }
+    if (document.getElementsByClassName('has-error').length!=0) all_valid = false;
+
+    if (!all_valid){
       gritterAdd('Error','Missing a required field. ','gritter-danger');
       return false;
     }
     return true;
   })
+
+  $(".reset_filter").on("click", function (){
+    event.preventDefault();
+    elements = document.getElementsByTagName('input');
+    for (var i = 0; i < elements.length; i++) {
+      var input = elements[i];
+      if (input.type != 'hidden') input.value = '';
+    }
+    selects = document.getElementsByTagName('select');
+    for (var i = 0; i < selects.length; i++) {
+      var select = selects[i];
+      if (input.type != 'hidden') select.value = '';
+    }
+  });
 });
 
 function show_err(el,txt){
@@ -80,6 +101,7 @@ function hide_err(el){
 }
 function valid_order_create(elemForm){
   valid=true;
+
   lb=$(elemForm).parents('form:first').find('[name=lb]');
   oz=$(elemForm).parents('form:first').find('[name=oz]');
 
@@ -115,6 +137,7 @@ function valid_order_create(elemForm){
   els=$(elemForm).parents('form:first').find('[name=track_number]');
   //for(i=0;i<els.length;i++){
     el=$(els).closest('.label_valid');
+
     if((!els.val()) ||  (els.val().length<4)){
       valid=false;
       show_err(el,"Track number is required.");
@@ -122,8 +145,6 @@ function valid_order_create(elemForm){
       hide_err(el);
     }
  // }
-
-
   return valid;
 }
 
@@ -381,3 +402,4 @@ function init_order_border(){
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
+
