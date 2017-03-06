@@ -29,8 +29,8 @@ if (!Yii::$app->user->isGuest) {
 
         </div>
                 <div class="col-xs-7 hid">
-                    <?= Html::a('<i class="icon-metro-location"></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-info-border ']) ?>
-                    <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-info-border']) ?>
+                    <?= Html::a('<i class="glyphicon glyphicon-pencil"></i></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-science-blue']) ?>
+                    <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-science-blue']) ?>
                 </div>
             <?php } ?>
         <div class="col-xs-3 pull-right">
@@ -118,7 +118,7 @@ if (!Yii::$app->user->isGuest) {
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
                     switch ($data->order_status) {
-                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-science-blue']); break;
+                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-info']); break;
                         case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-sm btn btn-danger']);break;
                         case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-sm btn-warning']);break;
                         case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-sm btn-info']);break;

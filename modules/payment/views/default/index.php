@@ -5,14 +5,25 @@ use app\modules\payment\models\PaymentsList;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\payment\models\PaymentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = 'Personal Payments Lists';
+$this->title = 'Personal Payments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="payments-list-index">
-
-  <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
   <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="row">
+        <div class="col-xs-2">
+            <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+
+        </div>
+    </div>
+    <hr class="bottom_line">
+    <div class="row">
+        <div class="col-md-12 scrit margin-bottom-10">
   <?= $this->render('paymentFilterForm', ['model' => $filterForm]);?>
+        </div>
+    </div>
+    <div class="table-responsive">
   <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
@@ -58,4 +69,5 @@ $this->params['breadcrumbs'][] = $this->title;
       ],
     ],
   ]); ?>
+    </div>
 </div>
