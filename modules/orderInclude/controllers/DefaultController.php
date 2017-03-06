@@ -102,6 +102,7 @@ class DefaultController extends Controller
       //получаем посылки в заказе
       //  var_dump(Yii::$app->request);
       //$totalPriceArray = [0];
+      $totalPriceArray=[];
       $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
       foreach($model as $percel)
         {
@@ -115,7 +116,7 @@ class DefaultController extends Controller
       $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
       $message_for_edit_prohibited_order = " ";
       $edit_not_prohibited = 1;
-      if ($payment->status > 0) {
+      if ($payment['status'] > 0) {
           $edit_not_prohibited = 0;
           $message_for_edit_prohibited_order = "Editing order prohibited, because the order has been paid.";
       }

@@ -75,7 +75,9 @@ class SiteController extends Controller
                 if (count($order->orderElement)==0) $emptyOrder =$order->id;
             }
         }
-
+        $query['OrderSearch'] = Yii::$app->request->queryParams;
+        $time_to['created_at_to'] = null;
+        $time_to['transport_date_to'] = null;
 // Загружаем фильтр из формы
         $filterForm = new OrderFilterForm();
         if(Yii::$app->request->post()) {
@@ -86,12 +88,14 @@ class SiteController extends Controller
             $time_to += ['transport_date_to' => $filterForm->transport_data_to];
         }
 
+
         $orderSearchModel = new OrderSearch();
         //$query = Yii::$app->request->queryParams;
         //if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['client_id' => Yii::$app->user->id];
         //else $query['OrderSearch'] = ['client_id' => Yii::$app->user->id];
-
-        $orders = $orderSearchModel->search($query,$time_to);
+        $searchModel = new OrderSearch();
+        $orders = $searchModel->search($query,$time_to);
+        //$orders = $orderSearchModel->search(null,null);
 
         return $this->render('index',[
             'orders' => $orders,

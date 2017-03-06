@@ -35,7 +35,7 @@ class Order extends \yii\db\ActiveRecord
     public static function orderStatusText($param)
     {
         $textForStatus =  Order::getTextStatus();
-        if ($param < count($textForStatus)) return  $textForStatus[$param];
+        if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown status';
     }
     /**
