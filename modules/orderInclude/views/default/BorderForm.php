@@ -61,18 +61,18 @@ $form = ActiveForm::begin([
 <div class="col-md-12 padding-top-10 text-center text_certif" >
   <?= $form->field($model, 'agreement')->checkbox(['label' => '<span class="fa fa-check otst"></span> I certify..,my undefstanding..Im responsible for cross-bording, law, etc'])->label("") ?>
 
+  <?=Html::a('Print Border Form ABC123', ['/orderInclude/border-form-pdf/'.$order_id],
+      [
+          'class'=>'btn btn-info text-center on_agreement',
+          'target'=>'_blank',
+          'data-toggle'=>'tooltip',
+          'title'=>'Will open the generated PDF file in a new window'
+      ])?>
 </div>
 </div>
 <hr>
 <div class="form-group">
-<?=Html::a('Print Border Form ABC123', ['/orderInclude/border-form-pdf/'.$order_id],
-  [
-    'class'=>'btn btn-info on_agreement',
-    'target'=>'_blank',
-    'data-toggle'=>'tooltip',
-    'title'=>'Will open the generated PDF file in a new window'
-  ])?>
-
+    <?=Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/create-order/'.$order_id], ['class' => 'btn btn-default pull-left']) ?>
 
   <?= Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i> ', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-success pull-right']) ?>
 </div>

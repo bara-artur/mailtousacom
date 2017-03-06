@@ -122,7 +122,7 @@ if($order_elements){
                             <div class="row">
                                 <div class="col-md-12">
                                     <h5 class="total_package padding-top-10">Total</h5>
-                                    <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h6 class="bg-warning fg-white padding-10 font-weight-600 letter-spacing03">Attention ! Restriction in <?= Yii::$app->params['parcelMaxPrice'] ?>$ on total price of items. Exceeded of total price in parcel.</h6> <?php } ?>
+                                    <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h6 class="bg-warning fg-white padding-10 font-weight-600 letter-spacing03">Attention ! Restriction in <?= Yii::$app->params['parcelMaxPrice'] ?>$ on total price of items. Exceeded of total price in parcel. <i class="fa fa-warning pull-right"></i></h6> <?php } ?>
                                     <form id="lb-oz-tn-form" title="" method="post">
                                         <div class="label_valid col-md-6 padding-off-left padding-off-right">
                                             <div class="form-control-addon-fill">
