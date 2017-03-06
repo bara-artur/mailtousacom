@@ -24,16 +24,16 @@ if (!Yii::$app->user->isGuest) {
     <div class="row">
 
             <?php if ($orders) { ?>
-        <div class="col-xs-4">
+        <div class="col-xs-2">
                 <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
 
         </div>
-                <div class="col-xs-4 hid text-center">
-                    <?= Html::a('<i class="icon-metro-location"></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-science-blue-border ']) ?>
-                    <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-science-blue-border']) ?>
+                <div class="col-xs-7 hid">
+                    <?= Html::a('<i class="icon-metro-location"></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-info-border ']) ?>
+                    <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-info-border']) ?>
                 </div>
             <?php } ?>
-        <div class="col-xs-4 pull-right">
+        <div class="col-xs-3 pull-right">
             <?= Html::a('<i class="fa fa-magic"></i> Create new order', ['/orderInclude/create-order'], ['class' => 'btn btn-success pull-right']) ?>
         </div>
 

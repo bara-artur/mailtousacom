@@ -190,7 +190,7 @@ a.desc:after {
     .navbar-nav > li > a {
         padding-top: 5px;
         padding-bottom: 5px;
-        margin-bottom: 6.5px;
+        margin-bottom: 4.5px;
         margin-top: 8.5px;
         margin-right: 8px;
     }
@@ -663,8 +663,8 @@ hr.podes
     padding-left: 20px;
 }
 
-@media (max-width: 768px) {
-    .col-xs-4.hid.text-center {
+@media (max-width: 750px) {
+    .hid {
         display: none;
     }
 }
