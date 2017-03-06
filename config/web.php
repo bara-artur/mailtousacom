@@ -71,6 +71,8 @@ $config = [
                 'user/default/<action>'=>'404',
                 'user/user/<action>'=>'404',
                 'user/user/<action>/<action2>'=>'404',
+                'ebay/default/<action>/<action2>'=>'404',
+                'ebay/default/<action>'=>'404',
                 //получение города по стране
                 'city/get/<id:\d+>' => 'city/get',
                 //Взаимодействия с пользователем на сайте
@@ -98,6 +100,9 @@ $config = [
 
                 'payment/<action:order>/<id:\d+>'=>'payment/default/<action>/',
                 'payment/<action:finish>'=>'payment/default/<action>/',
+
+                'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',
+                'ebay/<action:callback>'=>'ebay/default/<action>/',
             ],
         ],
     ],
@@ -137,6 +142,11 @@ $config = [
           'log.FileName'           => '@runtime/logs/paypal.log',
           'log.LogLevel'           => 'FINE', // 'FINE','INFO','WARN','ERROR';
         ]
+      ],
+      'ebay' => [
+        'class'        => 'app\modules\ebay\Module',
+        'mode'         =>'sandbox',
+        'config'       => $personal['ebay']
       ],
       'tariff' => [
         'class' => 'app\modules\tariff\Module',

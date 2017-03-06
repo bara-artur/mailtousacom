@@ -48,4 +48,14 @@ class Log extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
+
+  public function createLog($user_id,$order_id,$description){
+    $model = new Log();
+    $model->user_id = $user_id;
+    $model->order_id = $order_id;
+    $model->description = $description;
+    $model->created_at = time();
+    $model->save();
+
+  }
 }

@@ -32,7 +32,7 @@ tests/_support/_generated
 
 db.php
 personal.php
-params.php
+#params.php
 /vendor_/
 /web/user_file/
 /web/assets/*

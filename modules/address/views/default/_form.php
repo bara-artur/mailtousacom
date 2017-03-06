@@ -19,7 +19,14 @@ $state_names = ArrayHelper::map($states,'name','name');
       'id'=>'created_address',
       'validateOnChange' => true,
     ]); ?>
-    <h4 class="modernui-neutral2 margin-bottom-10">Please add your billing address <font class="text-danger">*</font> <i class="icon-metro-location"></i></h4>
+    <h4 class="modernui-neutral2 margin-bottom-10">
+        <?php if ($update_button==0) { ?>
+            Please add your billing address
+        <?php } else { ?>
+            Update billing address
+        <?php } ?>
+        <font class="text-danger">*</font> <i class="icon-metro-location"></i>
+    </h4>
     <div class="row">
         <div class="col-md-6">
         <?= $form->field($model, 'first_name')->textInput(['maxlength' => true, 'class'=>'first_name form-control']) ?>
@@ -49,8 +56,10 @@ $state_names = ArrayHelper::map($states,'name','name');
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">
-          <?php if ($show_button) { ?>
-	        <?= Html::submitButton('NEXT<i class="icon-metro-arrow-right-5"></i>', ['class' => $model->isNewRecord ? 'btn btn-success push-down-margin-thin width_but pull-right' : 'btn btn-success push-down-margin-thin width_but pull-right']) ?>
+          <?php if ($update_button==0) { ?>
+	                  <?= Html::submitButton('NEXT<i class="icon-metro-arrow-right-5"></i>', ['class' => $model->isNewRecord ? 'btn btn-success push-down-margin-thin width_but pull-right' : 'btn btn-success push-down-margin-thin width_but pull-right']) ?>
+          <?php } else {?>
+                    <?= Html::submitButton('Save', ['class' => $model->isNewRecord ? 'btn btn-success push-down-margin-thin width_but pull-right' : 'btn btn-success push-down-margin-thin width_but pull-right']) ?>
           <?php } ?>
  	    </div>
 	<?php } ?>

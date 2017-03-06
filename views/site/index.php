@@ -19,10 +19,23 @@ $this->title = 'Shipping to USA and Canada';
 <?php
 if (!Yii::$app->user->isGuest) {
     ?>
+    <p>
+        <?= Html::a('Create Order', ['/orderInclude/create-order'], ['class' => 'btn btn-success']) ?>
+        <?php if ($orders) { ?>
+            <?= Html::a('Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-info']) ?>
+            <?= Html::a('USA Address', ['/address/addressusa'], ['class' => 'btn btn-info']) ?>
+        <?php } ?>
+    </p>
+
     <h4 class="modernui-neutral2">My Orders</h4>
+
     <div class="row">
         <div class="col-md-12">
-            <?= Html::a('<i class="fa fa-magic"></i> Create New Order', ['/orderInclude/create-order/'], ['class' => 'btn btn-success pull-right']) ?>
+            <?php if ($emptyOrder==null) { ?>
+                <?= Html::a('<i class="fa fa-magic"></i> Create New Order',['/orderInclude/create-order/'],['class' => 'btn btn-success pull-right'])?>
+            <?php } else { ?>
+                <?= Html::a('<i class="fa fa-magic"></i> Create New Order',['/orderInclude/create-order/'.$emptyOrder],['class' => 'btn btn-success pull-right']) ?>
+            <?php } ?>
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border','data-toggle' => 'collapse']) ?>
             <hr class="bottom_line">
         </div>
@@ -33,8 +46,11 @@ if (!Yii::$app->user->isGuest) {
         </div>
     </div>
 
+
     <div class="table-responsive">
-        <?= GridView::widget(['dataProvider' => $orders, 'columns' => [
+        <?= GridView::widget([
+            'dataProvider' => $orders,
+            'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'id',
                 ['attribute'=> 'order_status',
@@ -112,5 +128,4 @@ if (!Yii::$app->user->isGuest) {
             ],
         ]); ?>
     </div>
-    <hr>
 <?php }?>

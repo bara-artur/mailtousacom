@@ -68,6 +68,14 @@ class SiteController extends Controller
             return $this->redirect(['/address/create', 'first_address'=>'1']);
         }
 
+        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
+        $emptyOrder = null;
+        foreach ($orderTable as $i=>$order){
+            if ($emptyOrder==null){
+                if (count($order->orderElement)==0) $emptyOrder =$order->id;
+            }
+        }
+
 // Загружаем фильтр из формы
         $filterForm = new OrderFilterForm();
         if(Yii::$app->request->post()) {
@@ -89,6 +97,7 @@ class SiteController extends Controller
             'orders' => $orders,
             'searchModel' => $orderSearchModel,
             'filterForm' => $filterForm,
+            'emptyOrder' => $emptyOrder
         ]);
     }
 
