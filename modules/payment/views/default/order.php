@@ -29,24 +29,36 @@ $form = ActiveForm::begin([
   'validateOnChange' => true,
 ]);
 ?>
-
-<p>
+<h4 class="modernui-neutral2">Order payment</h4>
+<div class="row">
+<div class="col-md-offset-4 col-md-4">
+  <div class="trans_text text-center font-weight-600">
   Please pay your MailToUSA fees
-</p>
-<p>
-  Sum to pay <?=number_format($total['sum']+$total['gst']+$total['qst'],2);?>$ (Included vat <?=number_format($total['gst']+$total['qst']);?>$)
-</p>
+  </div>
+    <div class="trans_text text-center">
+        Sum to pay: <span class="trans_count"><?=number_format($total['sum']+$total['gst']+$total['qst'],2);?>$</span>&nbsp;&nbsp;(included vat <?=number_format($total['gst']+$total['qst']);?>$)
+</div>
+    <hr class="podes">
+<div class="col-md-offset-2 trans_text custom-radio">
 <?= $form->field($model, 'payment_type')->radioList(
   [
-    1 => 'PayPal',
-    2 => 'I will pay at warehouse'
+    1 => '<span></span>&nbsp;&nbsp;PayPal',
+    2 => '<span></span>&nbsp;&nbsp;I will pay at warehouse'
   ]
 );
 ?>
-
-<div class="form-group">
-  <?= Html::submitButton('Next', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 </div>
+</div>
+    </div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+<div class="form-group">
+    <?=Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/'.$order_id], ['class' => 'btn btn-default pull-left']) ?>
 
+  <?= Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success pull-right']) ?>
+</div>
+</div>
+</div>
 
 <?php ActiveForm::end(); ?>

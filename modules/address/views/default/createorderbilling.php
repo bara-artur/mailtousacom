@@ -16,7 +16,6 @@ $this->title = 'Billing address';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<?= Html::a('Main menu', ['/'], ['class' => 'btn btn-success']) ?>
 <?= $this->render('_form', [
   'model' => $model,
   'update_button' => $update_button,
