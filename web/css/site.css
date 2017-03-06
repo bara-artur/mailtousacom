@@ -650,8 +650,13 @@ hr.podes
 }
 .has-success .radio{color:#565656;}
 
-/*.field-order-payment_type label.control-label{text-align: center;width:100%;}*/
+.field-order-payment_type label.control-label
+{
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
 .custom-radio label input:checked+span:before {
     top: 4.2px;
     background-color: #199900;
 }
+#order-payment_type .radio{padding-left: 20px;}
