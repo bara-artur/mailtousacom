@@ -635,3 +635,9 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
 border: 1px solid #eee;
 margin: 0px;
 }
+/*06032017*/
+.letter-spacing03
+{
+    letter-spacing: 0.3px !important;
+    font-size: 18px;
+}

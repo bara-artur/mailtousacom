@@ -11,16 +11,12 @@ use yii\bootstrap\ActiveForm;
 use yii\widgets\DetailView;
 use app\components\ParcelPrice;
 use kartik\select2\Select2;
-
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Order';
 $this->params['breadcrumbs'][] = $this->title;
-
 CrudAsset::register($this);
-
 $submitOption = [
     'class' => 'btn btn-lg btn-success'
 ];
@@ -71,7 +67,7 @@ if($order_elements){
             </div>
 
             <div class="order-include-index col-md-9 border_left">
-                <h5 class="order_include">What is inside in shipping package</h5>
+                <h5 class="order_include">What is inside in shipping parcel</h5>
                 <div id="ajaxCrudDatatable_<?=$percel-id;?>">
                     <div class="" id="crud-datatable-pjax">
                         <?php Pjax::begin(); ?>
@@ -126,7 +122,7 @@ if($order_elements){
                             <div class="row">
                                 <div class="col-md-12">
                                     <h5 class="total_package padding-top-10">Total</h5>
-                                    <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
+                                    <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h6 class="bg-warning fg-white padding-10 font-weight-600 letter-spacing03">Attention ! Restriction in <?= Yii::$app->params['parcelMaxPrice'] ?>$ on total price of items. Exceeded of total price in parcel.</h6> <?php } ?>
                                     <form id="lb-oz-tn-form" title="" method="post">
                                         <div class="label_valid col-md-6 padding-off-left padding-off-right">
                                             <div class="form-control-addon-fill">
@@ -157,7 +153,8 @@ if($order_elements){
                             <hr class="bor_bottom">
                             <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
                             <input type="hidden" name = "order_id" value=<?=$order_id?>>
-                            <p><b>Cost of delivery : </b>
+                            <div class="row">
+                            <div class="col-md-6 cost_del">Cost of delivery :
                                 <span id="results resInd<?=$k?>">
                                 <?php
                                 if($percel->weight>0) {
@@ -172,7 +169,8 @@ if($order_elements){
                                 }
                                 echo $ParcelPrice;
                                 ?>
-                            </span></div>
+                            </span>
+                            </div>
                         </form>
 
 
@@ -190,14 +188,14 @@ if($order_elements){
                                     'data-confirm-message'=>"Are you sure want to delete this packages",
                                 ])?>
 
-
                         </div>
+
                     </div>
                 </div>
                 <?php Pjax::end(); ?>
             </div>
         </div>
-        </div>
+            </div>
         </div>
 
         <hr>
@@ -237,12 +235,10 @@ echo '
         $(".show_modal").on("click", function() {
           $("#ajaxCrudModal").attr("tabindex",-1);
         })
-
       });
   
     </script>
 ';
-
 if($createNewAddress){
     echo '
     <script>
