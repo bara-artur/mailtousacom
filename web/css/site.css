@@ -312,7 +312,7 @@ a.desc:after {
 }
 .btn_all{width:100%;}
 .navbar {
-    border: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
     background-color: #FFFFFF;
 
 }
@@ -652,11 +652,19 @@ hr.podes
 
 .field-order-payment_type label.control-label
 {
-    margin-top: 10px;
-    margin-bottom: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
 }
 .custom-radio label input:checked+span:before {
     top: 4.2px;
     background-color: #199900;
 }
-#order-payment_type .radio{padding-left: 20px;}
+#order-payment_type .radio{
+    padding-left: 20px;
+}
+
+@media (max-width: 768px) {
+    .col-xs-4.hid.text-center {
+        display: none;
+    }
+}

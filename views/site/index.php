@@ -19,27 +19,26 @@ $this->title = 'Shipping to USA and Canada';
 <?php
 if (!Yii::$app->user->isGuest) {
     ?>
-    <p>
-        <?= Html::a('Create Order', ['/orderInclude/create-order'], ['class' => 'btn btn-success']) ?>
-        <?php if ($orders) { ?>
-            <?= Html::a('Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-info']) ?>
-            <?= Html::a('USA Address', ['/address/addressusa'], ['class' => 'btn btn-info']) ?>
-        <?php } ?>
-    </p>
-
     <h4 class="modernui-neutral2">My Orders</h4>
 
     <div class="row">
-        <div class="col-md-12">
-            <?php if ($emptyOrder==null) { ?>
-                <?= Html::a('<i class="fa fa-magic"></i> Create New Order',['/orderInclude/create-order/'],['class' => 'btn btn-success pull-right'])?>
-            <?php } else { ?>
-                <?= Html::a('<i class="fa fa-magic"></i> Create New Order',['/orderInclude/create-order/'.$emptyOrder],['class' => 'btn btn-success pull-right']) ?>
-            <?php } ?>
-            <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border','data-toggle' => 'collapse']) ?>
-            <hr class="bottom_line">
+
+            <?php if ($orders) { ?>
+        <div class="col-xs-4">
+                <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+
         </div>
-    </div>
+                <div class="col-xs-4 hid text-center">
+                    <?= Html::a('<i class="icon-metro-location"></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-science-blue-border ']) ?>
+                    <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-science-blue-border']) ?>
+                </div>
+            <?php } ?>
+        <div class="col-xs-4 pull-right">
+            <?= Html::a('<i class="fa fa-magic"></i> Create new order', ['/orderInclude/create-order'], ['class' => 'btn btn-success pull-right']) ?>
+        </div>
+
+        </div>
+    <hr class="bottom_line">
     <div class="row">
         <div class="col-md-12 scrit">
             <?= $this->render('orderFilterForm', ['model' => $filterForm]);?>
@@ -113,15 +112,16 @@ if (!Yii::$app->user->isGuest) {
                     },
                     'format'=>['decimal',2]
                 ],
+
                 // 'order_status',
                 // 'created_at',
                 // 'transport_data',
-                ['content' => function($data){
+                ['attribute' => 'Action','content' => function($data){
                     switch ($data->order_status) {
-                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-info']); break;
-                        case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-danger']);break;
-                        case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-warning']);break;
-                        case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-info']);break;
+                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-science-blue']); break;
+                        case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-sm btn btn-danger']);break;
+                        case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-sm btn-warning']);break;
+                        case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-sm btn-info']);break;
                         default: return "Unknown status - ".$data->order_status;
                     }
                 }],
