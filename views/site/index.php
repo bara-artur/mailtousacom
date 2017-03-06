@@ -34,84 +34,82 @@ if (!Yii::$app->user->isGuest) {
     </div>
 
     <div class="table-responsive">
-        <?= GridView::widget([
-          'dataProvider' => $orders,
-          'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            ['attribute'=> 'order_status',
-              'content' => function($data){
-                  return $data::orderStatusText($data->order_status);
-              },
+        <?= GridView::widget(['dataProvider' => $orders, 'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'id',
+                ['attribute'=> 'order_status',
+                    'content' => function($data){
+                        return $data::orderStatusText($data->order_status);
+                    },
+                ],
+                ['attribute'=> 'created_at',
+                    'content'=> function($data){
+                        if ($data->created_at == 0) return '-';
+                        else return date(\Yii::$app->params['data_time_format_php'],$data->created_at);
+                    },
+                    'format' => 'raw',
+                ],
+                ['attribute'=> 'transport_data',
+                    'content'=> function($data){
+                        if ($data->transport_data == 0) return '-';
+                        else return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
+                    }],
+                ['attribute'=> 'payment_type',
+                    'content' => function($data){
+                        return PaymentsList::getPayStatus()[$data->payment_type];
+                    },
+                    'filter' => PaymentsList::getPayStatus(),
+                ],
+                ['attribute'=> 'payment_state',
+                    'content' => function($data){
+                        return PaymentsList::getTextStatus()[$data->payment_state];
+                    },
+                ],
+                [
+                    'attribute' => 'price',
+                    'content'=> function($data){
+                        if ($data->price == 0) return '-';
+                        else return number_format($data->price,2);
+                    },
+                    'format'=>['decimal',2]
+                ],
+                [
+                    'attribute' => 'qst',
+                    'content'=> function($data){
+                        if ($data->qst == 0) return '-';
+                        else return number_format($data->qst,2);
+                    },
+                    'format'=>['decimal',2]
+                ],
+                [
+                    'attribute' => 'gst',
+                    'content'=> function($data){
+                        if ($data->gst == 0) return '-';
+                        else return number_format($data->gst,2);
+                    },
+                    'format'=>['decimal',2]
+                ],
+                [
+                    'attribute' => 'total',
+                    'content'=> function($data){
+                        if ($data->gst == 0) return '-';
+                        else return number_format($data->gst+$data->qst+$data->price,2);
+                    },
+                    'format'=>['decimal',2]
+                ],
+                // 'order_status',
+                // 'created_at',
+                // 'transport_data',
+                ['content' => function($data){
+                    switch ($data->order_status) {
+                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-info']); break;
+                        case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-danger']);break;
+                        case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-warning']);break;
+                        case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-info']);break;
+                        default: return "Unknown status - ".$data->order_status;
+                    }
+                }],
             ],
-            ['attribute'=> 'created_at',
-              'content'=> function($data){
-                  if ($data->created_at == 0) return '-';
-                  else return date(\Yii::$app->params['data_time_format_php'],$data->created_at);
-              },
-              'format' => 'raw',
-            ],
-            ['attribute'=> 'transport_data',
-              'content'=> function($data){
-                  if ($data->transport_data == 0) return '-';
-                  else return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
-              }],
-            ['attribute'=> 'payment_type',
-              'content' => function($data){
-                  return PaymentsList::getPayStatus()[$data->payment_type];
-              },
-              'filter' => PaymentsList::getPayStatus(),
-            ],
-            ['attribute'=> 'payment_state',
-              'content' => function($data){
-                  return PaymentsList::getTextStatus()[$data->payment_state];
-              },
-            ],
-            [
-              'attribute' => 'price',
-              'content'=> function($data){
-                  if ($data->price == 0) return '-';
-                  else return number_format($data->price,2);
-              },
-              'format'=>['decimal',2]
-            ],
-            [
-              'attribute' => 'qst',
-              'content'=> function($data){
-                  if ($data->qst == 0) return '-';
-                  else return number_format($data->qst,2);
-              },
-              'format'=>['decimal',2]
-            ],
-            [
-              'attribute' => 'gst',
-              'content'=> function($data){
-                  if ($data->gst == 0) return '-';
-                  else return number_format($data->gst,2);
-              },
-              'format'=>['decimal',2]
-            ],
-            [
-              'attribute' => 'total',
-              'content'=> function($data){
-                if ($data->gst == 0) return '-';
-                else return number_format($data->gst+$data->qst+$data->price,2);
-              },
-              'format'=>['decimal',2]
-            ],
-              // 'order_status',
-              // 'created_at',
-              // 'transport_data',
-            ['content' => function($data){
-                switch ($data->order_status) {
-                    case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-success']); break;
-                    case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-danger']);break;
-                    case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-warning']);break;
-                    case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-info']);break;
-                    default: return "Unknown status - ".$data->order_status;
-                }
-            }],
-          ],
         ]); ?>
     </div>
     <hr>
