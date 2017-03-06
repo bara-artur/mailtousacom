@@ -649,31 +649,9 @@ hr.podes
     border-top: 1px dotted #ccc;
 }
 .has-success .radio{color:#565656;}
-input[type=radio] {
-    display: none;
-}
-.radio label:before {
-    content: "";
-    display: inline-block;
 
-    width: 16px;
-    height: 16px;
-
-    margin-right: 10px;
-    position: absolute;
-    left: 0;
-    bottom: 1px;
-    background-color: #eeeeee;
-    box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+/*.field-order-payment_type label.control-label{text-align: center;width:100%;}*/
+.custom-radio label input:checked+span:before {
+    top: 4.2px;
+    background-color: #199900;
 }
-.radio label:before {
-    border-radius: 8px;
-}
-.radio input[type=radio] + .radio label::before {
-    content: "\2022";
-    color: #f3f3f3 ;
-    font-size: 30px;
-    text-align: center;
-    line-height: 18px;
-}
-.field-order-payment_type label.control-label{text-align: center;width:100%;}

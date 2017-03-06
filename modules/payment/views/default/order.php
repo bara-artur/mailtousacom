@@ -39,14 +39,15 @@ $form = ActiveForm::begin([
         Sum to pay: <span class="trans_count"><?=number_format($total['sum']+$total['gst']+$total['qst'],2);?>$</span>&nbsp;&nbsp;(included vat <?=number_format($total['gst']+$total['qst']);?>$)
 </div>
     <hr class="podes">
-
+<div class="col-md-offset-2 custom-radio">
 <?= $form->field($model, 'payment_type')->radioList(
   [
-    1 => 'PayPal',
-    2 => 'I will pay at warehouse'
+    1 => '<span></span>&nbsp;&nbsp;PayPal',
+    2 => '<span></span>&nbsp;&nbsp;I will pay at warehouse'
   ]
 );
 ?>
+</div>
 </div>
     </div>
 <hr>
