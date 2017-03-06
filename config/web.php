@@ -73,6 +73,8 @@ $config = [
                 'user/user/<action>/<action2>'=>'404',
                 'ebay/default/<action>/<action2>'=>'404',
                 'ebay/default/<action>'=>'404',
+                '/site/<action>'=>'404',
+                '/'=>'/site/index',
                 //получение города по стране
                 'city/get/<id:\d+>' => 'city/get',
                 //Взаимодействия с пользователем на сайте
