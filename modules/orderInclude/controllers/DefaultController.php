@@ -487,20 +487,23 @@ class DefaultController extends Controller
     $total['weight_lb']=floor($total['weight']);
     $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
 
+    $address=Address::findOne($order->billing_address_id);
+
     $content = $this->renderPartial('borderFormPdf',[
       'order_elements' => $model,
       'order'=>$order,
       'order_id'=>$id,
       'total'=>$total,
+      'address'=>$address
     ]);
 
-    echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
+    //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
     //return $content;
     // setup kartik\mpdf\Pdf component
     $pdf = new Pdf([
       'content' => $content,
       //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
-      //'cssFile' => 'app\web\css\pdf_CBP_Form_7533.css',
+      'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
       'cssInline' => '.kv-heading-1{font-size:180px}',
       'options' => ['title' => 'CBP Form 7533 for order №'.$id],
       'methods' => [

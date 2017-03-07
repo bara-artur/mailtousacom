@@ -69,12 +69,6 @@ if (!Yii::$app->user->isGuest) {
                         if ($data->transport_data == 0) return '-';
                         else return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
                     }],
-                ['attribute'=> 'payment_type',
-                    'content' => function($data){
-                        return PaymentsList::getPayStatus()[$data->payment_type];
-                    },
-                    'filter' => PaymentsList::getPayStatus(),
-                ],
                 ['attribute'=> 'payment_state',
                     'content' => function($data){
                         return PaymentsList::getTextStatus()[$data->payment_state];
