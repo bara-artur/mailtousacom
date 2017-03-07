@@ -29,30 +29,30 @@ $state_names = ArrayHelper::map($states,'name','name');
     </h4>
     <div class="row">
         <div class="col-md-6">
-        <?= $form->field($model, 'first_name')->textInput(['maxlength' => true, 'class'=>'first_name form-control']) ?>
+        <?= $form->field($model, 'first_name')->textInput(['maxlength' => true, 'class'=>'first_name form-control letters']) ?>
         </div>
         <div class="col-md-6">
-    <?= $form->field($model, 'last_name')->textInput(['maxlength' => true, 'class'=>'last_name form-control']) ?>
+    <?= $form->field($model, 'last_name')->textInput(['maxlength' => true, 'class'=>'last_name form-control letters']) ?>
         </div>
     </div>
     <?= $form->field($model, 'address_type')->checkbox(['label' => '<span class="fa fa-check otst"></span> I will use my company address', 'class'=>'show_company'])->label("") ?>
-    <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'company_name form-control']) ?>
+    <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'company_name form-control no_foreign_letters']) ?>
 
-    <?= $form->field($model, 'adress_1')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'adress_1')->textInput(['maxlength' => true, 'class' => 'form-control no_foreign_letters']) ?>
 
-    <?= $form->field($model, 'adress_2')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'adress_2')->textInput(['maxlength' => true, 'class' => 'form-control no_foreign_letters']) ?>
     <div class="row">
         <div class="col-md-4">
-    <?= $form->field($model, 'city')->textInput() ?>
+    <?= $form->field($model, 'city')->textInput(['maxlength' => true, 'class' => 'form-control letters']) ?>
         </div>
         <div class="col-md-4">
     <?= $form->field($model, 'state')->dropDownList($state_names) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'zip')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'zip')->textInput(['maxlength' => true, 'class' => 'form-control num']) ?>
     </div>
     </div>
-    <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'phone')->textInput(['maxlength' => true, 'class' => 'form-control num']) ?>
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">

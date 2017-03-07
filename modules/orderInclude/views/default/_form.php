@@ -13,7 +13,7 @@ use yii\bootstrap\Modal;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'class' => 'no_foreign_letters form-control']) ?>
 
     <?= $form->field($model, 'price')->textInput() ?>
 

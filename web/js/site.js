@@ -2,7 +2,8 @@ $(document).ready(function() {
   $('.secundar_address').hide();
   $('.show_after_all_button').hide();
   init_address_edit();
-  no_letters_in_input();
+  init_js_validation();
+
   ajax_send_lb_oz_tn_onchange();
 
 
@@ -341,23 +342,36 @@ function init_address_edit(){
   });
 }
 
-function  no_letters_in_input(){
-  $("input.num").keydown(function(event) {
-    // Разрешаем нажатие клавиш backspace, Del, Tab и Esc
-    if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
-        // Разрешаем выделение: Ctrl+A
-        (event.keyCode == 65 && event.ctrlKey === true) ||
-        // Разрешаем клавиши навигации: Home, End, Left, Right
-        (event.keyCode >= 35 && event.keyCode <= 39)) {
-      return;
-    }
-    else {
-      // Запрещаем всё, кроме клавиш цифр на основной клавиатуре, а также Num-клавиатуре
-      if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
-        event.preventDefault();
-      }
-    }
-  });
+function  no_letters_in_input(evt){
+    if ( ( evt.keyCode >= 48 && evt.keyCode <= 57 )) return;
+    else  evt.preventDefault();
+}
+
+function  only_letters_in_input(evt){
+        if(
+            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) ||
+            ( evt.keyCode >= 65 && evt.keyCode <= 90 )|| (evt.keyCode==32) )
+            return ;
+        else evt.preventDefault();
+}
+
+function  only_no_foreign_letters_in_input(evt){
+        if(
+            ( evt.keyCode >= 48 && evt.keyCode <= 57 ) ||
+            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) ||
+            ( evt.keyCode >= 65 && evt.keyCode <= 90 )||
+            (evt.keyCode==44)||    // запятая
+            (evt.keyCode==46)||    // точка
+            (evt.keyCode==32) )   // пробел
+            return;
+        else evt.preventDefault();
+}
+
+function init_js_validation()
+{
+          $('body').on('keypress', '.letters', only_letters_in_input);
+          $('body').on('keypress', '.no_foreign_letters', only_no_foreign_letters_in_input);
+          $('body').on('keypress', '.num', no_letters_in_input);
 }
 
 function ajax_send_lb_oz_tn_onchange(){

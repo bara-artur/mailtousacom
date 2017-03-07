@@ -71,13 +71,13 @@ if (!Yii::$app->user->isGuest) {
             else return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
           }],
         ['attribute'=> 'payment_type',
-          'content' => function($data){ if ($data->payment_type<4) return PaymentsList::getPayStatus()[$data->payment_type];
+          'content' => function($data){ if ($data->payment_type<4) return PaymentsList::statusPayText($data->payment_type);
           else return 'Unknown';
           },
           'filter' => PaymentsList::getPayStatus(),
         ],
         ['attribute'=> 'payment_state',
-          'content' => function($data){ if ($data->payment_state<4) return PaymentsList::getTextStatus()[$data->payment_state];
+          'content' => function($data){ if ($data->payment_state<4) return PaymentsList::statusText($data->payment_state);
           else return 'Unknown';
           },
         ],

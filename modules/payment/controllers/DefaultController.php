@@ -136,11 +136,10 @@ class DefaultController extends Controller
         $this_weight = 0;
         foreach ($pac->includes_packs as $pack) {
           $total['price'] += $pack['price'] * $pack['quantity'];
-          $total['weight'] += $pack['weight'] * $pack['quantity'];
           $total['quantity'] += $pack['quantity'];
-          $this_weight += $pack['weight'] * $pack['quantity'];
         }
-
+        $total['weight'] = $pac->weight;
+        $this_weight += $pac->weight;
         $t=array();
         $t['price']=(float)ParcelPrice::widget(['weight'=>$this_weight]);
         $t['qst']=round($t['price']*$tax['qst']/100,2);
