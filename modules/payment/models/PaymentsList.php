@@ -34,10 +34,10 @@ class PaymentsList extends \yii\db\ActiveRecord
     public static function getPayStatus(){
         return array(
             ''=>'All',
-            '0'=>"0t",
-            '1'=>'1t',
-            '2'=>'2t',
-            '3'=>'3t',
+            '0'=>"-",
+            '1'=>'PayPal',
+            '2'=>'At the point',
+            '3'=>'Per month',
             '4'=>'Unknown'
         );
     }

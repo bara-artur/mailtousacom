@@ -10,12 +10,17 @@ use kartik\widgets\DatePicker;
 /* @var $form ActiveForm */
 ?>
 <div class="paymentFilterForm">
-
+    <div id="collapse" class="panel panel-collapse collapse">
+        <div class="panel-body">
     <?php $form = ActiveForm::begin(); ?>
-
-        <?= $form->field($model, 'type')->dropDownList( PaymentsList::getPayStatus()) ?>
+<div class="row">
+       <div class="col-md-3">
+           <?= $form->field($model, 'type')->dropDownList( PaymentsList::getPayStatus()) ?>
+       </div>
+        <div class="col-md-3">
         <?= $form->field($model, 'status')->dropDownList( PaymentsList::getTextStatus()) ?>
-
+        </div>
+            <div class="col-md-3">
     <?= $form->field($model,'pay_time')->widget(DatePicker::className(),[
       'name' => 'pay_time',
       'type' => DatePicker::TYPE_RANGE,
@@ -26,10 +31,24 @@ use kartik\widgets\DatePicker;
         'format' => \Yii::$app->params['data_format_js']
       ]
     ]);?>
-
-        <div class="form-group">
-            <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Action</label>
+                <div class="row">
+                    <div class="col-xs-3 padding-off-right">
+                        <?=  Html::resetButton('<i class="fa fa-refresh"></i>',['class' => 'btn btn-neutral-border but_top fix reset_filter']) ?>
+                    </div>
+        <div class="col-xs-6">
+            <?= Html::submitButton('<i class="fa fa-search"></i> Search', ['class' => 'btn btn-success but_top']) ?>
         </div>
+                    <div class="col-xs-3 padding-off-left">
+                        <?= Html::a('<i class="fa fa-remove"></i>',['#collapse'],['class' => 'btn btn-neutral-border but_top fix','data-toggle' => 'collapse']) ?>
+                    </div>
+                </div>
+       </div>
+       </div>
     <?php ActiveForm::end(); ?>
 
+        </div>
+    </div>
 </div><!-- paymentFilterForm -->

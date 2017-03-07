@@ -68,17 +68,18 @@ class SiteController extends Controller
             return $this->redirect(['/address/create', 'first_address'=>'1']);
         }
 
-        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
+/*        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
         $emptyOrder = null;
         foreach ($orderTable as $i=>$order){
             if ($emptyOrder==null){
                 if (count($order->orderElement)==0) $emptyOrder =$order->id;
             }
-        }
+        }*/
+
         $query['OrderSearch'] = Yii::$app->request->queryParams;
         $time_to['created_at_to'] = null;
         $time_to['transport_date_to'] = null;
-// Загружаем фильтр из формы
+        // Загружаем фильтр из формы
         $filterForm = new OrderFilterForm();
         if(Yii::$app->request->post()) {
             $filterForm = new OrderFilterForm();
@@ -101,7 +102,7 @@ class SiteController extends Controller
             'orders' => $orders,
             'searchModel' => $orderSearchModel,
             'filterForm' => $filterForm,
-            'emptyOrder' => $emptyOrder
+            //'emptyOrder' => $emptyOrder
         ]);
     }
 

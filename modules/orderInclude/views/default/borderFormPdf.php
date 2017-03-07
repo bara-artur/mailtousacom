@@ -29,7 +29,20 @@
       <TR>
         <TD class="border">
           3. Name and Address of Owner
-          <P class="user_inp">8469512 Inc 294 Rue Ste-Catherine West Monteal QC H2X 2A1 Canada</P>
+          <P class="user_inp">
+            <?php
+              if($address->address_type==0){
+            ?>
+              <?=$address->first_name;?> <?=$address->last_name;?><br>
+            <?php }else{?>
+              <?=$address->company_name;?><br>
+            <?php }?>
+
+            <?=$address->city;?>
+            <?=$address->state;?>
+            <?=$address->adress_1;?> <?=$address->adress_2;?>
+            <?=$address->zip;?>
+          </P>
         </TD>
         <TD class="border border_h">
           4. Foreign Port of Lading
