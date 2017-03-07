@@ -28,10 +28,6 @@ if (!Yii::$app->user->isGuest) {
                 <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
 
-                <div class="col-xs-7 hid">
-                    <?= Html::a('<i class="glyphicon glyphicon-pencil"></i></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-science-blue']) ?>
-                    <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-science-blue']) ?>
-                </div>
             <?php } ?>
         <div class="col-xs-3 pull-right">
             <?= Html::a('<i class="fa fa-magic"></i> Create new order', ['/orderInclude/create-order'], ['class' => 'btn btn-success pull-right']) ?>

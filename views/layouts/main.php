@@ -51,7 +51,8 @@ AppAsset::register($this);
             ):(
                 ((Yii::$app->params['showAdminPanel']==1)?
                   (
-                    '<li>'.Html::a('Roles', ['/rbac/role/'], ['class' => 'btn btn-science-blue']) .'</li>'
+                    '<li>'.Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link']) .'</li>'
+                    .'<li>'.Html::a('Roles', ['/rbac/role/'], ['class' => 'btn btn-science-blue']) .'</li>'
                     .'<li>'.Html::a('Rules', ['/rbac/rule/'], ['class' => 'btn btn-science-blue']) .'</li>'
                     .'<li>'.Html::a('Permissions', ['/rbac/permission/'], ['class' => 'btn btn-science-blue']) .'</li>'
                     .'<li>'.Html::a('Assignments', ['/rbac/assignment/'], ['class' => 'btn btn-science-blue']) .'</li>'
