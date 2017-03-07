@@ -41,7 +41,7 @@ class OrderSearch extends Order
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $time_to)
+    public function search($params, $time_to, $admin = 00)
     {
         $query = Order::find();
         // add conditions that should always apply here
@@ -75,12 +75,13 @@ class OrderSearch extends Order
             'id' => $this->id,
             'billing_address_id' => $this->billing_address_id,
             'order_type' => $this->order_type,
-            'user_id' => $this->user_id,
+            //'user_id' => $this->user_id,
             'user_id_750' => $this->user_id_750,
             'order_status' => $this->order_status,
             'payment_state' => $this->payment_state,
             'payment_type' => $this->payment_type,
         ]);
+        if ($admin==0) $query->andFilterWhere(['user_id' => $this->user_id,]);
 
         return $dataProvider;
     }

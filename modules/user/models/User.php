@@ -542,4 +542,6 @@ class User extends ActiveRecord  implements IdentityInterface
         if(file_exists($path))rmdir($path);
         return true;
     }
+
+
 }
