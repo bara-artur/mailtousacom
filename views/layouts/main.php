@@ -54,10 +54,16 @@ AppAsset::register($this);
                     <ul class="dropdown-menu">
                         <li>'
                 . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
-                .'</li>
-                        <li>'
-                . Html::a('Upgrade my account', ['/upgrade/'], ['class' => 'profile-link'])
                 .'</li>'
+                .'<li>'
+                .Html::a('Update my billing address', ['/address/create-order-billing'], ['class' => 'profile-link'])
+                .'</li>'
+                .'<li>'
+                .Html::a('View return address', ['/address/addressusa'], ['class' => 'profile-link'])
+                //.'</li>'
+                //.'<li>'
+                //. Html::a('Upgrade my account', ['/upgrade/'], ['class' => 'profile-link'])
+                //.'</li>'
                 .'</ul>'
                 .'</li>'
                 .'<li>'

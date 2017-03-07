@@ -17,7 +17,7 @@ use yii\bootstrap\Modal;
 
     <?= $form->field($model, 'price')->textInput() ?>
 
-   <?= $form->field($model, 'country')->widget(Select2::classname(), [
+    <?= $form->field($model, 'country')->widget(Select2::classname(), [
         'data' => Yii::$app->params['country'],
         'language' => 'en',
         'options' => ['placeholder' => 'Select the country','tabindex'=>'10'],
@@ -39,5 +39,5 @@ use yii\bootstrap\Modal;
 </div>
 
 <script>
-  $('#ajaxCrudModal').removeAttr("tabindex")
+    $('#ajaxCrudModal').removeAttr("tabindex")
 </script>

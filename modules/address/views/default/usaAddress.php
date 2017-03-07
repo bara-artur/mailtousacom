@@ -12,7 +12,6 @@ use johnitvn\ajaxcrud\BulkButtonWidget;
 $this->title = 'Return address';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?= Html::a('Main menu', ['/'], ['class' => 'btn btn-success']) ?>
 <div id="return_address">
     <form role="form" class="form-control-2x">
     <div class="form-group">

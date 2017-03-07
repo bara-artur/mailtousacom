@@ -190,7 +190,7 @@ a.desc:after {
     .navbar-nav > li > a {
         padding-top: 5px;
         padding-bottom: 5px;
-        margin-bottom: 6.5px;
+        margin-bottom: 4.5px;
         margin-top: 8.5px;
         margin-right: 8px;
     }
@@ -312,7 +312,7 @@ a.desc:after {
 }
 .btn_all{width:100%;}
 .navbar {
-    border: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
     background-color: #FFFFFF;
 
 }
@@ -634,4 +634,37 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
 {
 border: 1px solid #eee;
 margin: 0px;
+}
+/*06032017*/
+.letter-spacing03
+{
+    letter-spacing: 0.3px !important;
+    font-size: 18px;
+}
+hr.podes
+{
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border: 0;
+    border-top: 1px dotted #ccc;
+}
+.has-success .radio{color:#565656;}
+
+.field-order-payment_type label.control-label
+{
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+.custom-radio label input:checked+span:before {
+    top: 4.2px;
+    background-color: #199900;
+}
+#order-payment_type .radio{
+    padding-left: 20px;
+}
+
+@media (max-width: 750px) {
+    .hid {
+        display: none;
+    }
 }
