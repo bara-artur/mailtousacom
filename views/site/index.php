@@ -19,20 +19,8 @@ $this->title = 'Shipping to USA and Canada';
 <?php
 if (!Yii::$app->user->isGuest) {
     ?>
-    <h4 class="modernui-neutral2">My Orders</h4>
-  <p> delete here $showAdminPanel =1; </p>
-<?php
-  $showAdminPanel =1;
-  if ($showAdminPanel==1) { ?>
-    <div class="admin_menu">
-      <ul>
-        <li><?= Html::a('Roles', ['/rbac/role/'], ['class' => 'btn btn-science-blue']) ?></li>
-        <li><?= Html::a('Rules', ['/rbac/rule/'], ['class' => 'btn btn-science-blue']) ?></li>
-        <li><?= Html::a('Permissions', ['/rbac/permission/'], ['class' => 'btn btn-science-blue']) ?></li>
-        <li><?= Html::a('Assignments', ['/rbac/assignment/'], ['class' => 'btn btn-science-blue']) ?></li>
-      </ul>
-    </div>
-<?php } ?>
+    <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
+
     <div class="row">
 
             <?php if ($orders) { ?>

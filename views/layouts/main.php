@@ -49,26 +49,35 @@ AppAsset::register($this);
               . Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration'])
               . '</li>'
             ):(
-                '<li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-metro-user-2"></i>&nbsp;&nbsp;Profile <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>'
-                . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
-                .'</li>'
-                .'<li>'
-                .Html::a('Update my billing address', ['/address/create-order-billing'], ['class' => 'profile-link'])
-                .'</li>'
-                .'<li>'
-                .Html::a('View return address', ['/address/addressusa'], ['class' => 'profile-link'])
-                //.'</li>'
-                //.'<li>'
-                //. Html::a('Upgrade my account', ['/upgrade/'], ['class' => 'profile-link'])
-                //.'</li>'
-                .'</ul>'
-                .'</li>'
-                .'<li>'
-                . Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/'], ['class' => 'profile-link'])
-                .'</li>'
+                ((Yii::$app->params['showAdminPanel']==1)?
+                  (
+                    '<li>'.Html::a('Roles', ['/rbac/role/'], ['class' => 'btn btn-science-blue']) .'</li>'
+                    .'<li>'.Html::a('Rules', ['/rbac/rule/'], ['class' => 'btn btn-science-blue']) .'</li>'
+                    .'<li>'.Html::a('Permissions', ['/rbac/permission/'], ['class' => 'btn btn-science-blue']) .'</li>'
+                    .'<li>'.Html::a('Assignments', ['/rbac/assignment/'], ['class' => 'btn btn-science-blue']) .'</li>'
+                  ):
+                  (
+                    '<li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-metro-user-2"></i>&nbsp;&nbsp;Profile <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>'
+                    . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
+                    .'</li>'
+                    .'<li>'
+                    .Html::a('Update my billing address', ['/address/create-order-billing'], ['class' => 'profile-link'])
+                    .'</li>'
+                    .'<li>'
+                    .Html::a('View return address', ['/address/addressusa'], ['class' => 'profile-link'])
+                    //.'</li>'
+                    //.'<li>'
+                    //. Html::a('Upgrade my account', ['/upgrade/'], ['class' => 'profile-link'])
+                    //.'</li>'
+                    .'</ul>'
+                    .'</li>'
+                    .'<li>'
+                    .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/'], ['class' => 'profile-link'])
+                    .'</li>'
+                  ))
                 //. '<li>'
                 //. Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])
                 //. '</li>'
