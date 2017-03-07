@@ -11,7 +11,8 @@ use app\models\ContactForm;
 use app\modules\order\models\OrderSearch;
 use app\modules\order\models\Order;
 use app\modules\payment\models\PaymentSearch;
-use  app\modules\order\models\OrderFilterForm;
+use app\modules\order\models\OrderFilterForm;
+use app\modules\user\models\User;
 
 class SiteController extends Controller
 {
@@ -89,19 +90,23 @@ class SiteController extends Controller
             $time_to += ['transport_date_to' => $filterForm->transport_data_to];
         }
 
+      $showAdminPanel =0;
+        $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+        if ($user->isManager()) $showAdminPanel = 1;
 
         $orderSearchModel = new OrderSearch();
         //$query = Yii::$app->request->queryParams;
         //if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['client_id' => Yii::$app->user->id];
         //else $query['OrderSearch'] = ['client_id' => Yii::$app->user->id];
         $searchModel = new OrderSearch();
-        $orders = $searchModel->search($query,$time_to);
+        $orders = $searchModel->search($query,$time_to,$showAdminPanel);
         //$orders = $orderSearchModel->search(null,null);
 
         return $this->render('index',[
             'orders' => $orders,
             'searchModel' => $orderSearchModel,
             'filterForm' => $filterForm,
+            'showAdminPanel' => $showAdminPanel,
             //'emptyOrder' => $emptyOrder
         ]);
     }
