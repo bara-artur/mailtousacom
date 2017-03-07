@@ -1,259 +1,260 @@
 $(document).ready(function() {
-    $('.secundar_address').hide();
-    $('.show_after_all_button').hide();
-    init_address_edit();
-    no_letters_in_input();
-    ajax_send_lb_oz_tn_onchange();
+  $('.secundar_address').hide();
+  $('.show_after_all_button').hide();
+  init_address_edit();
+  init_js_validation();
+
+  ajax_send_lb_oz_tn_onchange();
 
 
-    //в модалках запрет отправки по Enter
-    $('body').on('keydown','.modal-content input',function(event){
-        if(event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-        }
-    });
+  //в модалках запрет отправки по Enter
+  $('body').on('keydown','.modal-content input',function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
 
-    $("#w0 button[name='signup-button']" ).prop("disabled",true);;
-    $("input[name='I_accept']" ).on( "change", function() {
-        if($("input[name='I_accept']").prop("checked")) {
-            $("#w0 button[name='signup-button']").prop("disabled",false);
-            //$("input[name='I_accept']").prop('checked', true);
-        }
-        else{
-            $("#w0 button[name='signup-button']").prop("disabled",true);
-            //$("input[name='I_accept']").prop('checked', false);
-        }
-    });
+  $("#w0 button[name='signup-button']" ).prop("disabled",true);;
+  $("input[name='I_accept']" ).on( "change", function() {
+    if($("input[name='I_accept']").prop("checked")) {
+      $("#w0 button[name='signup-button']").prop("disabled",false);
+      //$("input[name='I_accept']").prop('checked', true);
+    }
+    else{
+      $("#w0 button[name='signup-button']").prop("disabled",true);
+      //$("input[name='I_accept']").prop('checked', false);
+    }
+  });
 
-    //$("input[name='need_return_address']").attr('checked', false);
-    if ($(".need_return_address").attr("checked") != 'checked')  $(".no_return_address").hide();
+  //$("input[name='need_return_address']").attr('checked', false);
+  if ($(".need_return_address").attr("checked") != 'checked')  $(".no_return_address").hide();
     $(".btn.add_new_address").removeClass("pull-left");
-    // скраваем.отображаем return поля по чекбоксу need_return_address
+  // скраваем.отображаем return поля по чекбоксу need_return_address
 
-    $(".need_return_address" ).on( "click", function() {   // скраваем/отображаем return поля по чекбоксу need_return_address
-        if($(".need_return_address").attr("checked") != 'checked') {
-            $(".no_return_address").show(500);
-            $(".btn.add_new_address").addClass("pull-right");
-            $(".need_return_address").attr('checked', true);
-        }
-        else{
-            $(".no_return_address").hide(500);
-            $(".btn.add_new_address").removeClass("pull-right");
-            $(".need_return_address").attr('checked', false);
-        }
-    });
-    $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
-        if ($(".need_return_address").attr("checked") != 'checked') {
-            $('.return_state').val($('.send_state').val());
-            $('.return_zip').val($('.send_zip').val());
-            $('.return_phone').val($('.send_phone').val());
-            $('.return_first_name').val($('.send_first_name').val());
-            $('.return_last_name').val($('.send_last_name').val());
-            $('.return_company_name').val($('.send_company_name').val());
-            $('.return_adress_1').val($('.send_adress_1').val())
-            $('.return_adress_2').val($('.send_adress_2').val());
-            $('.return_city').val($('.send_city').val());
-        }
-        return true;
+  $(".need_return_address" ).on( "click", function() {   // скраваем/отображаем return поля по чекбоксу need_return_address
+    if($(".need_return_address").attr("checked") != 'checked') {
+      $(".no_return_address").show(500);
+      $(".btn.add_new_address").addClass("pull-right");
+      $(".need_return_address").attr('checked', true);
+    }
+    else{
+      $(".no_return_address").hide(500);
+      $(".btn.add_new_address").removeClass("pull-right");
+      $(".need_return_address").attr('checked', false);
+    }
+  });
+  $('.add_new_address').submit(function(){  // Дублирование данных из Send  в Return при невыбранном need_return_address
+    if ($(".need_return_address").attr("checked") != 'checked') {
+      $('.return_state').val($('.send_state').val());
+      $('.return_zip').val($('.send_zip').val());
+      $('.return_phone').val($('.send_phone').val());
+      $('.return_first_name').val($('.send_first_name').val());
+      $('.return_last_name').val($('.send_last_name').val());
+      $('.return_company_name').val($('.send_company_name').val());
+      $('.return_adress_1').val($('.send_adress_1').val())
+      $('.return_adress_2').val($('.send_adress_2').val());
+      $('.return_city').val($('.send_city').val());
+    }
+    return true;
 
-    });
+  });
 
-    $('.go_to_order').on('click',function(){
-        all_lb =  document.getElementsByName('lb');
-        all_valid = true;
-        for (i=0;i<all_lb.length;i++) {
-            if (valid_order_create(all_lb[i]) == false) all_valid = false;
-        }
-        if (document.getElementsByClassName('has-error').length!=0) all_valid = false;
+  $('.go_to_order').on('click',function(){
+    all_lb =  document.getElementsByName('lb');
+    all_valid = true;
+    for (i=0;i<all_lb.length;i++) {
+      if (valid_order_create(all_lb[i]) == false) all_valid = false;
+    }
+    if (document.getElementsByClassName('has-error').length!=0) all_valid = false;
 
-        if (!all_valid){
-            gritterAdd('Error','Missing a required field. ','gritter-danger');
-            return false;
-        }
-        return true;
-    })
+    if (!all_valid){
+      gritterAdd('Error','Missing a required field. ','gritter-danger');
+      return false;
+    }
+    return true;
+  })
 
-    $(".reset_filter").on("click", function (){
-        event.preventDefault();
-        elements = document.getElementsByTagName('input');
-        for (var i = 0; i < elements.length; i++) {
-            var input = elements[i];
-            if (input.type != 'hidden') input.value = '';
-        }
-        selects = document.getElementsByTagName('select');
-        for (var i = 0; i < selects.length; i++) {
-            var select = selects[i];
-            if (input.type != 'hidden') select.value = '';
-        }
-    });
+  $(".reset_filter").on("click", function (){
+    event.preventDefault();
+    elements = document.getElementsByTagName('input');
+    for (var i = 0; i < elements.length; i++) {
+      var input = elements[i];
+      if (input.type != 'hidden') input.value = '';
+    }
+    selects = document.getElementsByTagName('select');
+    for (var i = 0; i < selects.length; i++) {
+      var select = selects[i];
+      if (input.type != 'hidden') select.value = '';
+    }
+  });
 });
 
 function show_err(el,txt){
-    if(!el.hasClass('has-error')) {
-        el.addClass('has-error');
-        el.append("<div class=\"help-block\">"+txt+"</div>");
-    }
+  if(!el.hasClass('has-error')) {
+    el.addClass('has-error');
+    el.append("<div class=\"help-block\">"+txt+"</div>");
+  }
 }
 function hide_err(el){
-    el.removeClass('has-error');
-    el.find('.help-block').remove();
+  el.removeClass('has-error');
+  el.find('.help-block').remove();
 }
 function valid_order_create(elemForm){
-    valid=true;
+  valid=true;
 
-    lb=$(elemForm).parents('form:first').find('[name=lb]');
-    oz=$(elemForm).parents('form:first').find('[name=oz]');
+  lb=$(elemForm).parents('form:first').find('[name=lb]');
+  oz=$(elemForm).parents('form:first').find('[name=oz]');
 
-    //for(i=0;i<lb.length;i++){
+  //for(i=0;i<lb.length;i++){
     el=$(lb).closest('.label_valid');
     if((!lb.val()) ||
         (!oz.val()) ||
-        (parseInt(lb.val())+parseInt(oz.val())/16)==0)
+      (parseInt(lb.val())+parseInt(oz.val())/16)==0)
     {
-        valid=false;
-        show_err(el,"Field scale required.");
+      valid=false;
+      show_err(el,"Field scale required.");
     }else{
+      if(
+          (parseInt(oz.val())>=16) ||
+          (parseInt(oz.val())<0)
+      ){
+        valid=false;
+        show_err(el,"The value of Oz can not be more than 15.");
+      }else {
         if(
-            (parseInt(oz.val())>=16) ||
-            (parseInt(oz.val())<0)
+            (parseInt(lb.val())>=101) ||
+            (parseInt(lb.val()))<0
         ){
-            valid=false;
-            show_err(el,"The value of Oz can not be more than 15.");
+          valid=false;
+          show_err(el,"The value of Lb can not be more than 100.");
         }else {
-            if(
-                (parseInt(lb.val())>=101) ||
-                (parseInt(lb.val()))<0
-            ){
-                valid=false;
-                show_err(el,"The value of Lb can not be more than 100.");
-            }else {
-                hide_err(el);
-            }
+          hide_err(el);
         }
+      }
     }
-    //}
+  //}
 
-    els=$(elemForm).parents('form:first').find('[name=track_number]');
-    //for(i=0;i<els.length;i++){
+  els=$(elemForm).parents('form:first').find('[name=track_number]');
+  //for(i=0;i<els.length;i++){
     el=$(els).closest('.label_valid');
 
     if((!els.val()) ||  (els.val().length<4)){
-        valid=false;
-        show_err(el,"Track number is required.");
+      valid=false;
+      show_err(el,"Track number is required.");
     }else{
-        hide_err(el);
+      hide_err(el);
     }
-    // }
-    return valid;
+ // }
+  return valid;
 }
 
 var popup = (function() {
-    var conteiner;
-    var mouseOver = 0;
-    var timerClearAll = null;
-    var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-    var time = 3000;
+  var conteiner;
+  var mouseOver = 0;
+  var timerClearAll = null;
+  var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+  var time = 3000;
 
-    var _setUpListeners = function() {
-        $('body').on('click', '.notification_close', _closePopup);
-        $('body').on('mouseenter', '.notification_container', _onEnter);
-        $('body').on('mouseleave', '.notification_container', _onLeave);
-    };
+  var _setUpListeners = function() {
+    $('body').on('click', '.notification_close', _closePopup);
+    $('body').on('mouseenter', '.notification_container', _onEnter);
+    $('body').on('mouseleave', '.notification_container', _onLeave);
+  };
 
-    var _onEnter = function(event) {
-        if(event)event.preventDefault();
-        if (timerClearAll!=null) {
-            clearTimeout(timerClearAll);
-            timerClearAll = null;
-        }
-        conteiner.find('.notification_item').each(function(i){
-            var option=$(this).data('option');
-            if(option.timer) {
-                clearTimeout(option.timer);
-            }
-        });
-        mouseOver = 1;
-    };
+  var _onEnter = function(event) {
+    if(event)event.preventDefault();
+    if (timerClearAll!=null) {
+      clearTimeout(timerClearAll);
+      timerClearAll = null;
+    }
+    conteiner.find('.notification_item').each(function(i){
+      var option=$(this).data('option');
+      if(option.timer) {
+        clearTimeout(option.timer);
+      }
+    });
+    mouseOver = 1;
+  };
 
-    var _onLeave = function() {
-        conteiner.find('.notification_item').each(function(i){
-            $this=$(this);
-            var option=$this.data('option');
-            if(option.time>0) {
-                option.timer = setTimeout(_closePopup.bind(option.close), option.time - 1500 + 100 * i);
-                $this.data('option',option)
-            }
-        });
-        mouseOver = 0;
-    };
+  var _onLeave = function() {
+    conteiner.find('.notification_item').each(function(i){
+      $this=$(this);
+      var option=$this.data('option');
+      if(option.time>0) {
+        option.timer = setTimeout(_closePopup.bind(option.close), option.time - 1500 + 100 * i);
+        $this.data('option',option)
+      }
+    });
+    mouseOver = 0;
+  };
 
-    var _closePopup = function(event) {
-        if(event)event.preventDefault();
+  var _closePopup = function(event) {
+    if(event)event.preventDefault();
 
-        var $this = $(this).parent();
-        $this.on(animationEnd, function() {
-            $(this).remove();
-        });
-        $this.addClass('notification_hide')
-    };
+    var $this = $(this).parent();
+    $this.on(animationEnd, function() {
+      $(this).remove();
+    });
+    $this.addClass('notification_hide')
+  };
 
-    var open = function(data) {
-        var option = {time : (data.time||data.time===0)?data.time:time};
-        if (!conteiner) {
-            conteiner = $('<ul/>', {
-                'class': 'notification_container'
-            });
+  var open = function(data) {
+    var option = {time : (data.time||data.time===0)?data.time:time};
+    if (!conteiner) {
+      conteiner = $('<ul/>', {
+        'class': 'notification_container'
+      });
 
-            $('body').append(conteiner);
-            _setUpListeners();
-        }
+      $('body').append(conteiner);
+      _setUpListeners();
+    }
 
-        var li = $('<li/>', {
-            class: 'notification_item'
-        });
+    var li = $('<li/>', {
+      class: 'notification_item'
+    });
 
-        if (data.type){
-            li.addClass('notification_item-' + data.type);
-        }
+    if (data.type){
+      li.addClass('notification_item-' + data.type);
+    }
 
-        var close=$('<span/>',{
-            class:'notification_close'
-        });
-        option.close=close;
-        li.append(close);
+    var close=$('<span/>',{
+      class:'notification_close'
+    });
+    option.close=close;
+    li.append(close);
 
-        if(data.title && data.title.length>0) {
-            var title = $('<p/>', {
-                class: "notification_title"
-            });
-            title.html(data.title);
-            li.append(title);
-        }
+    if(data.title && data.title.length>0) {
+      var title = $('<p/>', {
+        class: "notification_title"
+      });
+      title.html(data.title);
+      li.append(title);
+    }
 
-        var content = $('<div/>',{
-            class:"notification_content"
-        });
-        content.html(data.message);
+    var content = $('<div/>',{
+      class:"notification_content"
+    });
+    content.html(data.message);
 
-        li.append(content);
+    li.append(content);
 
-        conteiner.append(li);
+    conteiner.append(li);
 
-        if(option.time>0){
-            option.timer=setTimeout(_closePopup.bind(close), option.time);
-        }
-        li.data('option',option)
-    };
+    if(option.time>0){
+      option.timer=setTimeout(_closePopup.bind(close), option.time);
+    }
+    li.data('option',option)
+  };
 
-    return {
-        open: open
-    };
+  return {
+    open: open
+  };
 }());
 
 function onlineTrace() {
-    $.get('/online');
-    setTimeout(onlineTrace, 60000)
+  $.get('/online');
+  setTimeout(onlineTrace, 60000)
 }
 $(function(){
     var form = $(".user-form");
@@ -268,135 +269,148 @@ $(function(){
 });
 
 function table_change_input(el){
-    $el=$(el)
-    $el
-        .addClass('saving')
-        .prop('disabled',true)
-    post={
-        'weight':$el.attr('weight'),
-        'count':$el.attr('count'),
-        'value':$el.val(),
-    };
-    var f_ok=table_change_ok.bind($el);
-    var f_fail=table_change_fail.bind($el);
-    $.post($el.closest('[href]').attr('href'),post,f_ok,'json').fail(f_fail);
+  $el=$(el)
+  $el
+    .addClass('saving')
+    .prop('disabled',true)
+  post={
+    'weight':$el.attr('weight'),
+    'count':$el.attr('count'),
+    'value':$el.val(),
+  };
+  var f_ok=table_change_ok.bind($el);
+  var f_fail=table_change_fail.bind($el);
+  $.post($el.closest('[href]').attr('href'),post,f_ok,'json').fail(f_fail);
 }
 function table_change_ok(data){
-    $el=this;
-    $el
-        .removeClass('saving')
-        .prop('disabled',false);
-    $el.val(data.price);
-    gritterAdd('Saving', 'Saving successful', 'gritter-success');
+  $el=this;
+  $el
+    .removeClass('saving')
+    .prop('disabled',false);
+  $el.val(data.price);
+  gritterAdd('Saving', 'Saving successful', 'gritter-success');
 }
 
 function table_change_fail(){
-    $el=this;
-    $el
-        .removeClass('saving')
-        .addClass('error')
-        .prop('disabled',false);
-    gritterAdd('Saving', 'Saving error', 'gritter-danger');
+  $el=this;
+  $el
+    .removeClass('saving')
+    .addClass('error')
+    .prop('disabled',false);
+  gritterAdd('Saving', 'Saving error', 'gritter-danger');
 }
 
 function init_address_edit(){
-    function on_address_submit(){
-        if ($(".show_company").prop('checked')==false) {
-            $('.company_name').val('Personal address');
-        }
-        else {
-            if ($('.first_name').val()=="") $('.first_name').val("-");
-            if ($('.last_name').val()=="") $('.last_name').val("-");
-        }
-        return true;
+  function on_address_submit(){
+    if ($(".show_company").prop('checked')==false) {
+      $('.company_name').val('Personal address');
     }
+    else {
+      if ($('.first_name').val()=="") $('.first_name').val("-");
+      if ($('.last_name').val()=="") $('.last_name').val("-");
+    }
+    return true;
+  }
 
-    $('.add_new_address').submit(on_address_submit);
+  $('.add_new_address').submit(on_address_submit);
 
+  company_blk=$('.company_name.form-control').parent();
+  if ($('.show_company').prop('checked')==false){
+    $('.company_name')
+      .val('Personal address')
+      .data('val', '');
+    company_blk.hide(500);
+  }
+  $('.show_company').on("click", function(){
     company_blk=$('.company_name.form-control').parent();
-    if ($('.show_company').prop('checked')==false){
-        $('.company_name')
-            .val('Personal address')
-            .data('val', '');
-        company_blk.hide(500);
+    if ($('.show_company').prop('checked')==false) {
+      v = $('.company_name').val();
+      $('.company_name')
+        .val('Personal address')
+        .data('val', v);
+      company_blk.hide(500);
+    }else{
+      $('.company_name').val($('.company_name').data('val'));
+      company_blk.show(500);
     }
-    $('.show_company').on("click", function(){
-        company_blk=$('.company_name.form-control').parent();
-        if ($('.show_company').prop('checked')==false) {
-            v = $('.company_name').val();
-            $('.company_name')
-                .val('Personal address')
-                .data('val', v);
-            company_blk.hide(500);
-        }else{
-            $('.company_name').val($('.company_name').data('val'));
-            company_blk.show(500);
-        }
-    });
-    $(".show_all_addresses").on("click", function(){
-        $('.secundar_address').show(500);
-        $('.show_after_all_button').show();
-        $(".show_all_addresses").hide();
-        $(".main_address_button").hide();
-    });
+  });
+  $(".show_all_addresses").on("click", function(){
+    $('.secundar_address').show(500);
+    $('.show_after_all_button').show();
+    $(".show_all_addresses").hide();
+    $(".main_address_button").hide();
+  });
 }
 
-function  no_letters_in_input(){
-    $("input.num").keydown(function(event) {
-        // Разрешаем нажатие клавиш backspace, Del, Tab и Esc
-        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
-            // Разрешаем выделение: Ctrl+A
-            (event.keyCode == 65 && event.ctrlKey === true) ||
-            // Разрешаем клавиши навигации: Home, End, Left, Right
-            (event.keyCode >= 35 && event.keyCode <= 39)) {
+function  no_letters_in_input(evt){
+    if ( ( evt.keyCode >= 48 && evt.keyCode <= 57 )) return;
+    else  evt.preventDefault();
+}
+
+function  only_letters_in_input(evt){
+        if(
+            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) ||
+            ( evt.keyCode >= 65 && evt.keyCode <= 90 )|| (evt.keyCode==32) )
+            return ;
+        else evt.preventDefault();
+}
+
+function  only_no_foreign_letters_in_input(evt){
+        if(
+            ( evt.keyCode >= 48 && evt.keyCode <= 57 ) ||
+            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) ||
+            ( evt.keyCode >= 65 && evt.keyCode <= 90 )||
+            (evt.keyCode==44)||    // запятая
+            (evt.keyCode==46)||    // точка
+            (evt.keyCode==32) )   // пробел
             return;
-        }
-        else {
-            // Запрещаем всё, кроме клавиш цифр на основной клавиатуре, а также Num-клавиатуре
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
-                event.preventDefault();
-            }
-        }
-    });
+        else evt.preventDefault();
+}
+
+function init_js_validation()
+{
+          $('body').on('keypress', '.letters', only_letters_in_input);
+          $('body').on('keypress', '.no_foreign_letters', only_no_foreign_letters_in_input);
+          $('body').on('keypress', '.num', no_letters_in_input);
 }
 
 function ajax_send_lb_oz_tn_onchange(){
-    $( ".lb-oz-tn-onChange" ).change(function() {
-        elemForm = this;
-        index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
-        if(!valid_order_create(elemForm))return false;
+  $( ".lb-oz-tn-onChange" ).change(function() {
+    elemForm = this;
+    index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
+    if(!valid_order_create(elemForm))return false;
 
-        var msg   = $(this).parents('form:first').serialize();
-        $.ajax({
-            type: 'POST',
-            url: 'orderElement/create-order',
-            data: msg,
-            success: function(data) {
-                $('.resInd'+index).html(data).css( "color", "blue");
-            },
-            error:  function(xhr, str){
-                gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
-            }
-        });
+    var msg   = $(this).parents('form:first').serialize();
+    $.ajax({
+      type: 'POST',
+      url: 'orderElement/create-order',
+      data: msg,
+      success: function(data) {
+        $('.resInd'+index).html(data).css( "color", "blue");
+      },
+      error:  function(xhr, str){
+        gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+      }
     });
+  });
 }
 
 function init_order_border(){
-    $('.order_agreement').submit(function(){  // действия перед submit формы
-        if ($("#order-agreement").prop('checked')==false) {
-            gritterAdd('Error','you must agree','gritter-danger');
-            return false;
-        }
-        return true;
-    });
-
+  $('.order_agreement').submit(function(){  // действия перед submit формы
     if ($("#order-agreement").prop('checked')==false) {
-        $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',true)
+      gritterAdd('Error','you must agree','gritter-danger');
+      return false;
     }
+    return true;
+  });
 
-    $("#order-agreement").on("change", function(){
-        $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',!this.checked)
-    });
+  if ($("#order-agreement").prop('checked')==false) {
+    $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',true)
+  }
+
+  $("#order-agreement").on("change", function(){
+    $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',!this.checked)
+  });
 
 }
 $(function () {

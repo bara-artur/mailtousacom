@@ -18,17 +18,17 @@ class PaymentsList extends \yii\db\ActiveRecord
         return array(
             ''=>'All',
             '0'=>"Don't paid",
-            '1'=>'Throught Paypal',
-            '1'=>'On the delivery address',
-            '2'=>'Per Month',
-            '3'=>'Unknown'
+            '1'=>'Through Paypal',
+            '2'=>'On the delivery address',
+            '3'=>'Per Month',
+            '4'=>'Unknown'
         );
     }
 
     public static function statusText($param)
     {
         $textForStatus = PaymentsList::getTextStatus();
-        if ($param < count($textForStatus)) return  $textForStatus[$param];
+        if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown status';
     }
     public static function getPayStatus(){
@@ -36,16 +36,16 @@ class PaymentsList extends \yii\db\ActiveRecord
             ''=>'All',
             '0'=>"0t",
             '1'=>'1t',
-            '1'=>'2t',
-            '2'=>'3t',
-            '3'=>'Unknown'
+            '2'=>'2t',
+            '3'=>'3t',
+            '4'=>'Unknown'
         );
     }
 
     public static function statusPayText($param)
     {
         $textForStatus = PaymentsList::getPayStatus();
-        if ($param < count($textForStatus)) return  $textForStatus[$param];
+        if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown pay system';
     }
     /**

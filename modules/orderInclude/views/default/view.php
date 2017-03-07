@@ -16,6 +16,5 @@ use yii\widgets\DetailView;
             'quantity',
         ],
     ]) ?>
-    <?=$test?>
 
 </div>
