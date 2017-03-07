@@ -90,9 +90,9 @@ class SiteController extends Controller
             $time_to += ['transport_date_to' => $filterForm->transport_data_to];
         }
 
-      $showAdminPanel =0;
+        $showAdminPanel =0;
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-        if ($user->isManager()) $showAdminPanel = 1;
+        if (($user!=null)&&($user->isManager())) $showAdminPanel = 1;
 
         $orderSearchModel = new OrderSearch();
         //$query = Yii::$app->request->queryParams;
