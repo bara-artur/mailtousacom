@@ -27,7 +27,7 @@ $config = [
         ],
         'authManager' => [
           'class' => 'yii\rbac\DbManager',
-          'cache' => 'yii\caching\FileCache',
+         // 'cache' => 'yii\caching\FileCache',
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -111,7 +111,7 @@ $config = [
     'params' => $params,
     'modules' => [
       'rbac' =>  [
-        'class' => 'johnitvn\rbacplus\Module',
+        'class' => 'johnitv\rbacplus\Module',
         'userModelClassName'=>null,
         'userModelIdField'=>'id',
         'userModelLoginField'=>'username',
