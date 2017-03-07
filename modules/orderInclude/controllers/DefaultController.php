@@ -47,6 +47,21 @@ class DefaultController extends Controller
      */
     public function actionCreateOrder()
     {
+      $orderTable = Order::find()
+        ->select(['`order_element`.`order_id`','`order`.`id`'])
+        ->leftJoin('order_element', '`order`.`id` = `order_element`.`order_id`')
+        ->where(['user_id'=>Yii::$app->user->id,'order_id'=>null])
+        ->asArray()
+        ->all();
+
+      if(count($orderTable)>0){
+        foreach ($orderTable as $order){
+          if ($order['id']!=null){
+            return $this->redirect('/orderInclude/create-order/'.$order['id']);
+          }
+        }
+      }
+
         $request = Yii::$app->request;
         if(!Yii::$app->user->isGuest && !$request->isAjax && $request->getIsGet()) {
             $address = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
@@ -171,6 +186,7 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+
         $request = Yii::$app->request;
         $model = new OrderInclude();  
 

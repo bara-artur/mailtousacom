@@ -51,7 +51,7 @@ if (!Yii::$app->user->isGuest) {
             'dataProvider' => $orders,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                'id',
+                'userOrder_id',
                 ['attribute'=> 'order_status',
                     'content' => function($data){
                         return $data::orderStatusText($data->order_status);
