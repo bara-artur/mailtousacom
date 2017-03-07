@@ -111,8 +111,8 @@ $config = [
     'params' => $params,
     'modules' => [
       'rbac' =>  [
-        'class' => 'johnitv\rbacplus\Module',
-        'userModelClassName'=>null,
+        'class' => '\johnitvn\rbacplus\Module',
+/*        'userModelClassName'=>null,
         'userModelIdField'=>'id',
         'userModelLoginField'=>'username',
         'userModelLoginFieldLabel'=>null,
@@ -120,7 +120,7 @@ $config = [
         'beforeCreateController'=>function($route){
           return Yii::$app->user->can('rbac');
         },
-        'beforeAction'=>null
+        'beforeAction'=>null*/
       ],
       'user' => [
             'class' => 'app\modules\user\Module',

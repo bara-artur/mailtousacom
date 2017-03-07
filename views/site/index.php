@@ -20,14 +20,26 @@ $this->title = 'Shipping to USA and Canada';
 if (!Yii::$app->user->isGuest) {
     ?>
     <h4 class="modernui-neutral2">My Orders</h4>
-
+  <p> delete here $showAdminPanel =1; </p>
+<?php
+  $showAdminPanel =1;
+  if ($showAdminPanel==1) { ?>
+    <div class="admin_menu">
+      <ul>
+        <li><?= Html::a('Roles', ['/rbac/role/'], ['class' => 'btn btn-science-blue']) ?></li>
+        <li><?= Html::a('Rules', ['/rbac/rule/'], ['class' => 'btn btn-science-blue']) ?></li>
+        <li><?= Html::a('Permissions', ['/rbac/permission/'], ['class' => 'btn btn-science-blue']) ?></li>
+        <li><?= Html::a('Assignments', ['/rbac/assignment/'], ['class' => 'btn btn-science-blue']) ?></li>
+      </ul>
+    </div>
+<?php } ?>
     <div class="row">
 
             <?php if ($orders) { ?>
         <div class="col-xs-2">
                 <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
-
         </div>
+
                 <div class="col-xs-7 hid">
                     <?= Html::a('<i class="glyphicon glyphicon-pencil"></i></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-science-blue']) ?>
                     <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-science-blue']) ?>
@@ -71,7 +83,7 @@ if (!Yii::$app->user->isGuest) {
                     }],
                 ['attribute'=> 'payment_state',
                     'content' => function($data){
-                        return PaymentsList::getTextStatus()[$data->payment_state];
+                        return PaymentsList::statusText($data->payment_state);
                     },
                 ],
                 [
