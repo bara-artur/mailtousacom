@@ -35,7 +35,7 @@ class OrderFilterForm extends Order
     public function rules()
     {
         return [
-            [['id','transport_data','order_status',
+            [['id','user_id','transport_data','order_status',
                 'transport_data','transport_data_to','created_at','created_at_to',
               'order_type','payment_state','payment_type'], 'safe']
         ];

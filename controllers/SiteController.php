@@ -91,16 +91,18 @@ class SiteController extends Controller
             $time_to += ['transport_date_to' => $filterForm->transport_data_to];
         }
 
-        Yii::$app->params['showAdminPanel'] =0;
+        Yii::$app->params['showAdminPanel'] = 1;
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
         if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
 
         $orderSearchModel = new OrderSearch();
         //$query = Yii::$app->request->queryParams;
-        //if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['client_id' => Yii::$app->user->id];
-        //else $query['OrderSearch'] = ['client_id' => Yii::$app->user->id];
+        if (Yii::$app->params['showAdminPanel']==0) {
+          if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
+          else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
+        }
         $searchModel = new OrderSearch();
-        $orders = $searchModel->search($query,$time_to,Yii::$app->params['showAdminPanel']);
+        $orders = $searchModel->search($query,$time_to);
         //$orders = $orderSearchModel->search(null,null);
 
         return $this->render('index',[
