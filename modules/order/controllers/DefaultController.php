@@ -8,6 +8,7 @@ use app\modules\order\models\OrderSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\modules\user\models\User;
 
 /**
  * DefaultController implements the CRUD actions for Order model.
@@ -29,6 +30,26 @@ class DefaultController extends Controller
         ];
     }
 
+    public function actionUpdate()
+    {
+      $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+      if (($user!=null)&&(1)) {
+        $order_id = $_POST['order_id'];
+        $request = Yii::$app->request;
+        $success = false;
+        if (($order_id) && ($request->isAjax)) {
+          $oldModel = Order::find()->where(['id' => $order_id])->one();
+          if ($oldModel) {
+            if (($_POST['order_status'] != null)&&($_POST['order_status'] != 'none')) $oldModel->order_status = $_POST['order_status'];
+            if (($_POST['payment_state'] != null)&&($_POST['payment_state'] != 'none')) $oldModel->payment_state = $_POST['payment_state'];
+
+            $success = $oldModel->save();
+          }
+        }
+        return $success;
+      }
+    //  return $this->redirect(['/']);
+    }
     /**
      * Lists all Order models.
      * @return mixed

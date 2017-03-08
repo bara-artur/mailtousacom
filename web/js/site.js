@@ -5,6 +5,7 @@ $(document).ready(function() {
   init_js_validation();
 
   ajax_send_lb_oz_tn_onchange();
+  ajax_send_admin_status_onchange();
 
 
   //в модалках запрет отправки по Enter
@@ -387,6 +388,34 @@ function ajax_send_lb_oz_tn_onchange(){
       data: msg,
       success: function(data) {
         $('.resInd'+index).html(data).css( "color", "blue");
+      },
+      error:  function(xhr, str){
+        gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+      }
+    });
+  });
+}
+
+function ajax_send_admin_status_onchange(){
+  $( ".status_droplist" ).change(function() {
+    elem = this;
+    elem.style.color = 'red';
+    //index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
+
+    name = elem.name;
+    payStatus = 'none';
+    ordStatus = 'none';
+    order_id = name.substr(9,name.length-9);
+
+    if (name.substr(0,3)=='pay') payStatus = elem.value;
+    if (name.substr(0,3)=='ord') ordStatus = elem.value;
+    console.log('{'+order_id+'} payStatus='+payStatus+' ordStatus='+ordStatus);
+    $.ajax({
+      type: 'POST',
+      url: 'order/update',
+      data: { order_id: order_id, order_status: ordStatus ,payment_state : payStatus },
+      success: function(data) {
+        if (data) elem.style.color = 'lime';
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
