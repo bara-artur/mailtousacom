@@ -290,13 +290,7 @@ class DefaultController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+          throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 

@@ -12,6 +12,8 @@ use app\modules\user\models\User;
  */
 class UserSearch extends User
 {
+  public $fullName,$role;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'status', 'created_at', 'updated_at', 'last_online', 'ebay_account', 'ebay_last_update'], 'integer'],
-            [['username', 'email', 'first_name', 'last_name', 'password_hash', 'photo', 'password_reset_token', 'email_confirm_token', 'auth_key', 'login_at', 'ip', 'phone', 'docs', 'ebay_token'], 'safe'],
+            [['username', 'email', 'first_name', 'last_name', 'fullName', 'password_hash', 'photo', 'password_reset_token', 'email_confirm_token', 'auth_key', 'login_at', 'ip', 'phone', 'docs', 'ebay_token','role'], 'safe'],
         ];
     }
 
@@ -57,6 +59,15 @@ class UserSearch extends User
             return $dataProvider;
         }
 
+        $sort=$dataProvider->getSort();
+        $sort->attributes['fullName']=[
+          'asc' => ['first_name' => SORT_ASC, 'last_name' => SORT_ASC],
+          'desc' => ['first_name' => SORT_DESC, 'last_name' => SORT_DESC],
+          'label' => 'Full Name',
+          'default' => SORT_ASC
+        ];
+        $dataProvider->setSort($sort);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -83,6 +94,23 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'docs', $this->docs])
             ->andFilterWhere(['like', 'ebay_token', $this->ebay_token]);
 
-        return $dataProvider;
+        if($this->role && strlen(trim($this->role))>0) {
+          $query->leftJoin('auth_assignment', 'user.id= auth_assignment.user_id');
+          if($this->role==-1){
+            $query->andWhere('auth_assignment.item_name  IS NULL');
+          }else {
+            $query->andWhere('auth_assignment.item_name=\'' . $this->role . '\'');
+          }
+        }
+        // фильтр по имени
+        if($this->fullName && strlen(trim($this->fullName))>0) {
+          $this->fullName=trim($this->fullName);
+          $query->andWhere('first_name LIKE "%' . $this->fullName . '%" ' .
+            'OR last_name LIKE "%' . $this->fullName . '%"'
+          );
+        }
+
+
+      return $dataProvider;
     }
 }

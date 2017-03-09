@@ -2,15 +2,22 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\bootstrap\Modal;
+use johnitvn\ajaxcrud\CrudAsset;
+use yii\widgets\Pjax;
+use \app\modules\user\models\User;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\user\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+CrudAsset::register($this);
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+
+<?php Pjax::begin();?>
+<div class="user-index" id="crud-datatable-pjax">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -27,9 +34,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'username',
             'email:email',
-            'first_name',
-            'last_name',
-            // 'status',
+            'fullName',
+          [
+            'attribute'=>'status',
+            'format' => 'raw',
+            'filter'=> array(''=>'All',0=>"Blocked",1=>'Active',2=>"Wait"),
+            'value' => function ($model, $key, $index, $column) {
+                switch ($model->status) {
+                    case 0:
+                        return '<span class="label label-danger">
+            <i class="glyphicon glyphicon-lock"></i>Blocked</span>';
+                        break;
+                    case 2:
+                        return '<span class="label label-warning">
+              <i class="glyphicon glyphicon-hourglass"></i>Wait</span>';
+                        break;
+                    case 1:
+                        return '<span class="label label-success">
+              <i class="glyphicon glyphicon-ok"></i>Active</span>';
+                        break;
+                }
+                return false;
+            },
+          ],
+          [
+            'attribute'=>'role',
+            'format' => 'raw',
+            'filter'=> User::getRoleList(),
+            'value' => function ($model, $key, $index, $column) {
+              return implode(',',$model->getRoleOfUserArray());
+            },
+          ],
             // 'password_hash',
             // 'photo',
             // 'password_reset_token',
@@ -40,13 +75,57 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'login_at',
             // 'ip',
             // 'last_online',
-            // 'phone',
+             'phone',
             // 'docs',
             // 'ebay_account',
             // 'ebay_last_update',
             // 'ebay_token',
 
-            ['class' => 'yii\grid\ActionColumn'],
+          [
+            'class' => 'yii\grid\ActionColumn',
+            'template'=>$user_btn,
+            'buttons'=>[
+              'update' => function ($url, $model) {
+                  return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '/user/admin/update?id='.$model->id, [
+                    'title' => 'Update',
+                    'class'=>'table_buttom',
+                    'role'=>'modal-remote',
+                    'title'=> 'Update',
+                    'data-pjax'=>0,
+                  ]);
+              },
+              'delete' => function ($url, $model) {
+                  return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                    'role'=>'modal-remote',
+                    'title'=> 'Delete',
+                    'data-pjax'=>0,
+                    'class'=>'table_buttom',
+                    'data-request-method'=>"post",
+                    'data-confirm-title'=>"Are you sure?",
+                    'data-confirm-message'=>"Are you sure want to delete this user",
+                  ]);
+              },
+              'rbac' => function ($url, $model) {
+                //$url="/rbac/assignment/assignment?id=".$model->id;
+                  return Html::a('<span class="glyphicon glyphicon-user"></span>', $url, [
+                    'role'=>'modal-remote',
+                    'title'=> 'Role',
+                    'data-pjax'=>0,
+                    'class'=>'table_buttom',
+                  ]);
+              },
+            ],
+              //'updateOptions' => ['label'=>\Yii::t('app', 'Edit')],
+          ],
         ],
     ]); ?>
 </div>
+<?php Pjax::end(); ?>
+
+<?php
+  Modal::begin([
+    "id"=>"ajaxCrudModal",
+    "footer"=>"",// always need it for jquery plugin
+  ]);
+  Modal::end();
+?>

@@ -7,8 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $model app\modules\user\models\User */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
-<div class="user-form">
+<div class="user-form_">
 
     <?php $form = ActiveForm::begin(); ?>
 
@@ -18,19 +17,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'password_hash')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'ebay_account')->textInput() ?>
-
-    <?= $form->field($model, 'ebay_last_update')->textInput() ?>
-
-    <?= $form->field($model, 'ebay_token')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
     <?php ActiveForm::end(); ?>
 

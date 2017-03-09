@@ -8,11 +8,11 @@ class m170307_192438_add_rbac_rull extends Migration
     {
       //Предустановленные значения таблицы пользователей user
       $this->batchInsert('auth_item', ['name', 'type', 'description', 'rule_name', 'created_at', 'updated_at'], [
-        ['userManager', 1, 'View user list', NULL, time(), time()],
+        ['userManager', 2, 'View user list', NULL, time(), time()],
       ]);
       //Предустановленные значения таблицы разрешений auth_item_child
       $this->batchInsert('auth_item_child', ['parent', 'child'], [
-        ['userManager', 'rbac'],
+        ['administrator','userManager'],
       ]);
     }
 

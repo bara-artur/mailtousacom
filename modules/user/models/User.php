@@ -124,24 +124,48 @@ class User extends ActiveRecord  implements IdentityInterface
 
 
     public function isManager(){
-        return ($this->getRoleOfUser($this->id,'administrator')||$this->getRoleOfUser($this->id,'moderator'));
+      return (count($this->getRoleOfUserArray())>0);
     }
 
+    public function getRoleOfUserArray($id=false)
+    {
+      if($id==false)$id=$this->id;
+      if (!isset($this->roles) || !is_array($this->roles)) {
+        $roles = (new Query)
+          ->select('item_name')
+          ->from('auth_assignment')
+          ->where(['user_id' => $id])
+          ->all();
+        $this->roles=array();
+        if($roles){
+          foreach ($roles as $role){
+            $this->roles[] = $role['item_name'];
+          }
+        }
+      }
+      return $this->roles;
+    }
+
+    public static function getRoleList(){
+      $roles_array=[];
+      $roles = (new Query)
+        ->select('name')
+        ->from('auth_item')
+        ->where(['type' => 1])
+        ->all();
+
+      $roles_array['']="ALL";
+      $roles_array['-1']="Clients";
+      if($roles){
+        foreach ($roles as $role){
+          $roles_array[$role['name']] = $role['name'];
+        }
+      }
+      return $roles_array;
+    }
     public function getRoleOfUser($id,$roleName)
     {
-        if (!isset($this->roles) || !is_array($this->roles)) {
-            $roles = (new Query)
-                ->select('item_name')
-                ->from('auth_assignment')
-                ->where(['user_id' => $id])
-                ->all();
-            $this->roles=array();
-            if($roles){
-                foreach ($roles as $role){
-                    $this->roles[] = $role['item_name'];
-                }
-            }
-        }
+        $this->getRoleOfUserArray($id);
         return in_array($roleName,$this->roles);
     }
     /**
@@ -382,6 +406,12 @@ class User extends ActiveRecord  implements IdentityInterface
           ->createCommand()
           ->update($this->tableName(), $fileToBd, ['id' => $this->id])
           ->execute();
+
+        // Если указан новый пароль
+        if ($this->password && strlen($this->password)>3) {
+          $this->setPassword($this->password);
+          $this->generateAuthKey();
+        }
 
         return true;
     }
