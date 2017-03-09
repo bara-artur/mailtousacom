@@ -5,7 +5,7 @@ $(document).ready(function() {
   init_js_validation();
 
   ajax_send_lb_oz_tn_onchange();
-
+  ajax_send_admin_user_status_onchange();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){

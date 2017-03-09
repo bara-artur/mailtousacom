@@ -39,7 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'attribute'=>'status',
             'format' => 'raw',
             'filter'=> array(''=>'All',0=>"Blocked",1=>'Active',2=>"Wait"),
-            'value' => function ($model, $key, $index, $column) {
+            'content' => function($data){
+              return Html::dropDownList('usrStatus'.$data->id, $data->status, ['0'=>'Blocked','1'=>'Active','2'=>'Wait'], ['class' => 'user_droplist']);
+
+            },
+            /*'value' => function ($model, $key, $index, $column) {
                 switch ($model->status) {
                     case 0:
                         return '<span class="label label-danger">
@@ -55,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         break;
                 }
                 return false;
-            },
+            },*/
           ],
           [
             'attribute'=>'role',

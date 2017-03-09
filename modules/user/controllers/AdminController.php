@@ -61,6 +61,7 @@ class AdminController extends Controller
       ]);
     }
 
+
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -85,6 +86,29 @@ class AdminController extends Controller
      * @param integer $id
      * @return mixed
      */
+    public function actionUpdateStatus()
+    {
+      return true;
+      /*$user = User::find()->where(['id' => Yii::$app->user->id])->one();
+      if (($user!=null)&&(1)) {
+        $user_id = $_POST['id'];
+        $request = Yii::$app->request;
+        // $success = false;
+        $success = true;
+         if (($user_id) && ($request->isAjax)) {
+           $oldModel = User::find()->where(['id' => $user_id])->one();
+           if ($oldModel) {
+             if (($_POST['usrStatus'] != null)&&($_POST['usrStatus'] != 'none')) $oldModel->status = $_POST['usrStatus'];
+
+             $success = $oldModel->save();
+           }
+         }
+        return $success;
+      }*/
+      //  return $this->redirect(['/']);
+
+    }
+
     public function actionUpdate($id)
     {
       $model = $this->findModel($id);
