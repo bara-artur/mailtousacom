@@ -4,6 +4,7 @@ namespace app\modules\user\controllers;
 
 use Yii;
 use app\modules\user\models\User;
+use app\modules\user\models\UserAdminCreate;
 use app\modules\user\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,6 +13,8 @@ use \yii\web\Response;
 use yii\helpers\Html;
 use johnitvn\rbacplus\models\AssignmentSearch;
 use johnitvn\rbacplus\models\AssignmentForm;
+use app\modules\address\models\Address;
+use app\modules\order\models\Order;
 
 /**
  * AdminController implements the CRUD actions for User model.
@@ -53,7 +56,7 @@ class AdminController extends Controller
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-      $user_btn='{rbac}{update}{delete}';
+      $user_btn='{rbac}{update}{delete}{billing}';
       return $this->render('index', [
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
@@ -69,16 +72,115 @@ class AdminController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+      $model =new UserAdminCreate;
+      $request = Yii::$app->request;
+      if($request->isAjax) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if ($request->isGet) {
+          return [
+            'title' => "Update user " . $model->getFullName(),
+            'content' => $this->renderAjax('update', [
+              'model' => $model,
+            ]),
+            'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+              Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+          ];
+        }else if(
+            $model->load($request->post()) &&
+            //($model->docs='')&&
+            ($model->status=User::STATUS_ACTIVE)&&
+            ($model->save())
+          ){
+          $model->removeEmailConfirmToken();
+          $model->removePasswordResetToken();
+          $model->save();
+          $content='
+              <span class="text-success">Update user success</span>
+              Do you wont edit Billing address?
+              ';
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+          return [
+            //'forceReload'=>'#crud-datatable-pjax',
+            'title'=> "Create new OrderInclude",
+            'content'=>$content,
+            'footer'=>
+              Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"]).
+              Html::a('Billing address', ['Billing'], [
+                'title' => '',
+                'class'=>'btn btn-success',
+                'role'=>'modal-remote',
+                'data-pjax'=>0,
+              ])
+          ];
+        }else{
+          return [
+            'title' => "Update user " . $model->getFullName(),
+            'content' => $this->renderAjax('update', [
+              'model' => $model,
+            ]),
+            'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+              Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+          ];
         }
+      }else{
+        throw new NotFoundHttpException('The requested page does not exist.');
+      }
     }
+
+  public function actionBilling()
+  {
+    $order = Order::find()->where(['user_id'=>Yii::$app->user->id])->one();
+    $update_button =0;
+    if ($order) $update_button = 1;
+
+    $model = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
+    if(!$model){
+      $model= new Address();
+    }
+
+    $request = Yii::$app->request;
+    if($request->isAjax) {
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if ($request->isGet) {
+        return [
+          'title' => $update_button==0?'Create billing address':'Update billing address' ,
+          'content' => $this->renderAjax("@app/modules/address/views/default/createorderbilling.php", [
+            'model' => $model,
+            'update_button'=>2
+          ]),
+          'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+            Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+        ];
+      }else if(
+        $model->load($request->post()) &&
+        ($model->save())
+      ){
+        $content='
+              <span class="text-success">Update billing address successful</span>
+              Do you want create order?
+              ';
+
+        return [
+          //'forceReload'=>'#crud-datatable-pjax',
+          'title'=> "Create new OrderInclude",
+          'content'=>$content,
+          'footer'=>
+            Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"])
+        ];
+      }else{
+        return [
+          'title' => "Update user " . $model->getFullName(),
+          'content' => $this->renderAjax('update', [
+            'model' => $model,
+          ]),
+          'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+            Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+        ];
+      }
+    }else{
+      throw new NotFoundHttpException('The requested page does not exist.');
+    }
+  }
 
     /**
      * Updates an existing User model.
@@ -88,25 +190,19 @@ class AdminController extends Controller
      */
     public function actionUpdateStatus()
     {
-      return true;
-      /*$user = User::find()->where(['id' => Yii::$app->user->id])->one();
-      if (($user!=null)&&(1)) {
-        $user_id = $_POST['id'];
-        $request = Yii::$app->request;
-        // $success = false;
-        $success = true;
+      $request = Yii::$app->request;
+      $user_id=$request->post('user_id');
+      $user = User::find()->where(['id' => $user_id])->one();
+      if ($user) {
          if (($user_id) && ($request->isAjax)) {
-           $oldModel = User::find()->where(['id' => $user_id])->one();
-           if ($oldModel) {
-             if (($_POST['usrStatus'] != null)&&($_POST['usrStatus'] != 'none')) $oldModel->status = $_POST['usrStatus'];
-
-             $success = $oldModel->save();
-           }
+           $user->status=$request->post('status');
+           $user->removeEmailConfirmToken();
+           $user->removePasswordResetToken();
+           $user->save();
+           return 1;
          }
-        return $success;
-      }*/
-      //  return $this->redirect(['/']);
-
+      }
+      return false;
     }
 
     public function actionUpdate($id)
@@ -144,13 +240,6 @@ class AdminController extends Controller
       }else{
         throw new NotFoundHttpException('The requested page does not exist.');
       }
-        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }*/
     }
 
   public function actionRbac($id){

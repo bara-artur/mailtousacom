@@ -23,7 +23,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+      <?=Html::a('Create User', ['create'], [
+        'title' => 'Update',
+        'class'=>'btn btn-success',
+        'role'=>'modal-remote',
+        'title'=> 'Create',
+        'data-pjax'=>0,
+      ]);?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -116,6 +122,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'title'=> 'Role',
                     'data-pjax'=>0,
                     'class'=>'table_buttom',
+                  ]);
+              },
+              'billing' => function ($url, $model) {
+                //$url="/rbac/assignment/assignment?id=".$model->id;
+                  return  Html::a('<span class="fa fa-briefcase"></span>', $url, [
+                    'title' => 'Billing address',
+                    'class'=>'table_buttom',
+                    'role'=>'modal-remote',
+                    'data-pjax'=>0,
                   ]);
               },
             ],
