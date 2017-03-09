@@ -69,7 +69,7 @@ if (!Yii::$app->user->isGuest) {
                 ['attribute'=> 'transport_data',
                     'content'=> function($data){
                         if ($data->transport_data == 0) return '-';
-                        else return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
+                        else return date(\Yii::$app->params['data_format_php'],$data->transport_data);
                     }],
                 ['attribute'=> 'payment_state',
                     'content' => function($data){

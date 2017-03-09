@@ -399,7 +399,9 @@ function ajax_send_lb_oz_tn_onchange(){
 function ajax_send_admin_status_onchange(){
   $( ".status_droplist" ).change(function() {
     elem = this;
-    elem.style.color = 'red';
+    elem.classList.add('ajax_proccessing');
+    elem.classList.remove("ajax_proccessing_error");
+    elem.disabled = true;
     //index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
 
     name = elem.name;
@@ -409,16 +411,27 @@ function ajax_send_admin_status_onchange(){
 
     if (name.substr(0,3)=='pay') payStatus = elem.value;
     if (name.substr(0,3)=='ord') ordStatus = elem.value;
-    console.log('{'+order_id+'} payStatus='+payStatus+' ordStatus='+ordStatus);
     $.ajax({
       type: 'POST',
       url: 'order/update',
       data: { order_id: order_id, order_status: ordStatus ,payment_state : payStatus },
       success: function(data) {
-        if (data) elem.style.color = 'lime';
+        elem.disabled = false;
+        if (data)  {
+          gritterAdd('Saving', 'Saving successful', 'gritter-success');
+          elem.classList.remove("ajax_proccessing");
+        }
+        else {
+          gritterAdd('Saving', 'Saving error. {'+order_id+'} payStatus='+payStatus+' ordStatus='+ordStatus, 'gritter-danger');
+          elem.classList.remove("ajax_proccessing");
+          elem.classList.add('ajax_proccessing_error');
+        }
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+        elem.disabled = false;
+        elem.classList.remove("ajax_proccessing");
+        elem.classList.add('ajax_proccessing_error');
       }
     });
   });
