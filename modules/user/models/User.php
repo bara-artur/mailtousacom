@@ -360,7 +360,10 @@ class User extends ActiveRecord  implements IdentityInterface
         //проверяем существовние пользователя
         $pos = strripos($this->email, '@');
         if ($pos) $this->username = substr($this->email, 0, $pos);;
-        if ($oldValue && isset($oldValue['email']) && $oldValue['email'] != $this->email){
+        if (
+          ($oldValue && isset($oldValue['email']) && $oldValue['email'] != $this->email)||
+          (!$oldValue && !isset($oldValue['email']))
+        ){
           if ($this->findByEmail($this->email)) {
               $this->addError('email', 'Email already exists');
               return false;
