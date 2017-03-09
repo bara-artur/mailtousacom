@@ -483,7 +483,9 @@ class DefaultController extends Controller
 
     $address=Address::findOne($order->billing_address_id);
 
-    $content = $this->renderPartial('borderFormPdf',[
+    $tpl=count($model)==1?'borderFormPdf_one_pac':'borderFormPdf';
+
+    $content = $this->renderPartial($tpl,[
       'order_elements' => $model,
       'order'=>$order,
       'order_id'=>$id,

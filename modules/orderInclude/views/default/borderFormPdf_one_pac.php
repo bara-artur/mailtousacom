@@ -132,16 +132,22 @@
       </TR>
       <TR class="user_inp">
         <TD class="tr13 td35" colspan="2">
-          <?=count($order_elements);?> individually packaged packages
+          <?=count($order_elements);?> individually packaged package
         </TD>
         <TD class="tr13 td36 td12">
 
         </TD>
         <TD class="tr13 td38" colspan="4">
-          <?=count($order_elements);?> packages, total amount <?=$total['price'];?>
+          <?=count($order_elements);?> package, total amount <?=$total['price'];?>
         </TD>
         <TD class="tr13 td51" colspan="3">
-          various consignees
+          <?
+            $include=$order_elements[0];
+            if($include->address_type==1){
+              echo $include->company_name.', ';
+            }
+            echo $include->first_name.' '.$include->last_name;
+          ;?>
         </TD>
         <TD class="tr13 td17" colspan="2"><P class="p11 ft6">&nbsp;</P></TD>
       </TR>
