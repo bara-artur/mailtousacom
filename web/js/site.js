@@ -3,9 +3,8 @@ $(document).ready(function() {
   $('.show_after_all_button').hide();
   init_address_edit();
   init_js_validation();
-
   ajax_send_lb_oz_tn_onchange();
-  ajax_send_admin_user_status_onchange();
+ // ajax_send_admin_user_status_onchange();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -106,6 +105,7 @@ function valid_order_create(elemForm){
   lb=$(elemForm).parents('form:first').find('[name=lb]');
   oz=$(elemForm).parents('form:first').find('[name=oz]');
 
+
   //for(i=0;i<lb.length;i++){
     el=$(lb).closest('.label_valid');
     if((!lb.val()) ||
@@ -136,14 +136,25 @@ function valid_order_create(elemForm){
   //}
 
   els=$(elemForm).parents('form:first').find('[name=track_number]');
+  els_type=$(elemForm).parents('form:first').find('[name=track_number_type]');
   //for(i=0;i<els.length;i++){
-    el=$(els).closest('.label_valid');
 
-    if((!els.val()) ||  (els.val().length<4)){
-      valid=false;
-      show_err(el,"Track number is required.");
-    }else{
+    el=$(els).closest('.label_valid');
+    if (els_type.prop('checked')) {
       hide_err(el);
+      els.val(0);
+      els.parent().hide();
+      els_type.val(1);
+    }
+    else {
+      els.parent().show();
+      els_type.val(0);
+      if ((!els.val()) || (els.val().length < 4)) {
+        valid = false;
+        show_err(el, "Track number is required.");
+      } else {
+        hide_err(el);
+      }
     }
  // }
   return valid;
@@ -381,6 +392,7 @@ function ajax_send_lb_oz_tn_onchange(){
     if(!valid_order_create(elemForm))return false;
 
     var msg   = $(this).parents('form:first').serialize();
+    console.log(msg);
     $.ajax({
       type: 'POST',
       url: 'orderElement/create-order',
@@ -416,4 +428,3 @@ function init_order_border(){
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
-

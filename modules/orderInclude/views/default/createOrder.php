@@ -83,7 +83,7 @@ $submitOption = [
                       <th>Quantity</th>
                       <th>Action</th>
                     </tr>
-                    <?php $includes=$percel->getIncludes();?>
+                    <?php $includes=$percel->orderInclude;?>
                     <?php $total_weight=0;?>
                     <?php foreach ($includes as $i => $item){
                       // $total_weight+=$item['weight']*$item['quantity'];
@@ -124,39 +124,37 @@ $submitOption = [
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <h5 class="total_package padding-top-10">Total</h5>
-            <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
-            <form id="lb-oz-tn-form" title="" method="post">
-              <div class="label_valid col-md-6 padding-off-left padding-off-right">
-                <div class="form-control-addon-fill">
-                  <div class="input-group">
-                    <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
-                    <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
-                    <span class="input-group-addon fint_input">lb</span>
+          <h5 class="total_package padding-top-10">Total</h5>
+          <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
+          <form id="lb-oz-tn-form" title="" method="post">
+            <div class="label_valid col-md-6 padding-off-left padding-off-right">
+              <div class="form-control-addon-fill">
+                <div class="input-group">
+                  <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
+                  <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
+                  <span class="input-group-addon fint_input">lb</span>
 
 
-                    <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
-                    <span class="input-group-addon fint_input">oz</span>
-                  </div>
+                  <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
+                  <span class="input-group-addon fint_input">oz</span>
                 </div>
               </div>
-              <div class="label_valid col-md-5 col-md-offset-1 padding-off-right padding-off-left bor">
-                <div class="form-control-addon-fill">
-                  <div class="input-group">
-                    <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
-                    <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
-                  </div>
+            </div>
+            <div class="label_valid col-md-5 col-md-offset-1 padding-off-right padding-off-left bor">
+              <div class="form-control-addon-fill">
+                <div class="input-group" <?php if($percel->track_number_type==1) { echo 'style="display:none;"';}?>>
+                  <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
+                  <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
                 </div>
               </div>
-              <hr class="bor_bottom">
-              <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
-              <input type="hidden" name = "order_id" value=<?=$order_id?>>
-              <p><b>Cost of delivery : </b>
-                <span id="results resInd<?=$k?>">
+            </div>
+            <span class="input-group-addon fint_input padding-off-left"> Track Number not required :</span>
+            <input type="checkbox" id="track_number_type" class="lb-oz-tn-onChange form-control" name = "track_number_type" <?php if($percel->track_number_type==1) { echo 'checked';}?>>
+            <hr class="bor_bottom">
+            <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
+            <input type="hidden" name = "order_id" value=<?=$order_id?>>
+            <p><b>Cost of delivery : </b>
+              <span id="results resInd<?=$k?>">
                         <?php
                         if($percel->weight>0) {
                           $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
@@ -171,25 +169,25 @@ $submitOption = [
                         echo $ParcelPrice;
                         ?>
                     </span>
-              </p>
-            </form>
+            </p>
+          </form>
 
-            <div class="col-md-6 btn-group-md bord_butt text-right">
-              <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
-                ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
-              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
-                [
-                  'role'=>'modal-remote',
-                  'title'=> 'Delete',
-                  'data-pjax'=>0,
-                  'class'=>'btn btn-danger',
-                  'data-request-method'=>"post",
-                  'data-confirm-title'=>"Are you sure?",
-                  'data-confirm-message'=>"Are you sure want to delete this packages",
-                ])?>
-            </div>
+          <div class="col-md-6 btn-group-md bord_butt text-right">
+            <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
+              ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
+            <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
+              [
+                'role'=>'modal-remote',
+                'title'=> 'Delete',
+                'data-pjax'=>0,
+                'class'=>'btn btn-danger',
+                'data-request-method'=>"post",
+                'data-confirm-title'=>"Are you sure?",
+                'data-confirm-message'=>"Are you sure want to delete this packages",
+              ])?>
           </div>
         </div>
+
         <?php Pjax::end(); ?>
         <hr>
       <?php } ?>
@@ -209,11 +207,12 @@ $submitOption = [
       'class'=>'btn btn-default show_modal',
       'id' => 'open_add_order_address',
     ])?>
-
-  <?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
-    [
-      'class'=>'btn btn-success pull-right go_to_order'
-    ])?>
+  <?php if ($hideNext!=1){ ?>
+    <?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
+      [
+        'class'=>'btn btn-success pull-right go_to_order'
+      ])?>
+  <?php } ?>
 <?php } ?>
 <?php
 echo '
