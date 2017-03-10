@@ -662,9 +662,20 @@ hr.podes
 #order-payment_type .radio{
     padding-left: 20px;
 }
+/*10032017*/
+input.form-control,select.form-control
+{
+    padding: 4px 4px !important;
+    height: 32px !important;
+}
+h4.modal-title{
+    color: #454545;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eeeeee;
+    margin-top:12px;
+    font-size:20px;
 
-@media (max-width: 750px) {
-    .hid {
-        display: none;
-    }
 }
