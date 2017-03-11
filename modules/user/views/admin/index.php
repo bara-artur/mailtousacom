@@ -24,7 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row text-right">
         <div class="col-md-12">
       <?=Html::a('<i class="fa fa-plus"></i> Add User', ['create'], [
-        'title' => 'Update',
         'class'=>'btn btn-science-blue',
         'role'=>'modal-remote',
         'title'=> 'Add User',
@@ -127,6 +126,9 @@ $this->params['breadcrumbs'][] = $this->title;
                   ]);
               },
               'billing' => function ($url, $model) {
+                if(count($model->getRoleOfUserArray())>0){
+                  return;
+                }
                 //$url="/rbac/assignment/assignment?id=".$model->id;
                   return  Html::a('<i class="icon-metro-location"></i>', $url, [
                     'title' => 'Billing address',
