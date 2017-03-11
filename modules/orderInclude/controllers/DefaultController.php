@@ -20,6 +20,7 @@ use yii\helpers\Html;
 use yii\db\Query;
 use kartik\mpdf\Pdf;
 use app\modules\logs\models\Log;
+use app\modules\user\models\User;
 /**
  * DefaultController implements the CRUD actions for OrderInclude model.
  */
@@ -41,16 +42,28 @@ class DefaultController extends Controller
         ];
     }
 
+
+  public function actionCreateOrderAdmin($id){  // Администратор выбрал userа для оформления заказа
+
+     if (Yii::$app->user->can('userManager')) {
+       Yii::$app->params['adminUserChoosing'] = $id;
+       return $this->redirect('/orderInclude/create-order');
+     }
+   return $this->redirect('/');
+  }
 /**
      * Lists all OrderInclude models.
      * @return mixed
      */
-    public function actionCreateOrder()
+
+    public function actionCreateOrder($user=0) // создание заказа
     {
+      if (Yii::$app->user->can('userManager')&&($user!=0)) $user_id = $user;
+      else $user_id = Yii::$app->user->id;
       $orderTable = Order::find()
         ->select(['`order_element`.`order_id`','`order`.`id`'])
         ->leftJoin('order_element', '`order`.`id` = `order_element`.`order_id`')
-        ->where(['user_id'=>Yii::$app->user->id,'order_id'=>null])
+        ->where(['user_id'=>$user_id,'order_id'=>null])
         ->asArray()
         ->all();
 
@@ -64,11 +77,11 @@ class DefaultController extends Controller
 
         $request = Yii::$app->request;
         if(!Yii::$app->user->isGuest && !$request->isAjax && $request->getIsGet()) {
-            $address = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
-            $last_order = Order::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->orderBy('created_at DESC')->one();
+            $address = Address::find()->where('user_id = :id', [':id' => $user_id])->one();
+            $last_order = Order::find()->where('user_id = :id', [':id' => $user_id])->orderBy('created_at DESC')->one();
             $address_id = $address->id;
             $model = new Order();
-            $model->user_id = Yii::$app->user->id;
+            $model->user_id = $user_id;
             $model->billing_address_id = $address_id;
             $model->order_status = 0;
             $model->order_type = 0;
@@ -77,10 +90,10 @@ class DefaultController extends Controller
                 $tmp = strripos($last_order->userOrder_id, '_'); // ищем начало индекса номера заказа
                 if ($tmp) $tmp = substr($last_order->userOrder_id, $tmp+1); // если tmp не 0(не может быть заказа без юзера) и не false,  то берем индекс заказа
                 else $tmp = 0;
-                $model->userOrder_id = Yii::$app->user->id.'_'.((int)$tmp+1); // создаем новый номер
+                $model->userOrder_id = $user_id.'_'.((int)$tmp+1); // создаем новый номер
             }
             else {
-                $model->userOrder_id = Yii::$app->user->id.'_1'; // создаем первый номер
+                $model->userOrder_id = $user_id.'_1'; // создаем первый номер
             }
             $model->created_at = time();
             $model->transport_data = time();
@@ -187,7 +200,7 @@ class DefaultController extends Controller
      * and for non-ajax request if creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate() // создание товара внутри Посылки в ЗАКАЗЕ. Модалки
     {
 
         $request = Yii::$app->request;

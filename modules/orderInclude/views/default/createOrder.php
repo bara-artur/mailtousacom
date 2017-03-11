@@ -32,8 +32,7 @@ $submitOption = [
     <?php } ?>
   </div>
 
-<?php Yii::$app->params['showAdminPanel']=1; ?>
-<?php if (Yii::$app->params['showAdminPanel']==1) { ?>
+<?php if (Yii::$app->user->can('userManager')) { ?>
   <div class="row">
     <?=Html::a('User choosing', ['/order/create/'],
       [

@@ -48,11 +48,11 @@ class DefaultController extends Controller
             ->orWhere(['like', 'first_name', $tmp])
             ->orWhere(['like', 'last_name', $tmp])
             ->orWhere(['like', 'phone', $tmp])
-            ->select(['username as value', 'email as label'])
+            ->select(['concat(id,\') \' ,first_name, \' \',last_name,\', \',phone,\', \',email,\'[server_confirm]\') as value', "concat(first_name, ' ',last_name,', ',phone,', ',email) as label"])
             ->asArray()
             ->all();
 
-          return ['11111111111','2222222222','33333333331','4444444444441','555555555551','5666666666661','77777771','4444444441','3333331',',199999999','8888881'];
+          return $listdata;
         } else {
           /*
           *   Process for ajax request

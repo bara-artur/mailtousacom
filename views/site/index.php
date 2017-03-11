@@ -31,6 +31,7 @@ if (!Yii::$app->user->isGuest) {
 
             <?php } ?>
         <div class="col-xs-3 pull-right">
+          <?=  Yii::$app->params['showAdminPanel'] ?>
             <?= Html::a('<i class="fa fa-magic"></i> Create new order', ['/orderInclude/create-order'], ['class' => 'btn btn-success pull-right']) ?>
         </div>
 
