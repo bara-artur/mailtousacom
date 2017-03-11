@@ -41,7 +41,8 @@ class OrderElement extends \yii\db\ActiveRecord
             [['company_name'], 'string', 'max' => 128],
             [['order_id','track_number'], 'integer'],
             [['weight'], 'double'],
-            [['address_type','weight','track_number'], 'safe'],
+            [['track_number_type'], 'integer'],
+            [['address_type','weight','track_number','track_number_type'], 'safe'],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
         ];
     }

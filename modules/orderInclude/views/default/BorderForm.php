@@ -46,8 +46,8 @@ $form = ActiveForm::begin([
     //'value' => date('d-M-Y', strtotime('+1 days')),
     'options' => ['placeholder' => 'Choose date'],
     'pluginOptions' => [
-      'startDate' => date('d-M-Y', strtotime('+5 hours')),
-      'format' => 'dd-M-yyyy',
+      'startDate' => date(\Yii::$app->params['data_format_php'], strtotime('+5 hours')),
+      'format' => \Yii::$app->params['data_format_js'],
       'todayHighlight' => true,
       'autoclose'=>true,
     ]

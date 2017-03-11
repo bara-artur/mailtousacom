@@ -119,12 +119,14 @@ class DefaultController extends Controller
       //$totalPriceArray = [0];
       $totalPriceArray=[];
       $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
+      $hideNext = 0;
       foreach($model as $percel)
         {
             $totalPrice = 0;
             foreach ($percel->orderInclude as $ordInclude) {
-                $totalPrice += $ordInclude->price;
+                $totalPrice += ($ordInclude->price * $ordInclude->quantity);
             }
+            if ($totalPrice > Yii::$app->params['parcelMaxPrice']) $hideNext = 1;
             $totalPriceArray[] = $totalPrice;
         }
       $order = Order::find()->where(['id'=>$id])->one();
@@ -146,6 +148,7 @@ class DefaultController extends Controller
         'order_id'=>$id,
         'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
         'totalPriceArray' => $totalPriceArray,
+        'hideNext' => $hideNext,
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
@@ -363,7 +366,6 @@ class DefaultController extends Controller
           return $this->redirect('/orderInclude/create-order/' . $id);
         }
         $this_weight = 0;
-        $msg = '123';
           $no_country = false;
         foreach ($pac->includes_packs as $pack) {
           $total['price'] += $pack['price'] * $pack['quantity'];
@@ -383,7 +385,7 @@ class DefaultController extends Controller
                 ->getSession()
                 ->setFlash(
                     'error',
-                    'Enter a country in parcel-table'.$msg
+                    'Enter a country in parcel-table'
                 );
             return $this->redirect('/orderInclude/create-order/' . $id);
         }

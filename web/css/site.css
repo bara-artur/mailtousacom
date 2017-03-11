@@ -678,3 +678,7 @@ h4.modal-title{
     margin-top:12px;
     font-size:20px;
 }
+
+.ui-autocomplete{
+    z-index: 99999 !important;
+}

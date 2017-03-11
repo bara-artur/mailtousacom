@@ -135,14 +135,24 @@ function valid_order_create(elemForm){
   //}
 
   els=$(elemForm).parents('form:first').find('[name=track_number]');
+  els_type=$(elemForm).parents('form:first').find('[name=track_number_type]');
   //for(i=0;i<els.length;i++){
     el=$(els).closest('.label_valid');
-
-    if((!els.val()) ||  (els.val().length<4)){
-      valid=false;
-      show_err(el,"Track number is required.");
-    }else{
+    if (els_type.prop('checked')) {
       hide_err(el);
+      els.val(0);
+      els.parent().hide();
+      els_type.val(1);
+    }
+    else {
+      els.parent().show();
+      els_type.val(0);
+      if ((!els.val()) || (els.val().length < 4)) {
+        valid = false;
+        show_err(el, "Track number is required.");
+      } else {
+        hide_err(el);
+      }
     }
  // }
   return valid;
@@ -369,7 +379,7 @@ function  only_no_foreign_letters_in_input(evt){
 function init_js_validation()
 {
           $('body').on('keypress', '.letters', only_letters_in_input);
-          $('body').on('keypress', '.no_foreign_letters', only_no_foreign_letters_in_input);
+          $('body').on('keypress', 'input,textarea', only_no_foreign_letters_in_input);
           $('body').on('keypress', '.num', no_letters_in_input);
 }
 
@@ -389,6 +399,47 @@ function ajax_send_lb_oz_tn_onchange(){
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+      }
+    });
+  });
+}
+
+function ajax_send_admin_status_onchange(){
+  $( ".status_droplist" ).change(function() {
+    elem = this;
+    elem.classList.add('ajax_proccessing');
+    elem.classList.remove("ajax_proccessing_error");
+    elem.disabled = true;
+    //index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
+
+    name = elem.name;
+    payStatus = 'none';
+    ordStatus = 'none';
+    order_id = name.substr(9,name.length-9);
+
+    if (name.substr(0,3)=='pay') payStatus = elem.value;
+    if (name.substr(0,3)=='ord') ordStatus = elem.value;
+    $.ajax({
+      type: 'POST',
+      url: 'order/update',
+      data: { order_id: order_id, order_status: ordStatus ,payment_state : payStatus },
+      success: function(data) {
+        elem.disabled = false;
+        if (data)  {
+          gritterAdd('Saving', 'Saving successful', 'gritter-success');
+          elem.classList.remove("ajax_proccessing");
+        }
+        else {
+          gritterAdd('Saving', 'Saving error. {'+order_id+'} payStatus='+payStatus+' ordStatus='+ordStatus, 'gritter-danger');
+          elem.classList.remove("ajax_proccessing");
+          elem.classList.add('ajax_proccessing_error');
+        }
+      },
+      error:  function(xhr, str){
+        gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+        elem.disabled = false;
+        elem.classList.remove("ajax_proccessing");
+        elem.classList.add('ajax_proccessing_error');
       }
     });
   });

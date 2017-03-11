@@ -53,10 +53,15 @@ class AdminController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new UserSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+      $searchModel = new UserSearch();
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-      $user_btn='{rbac}{update}{delete}{billing}';
+      $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+      $user_btn='';
+      if(Yii::$app->user->can('rbac')){
+        $user_btn.='{rbac}';
+      }
+      $user_btn.='{update}{delete}{billing}';
       return $this->render('index', [
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
@@ -243,6 +248,10 @@ class AdminController extends Controller
     }
 
   public function actionRbac($id){
+    if(!Yii::$app->user->can('rbac')){
+      throw new NotFoundHttpException('Access is denied.');
+    }
+
     $rbacModule = Yii::$app->getModule('rbac');
     $model = call_user_func($rbacModule->userModelClassName . '::findOne', $id);
     $formModel = new AssignmentForm($id);

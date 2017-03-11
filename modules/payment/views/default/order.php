@@ -39,15 +39,37 @@ $form = ActiveForm::begin([
         Sum to pay: <span class="trans_count"><?=number_format($total['sum']+$total['gst']+$total['qst'],2);?>$</span>&nbsp;&nbsp;(included vat <?=number_format($total['gst']+$total['qst']);?>$)
 </div>
     <hr class="podes">
-<div class="col-md-offset-2 trans_text custom-radio">
-<?= $form->field($model, 'payment_type')->radioList(
-  [
-    1 => '<span></span>&nbsp;&nbsp;PayPal',
-    2 => '<span></span>&nbsp;&nbsp;I will pay at warehouse'
-  ]
-);
-?>
-</div>
+
+  <?php
+    if(!Yii::$app->user->identity->isManager()){?>
+      <div class="col-md-offset-2 trans_text custom-radio">
+      <?= $form->field($model, 'payment_type')->radioList(
+        [
+          1 => '<span></span>&nbsp;&nbsp;PayPal',
+          2 => '<span></span>&nbsp;&nbsp;I will pay at warehouse'
+        ]
+      );
+      ?>
+      </div>
+    <?php
+    }else{
+      if($model->payment_state!=0){
+        ?>
+          <h4>
+            The order has already been paid.
+          </h4>
+        <?php
+        echo $form->field($model, 'payment_type')->hiddenInput(['value'=>'-1'])->label(false);
+      }else{
+        ?>
+        <h4>
+          The order has not been paid yet. Take payment in cash.
+        </h4>
+        <?php
+        $pay_text="The customer paid me the order.";
+        echo $form->field($model, 'payment_type')->hiddenInput(['value'=>'3'])->label(false);
+      }
+    }?>
 </div>
     </div>
 <hr>
@@ -55,8 +77,17 @@ $form = ActiveForm::begin([
     <div class="col-md-12">
 <div class="form-group">
     <?=Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/'.$order_id], ['class' => 'btn btn-default pull-left']) ?>
+<?php
+  if(Yii::$app->user->identity->isManager()){
+    echo Html::a('Return to orders list', ['/'], ['class' => 'btn btn-default pull-left']);
+    if($model->order_status<2){
+      echo Html::submitButton($pay_text.'Accept the order for the receiving point.', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success pull-right']);
+    }
 
-  <?= Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success pull-right']) ?>
+  }else{
+    echo Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success pull-right']);
+  }
+    ?>
 </div>
 </div>
 </div>

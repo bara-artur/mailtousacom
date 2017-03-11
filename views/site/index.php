@@ -1,6 +1,7 @@
 <?php
 use app\modules\user\components\UserWidget;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use app\modules\payment\models\PaymentsList;
 use yii\jui\DatePicker;
@@ -19,20 +20,8 @@ $this->title = 'Shipping to USA and Canada';
 <?php
 if (!Yii::$app->user->isGuest) {
     ?>
-    <h4 class="modernui-neutral2">My Orders</h4>
-  <p> delete here $showAdminPanel =1; </p>
-<?php
-  $showAdminPanel =1;
-  if ($showAdminPanel==1) { ?>
-    <div class="admin_menu">
-      <ul>
-        <li><?= Html::a('Roles', ['/rbac/role/'], ['class' => 'btn btn-science-blue']) ?></li>
-        <li><?= Html::a('Rules', ['/rbac/rule/'], ['class' => 'btn btn-science-blue']) ?></li>
-        <li><?= Html::a('Permissions', ['/rbac/permission/'], ['class' => 'btn btn-science-blue']) ?></li>
-        <li><?= Html::a('Assignments', ['/rbac/assignment/'], ['class' => 'btn btn-science-blue']) ?></li>
-      </ul>
-    </div>
-<?php } ?>
+    <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
+
     <div class="row">
 
             <?php if ($orders) { ?>
@@ -40,16 +29,12 @@ if (!Yii::$app->user->isGuest) {
                 <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
 
-                <div class="col-xs-7 hid">
-                    <?= Html::a('<i class="glyphicon glyphicon-pencil"></i></i> Billing address', ['/address/create-order-billing'], ['class' => 'btn btn-science-blue']) ?>
-                    <?= Html::a('<span class="fa fa-eye"></span> Return address', ['/address/addressusa'], ['class' => 'btn btn-science-blue']) ?>
-                </div>
             <?php } ?>
         <div class="col-xs-3 pull-right">
             <?= Html::a('<i class="fa fa-magic"></i> Create new order', ['/orderInclude/create-order'], ['class' => 'btn btn-success pull-right']) ?>
         </div>
 
-        </div>
+    </div>
     <hr class="bottom_line">
     <div class="row">
         <div class="col-md-12 scrit">
@@ -64,9 +49,19 @@ if (!Yii::$app->user->isGuest) {
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'userOrder_id',
+                ['attribute'=> 'user_id',
+                  'visible' => (Yii::$app->params['showAdminPanel']==1),
+                  'format' => 'raw',
+                  'label'=>'User',
+                  'content'=> function($data){
+                    return $data->user->lineInfo;
+                  }
+                ],
                 ['attribute'=> 'order_status',
-                    'content' => function($data){
-                        return $data::orderStatusText($data->order_status);
+
+                  'content' => function($data){
+                        if (Yii::$app->params['showAdminPanel']==1) return Html::dropDownList('ordStatus'.$data->id, $data->order_status, $data::getTextStatus(), ['class' => 'status_droplist']);
+                        else return $data::orderStatusText($data->order_status);
                     },
                 ],
                 ['attribute'=> 'created_at',
@@ -79,11 +74,12 @@ if (!Yii::$app->user->isGuest) {
                 ['attribute'=> 'transport_data',
                     'content'=> function($data){
                         if ($data->transport_data == 0) return '-';
-                        else return date(\Yii::$app->params['data_time_format_php'],$data->transport_data);
+                        else return date(\Yii::$app->params['data_format_php'],$data->transport_data);
                     }],
                 ['attribute'=> 'payment_state',
                     'content' => function($data){
-                        return PaymentsList::statusText($data->payment_state);
+                      if (Yii::$app->params['showAdminPanel']==1) return Html::dropDownList('payStatus'.$data->id, $data->payment_state, PaymentsList::getTextStatus(), ['class' => 'status_droplist']);
+                      else return PaymentsList::statusText($data->payment_state);
                     },
                 ],
                 [
