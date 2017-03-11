@@ -116,7 +116,7 @@ class DefaultController extends Controller
     public function actionCreate($id)
     {
         $request = Yii::$app->request;
-        $model = new OrderElement();  
+        $model = new OrderElement();
 
         if($request->isAjax){
 

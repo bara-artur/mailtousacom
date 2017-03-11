@@ -3,8 +3,10 @@ $(document).ready(function() {
   $('.show_after_all_button').hide();
   init_address_edit();
   init_js_validation();
+
   ajax_send_lb_oz_tn_onchange();
- // ajax_send_admin_user_status_onchange();
+  ajax_send_admin_status_onchange();
+
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -104,7 +106,6 @@ function valid_order_create(elemForm){
 
   lb=$(elemForm).parents('form:first').find('[name=lb]');
   oz=$(elemForm).parents('form:first').find('[name=oz]');
-
 
   //for(i=0;i<lb.length;i++){
     el=$(lb).closest('.label_valid');
@@ -392,7 +393,6 @@ function ajax_send_lb_oz_tn_onchange(){
     if(!valid_order_create(elemForm))return false;
 
     var msg   = $(this).parents('form:first').serialize();
-    console.log(msg);
     $.ajax({
       type: 'POST',
       url: 'orderElement/create-order',
@@ -402,6 +402,47 @@ function ajax_send_lb_oz_tn_onchange(){
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+      }
+    });
+  });
+}
+
+function ajax_send_admin_status_onchange(){
+  $( ".status_droplist" ).change(function() {
+    elem = this;
+    elem.classList.add('ajax_proccessing');
+    elem.classList.remove("ajax_proccessing_error");
+    elem.disabled = true;
+    //index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
+
+    name = elem.name;
+    payStatus = 'none';
+    ordStatus = 'none';
+    order_id = name.substr(9,name.length-9);
+
+    if (name.substr(0,3)=='pay') payStatus = elem.value;
+    if (name.substr(0,3)=='ord') ordStatus = elem.value;
+    $.ajax({
+      type: 'POST',
+      url: 'order/update',
+      data: { order_id: order_id, order_status: ordStatus ,payment_state : payStatus },
+      success: function(data) {
+        elem.disabled = false;
+        if (data)  {
+          gritterAdd('Saving', 'Saving successful', 'gritter-success');
+          elem.classList.remove("ajax_proccessing");
+        }
+        else {
+          gritterAdd('Saving', 'Saving error. {'+order_id+'} payStatus='+payStatus+' ordStatus='+ordStatus, 'gritter-danger');
+          elem.classList.remove("ajax_proccessing");
+          elem.classList.add('ajax_proccessing_error');
+        }
+      },
+      error:  function(xhr, str){
+        gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+        elem.disabled = false;
+        elem.classList.remove("ajax_proccessing");
+        elem.classList.add('ajax_proccessing_error');
       }
     });
   });
@@ -428,3 +469,4 @@ function init_order_border(){
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
+

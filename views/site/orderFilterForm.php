@@ -19,6 +19,12 @@ use kartik\widgets\DatePicker;
     <div class="col-md-1">
        <?= $form->field($model, 'id')->textInput () ?>
     </div>
+
+    <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
+      <div class="col-md-1">
+        <?= $form->field($model, 'user_id')->textInput () ?>
+      </div>
+    <?php } ?>
     <div class="col-md-2">
        <?= $form->field($model, 'order_status')->dropDownList( Order::getTextStatus()) ?>
     </div>
