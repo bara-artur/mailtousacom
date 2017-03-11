@@ -8,7 +8,8 @@ $(document).ready(function() {
       if(upd_but.length>0){
         upd_but[0].click();
       }
-    })
+    });
+  ajax_send_admin_user_status_onchange()
 });
 
 function ajax_send_admin_user_status_onchange(){

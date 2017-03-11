@@ -5,8 +5,6 @@ $(document).ready(function() {
   init_js_validation();
 
   ajax_send_lb_oz_tn_onchange();
-  ajax_send_admin_status_onchange();
-
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -139,7 +137,6 @@ function valid_order_create(elemForm){
   els=$(elemForm).parents('form:first').find('[name=track_number]');
   els_type=$(elemForm).parents('form:first').find('[name=track_number_type]');
   //for(i=0;i<els.length;i++){
-
     el=$(els).closest('.label_valid');
     if (els_type.prop('checked')) {
       hide_err(el);

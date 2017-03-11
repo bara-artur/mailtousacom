@@ -19,18 +19,21 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin();?>
 <div class="user-index" id="crud-datatable-pjax">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-      <?=Html::a('Create User', ['create'], [
+    <div class="row text-right">
+        <div class="col-md-12">
+      <?=Html::a('<i class="fa fa-plus"></i> Add User', ['create'], [
         'title' => 'Update',
-        'class'=>'btn btn-success',
+        'class'=>'btn btn-science-blue',
         'role'=>'modal-remote',
-        'title'=> 'Create',
+        'title'=> 'Add User',
         'data-pjax'=>0,
       ]);?>
-    </p>
+        </div>
+    </div>
+    <hr class="bottom_line">
+    <div class="table-responsive">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -90,7 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'ebay_account',
             // 'ebay_last_update',
             // 'ebay_token',
-
           [
             'class' => 'yii\grid\ActionColumn',
             'template'=>$user_btn,
@@ -98,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
               'update' => function ($url, $model) {
                   return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '/user/admin/update?id='.$model->id, [
                     'title' => 'Update',
-                    'class'=>'table_buttom',
+                    'class'=>'btn btn-sm btn-info but_tab_marg',
                     'role'=>'modal-remote',
                     'title'=> 'Update',
                     'data-pjax'=>0,
@@ -109,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'role'=>'modal-remote',
                     'title'=> 'Delete',
                     'data-pjax'=>0,
-                    'class'=>'table_buttom',
+                    'class'=>'btn btn-sm btn-danger but_tab_marg',
                     'data-request-method'=>"post",
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this user",
@@ -119,16 +121,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 //$url="/rbac/assignment/assignment?id=".$model->id;
                   return Html::a('<span class="glyphicon glyphicon-user"></span>', $url, [
                     'role'=>'modal-remote',
-                    'title'=> 'Role',
+                    'title'=> 'Role user',
                     'data-pjax'=>0,
-                    'class'=>'table_buttom',
+                    'class'=>'btn btn-sm btn-science-blue but_tab_marg',
                   ]);
               },
               'billing' => function ($url, $model) {
                 //$url="/rbac/assignment/assignment?id=".$model->id;
-                  return  Html::a('<span class="fa fa-briefcase"></span>', $url, [
+                  return  Html::a('<i class="icon-metro-location"></i>', $url, [
                     'title' => 'Billing address',
-                    'class'=>'table_buttom',
+                    'class'=>'btn btn-sm btn-lima but_tab_marg',
                     'role'=>'modal-remote',
                     'data-pjax'=>0,
                   ]);
@@ -138,6 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
           ],
         ],
     ]); ?>
+</div>
 </div>
 <?php Pjax::end(); ?>
 
