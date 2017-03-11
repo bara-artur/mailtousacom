@@ -12,7 +12,6 @@ use yii\bootstrap\Modal;
 <div class="order-include-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'class' => 'no_foreign_letters form-control']) ?>
 
     <?= $form->field($model, 'price')->textInput() ?>
