@@ -95,7 +95,7 @@ class DefaultController extends Controller
       $session = Yii::$app->session;
       $session->set('last_order',$id);
 
-      if($order->payment_state!=0){
+      if($order->payment_state!=0 && !Yii::$app->user->identity->isManager()){
         Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
         return $this->redirect(['/']);
       }
@@ -166,37 +166,67 @@ class DefaultController extends Controller
       $order->save();
 
       $request = Yii::$app->request;
-      if($request->isPost){
-        if($order->load($request->post()) && $order->save()){
-          if($order->payment_type==1){
-            $pay=new DoPayment();
+      if($request->isPost) {
+        if ($order->payment_type == -1 && Yii::$app->user->identity->isManager()) {
+          $order->order_status=2;
+          $order->save();
+          \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
+          return $this->redirect(['/']);
+        } else {
+          if ($order->order_status < 2 && $order->load($request->post()) && $order->save()) {
+            if (!Yii::$app->user->identity->isManager()) {
+              if ($order->payment_type == 1) {
+                $pay = new DoPayment();
 
-            foreach($payments as $item) {
-              $pay->addItem($item);
+                foreach ($payments as $item) {
+                  $pay->addItem($item);
+                }
+
+                $payment = $pay->make_payment();
+
+                $customer = new PaymentsList();
+                $customer->type = 1;
+                $customer->order_id = $id;
+                $customer->create_time = time();
+                $customer->price = $total['sum'];
+                $customer->qst = $total['qst'];
+                $customer->gst = $total['gst'];
+                $customer->client_id = Yii::$app->user->getId();
+                $customer->code = $payment->getId();
+                $customer->save();
+
+                $approvalUrl = $payment->getApprovalLink();
+
+                return $this->redirect($approvalUrl);
+              }
+              if ($order->payment_type == 2) {
+                \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
+                return $this->redirect(['/']);
+              }
+            } else {
+              if ($order->payment_type == 3) {
+                $customer = new PaymentsList();
+                $customer->type = 3;
+                $customer->order_id = $id;
+                $customer->create_time = time();
+                $customer->price = $total['sum'];
+                $customer->qst = $total['qst'];
+                $customer->gst = $total['gst'];
+                $customer->client_id = Yii::$app->user->getId();
+                $customer->code = '';
+                $customer->save();
+
+                $order->order_status=2;
+                $order->save();
+
+                \Yii::$app->getSession()->setFlash('success', 'Payment received. The order is accepted to the warehouse and is waiting for dispatch.');
+                return $this->redirect(['/']);
+              }
             }
-
-            $payment= $pay->make_payment();
-
-            $customer = new PaymentsList();
-            $customer->type = 1;
-            $customer->order_id = $id;
-            $customer->create_time = time();
-            $customer->price = $total['sum'];
-            $customer->qst=$total['qst'];
-            $customer->gst=$total['gst'];
-            $customer->client_id = Yii::$app->user->getId();
-            $customer->code = $payment->getId();
-            $customer->save();
-
-            $approvalUrl = $payment->getApprovalLink();
-
-            return $this->redirect($approvalUrl);
-          }
-          if($order->payment_type==2){
-            \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
+          } else {
+            \Yii::$app->getSession()->setFlash('error', 'Your order error. Check the order or try again later.');
             return $this->redirect(['/']);
           }
-
         }
       }
 

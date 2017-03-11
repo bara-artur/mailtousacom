@@ -169,12 +169,16 @@ $submitOption = [
               </div>
               <div class="label_valid col-md-5 col-md-offset-1 padding-off-right padding-off-left bor">
                 <div class="form-control-addon-fill">
-                  <div class="input-group">
+                  <div class="input-group" <?php if($percel->track_number_type==1) { echo 'style="display:none;"';}?>>
                     <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
                     <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
                   </div>
                 </div>
               </div>
+
+              <span class="input-group-addon fint_input padding-off-left"> Track Number not required :</span>
+              <input type="checkbox" id="track_number_type" class="lb-oz-tn-onChange form-control" name = "track_number_type" <?php if($percel->track_number_type==1) { echo 'checked';}?>>
+
               <hr class="bor_bottom">
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
