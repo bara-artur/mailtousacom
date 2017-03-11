@@ -4,6 +4,7 @@ namespace app\modules\order\models;
 
 use Yii;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\user\models\User;
 
 /**
  * This is the model class for table "order".
@@ -44,6 +45,11 @@ class Order extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return 'order';
+    }
+
+    public function getUser()
+    {
+      return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     public function getOrderElement()

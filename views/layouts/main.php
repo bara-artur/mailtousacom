@@ -37,77 +37,61 @@ AppAsset::register($this);
             'class' => 'navbar navbar-default navbar-fixed-top',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            //['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ?(
-              '<li>'
-              . Html::a('<i class="icon-metro-enter"></i> Sign In', ['/'])
-              . '</li>'
-              . '<li>'
-              . Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration'])
-              . '</li>'
-            ):(
-                ((Yii::$app->params['showAdminPanel']==1)?
-                  (
-                    '<li>'.Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link']) .'</li>'
-                    .'<li>'.Html::a('Roles', ['/rbac/role/'], ['class' => 'btn btn-science-blue']) .'</li>'
-                    .'<li>'.Html::a('Rules', ['/rbac/rule/'], ['class' => 'btn btn-science-blue']) .'</li>'
-                    .'<li>'.Html::a('Permissions', ['/rbac/permission/'], ['class' => 'btn btn-science-blue']) .'</li>'
-                    .'<li>'.Html::a('Assignments', ['/rbac/assignment/'], ['class' => 'btn btn-science-blue']) .'</li>'
-                  ):
-                  (
-                    '<li class="dropdown">
+    $user_menu=[];
+    if(Yii::$app->user->isGuest){
+        $user_menu[]='<li>'.Html::a('<i class="icon-metro-enter"></i> Sign In', ['/']).'</li>';
+        $user_menu[]='<li>'. Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration']). '</li>';
+    }else{
+        if(Yii::$app->user->identity->isManager()) {
+            if (Yii::$app->user->can('userManager')) {
+                $user_menu[] = '<li>' . Html::a('Users', ['/user/admin'], ['class' => 'profile-link']) . '</li>';
+            }
+            if(false){
+                $user_menu[]='<li>'
+                . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
+                . '</li>';
+            }
+            $user_menu[] ='<li>'.Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link']);
+        }else{
+            $user_menu[] ='<li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-metro-user-2"></i>&nbsp;&nbsp;Profile <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li>'
-                    . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
-                    .'</li>'
-                    .'<li>'
-                    .Html::a('Update my billing address', ['/address/create-order-billing'], ['class' => 'profile-link'])
-                    .'</li>'
-                    .'<li>'
-                    .Html::a('View return address', ['/address/addressusa'], ['class' => 'profile-link'])
-                    //.'</li>'
-                    //.'<li>'
-                    //. Html::a('Upgrade my account', ['/upgrade/'], ['class' => 'profile-link'])
-                    //.'</li>'
-                    .'</ul>'
-                    .'</li>'
-                    .'<li>'
-                    .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/'], ['class' => 'profile-link'])
-                    .'</li>'
-                  ))
-                //. '<li>'
-                //. Html::a('<i class="fa fa-map-marker"></i> My addresses', ['/address/'], ['class' => 'profile-link'])
-                //. '</li>'
-                .'<li>'
-                . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
-                . '</li>'
-                //.'<li class="dropdown">
-                //    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-wrench"></i> Configuration <span class="caret"></span></a>
-                //   <ul class="dropdown-menu">
-                //        <li>'
-                //            . Html::a('Tariffs', ['/tariff/'], ['class' => 'profile-link'])
-                //        .'</li>
-                //        <li>'
-                //            . Html::a('Taxes', ['/state/'], ['class' => 'profile-link'])
-                //        .'</li>'
-                //    .'</ul>'
-                //.'</li>'.
+            . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
+            .'</li>'
+            .'<li>'
+            .Html::a('Update my billing address', ['/address/create-order-billing'], ['class' => 'profile-link'])
+            .'</li>'
+            .'<li>'
+            .Html::a('View return address', ['/address/addressusa'], ['class' => 'profile-link'])
+            //.'</li>'
+            //.'<li>'
+            //. Html::a('Upgrade my account', ['/upgrade/'], ['class' => 'profile-link'])
+            //.'</li>'
+            .'</ul>'
+            .'</li>'
+            .'<li>'
+            .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/'], ['class' => 'profile-link'])
+            .'</li>'
+              .'<li>'
+              . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
+              . '</li>';
+        };
 
-                                  .'<li>'
-                                  . Html::beginForm(['/logout'], 'post')
-                                  . Html::submitButton(
-                                    'Logout [' . Yii::$app->user->identity->username . '] <i class="icon-metro-exit"></i>',
-                                    ['class' => 'btn btn-link logout']
-                                  )
-                )
-                . Html::endForm()
-                . '</li>'
+        $user_menu[] ='<li>'
+        . Html::beginForm(['/logout'], 'post')
+        . Html::submitButton(
+          'Logout [' . Yii::$app->user->identity->username . '] <i class="icon-metro-exit"></i>',
+          ['class' => 'btn btn-link logout']
+        )
+        . Html::endForm()
+        . '</li>';
 
-        ],
+    }
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' => $user_menu,
     ]);
     NavBar::end();
     ?>

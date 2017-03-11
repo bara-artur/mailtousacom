@@ -469,3 +469,12 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 })
 
+function form_parcel_create_type(el){
+  if($(el).prop('checked')){
+    $('.form_parcel_create_type_1').show();
+    $('.form_parcel_create_type_0').hide();
+  }else{
+    $('.form_parcel_create_type_1').hide();
+    $('.form_parcel_create_type_0').show();
+  }
+}

@@ -66,51 +66,55 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
-        if (Yii::$app->session->hasFlash('toAddressCreate')){
-            return $this->redirect(['/address/create', 'first_address'=>'1']);
-        }
-
-/*        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
-        $emptyOrder = null;
-        foreach ($orderTable as $i=>$order){
-            if ($emptyOrder==null){
-                if (count($order->orderElement)==0) $emptyOrder =$order->id;
-            }
-        }*/
-
-        $query['OrderSearch'] = Yii::$app->request->queryParams;
-        $time_to['created_at_to'] = null;
-        $time_to['transport_date_to'] = null;
-        // Загружаем фильтр из формы
-        $filterForm = new OrderFilterForm();
-        if(Yii::$app->request->post()) {
-            $filterForm = new OrderFilterForm();
-            $filterForm->load(Yii::$app->request->post());
-            $query['OrderSearch'] = $filterForm->toArray();
-            $time_to = ['created_at_to' => $filterForm->created_at_to];
-            $time_to += ['transport_date_to' => $filterForm->transport_data_to];
-        }
-
-        Yii::$app->params['showAdminPanel'] = 1;
+      if (!Yii::$app->user->isGuest) {
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-        if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
-
-        $orderSearchModel = new OrderSearch();
-        //$query = Yii::$app->request->queryParams;
-        if (Yii::$app->params['showAdminPanel']==0) {
-          if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
-          else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
+        if (!$user->isManager()) {
+          $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
+          if (!$haveOneAddress) {
+            return $this->redirect(['/address/create', 'first_address' => '1']);
+          }
         }
-        $searchModel = new OrderSearch();
-        $orders = $searchModel->search($query,$time_to);
-        //$orders = $orderSearchModel->search(null,null);
+      }
+      /*        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
+            $emptyOrder = null;
+            foreach ($orderTable as $i=>$order){
+                if ($emptyOrder==null){
+                    if (count($order->orderElement)==0) $emptyOrder =$order->id;
+                }
+            }*/
 
-        return $this->render('index',[
-            'orders' => $orders,
-            'searchModel' => $orderSearchModel,
-            'filterForm' => $filterForm,
-            //'emptyOrder' => $emptyOrder
-        ]);
+      $query['OrderSearch'] = Yii::$app->request->queryParams;
+      $time_to['created_at_to'] = null;
+      $time_to['transport_date_to'] = null;
+      // Загружаем фильтр из формы
+      $filterForm = new OrderFilterForm();
+      if(Yii::$app->request->post()) {
+          $filterForm = new OrderFilterForm();
+          $filterForm->load(Yii::$app->request->post());
+          $query['OrderSearch'] = $filterForm->toArray();
+          $time_to = ['created_at_to' => $filterForm->created_at_to];
+          $time_to += ['transport_date_to' => $filterForm->transport_data_to];
+      }
+
+      Yii::$app->params['showAdminPanel'] = 0;
+      if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
+
+      $orderSearchModel = new OrderSearch();
+      //$query = Yii::$app->request->queryParams;
+      if (Yii::$app->params['showAdminPanel']==0) {
+        if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
+        else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
+      }
+      $searchModel = new OrderSearch();
+      $orders = $searchModel->search($query,$time_to);
+      //$orders = $orderSearchModel->search(null,null);
+
+      return $this->render('index',[
+          'orders' => $orders,
+          'searchModel' => $orderSearchModel,
+          'filterForm' => $filterForm,
+          //'emptyOrder' => $emptyOrder
+      ]);
     }
 
     /**

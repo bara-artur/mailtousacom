@@ -379,7 +379,6 @@ class DefaultController extends Controller
           return $this->redirect('/orderInclude/create-order/' . $id);
         }
         $this_weight = 0;
-        $msg = '123';
           $no_country = false;
         foreach ($pac->includes_packs as $pack) {
           $total['price'] += $pack['price'] * $pack['quantity'];
@@ -399,7 +398,7 @@ class DefaultController extends Controller
                 ->getSession()
                 ->setFlash(
                     'error',
-                    'Enter a country in parcel-table'.$msg
+                    'Enter a country in parcel-table'
                 );
             return $this->redirect('/orderInclude/create-order/' . $id);
         }

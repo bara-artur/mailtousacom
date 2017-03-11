@@ -51,7 +51,12 @@ if (!Yii::$app->user->isGuest) {
                 ['class' => 'yii\grid\SerialColumn'],
                 'userOrder_id',
                 ['attribute'=> 'user_id',
-                    'visible' => (Yii::$app->params['showAdminPanel']==1),
+                  'visible' => (Yii::$app->params['showAdminPanel']==1),
+                  'format' => 'raw',
+                  'label'=>'User',
+                  'content'=> function($data){
+                    return $data->user->lineInfo;
+                  }
                 ],
                 ['attribute'=> 'order_status',
 
