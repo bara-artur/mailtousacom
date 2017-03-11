@@ -68,18 +68,6 @@ class DefaultController extends Controller
       ]);
     }
 
-    public function actionIndex()
-    {
-        $searchModel = new AddressSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $mainBillingAddress = 0;
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'mainBillingAddress' => $mainBillingAddress
-        ]);
-    }
 
     public function actionAddressusa()
     {

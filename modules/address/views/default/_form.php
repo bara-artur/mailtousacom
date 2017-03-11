@@ -19,14 +19,16 @@ $state_names = ArrayHelper::map($states,'name','name');
       'id'=>'created_address',
       'validateOnChange' => true,
     ]); ?>
-    <h4 class="modernui-neutral2 margin-bottom-10">
-        <?php if ($update_button==0) { ?>
-            Please add your billing address
-        <?php } else { ?>
-            Update billing address
-        <?php } ?>
-        <font class="text-danger">*</font> <i class="icon-metro-location"></i>
-    </h4>
+    <?php if ($update_button<2){ ?>
+        <h4 class="modernui-neutral2 margin-bottom-10">
+            <?php if ($update_button==0) { ?>
+                Please add your billing address
+            <?php } else { ?>
+                Update billing address
+            <?php } ?>
+            <font class="text-danger">*</font> <i class="icon-metro-location"></i>
+        </h4>
+    <?php };?>
     <div class="row">
         <div class="col-md-6">
         <?= $form->field($model, 'first_name')->textInput(['maxlength' => true, 'class'=>'first_name form-control letters']) ?>

@@ -290,13 +290,7 @@ class DefaultController extends Controller
             /*
             *   Process for non-ajax request
             */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
-            }
+          throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
@@ -489,7 +483,9 @@ class DefaultController extends Controller
 
     $address=Address::findOne($order->billing_address_id);
 
-    $content = $this->renderPartial('borderFormPdf',[
+    $tpl=count($model)==1?'borderFormPdf_one_pac':'borderFormPdf';
+
+    $content = $this->renderPartial($tpl,[
       'order_elements' => $model,
       'order'=>$order,
       'order_id'=>$id,
