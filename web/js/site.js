@@ -5,12 +5,8 @@ $(document).ready(function() {
   init_js_validation();
 
   ajax_send_lb_oz_tn_onchange();
-<<<<<<< HEAD
   ajax_send_admin_status_onchange();
-
-=======
   ajax_send_admin_user_status_onchange();
->>>>>>> master
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -141,14 +137,24 @@ function valid_order_create(elemForm){
   //}
 
   els=$(elemForm).parents('form:first').find('[name=track_number]');
+  els_type=$(elemForm).parents('form:first').find('[name=track_number_type]');
   //for(i=0;i<els.length;i++){
     el=$(els).closest('.label_valid');
-
-    if((!els.val()) ||  (els.val().length<4)){
-      valid=false;
-      show_err(el,"Track number is required.");
-    }else{
+    if (els_type.prop('checked')) {
       hide_err(el);
+      els.val(0);
+      els.parent().hide();
+      els_type.val(1);
+    }
+    else {
+      els.parent().show();
+      els_type.val(0);
+      if ((!els.val()) || (els.val().length < 4)) {
+        valid = false;
+        show_err(el, "Track number is required.");
+      } else {
+        hide_err(el);
+      }
     }
  // }
   return valid;
@@ -375,7 +381,7 @@ function  only_no_foreign_letters_in_input(evt){
 function init_js_validation()
 {
           $('body').on('keypress', '.letters', only_letters_in_input);
-          $('body').on('keypress', '.no_foreign_letters', only_no_foreign_letters_in_input);
+          $('body').on('keypress', 'input,textarea', only_no_foreign_letters_in_input);
           $('body').on('keypress', '.num', no_letters_in_input);
 }
 

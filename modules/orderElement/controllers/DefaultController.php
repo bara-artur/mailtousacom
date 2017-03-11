@@ -95,6 +95,9 @@ class DefaultController extends Controller
                 $oldModel->weight = $weight;
                 // $weight = $_POST['lb'] + $oz;
                 if ($_POST['track_number'] != null) $oldModel->track_number = $_POST['track_number'];
+                if (isset($_POST['track_number_type'])) $oldModel->track_number_type = 1;
+                else $oldModel->track_number_type = 0;
+
                 $oldModel->save();
             }
             $ParcelPrice=ParcelPrice::widget(['weight'=>$weight]);

@@ -171,7 +171,7 @@ $submitOption = [
                 <div class="form-control-addon-fill">
                   <div class="input-group">
                     <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
-                    <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control num" name="track_number" value="<?=$percel->track_number;?>">
+                    <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
                   </div>
                 </div>
               </div>
