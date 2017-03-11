@@ -11,6 +11,8 @@ use yii\bootstrap\ActiveForm;
 use yii\widgets\DetailView;
 use app\components\ParcelPrice;
 use kartik\select2\Select2;
+use yii\jui\AutoComplete;
+use app\modules\user\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -29,6 +31,27 @@ $submitOption = [
       <div class="prohibit_editing"><p><?=$message_for_edit_prohibited_order?> </p></div>
     <?php } ?>
   </div>
+
+<?php Yii::$app->params['showAdminPanel']=1; ?>
+<?php if (Yii::$app->params['showAdminPanel']==1) { ?>
+  <div class="row">
+    <?=Html::a('User choosing', ['/order/create/'],
+      [
+        'role'=>'modal-remote',
+        'class'=>'btn btn-success show_modal',
+       ])?>
+
+    <?php
+    //echo AutoComplete::widget([
+    //  'name' => 'country',
+    //  'clientOptions' => [
+    //    'source' => Url::to(['/order/create']),
+   //   ],
+   //   'options' => ['placeholder' => 'Select the country','tabindex'=>'10'],
+  //  ]);
+    ?>
+  </div>
+<?php } ?>
 
   <div id=crud-datatable-pjax>
     <?php
@@ -148,7 +171,7 @@ $submitOption = [
                 <div class="form-control-addon-fill">
                   <div class="input-group">
                     <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
-                    <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
+                    <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control num" name="track_number" value="<?=$percel->track_number;?>">
                   </div>
                 </div>
               </div>
@@ -242,3 +265,4 @@ if($createNewAddress){
     ';
 }
 ?>
+
