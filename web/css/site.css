@@ -668,3 +668,7 @@ hr.podes
         display: none;
     }
 }
+
+.ui-autocomplete{
+    z-index: 99999 !important;
+}
