@@ -66,11 +66,13 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
-      $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-      if(!$user->isManager()) {
-        $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
-        if (!$haveOneAddress) {
-          return $this->redirect(['/address/create', 'first_address' => '1']);
+      if (!Yii::$app->user->isGuest) {
+        $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+        if (!$user->isManager()) {
+          $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
+          if (!$haveOneAddress) {
+            return $this->redirect(['/address/create', 'first_address' => '1']);
+          }
         }
       }
 /*        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
