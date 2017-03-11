@@ -682,3 +682,30 @@ h4.modal-title{
 .ui-autocomplete{
     z-index: 99999 !important;
 }
+/*11032017*/
+div.icon_integ_ebay,div.icon_integ_amazon,div.icon_integ_shop
+{
+    border: 1px solid #b6b6b6;
+    height: 100px;
+    width: 100px;
+    background-size:cover !important;
+    margin: 0 auto;
+}
+div.icon_integ_ebay{
+    background:url("/img/ebay_logo_hover.jpg");
+}
+div.icon_integ_amazon{
+    background:url("/img/amazon_logo_hover.jpg");
+}
+
+div.icon_integ_shop{
+    background:url("/img/shop_logo_hover.jpg");
+}
+div.icon_integ_ebay:hover,div.icon_integ_amazon:hover,div.icon_integ_shop:hover{
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.22);}
+.text_b{
+    color:#000000;
+    font-size:18px;
+    line-height:18px;
+}
+.text_b input[type=checkbox]{display:none;}
