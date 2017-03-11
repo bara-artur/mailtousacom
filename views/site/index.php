@@ -54,8 +54,8 @@ if (!Yii::$app->user->isGuest) {
                   'visible' => (Yii::$app->params['showAdminPanel']==1),
                   'format' => 'raw',
                   'label'=>'User',
-                  'content'=> function($data){
-                    return $data->user->lineInfo;
+                  'content'=> function($data){ if ($data->user!=null)
+                    return $data->user->lineInfo; else return '-empty-';
                   }
                 ],
                 ['attribute'=> 'order_status',
