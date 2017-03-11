@@ -381,7 +381,7 @@ function  only_no_foreign_letters_in_input(evt){
 function init_js_validation()
 {
           $('body').on('keypress', '.letters', only_letters_in_input);
-          $('body').on('keypress', '.no_foreign_letters', only_no_foreign_letters_in_input);
+          $('body').on('keypress', 'input,textarea', only_no_foreign_letters_in_input);
           $('body').on('keypress', '.num', no_letters_in_input);
 }
 
