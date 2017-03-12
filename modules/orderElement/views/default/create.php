@@ -7,12 +7,17 @@ use yii\helpers\Html;
 /* @var $model app\modules\orderElement\models\OrderElement */
 
 ?>
+
+<?php
+    if(!Yii::$app->user->identity->isManager()){
+?>
 <div class="form_parcel_create_type_0">
     <div class="row">
-        <div class="col-md-12"><h6 class="modernui-neutral4">Please connect you stores with our WMS ( warehouse management software )</h6>
+        <div class="col-md-12"><h6 class="modernui-neutral4">Please connect you stores with our WMS ( warehouse
+                management software )</h6>
         </div>
         <div class="col-md-4 text-center">
-            <a href="/ebay/get-order/<?=$order_id;?>">
+            <a href="/ebay/get-order/<?= $order_id; ?>">
                 <div class="icon_integ_ebay"></div>
             </a>
         </div>
@@ -31,16 +36,23 @@ use yii\helpers\Html;
 <div class="row push-down-margin-thin">
     <div class="col-md-12 text-center">
         <div class="form-group text_b">
-        <label>
-            <input type="checkbox" onchange="form_parcel_create_type(this)">
-            <span class="fa fa-check otst"></span>
-            Skip integration,I will inter my orders manually
-        </label>
+            <label>
+                <input type="checkbox" onchange="form_parcel_create_type(this)">
+                <span class="fa fa-check otst"></span>
+                Skip integration,I will inter my orders manually
+            </label>
         </div>
     </div>
 </div>
 
 <div class="form_parcel_create_type_1" style="display: none;">
+<?php
+    }else{
+?>
+    <div class="form_parcel_create_type_1">
+<?php
+    }
+?>
     <h5 class="modernui-neutral4">Please enter recipient's address</h5>
     <div class="order-element-create">
         <?= $this->render('_form', [

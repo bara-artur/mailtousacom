@@ -2,6 +2,7 @@
 
 namespace app\modules\order\controllers;
 
+use app\modules\orderInclude\models\OrderInclude;
 use Yii;
 use app\modules\order\models\Order;
 use app\modules\order\models\OrderSearch;
@@ -34,41 +35,48 @@ class DefaultController extends Controller
 
   public function actionCreate()
   {
+    if(!Yii::$app->user->identity->isManager()){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'There is not enough user access.'
+        );
+      return $this->redirect(['/']);
+    };
 
+    $model= new User;
     $request = Yii::$app->request;
-
     if ($request->isAjax) {
       Yii::$app->response->format = Response::FORMAT_JSON;
-      if ($request->isGet) {
-          /*
-          *   Process for ajax request
-          */
-
-          Yii::$app->response->format = Response::FORMAT_JSON;
-
-          $model= new User;
-          return [
-            'title' => "Select a user for the new order",
-            'content' => $this->renderAjax('createByAdmin',[
-              'model'=>$model,
-            ]),
-            'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-              Html::a('<i class="fa fa-plus"></i> Create new user', '/user/admin/create', [
-                'class'=>'btn btn-science-blue',
-                'role'=>'modal-remote',
-                'title'=> 'Add User',
-                'data-pjax'=>0,
-              ]).
-              Html::button('<i class="fa fa-magic"></i>Create order', [
-                'class' => 'btn btn-success admin_choose_user',
-                'type' => "submit",
-                'disabled'=>true
-              ])
-
-          ];
-      } else {
-        return $this->redirect(['/']);
+      if ($request->isPost) {
+        $model->load($request->post());
+        if($model->user_id) {
+          return OrderInclude::createOrder($model->user_id,$this);
+          //$this->redirect('/user/view');
+          //return 'Redirect to order create';
+        }
       }
+      Yii::$app->response->format = Response::FORMAT_JSON;
+
+      return [
+        'title' => "Select a user for the new order",
+        'content' => $this->renderAjax('createByAdmin',[
+          'model'=>$model,
+        ]),
+        'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+          Html::a('<i class="fa fa-plus"></i> Create new user', '/user/admin/create', [
+            'class'=>'btn btn-science-blue',
+            'role'=>'modal-remote',
+            'title'=> 'Add User',
+            'data-pjax'=>0,
+          ]).
+          Html::button('<i class="fa fa-magic"></i>Create order', [
+            'class' => 'btn btn-success admin_choose_user',
+            'type' => "submit",
+            'disabled'=>true
+          ])
+      ];
     }
     return $this->redirect(['/']);
   }

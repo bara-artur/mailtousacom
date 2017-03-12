@@ -2,7 +2,13 @@
 
 namespace app\modules\orderInclude\models;
 
+use app\modules\order\models\Order;
+use app\modules\address\models\Address;
+use \yii\web\Response;
+use yii\helpers\Html;
 use Yii;
+use app\modules\logs\models\Log;
+
 /**
  * This is the model class for table "order_include".
  *
@@ -52,4 +58,109 @@ class OrderInclude extends \yii\db\ActiveRecord
         ];
     }
 
+  /**
+   * Lists all OrderInclude models.
+   * @return mixed
+   */
+  public static function createOrder($user,$this_){
+    if (Yii::$app->user->can('userManager')&&($user!=0))
+      $user_id = $user;
+    else
+      $user_id = Yii::$app->user->id;
+
+    $request = Yii::$app->request;
+    $orderTable = Order::find()
+      ->select(['`order_element`.`order_id`','`order`.`id`'])
+      ->leftJoin('order_element', '`order`.`id` = `order_element`.`order_id`')
+      ->where(['user_id'=>$user_id,'order_id'=>null])
+      ->asArray()
+      ->all();
+
+    if(count($orderTable)>0){
+      foreach ($orderTable as $order){
+        if ($order['id']!=null){
+          if($request->isAjax){
+            $this_->redirect('/orderInclude/create-order/' . $order['id']);
+            return "Redirecting to create an order";
+          }else {
+            return $this_->redirect('/orderInclude/create-order/' . $order['id']);
+          }
+        }
+      }
+    }
+
+    $request = Yii::$app->request;
+    if(!Yii::$app->user->isGuest) {
+      $address = Address::find()->where('user_id = :id', [':id' => $user_id])->one();
+      if($address) {
+        $last_order = Order::find()->where('user_id = :id', [':id' => $user_id])->orderBy('created_at DESC')->one();
+        $address_id = $address->id;
+        $model = new Order();
+        $model->user_id = $user_id;
+        $model->billing_address_id = $address_id;
+        $model->order_status = 0;
+        $model->order_type = 0;
+        $model->user_id_750 = $model->user_id + 750;
+        if ($last_order->userOrder_id != null) {
+          $tmp = strripos($last_order->userOrder_id, '_'); // ищем начало индекса номера заказа
+          if ($tmp) $tmp = substr($last_order->userOrder_id, $tmp + 1); // если tmp не 0(не может быть заказа без юзера) и не false,  то берем индекс заказа
+          else $tmp = 0;
+          $model->userOrder_id = $user_id . '_' . ((int)$tmp + 1); // создаем новый номер
+        } else {
+          $model->userOrder_id = $user_id . '_1'; // создаем первый номер
+        }
+        $model->created_at = time();
+        $model->transport_data = time();
+        if ($model->save()) {
+          $log = new Log;
+          $log->createLog($model->user_id, $model->id, "Draft");
+
+          if ($request->isAjax) {
+            $this_->redirect('/orderInclude/create-order/' . $model->id);
+            return "Redirecting to create an order";
+          } else {
+            return $this_->redirect('/orderInclude/create-order/' . $model->id);
+          }
+        }
+      }
+      //return ddd($model);
+    }
+
+    if(Yii::$app->user->isGuest){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'You must login.'
+        );
+      return $this_->redirect('/');
+    }else {
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'An error has occurred. Try to create order again.'
+        );
+
+      if($request->isAjax){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        //$this_->redirect('address/create-order-billing');
+        return [
+          'title' => "This user does not have a billing address",
+          'content' => "Do you want to create a billing address for the user?",
+          'footer'=>
+            Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"]).
+            Html::a('Billing address', '/user/admin/billing?id='.$user, [
+              'title' => '',
+              'class'=>'btn btn-success',
+              'role'=>'modal-remote',
+              'data-pjax'=>0,
+            ])
+        ];
+
+      }else {
+        return $this_->redirect('address/create-order-billing');
+      }
+    }
+  }
 }
