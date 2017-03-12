@@ -8,10 +8,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use app\modules\order\models\OrderSearch;
-use app\modules\order\models\Order;
-use app\modules\payment\models\PaymentSearch;
-use app\modules\order\models\OrderFilterForm;
+use app\modules\orderElement\models\OrderElement;
+use app\modules\orderElement\models\OrderElementSearch;
 use app\modules\user\models\User;
 
 class SiteController extends Controller
@@ -83,7 +81,7 @@ class SiteController extends Controller
                 }
             }*/
 
-      $query['OrderSearch'] = Yii::$app->request->queryParams;
+      /*$query['OrderSearch'] = Yii::$app->request->queryParams;
       $time_to['created_at_to'] = null;
       $time_to['transport_date_to'] = null;
       // Загружаем фильтр из формы
@@ -95,24 +93,28 @@ class SiteController extends Controller
           $time_to = ['created_at_to' => $filterForm->created_at_to];
           $time_to += ['transport_date_to' => $filterForm->transport_data_to];
       }
-
+*/
       Yii::$app->params['showAdminPanel'] = 0;
       if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
 
-      $orderSearchModel = new OrderSearch();
+      $searchModel = new OrderElementSearch();
+      $orderElements = $searchModel->search(Yii::$app->request->queryParams);
+
+
+   //   $orderSearchModel = new OrderSearch();
       //$query = Yii::$app->request->queryParams;
-      if (Yii::$app->params['showAdminPanel']==0) {
-        if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
-        else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
-      }
-      $searchModel = new OrderSearch();
-      $orders = $searchModel->search($query,$time_to);
+     // if (Yii::$app->params['showAdminPanel']==0) {
+     //   if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
+       // else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
+      //}
+      //$searchModel = new OrderSearch();
+     // $orders = $searchModel->search($query,$time_to);
       //$orders = $orderSearchModel->search(null,null);
 
       return $this->render('index',[
-          'orders' => $orders,
-          'searchModel' => $orderSearchModel,
-          'filterForm' => $filterForm,
+          'orderElements' => $orderElements,
+          'searchModel' => $searchModel,
+        //  'filterForm' => $filterForm,
           //'emptyOrder' => $emptyOrder
       ]);
     }
