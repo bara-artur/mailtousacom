@@ -68,10 +68,10 @@ class SiteController extends Controller
     {
       if (!Yii::$app->user->isGuest) {
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-        if (!$user->isManager()) {
+        if (!Yii::$app->user->identity->isManager()) {
           $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
           if (!$haveOneAddress) {
-            return $this->redirect(['/address/create', 'first_address' => '1']);
+            return $this->redirect(['/address/create-order-billing', 'first_address' => '1']);
           }
         }
       }
