@@ -91,9 +91,10 @@ $(document).ready(function() {
   });
 
   $('body').on('click','.ui-autocomplete .ui-menu-item',function(){
-    data=$(this).data('uiAutocompleteItem')
+    data=$(this).data('uiAutocompleteItem');
+    $('.admin_choose_user').prop('disabled',false)
     console.log(data)
-  })
+  });
 });
 
 function show_err(el,txt){

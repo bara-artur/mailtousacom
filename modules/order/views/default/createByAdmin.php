@@ -25,6 +25,12 @@ use yii\helpers\Url;
 </div>
 <?php echo "
           <script>
+            $('.modal_user_choosing').on('keydown',function(){
+              $('.admin_choose_user').prop('disabled',true)
+            });
+            $('.modal_user_choosing').on('paste',function(){
+              $('.admin_choose_user').prop('disabled',true)
+            });
             /*setInterval(function (){
               if ($('.modal_user_choosing').val().substr(-16,16)=='[server_confirm]') {
                 str = $('.modal_user_choosing').val();
