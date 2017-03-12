@@ -32,7 +32,7 @@ use yii\web\JsExpression;
         'placeholder' =>'name, phone or email',
         'tabindex'=>'10',
         'z-index'=>'9999',
-        'class'=>'modal_user_choosing',
+        'class'=>'modal_user_choosing form-control',
       ],
   ])->label(false);
   ?>
