@@ -6,6 +6,9 @@ use app\modules\payment\models\PaymentsList;
 use app\modules\order\models\Order;
 use kartik\daterange\DateRangePicker;
 use kartik\widgets\DatePicker;
+use yii\web\JsExpression;
+use yii\jui\AutoComplete;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\order\models\orderFilterForm */
@@ -14,7 +17,7 @@ use kartik\widgets\DatePicker;
 <div class="orderFilterForm">
         <div id="collapse" class="panel panel-collapse collapse">
             <div class="panel-body">
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['class'=>'order-filter-form'],]); ?>
     <div class="row">
     <div class="col-md-1">
        <?= $form->field($model, 'id')->textInput () ?>
@@ -22,7 +25,27 @@ use kartik\widgets\DatePicker;
 
     <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
       <div class="col-md-1">
-        <?= $form->field($model, 'user_id')->textInput () ?>
+        <?=$form->field($model, 'user_input')->widget(AutoComplete::classname(),[
+          'name' => 'user',
+          'clientOptions' => [
+            'source' => Url::to(['/user/admin/find-user']),
+            'autoFill'=>true,
+            'autoFocus'=> false,
+            'select' => new JsExpression("AutoCompleteUserSelect"),
+            'focus' => new JsExpression("AutoCompleteUserSelect"),
+          ],
+          'options' =>
+            [
+              'placeholder' =>'name, phone or email',
+              'tabindex'=>'10',
+              'z-index'=>'9999',
+              'class'=>'modal_user_choosing form-control',
+            ],
+        ])->label(false);
+        ?>
+        <?=Html::activeHiddenInput($model, 'user_id',[
+          'class'=>"AutoCompleteId"
+        ]);?>
       </div>
     <?php } ?>
     <div class="col-md-2">
