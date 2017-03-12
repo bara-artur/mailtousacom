@@ -15,20 +15,17 @@ use yii\helpers\Url;
   <?php echo AutoComplete::widget([
     'name' => 'user',
     'clientOptions' => [
-      'source' => Url::to(['/order/create']),
+      'source' => Url::to(['/user/admin/find-user']),
     ],
     'options' => ['placeholder' =>'name, phone or email','tabindex'=>'10','z-index'=>'9999', 'class'=>'modal_user_choosing'],
   ]);
   ?>
 
-  <?=Html::a('Create user', ['/'], ['class' => 'btn btn-sm btn-info']);?>
-</div>
-<div class="col-xs-3 pull-right">
-  <?= Html::a('<i class="fa fa-magic"></i> Create new order', ['/'], ['class' => 'admin_choose_user btn btn-success pull-right']) ?>
+
 </div>
 <?php echo "
           <script>
-            setInterval(function (){
+            /*setInterval(function (){
               if ($('.modal_user_choosing').val().substr(-16,16)=='[server_confirm]') {
                 str = $('.modal_user_choosing').val();
                 str = str.substr(0,str.indexOf(')'));
@@ -38,7 +35,7 @@ use yii\helpers\Url;
               else {
                 $('.admin_choose_user').hide();
                 }
-            }, 500);
+            }, 500);*/
           </script>    
         "; ?>
 

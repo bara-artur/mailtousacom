@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\modules\user\models\User;
 use \yii\web\Response;
+use yii\helpers\Html;
 
 /**
  * DefaultController implements the CRUD actions for Order model.
@@ -31,7 +32,45 @@ class DefaultController extends Controller
         ];
     }
 
-     public function actionUpdate()
+  public function actionCreate()
+  {
+
+    $request = Yii::$app->request;
+
+    if ($request->isAjax) {
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if ($request->isGet) {
+          /*
+          *   Process for ajax request
+          */
+
+          Yii::$app->response->format = Response::FORMAT_JSON;
+
+          return [
+            'title' => "Select a user for the new order",
+            'content' => $this->renderAjax('createByAdmin'),
+            'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+              Html::a('<i class="fa fa-plus"></i> Create new user', '/user/admin/create', [
+                'class'=>'btn btn-science-blue',
+                'role'=>'modal-remote',
+                'title'=> 'Add User',
+                'data-pjax'=>0,
+              ]).
+              Html::button('<i class="fa fa-magic"></i>Create order', [
+                'class' => 'btn btn-success admin_choose_user',
+                'type' => "submit",
+                'disabled'=>true
+              ])
+
+          ];
+      } else {
+        return $this->redirect(['/']);
+      }
+    }
+    return $this->redirect(['/']);
+  }
+
+    public function actionUpdate()
     {
       $user = User::find()->where(['id' => Yii::$app->user->id])->one();
       if (($user!=null)&&(1)) {

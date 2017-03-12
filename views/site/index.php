@@ -6,6 +6,10 @@ use yii\grid\GridView;
 use app\modules\payment\models\PaymentsList;
 use yii\jui\DatePicker;
 use kartik\daterange\DateRangePicker;
+use yii\bootstrap\Modal;
+use johnitvn\ajaxcrud\CrudAsset;
+
+CrudAsset::register($this);
 /* @var $this yii\web\View */
 $this->title = 'Shipping to USA and Canada';
 ?>
@@ -24,15 +28,18 @@ if (!Yii::$app->user->isGuest) {
 
     <div class="row">
 
-            <?php if ($orders) { ?>
-        <div class="col-xs-2">
-                <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
-        </div>
+        <?php if ($orders) { ?>
+          <div class="col-xs-2">
+            <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+          </div>
+        <?php } ?>
 
-            <?php } ?>
         <div class="col-xs-3 pull-right">
-          <?=  Yii::$app->params['showAdminPanel'] ?>
-            <?= Html::a('<i class="fa fa-magic"></i> Create new order', ['/orderInclude/create-order'], ['class' => 'btn btn-success pull-right']) ?>
+          <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
+            [
+              'role'=>'modal-remote',
+              'class'=>'btn btn-success show_modal',
+            ])?>
         </div>
 
     </div>
@@ -132,3 +139,9 @@ if (!Yii::$app->user->isGuest) {
         ]); ?>
     </div>
 <?php }?>
+
+<?php Modal::begin([
+  "id"=>"ajaxCrudModal",
+  "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>
