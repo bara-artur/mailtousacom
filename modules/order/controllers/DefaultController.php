@@ -46,9 +46,12 @@ class DefaultController extends Controller
 
           Yii::$app->response->format = Response::FORMAT_JSON;
 
+          $model= new User;
           return [
             'title' => "Select a user for the new order",
-            'content' => $this->renderAjax('createByAdmin'),
+            'content' => $this->renderAjax('createByAdmin',[
+              'model'=>$model,
+            ]),
             'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
               Html::a('<i class="fa fa-plus"></i> Create new user', '/user/admin/create', [
                 'class'=>'btn btn-science-blue',

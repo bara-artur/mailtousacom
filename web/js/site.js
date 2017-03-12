@@ -89,12 +89,6 @@ $(document).ready(function() {
       if (input.type != 'hidden') select.value = '';
     }
   });
-
-  $('body').on('click','.ui-autocomplete .ui-menu-item',function(){
-    data=$(this).data('uiAutocompleteItem');
-    $('.admin_choose_user').prop('disabled',false)
-    console.log(data)
-  });
 });
 
 function show_err(el,txt){
@@ -482,5 +476,14 @@ function form_parcel_create_type(el){
   }else{
     $('.form_parcel_create_type_1').hide();
     $('.form_parcel_create_type_0').show();
+  }
+}
+
+function AutoCompleteUserSelect(e,ui){
+  if(ui.item.id || ui.item.id>1){
+    $('.admin_choose_user').prop('disabled',false);
+    $('.AutoCompleteId').val(ui.item.id);
+  }else{
+    $('.admin_choose_user').prop('disabled',true);
   }
 }

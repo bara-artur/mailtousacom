@@ -19,6 +19,8 @@ class User extends ActiveRecord  implements IdentityInterface
     public $doc0,$doc1,$doc2,$doc3,$doc4,$doc5;
 
     public $userDir;
+    public $user_id;
+    public $user_input;
     public $password;
 
     // Статусы пользователя

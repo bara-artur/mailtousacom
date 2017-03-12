@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\jui\AutoComplete;
 use app\modules\user\models\User;
 use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\orderElement\models\OrderElement */
@@ -11,16 +12,31 @@ use yii\helpers\Url;
 ?>
 
 <div class="order-element-form">
+  <?php $form = ActiveForm::begin(); ?>
 
-  <?php echo AutoComplete::widget([
+  <?=Html::activeHiddenInput($model, 'user_id',[
+    'class'=>"AutoCompleteId"
+  ]);?>
+
+  <?=$form->field($model, 'user_input')->widget(AutoComplete::classname(),[
     'name' => 'user',
     'clientOptions' => [
       'source' => Url::to(['/user/admin/find-user']),
+      'autoFill'=>true,
+      'autoFocus'=> false,
+      'select' => new JsExpression("AutoCompleteUserSelect"),
+      'focus' => new JsExpression("AutoCompleteUserSelect"),
     ],
-    'options' => ['placeholder' =>'name, phone or email','tabindex'=>'10','z-index'=>'9999', 'class'=>'modal_user_choosing'],
-  ]);
+    'options' =>
+      [
+        'placeholder' =>'name, phone or email',
+        'tabindex'=>'10',
+        'z-index'=>'9999',
+        'class'=>'modal_user_choosing',
+      ],
+  ])->label(false);
   ?>
-
+  <?php ActiveForm::end(); ?>
 
 </div>
 <?php echo "
@@ -31,17 +47,6 @@ use yii\helpers\Url;
             $('.modal_user_choosing').on('paste',function(){
               $('.admin_choose_user').prop('disabled',true)
             });
-            /*setInterval(function (){
-              if ($('.modal_user_choosing').val().substr(-16,16)=='[server_confirm]') {
-                str = $('.modal_user_choosing').val();
-                str = str.substr(0,str.indexOf(')'));
-                $('.admin_choose_user').show();
-                $('.admin_choose_user').attr('href','/orderInclude/create-order?user='+str);
-              }
-              else {
-                $('.admin_choose_user').hide();
-                }
-            }, 500);*/
           </script>    
         "; ?>
 
