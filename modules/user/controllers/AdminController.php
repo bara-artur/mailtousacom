@@ -69,7 +69,47 @@ class AdminController extends Controller
       ]);
     }
 
+    public function actionFindUser(){
+      $request = Yii::$app->request;
 
+      if ($request->isAjax) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if ($request->isGet) {
+          if (isset($_GET['term'])) {
+            $tmp = $_GET['term'];
+
+            //фомируем список
+            $listdata = User::find()
+              ->orWhere(['like', 'email', $tmp])
+              ->orWhere(['like', 'first_name', $tmp])
+              ->orWhere(['like', 'last_name', $tmp])
+              ->orWhere(['like', 'phone', $tmp])
+              ->select(['concat(id,\') \' ,first_name, \' \',last_name,\', \',phone,\', \',email,\'[server_confirm]\') as value', "concat(first_name, ' ',last_name,', ',phone,', ',email) as label"])
+              ->asArray()
+              ->all();
+
+            return $listdata;
+          } else {
+            /*
+            *   Process for ajax request
+            */
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return [
+              'title' => "Adding new packages",
+              'content' => $this->renderAjax('createByAdmin'),
+              //'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+              //  Html::button('Save', ['class' => 'btn btn-success', 'type' => "submit"])
+
+            ];
+          }
+        } else {
+          return $this->redirect(['/']);
+        }
+      }
+      return $this->redirect(['/']);
+    }
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.

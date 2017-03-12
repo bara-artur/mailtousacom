@@ -89,6 +89,11 @@ $(document).ready(function() {
       if (input.type != 'hidden') select.value = '';
     }
   });
+
+  $('body').on('click','.ui-autocomplete .ui-menu-item',function(){
+    data=$(this).data('uiAutocompleteItem')
+    console.log(data)
+  })
 });
 
 function show_err(el,txt){
