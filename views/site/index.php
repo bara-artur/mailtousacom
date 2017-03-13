@@ -34,6 +34,13 @@ if (!Yii::$app->user->isGuest) {
           </div>
         <?php } ?>
 
+        <hr class="bottom_line">
+        <div class="row">
+          <div class="col-md-12 scrit">
+            <?= $this->render('elementFilterForm', ['model' => $filterForm]);?>
+          </div>
+        </div>
+
         <div class="col-xs-3 pull-right">
           <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
             [
@@ -59,31 +66,33 @@ if (!Yii::$app->user->isGuest) {
                     return $data->user->lineInfo; else return '-empty-';
                   }
                 ],
-   //             ['attribute'=> 'order_status',
-//
-  //                'content' => function($data){
-    //                    if (Yii::$app->params['showAdminPanel']==1) return Html::dropDownList('ordStatus'.$data->id, $data->order_status, $data::getTextStatus(), ['class' => 'status_droplist']);
-      //                  else return $data::orderStatusText($data->order_status);
-        //            },
-          //      ],
- //               ['attribute'=> 'created_at',
-   //                 'content'=> function($data){
-     //                   if ($data->created_at == 0) return '-';
-       //                 else return date(\Yii::$app->params['data_time_format_php'],$data->created_at);
-         //           },
-           //         'format' => 'raw',
-             //   ],
+                ['attribute'=> 'status',
+                  'content' => function($data){
+                        return $data::elementStatusText($data->status);
+                    },
+                ],
+                ['attribute'=> 'created_at',
+                    'content'=> function($data){
+                        if ($data->created_at == 0) return '-';
+                        else return date(Yii::$app->params['data_time_format_php'],$data->created_at);
+                    },
+                    'format' => 'raw',
+                ],
  //               ['attribute'=> 'transport_data',
    //                 'content'=> function($data){
      //                   if ($data->transport_data == 0) return '-';
        //                 else return date(\Yii::$app->params['data_format_php'],$data->transport_data);
          //           }],
- //               ['attribute'=> 'payment_state',
-      //              'content' => function($data){
-   ///                   if (Yii::$app->params['showAdminPanel']==1) return Html::dropDownList('payStatus'.$data->id, $data->payment_state, PaymentsList::getTextStatus(), ['class' => 'status_droplist']);
-       //               else return PaymentsList::statusText($data->payment_state);
-         //           },
-           //     ],
+                ['attribute'=> 'payment_state',
+                  'content' => function($data){
+                    return PaymentsList::statusText($data->payment_state);
+                  },
+                ],
+                ['attribute'=> 'payment_type',
+                  'content' => function($data){
+                    return PaymentsList::statusPayText($data->payment_type);
+                  },
+                ],
                 [
                     'attribute' => 'price',
                     'content'=> function($data){
