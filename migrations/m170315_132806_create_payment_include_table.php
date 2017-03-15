@@ -12,7 +12,7 @@ class m170315_132806_create_payment_include_table extends Migration
      */
     public function up()
     {
-        $this->dropTable('payments_list');
+      //  $this->dropTable('payments_list');
         $this->createTable('payment_include', [
           'id' => $this->primaryKey(),
           'user_id' => $this->integer()->notNull(),

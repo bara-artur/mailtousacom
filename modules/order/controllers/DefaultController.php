@@ -113,12 +113,7 @@ class DefaultController extends Controller
     {
       if (!Yii::$app->user->isGuest) {
         $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-        if (!$user->isManager()) {
-          $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
-          if (!$haveOneAddress) {
-            return $this->redirect(['/address/create', 'first_address' => '1']);
-          }
-        }
+        if (!$user->isManager()) { }
       }
       /*        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
             $emptyOrder = null;
@@ -138,7 +133,6 @@ class DefaultController extends Controller
         $filterForm->load(Yii::$app->request->post());
         $query['OrderSearch'] = $filterForm->toArray();
         $time_to = ['created_at_to' => $filterForm->created_at_to];
-        $time_to += ['transport_date_to' => $filterForm->transport_data_to];
       }
 
       Yii::$app->params['showAdminPanel'] = 0;

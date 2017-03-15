@@ -100,7 +100,7 @@ class DefaultController extends Controller
       return $this->render('createOrder', [
         'edit_not_prohibited' => $edit_not_prohibited,
         'order_elements' => $order_elements,
-        'createNewAddress'=>!$model,
+        'createNewAddress'=>!$order_elements,
         'order_id'=>$id,
         'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
         'totalPriceArray' => $totalPriceArray,
