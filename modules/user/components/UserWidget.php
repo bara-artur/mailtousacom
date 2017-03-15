@@ -25,6 +25,9 @@ class UserWidget extends Widget
                 return $this->render('loginWidget', [
                     'model' => $model
                 ]);
+            }else{
+              $this->view->context->redirect(['/']);
+              Yii::$app->end();
             }
         }
 
