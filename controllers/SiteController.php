@@ -67,15 +67,18 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
-      if (!Yii::$app->user->isGuest) {
-        $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-        if (!Yii::$app->user->identity->isManager()) {
-          $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
-          if (!$haveOneAddress) {
-            return $this->redirect(['/address/create-order-billing', 'first_address' => '1']);
-          }
+      if (Yii::$app->user->isGuest) {
+        return $this->render('index_login');
+      }
+
+      $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+      if (!Yii::$app->user->identity->isManager()) {
+        $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
+        if (!$haveOneAddress) {
+          return $this->redirect(['/address/create-order-billing', 'first_address' => '1']);
         }
       }
+
 
       $query['OrderElementSearch'] = Yii::$app->request->queryParams;
       $time_to['created_at_to'] = null;
@@ -103,8 +106,8 @@ class SiteController extends Controller
       $dataProvider = $searchModel->search($query,$time_to);
 
       $showTable = new ShowParcelTableForm();
-$showTable->showSerial =1;
-$showTable->showID =1;
+      $showTable->showSerial =1;
+      $showTable->showID =1;
       return $this->render('index', [
         'searchModel' => $searchModel,
         'orderElements' => $dataProvider,

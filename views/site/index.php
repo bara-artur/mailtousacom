@@ -12,17 +12,8 @@ use johnitvn\ajaxcrud\CrudAsset;
 CrudAsset::register($this);
 /* @var $this yii\web\View */
 $this->title = 'Shipping to USA and Canada';
-?>
-  <div class="site-index">
-    <?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
-    <?php if (Yii::$app->session->hasFlash('signup-success')) { ?> <p> <?= Yii::$app->session->getFlash('signup-success');  ?> </p>  <?php } ?>
-    <?php if (Yii::$app->session->hasFlash('reset-success')) { ?> <p> <?= Yii::$app->session->getFlash('reset-success');  ?> </p>  <?php } ?>
 
-    <?= UserWidget::widget() ?>
 
-  </div>
-<?php
-if (!Yii::$app->user->isGuest) {
     ?>
     <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
 
@@ -147,7 +138,7 @@ if (!Yii::$app->user->isGuest) {
             ],
         ]); ?>
     </div>
-<?php }?>
+
 
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",
