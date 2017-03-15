@@ -41,6 +41,12 @@ if (!Yii::$app->user->isGuest) {
           </div>
         </div>
 
+        <div class="row">
+          <div class="col-md-12">
+            <?= $this->render('showParcelTableForm', ['model' => $showTable]);?>
+          </div>
+        </div>
+
         <div class="col-xs-3 pull-right">
           <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
             [

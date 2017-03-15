@@ -12,6 +12,8 @@ use app\modules\orderElement\models\OrderElement;
 use app\modules\orderElement\models\OrderElementSearch;
 use app\modules\user\models\User;
 use app\modules\orderElement\models\ElementFilterForm;
+use app\modules\user\models\ShowParcelTableForm;
+
 
 class SiteController extends Controller
 {
@@ -100,10 +102,14 @@ class SiteController extends Controller
       $searchModel = new OrderElementSearch();
       $dataProvider = $searchModel->search($query,$time_to);
 
+      $showTable = new ShowParcelTableForm();
+$showTable->showSerial =1;
+$showTable->showID =1;
       return $this->render('index', [
         'searchModel' => $searchModel,
         'orderElements' => $dataProvider,
-        'filterForm' => $filterForm
+        'showTable' => $showTable,
+        'filterForm' => $filterForm,
       ]);
     }
 
