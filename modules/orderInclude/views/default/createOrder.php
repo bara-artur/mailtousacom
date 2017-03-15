@@ -140,9 +140,7 @@ $submitOption = [
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="row">
           <div class="col-md-12">
             <h5 class="total_package padding-top-10">Total</h5>
             <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
@@ -209,8 +207,9 @@ $submitOption = [
                 ])?>
             </div>
           </div>
-        </div>
+
         <?php Pjax::end(); ?>
+        </div>
         <hr>
       <?php } ?>
     <?php } ?>
