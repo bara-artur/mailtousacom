@@ -59,7 +59,7 @@ class OrderElement extends \yii\db\ActiveRecord
             [['first_name', 'last_name','company_name', 'adress_1','city', 'zip', 'phone', 'state'], 'required'],
             [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
             [['company_name'], 'string', 'max' => 128],
-            [['order_id','track_number'], 'integer'],
+            [['track_number'], 'string'],
             [['weight'], 'double'],
             [['track_number_type'], 'integer'],
             [['address_type','weight','track_number','track_number_type'], 'safe'],

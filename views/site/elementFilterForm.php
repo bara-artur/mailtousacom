@@ -65,9 +65,6 @@ use app\modules\orderElement\models\OrderElement;
           ]);?>
         </div>
         <div class="col-md-2">
-          <?= $form->field($model, 'payment_type')->dropDownList(PaymentsList::getPayStatus()) ?>
-        </div>
-        <div class="col-md-2">
           <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
         </div>
         <div class="col-md-2">

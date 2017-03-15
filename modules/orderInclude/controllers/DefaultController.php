@@ -55,32 +55,51 @@ class DefaultController extends Controller
       //  var_dump(Yii::$app->request);
       //$totalPriceArray = [0];
       $totalPriceArray=[];
-      $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
-      $hideNext = 0;
-      foreach($model as $percel)
-        {
-            $totalPrice = 0;
-            foreach ($percel->orderInclude as $ordInclude) {
-                $totalPrice += ($ordInclude->price * $ordInclude->quantity);
-            }
-            if ($totalPrice > Yii::$app->params['parcelMaxPrice']) $hideNext = 1;
-            $totalPriceArray[] = $totalPrice;
-        }
+ /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
+*/
+      $model = new OrderElement();
+      $hideNext =0 ;
       $order = Order::find()->where(['id'=>$id])->one();
-      $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
+      if (!$order) { // первый заход на сайт обычного user
+        $order = new Order();
+        $order->user_id = Yii::$app->user->id;
+        $order->created_at = time();
+        $order->el_group = '';
+        $order->save();
+      }
+      $numbers = explode(',',$order->el_group);
+
+      $hideNext = 0;
+      $order_elements = [];
+      if ($order->el_group != '') {
+        foreach ($numbers as $parcel_id) {
+          $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
+          $order_elements[] = $parcel;
+
+          $totalPrice = 0;
+          foreach ($parcel->orderInclude as $ordInclude) {
+            $totalPrice += ($ordInclude->price * $ordInclude->quantity);
+          }
+          if ($totalPrice > Yii::$app->params['parcelMaxPrice']) $hideNext = 1;
+          $totalPriceArray[] = $totalPrice;
+        }
+      }
+      $edit_not_prohibited = 1;
+      $message_for_edit_prohibited_order = 'Editing order prohibited';
+   /*   $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
       $message_for_edit_prohibited_order = " ";
       $edit_not_prohibited = 1;
       if ($payment['status'] > 0) {
           $edit_not_prohibited = 0;
           $message_for_edit_prohibited_order = "Editing order prohibited, because the order has been paid.";
-      }
-      if ($order->order_status > 1) {
+      }*/
+  /*    if ($order->order_status > 1) {
           $edit_not_prohibited = 0;
           $message_for_edit_prohibited_order = $message_for_edit_prohibited_order."<br>Editing order prohibited, because the order has been received at MailtoUSA facility.";
-      }
+      }*/
       return $this->render('createOrder', [
         'edit_not_prohibited' => $edit_not_prohibited,
-        'order_elements' => $model,
+        'order_elements' => $order_elements,
         'createNewAddress'=>!$model,
         'order_id'=>$id,
         'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,

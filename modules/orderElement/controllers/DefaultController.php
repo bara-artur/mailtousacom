@@ -2,6 +2,7 @@
 
 namespace app\modules\orderElement\controllers;
 
+use app\modules\order\models\Order;
 use Yii;
 use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderElement\models\OrderElement;
@@ -146,13 +147,20 @@ class DefaultController extends Controller
         
                 ];         
             }else if($model->load($request->post()) && $model->save()){
-
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Adding new packages",
-                    'content'=>'<span class="text-success">Create packages success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
-                ];
+                $order = Order::find()->where(['id'=> $_POST['OrderElement']['order_id']])->one();
+                if ($order->el_group==null) {
+                  $order->el_group = $model->id;
+                }else{
+                  $order->el_group = $order->el_group.','.$model->id;
+                }
+                if ($order->save()) {
+                  return [
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "Adding new packages",
+                    'content' => '<span class="text-success">Create packages success</span>',
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                  ];
+                }else throw new NotFoundHttpException('Order not requested');
             }else{
                 return [
                     'title'=> "Adding new packages",

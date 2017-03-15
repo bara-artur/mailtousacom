@@ -55,14 +55,6 @@ $this->title = 'Shipping to USA and Canada';
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
            //   'userOrder_id',
-                ['attribute'=> 'order_id',
-                  'visible' => (Yii::$app->params['showAdminPanel']==1),
-                  'format' => 'raw',
-                  'label'=>'Order ID',
-                  'content'=> function($data){return $data->order_id; if ($data->user!=null)
-                    return $data->user->lineInfo; else return '-empty-';
-                  }
-                ],
                 ['attribute'=> 'status',
                   'content' => function($data){
                         return $data::elementStatusText($data->status);
@@ -83,11 +75,6 @@ $this->title = 'Shipping to USA and Canada';
                 ['attribute'=> 'payment_state',
                   'content' => function($data){
                     return PaymentsList::statusText($data->payment_state);
-                  },
-                ],
-                ['attribute'=> 'payment_type',
-                  'content' => function($data){
-                    return PaymentsList::statusPayText($data->payment_type);
                   },
                 ],
                 [

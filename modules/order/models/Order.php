@@ -10,13 +10,9 @@ use app\modules\user\models\User;
  * This is the model class for table "order".
  *
  * @property integer $id
- * @property integer $billing_address_id
- * @property integer $order_type
+ * @property integer $el_group
  * @property integer $user_id
- * @property integer $user_id_750
- * @property integer $order_status
  * @property string $created_at
- * @property string $transport_data
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -62,10 +58,9 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status'], 'required'],
-            [['billing_address_id', 'order_type', 'user_id', 'user_id_750', 'order_status','agreement',
-                'payment_type','payment_state'], 'integer'],
-            [['created_at', 'transport_data'], 'safe'],
+            [['user_id'], 'required'],
+            [[ 'user_id'], 'integer'],
+            [['created_at'], 'safe'],
         ];
     }
 
@@ -76,25 +71,11 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'Order ID',
-            'billing_address_id' => 'Billing Address ID',
-            'order_type' => 'Order Type',
             'user_id' => 'User ID',
-            'user_id_750' => 'User Id 750',
-            'order_status' => 'Order Status',
+            'el_group' => 'User ID',
             'created_at' => 'Created At',
-            'created_at_to' => 'Created At To',
-            'transport_data' => 'Transport Data',
-            'qst' => 'QST/HST (%)',
-            'gst' => 'PST (%)',
-            'total'=>"Total"
+
         ];
     }
 
-  public function beforeSave($insert)
-  {
-    if (strlen($this->transport_data) > 0 && !ctype_digit($this->transport_data)) {
-      $this->transport_data = strtotime($this->transport_data);
-    }
-    return true;
-  }
 }

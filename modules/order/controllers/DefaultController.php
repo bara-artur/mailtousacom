@@ -34,9 +34,12 @@ class DefaultController extends Controller
         ];
     }
 
-  public function actionCreate()
+  public function actionCreate()   // попадаем если админ начинает оформлять заказ
   {
-    if(!Yii::$app->user->identity->isManager()){
+    if(!Yii::$app->user->identity->isManager()){  // user зашел не по адресу
+      if (!Yii::$app->user->isGuest){
+        return OrderInclude::createOrder(Yii::$app->user->id,$this);
+      }
       Yii::$app
         ->getSession()
         ->setFlash(
@@ -50,7 +53,7 @@ class DefaultController extends Controller
     $request = Yii::$app->request;
     if ($request->isAjax) {
       Yii::$app->response->format = Response::FORMAT_JSON;
-      if ($request->isPost) {
+      if ($request->isPost) {  // выбрали user_id для создания заказа ... идём оформлять посылки
         $model->load($request->post());
         if($model->user_id) {
           return OrderInclude::createOrder($model->user_id,$this);
@@ -59,7 +62,7 @@ class DefaultController extends Controller
         }
       }
       Yii::$app->response->format = Response::FORMAT_JSON;
-
+      //  показываем модалку для выбора пользователя или создания нового
       return [
         'title' => "Select a user for the new order",
         'content' => $this->renderAjax('createByAdmin',[

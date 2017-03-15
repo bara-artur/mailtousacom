@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-10"><p class="hint-block">Data are output automatically and serve only for informing you</p></div>
         <?php if ($show_button) { ?>
-        <?=Html::a('NEXT<i class="icon-metro-arrow-right-5"></i>', ['/orderInclude/create-order'],
+        <?=Html::a('NEXT<i class="icon-metro-arrow-right-5"></i>', ['/order/create/'],
           [
             'class'=>'btn btn-success push-down-margin-thin width_but pull-right go_to_order'
           ])?>

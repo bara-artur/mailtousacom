@@ -18,8 +18,8 @@ class OrderElementSearch extends OrderElement
     public function rules()
     {
         return [
-            [['id', 'order_id', 'status',
-              'payment_state','payment_type'], 'integer'],
+            [['id', 'status',
+              'payment_state'], 'integer'],
             [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2',
                'city', 'zip', 'phone', 'state','created_at', 'transport_data',
                'transport_data_to','created_at_to'], 'safe'],
@@ -60,10 +60,8 @@ class OrderElementSearch extends OrderElement
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'order_id' => $this->order_id,
             'status' => $this->status,
             'payment_state' => $this->payment_state,
-            'payment_type' => $this->payment_type,
 
         ]);
 

@@ -69,8 +69,9 @@ class OrderInclude extends \yii\db\ActiveRecord
       $user_id = Yii::$app->user->id;
 
     $request = Yii::$app->request;
-    $orderTable = Order::find()
-      ->select(['`order_element`.`order_id`','`order`.`id`'])
+    $emptyOrder = Order::find()->andWhere(['user_id'=>$user_id])->andWhere(['el_group'=>null])->one();
+    if ($emptyOrder!=null) return $this_->redirect('/orderInclude/create-order/' . $emptyOrder['id']);  // actionCreateOrder2
+     /* ->select(['`order_element`.`order_id`','`order`.`id`'])
       ->leftJoin('order_element', '`order`.`id` = `order_element`.`order_id`')
       ->where(['user_id'=>$user_id,'order_id'=>null])
       ->asArray()
@@ -88,7 +89,7 @@ class OrderInclude extends \yii\db\ActiveRecord
         }
       }
     }
-
+*/
     $request = Yii::$app->request;
     if(!Yii::$app->user->isGuest) {
       $address = Address::find()->where('user_id = :id', [':id' => $user_id])->one();
@@ -97,20 +98,7 @@ class OrderInclude extends \yii\db\ActiveRecord
         $address_id = $address->id;
         $model = new Order();
         $model->user_id = $user_id;
-        $model->billing_address_id = $address_id;
-        $model->order_status = 0;
-        $model->order_type = 0;
-        $model->user_id_750 = $model->user_id + 750;
-        if ($last_order->userOrder_id != null) {
-          $tmp = strripos($last_order->userOrder_id, '_'); // ищем начало индекса номера заказа
-          if ($tmp) $tmp = substr($last_order->userOrder_id, $tmp + 1); // если tmp не 0(не может быть заказа без юзера) и не false,  то берем индекс заказа
-          else $tmp = 0;
-          $model->userOrder_id = $user_id . '_' . ((int)$tmp + 1); // создаем новый номер
-        } else {
-          $model->userOrder_id = $user_id . '_1'; // создаем первый номер
-        }
         $model->created_at = time();
-        $model->transport_data = time();
         if ($model->save()) {
           $log = new Log;
           $log->createLog($model->user_id, $model->id, "Draft");

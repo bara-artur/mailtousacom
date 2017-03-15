@@ -16,7 +16,7 @@ class m170315_105838_system_reorganization extends Migration
         'id' => $this->primaryKey(),
         'user_id' => $this->integer()->notNull(),
         'el_group' => $this->string(128),
-        'create_at' => $this->integer()->notNull(),
+        'created_at' => $this->integer()->notNull(),
       ]);
       $this->dropColumn('order_element', 'order_id');
       $this->dropColumn('order_element', 'group_index');

@@ -52,13 +52,6 @@ if (!Yii::$app->user->isGuest) {
             return $data->user->lineInfo; else return '-empty-';
           }
         ],
-        ['attribute'=> 'order_status',
-
-          'content' => function($data){
-            if (Yii::$app->params['showAdminPanel']==1) return Html::dropDownList('ordStatus'.$data->id, $data->order_status, $data::getTextStatus(), ['class' => 'status_droplist']);
-            else return $data::orderStatusText($data->order_status);
-          },
-        ],
         ['attribute'=> 'created_at',
           'content'=> function($data){
             if ($data->created_at == 0) return '-';
@@ -66,50 +59,6 @@ if (!Yii::$app->user->isGuest) {
           },
           'format' => 'raw',
         ],
-        ['attribute'=> 'transport_data',
-          'content'=> function($data){
-            if ($data->transport_data == 0) return '-';
-            else return date(\Yii::$app->params['data_format_php'],$data->transport_data);
-          }],
-        ['attribute'=> 'payment_state',
-          'content' => function($data){
-            if (Yii::$app->params['showAdminPanel']==1) return Html::dropDownList('payStatus'.$data->id, $data->payment_state, PaymentsList::getTextStatus(), ['class' => 'status_droplist']);
-            else return PaymentsList::statusText($data->payment_state);
-          },
-        ],
-        [
-          'attribute' => 'price',
-          'content'=> function($data){
-            if ($data->price == 0) return '-';
-            else return number_format($data->price,2);
-          },
-          'format'=>['decimal',2]
-        ],
-        [
-          'attribute' => 'qst',
-          'content'=> function($data){
-            if ($data->qst == 0) return '-';
-            else return number_format($data->qst,2);
-          },
-          'format'=>['decimal',2]
-        ],
-        [
-          'attribute' => 'gst',
-          'content'=> function($data){
-            if ($data->gst == 0) return '-';
-            else return number_format($data->gst,2);
-          },
-          'format'=>['decimal',2]
-        ],
-        [
-          'attribute' => 'total',
-          'content'=> function($data){
-            if ($data->gst == 0) return '-';
-            else return number_format($data->gst+$data->qst+$data->price,2);
-          },
-          'format'=>['decimal',2]
-        ],
-
         // 'order_status',
         // 'created_at',
         // 'transport_data',
