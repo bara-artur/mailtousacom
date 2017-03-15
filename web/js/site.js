@@ -78,16 +78,13 @@ $(document).ready(function() {
 
   $(".reset_filter").on("click", function (){
     event.preventDefault();
-    elements = document.getElementsByTagName('input');
+
+    elements = $(this).parents('form:first').find("input,select");  // выборка внутри формы всех селектов и инпутов
     for (var i = 0; i < elements.length; i++) {
       var input = elements[i];
-      if (input.type != 'hidden') input.value = '';
+      if ((input.type != 'hidden')||((' ' + input.className + ' ').indexOf(' AutoCompleteId ') > -1)) input.value = ''; // проверка наличия класса AutoCompleteId
     }
-    selects = document.getElementsByTagName('select');
-    for (var i = 0; i < selects.length; i++) {
-      var select = selects[i];
-      if (input.type != 'hidden') select.value = '';
-    }
+
   });
 });
 

@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use app\modules\user\models\User;
 use \yii\web\Response;
 use yii\helpers\Html;
+use app\modules\order\models\OrderFilterForm;
 
 /**
  * DefaultController implements the CRUD actions for Order model.
@@ -105,19 +106,59 @@ class DefaultController extends Controller
      * Lists all Order models.
      * @return mixed
      */
-    /*    public function actionIndex()
+    public function actionIndex()
     {
-          $searchModel = new OrderSearch();
-          $dataProvider = $searchModel->search(['OrderSearch' => [
-              'user_id' => Yii::$app->user->id,
-          ]]);
-
-          return $this->render('index', [
-              'searchModel' => $searchModel,
-              'dataProvider' => $dataProvider,
-          ]);
+      if (!Yii::$app->user->isGuest) {
+        $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+        if (!$user->isManager()) {
+          $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
+          if (!$haveOneAddress) {
+            return $this->redirect(['/address/create', 'first_address' => '1']);
+          }
+        }
       }
-  */
+      /*        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
+            $emptyOrder = null;
+            foreach ($orderTable as $i=>$order){
+                if ($emptyOrder==null){
+                    if (count($order->orderElement)==0) $emptyOrder =$order->id;
+                }
+            }*/
+
+      $query['OrderSearch'] = Yii::$app->request->queryParams;
+      $time_to['created_at_to'] = null;
+      $time_to['transport_date_to'] = null;
+      // Загружаем фильтр из формы
+      $filterForm = new OrderFilterForm();
+      if(Yii::$app->request->post()) {
+        $filterForm = new OrderFilterForm();
+        $filterForm->load(Yii::$app->request->post());
+        $query['OrderSearch'] = $filterForm->toArray();
+        $time_to = ['created_at_to' => $filterForm->created_at_to];
+        $time_to += ['transport_date_to' => $filterForm->transport_data_to];
+      }
+
+      Yii::$app->params['showAdminPanel'] = 0;
+      if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
+
+      $orderSearchModel = new OrderSearch();
+      //$query = Yii::$app->request->queryParams;
+      if (Yii::$app->params['showAdminPanel']==0) {
+        if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
+        else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
+      }
+      $searchModel = new OrderSearch();
+      $orders = $searchModel->search($query,$time_to);
+      //$orders = $orderSearchModel->search(null,null);
+
+      return $this->render('index',[
+        'orders' => $orders,
+        'searchModel' => $orderSearchModel,
+        'filterForm' => $filterForm,
+        //'emptyOrder' => $emptyOrder
+      ]);
+    }
+
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

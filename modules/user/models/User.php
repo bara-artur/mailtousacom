@@ -312,9 +312,10 @@ class User extends ActiveRecord  implements IdentityInterface
         if (empty($token)) {
             return false;
         }
-        $parts = explode('_', $token);
-        $timestamp = (int)end($parts);
-        return $timestamp + self::EXPIRE >= time();
+        return true;
+     //   $parts = explode('_', $token);
+     //   $timestamp = (int)end($parts);
+     //   return $timestamp + self::EXPIRE >= time();
     }
 
     /**

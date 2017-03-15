@@ -38,7 +38,7 @@ class DefaultController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {    
+    {
         $searchModel = new OrderElementSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

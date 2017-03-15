@@ -25,6 +25,26 @@ class OrderElement extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+  public static function getTextStatus(){
+    return array(
+      ''=>'All',
+      '0'=>'Draft',
+      '1'=>'Awaiting at MailtoUSA facility',
+      '2'=>'Received at MailtoUSA facility',
+      '3'=>'On route to USA border',
+      '4'=>'Transferred to XXX faclitity',
+      '5'=>'YYY status',
+      '6'=>'Returned at MailtoUSA facility',
+    );
+  }
+
+  public static function elementStatusText($param)
+  {
+    $textForStatus =  OrderElement::getTextStatus();
+    if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
+    else return 'Unknown status';
+  }
+
     public static function tableName()
     {
         return 'order_element';
