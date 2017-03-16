@@ -104,6 +104,8 @@ class DefaultController extends Controller
 
       $model = OrderElement::find()->where(['id'=>$el_group])->all();
       $user_id=false;
+      $payments_list=[];
+
       foreach ($model as &$pac) {
         if(!$user_id){
           $user_id=$pac->user_id;
@@ -112,20 +114,19 @@ class DefaultController extends Controller
             throw new NotFoundHttpException('You can not pay parcels for different users.');
           }
         }
+
+        $item=[
+          'track_number'=>$pac->track_number,
+          'track_number_type'=>$pac->track_number_type,
+          'weight'=>$pac->weight,
+          'source'=>$pac->source,
+        ];
+        $payments_list[$pac->id]=$item;
       }
 
       if(!Yii::$app->user->identity->isManager() && $user_id!=Yii::$app->user->identity->id){
         throw new NotFoundHttpException('You can pay only for your packages.');
       }
-
-      $total=array(
-        'price'=>0,
-        'weight'=>0,
-        'quantity'=>0,
-        'gst'=>0,
-        'qst'=>0,
-        'sum'=>0,
-      );
 
       $query = new Query;
       $query->select('state')
@@ -147,9 +148,66 @@ class DefaultController extends Controller
       $tax = $query->one();
 
 
-      ddd($tax);
-      exit;
+      $payments=PaymentInclude::find()
+        ->select(['element_id','sum(price) as already_price','sum(qst) as already_qst','sum(gst) as already_gst'])
+        ->where([
+          'element_type'=>0,
+          'element_id'=>$el_group,
+          'status'=>1
+        ])
+        ->groupBy(['element_id'])
+        ->asArray()
+        ->all();
 
+      $tot_already_pays=0;
+      foreach ($payments as $pay) {
+        $pay['already_price']=round($pay['already_price'],2);
+        $pay['already_qst']=round($pay['already_qst'],2);
+        $pay['already_gst']=round($pay['already_gst'],2);
+        $payments_list[$pay['element_id']]=array_merge($pay,$payments_list[$pay['element_id']]);
+        $tot_already_pays+=$pay['already_price'];
+      };
+      $tot_already_pays=round($tot_already_pays,2);
+
+      $total=array(
+        'price'=>0,
+        'gst'=>0,
+        'qst'=>0,
+      );
+
+      $tot_pays=0;
+      foreach ($payments_list as &$item) {
+        $item['price']=(float)ParcelPrice::widget(['weight'=>$item['weight'],'user'=>$user_id]);
+        $item['qst']=round($item['price']*$tax['qst']/100,2);
+        $item['gst']=round($item['price']*$tax['gst']/100,2);
+        $tot_pays+=$item['price'];
+
+        if($item['price']<$item['already_price']){
+          Yii::$app->getSession()->setFlash('info', 'For the selected parcels there is an overpayment.');
+          $item['err']='For the this parcel there is an overpayment.';
+        }
+        $item['total_price']=$item['price']-$item['already_price'];
+        $item['total_qst']=$item['qst']-$item['already_qst'];
+        $item['total_gst']=$item['price']-$item['already_gst'];
+
+        $item['total_price']=round($item['total_price'],2);
+        $item['total_qst']=round($item['total_qst'],2);
+        $item['total_gst']=round($item['total_gst'],2);
+
+        $total['price']+=$item['total_price'];
+        $total['gst']+=$item['total_qst'];
+        $total['qst']+=$item['total_gst'];
+      }
+      $tot_pays=round($tot_pays,2);
+
+      if($tot_already_pays==$tot_pays){
+        Yii::$app->getSession()->setFlash('error', 'All selected orders have already been paid.');
+        return $this->redirect(['/orderInclude/create-order/'.$id]);
+      }
+
+      d($total);
+      ddd($payments_list);
+      /*
       if($order->payment_state!=0 && !Yii::$app->user->identity->isManager()){
         Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
         return $this->redirect(['/']);
@@ -291,10 +349,7 @@ class DefaultController extends Controller
         'order_id'=>$id,
         'total'=>$total,
         'model'=>$order,
-        /*'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-        'order' => $model,*/
-      ]);
+      ]);*/
 
     }
 

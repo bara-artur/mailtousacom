@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\payment\Module\models;
+namespace app\modules\payment\models;
 
 use Yii;
 
