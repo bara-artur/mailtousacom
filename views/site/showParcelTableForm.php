@@ -22,9 +22,11 @@ use app\modules\orderElement\models\OrderElement;
         <div class="col-md-1">
           <?= $form->field($model, 'showSerial')->checkbox(['class'=>'form-control']) ?>
         </div>
-        <div class="col-md-1">
-          <?= $form->field($model, 'showID')->checkbox(['class'=>'form-control']) ?>
-        </div>
+        <?php if (Yii::$app->params['showAdminPanel']==1) { ?>
+          <div class="col-md-1">
+            <?= $form->field($model, 'showID')->checkbox(['class'=>'form-control']) ?>
+          </div>
+        <?php } ?>
         <div class="col-md-1">
           <?= $form->field($model, 'showStatus')->checkbox(['class'=>'form-control'])?>
         </div>
@@ -36,9 +38,13 @@ use app\modules\orderElement\models\OrderElement;
         <div class="col-md-1">
           <?= $form->field($model, 'showPaymentState')->checkbox(['class'=>'form-control'])?>
         </div>
-
+        <?php if (false){?>
         <div class="col-md-1">
           <?= $form->field($model, 'showPaymentType')->checkbox(['class'=>'form-control'])?>
+        </div>
+        <?php }?>
+        <div class="col-md-1">
+          <?= $form->field($model, 'showPrice')->checkbox(['class'=>'form-control'])?>
         </div>
 
         <div class="col-md-1">
@@ -53,9 +59,8 @@ use app\modules\orderElement\models\OrderElement;
           <?= $form->field($model, 'showTotal')->checkbox(['class'=>'form-control'])?>
         </div>
 
-        <div class="col-xs-3 padding-off-left">
-          <?=Html::a('Refresh Table', ['/'],
-            ['title'=> 'Refresh','class'=>'btn btn btn-science-blue'])?>
+        <div class="col-md-2">
+          <?= Html::submitButton('Refresh table', ['class' => 'btn btn-success but_top']) ?>
         </div>
       </div>
     </div>

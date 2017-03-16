@@ -146,7 +146,10 @@ class DefaultController extends Controller
                                 Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
+            }else if($model->load($request->post())  ){
+                $model-> user_id = Yii::$app->user->id;
+                $model-> created_at = time();
+                $model->save();
                 $order = Order::find()->where(['id'=> $_POST['OrderElement']['order_id']])->one();
                 if ($order->el_group==null) {
                   $order->el_group = $model->id;

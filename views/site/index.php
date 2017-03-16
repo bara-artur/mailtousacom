@@ -53,12 +53,17 @@ $this->title = 'Shipping to USA and Canada';
         <?= GridView::widget([
             'dataProvider' => $orderElements,
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+                ['class' => 'yii\grid\SerialColumn',
+                  'visible' => $showTable->showSerial,],
            //   'userOrder_id',
+                ['attribute'=> 'user_id',
+                  'visible' => (($showTable->showID)&&(Yii::$app->params['showAdminPanel']==1)),
+                ],
                 ['attribute'=> 'status',
                   'content' => function($data){
                         return $data::elementStatusText($data->status);
                     },
+                  'visible' => $showTable->showStatus,
                 ],
                 ['attribute'=> 'created_at',
                     'content'=> function($data){
@@ -66,16 +71,24 @@ $this->title = 'Shipping to USA and Canada';
                         else return date(Yii::$app->params['data_time_format_php'],$data->created_at);
                     },
                     'format' => 'raw',
+                    'visible' => $showTable->showCreatedAt,
                 ],
  //               ['attribute'=> 'transport_data',
    //                 'content'=> function($data){
      //                   if ($data->transport_data == 0) return '-';
        //                 else return date(\Yii::$app->params['data_format_php'],$data->transport_data);
          //           }],
+              //  ['attribute'=> 'payment_type',
+                //  'content' => function($data){
+                  //  return PaymentsList::statusText($data->payment_state);
+           //       },
+             //     'visible' => $showTable->showPaymentType,
+               // ],
                 ['attribute'=> 'payment_state',
                   'content' => function($data){
                     return PaymentsList::statusText($data->payment_state);
                   },
+                  'visible' => $showTable->showPaymentState,
                 ],
                 [
                     'attribute' => 'price',
@@ -83,7 +96,8 @@ $this->title = 'Shipping to USA and Canada';
                         if ($data->price == 0) return '-';
                         else return number_format($data->price,2);
                     },
-                    'format'=>['decimal',2]
+                    'format'=>['decimal',2],
+                    'visible' => $showTable->showPrice,
                 ],
                 [
                     'attribute' => 'qst',
@@ -91,7 +105,8 @@ $this->title = 'Shipping to USA and Canada';
                         if ($data->qst == 0) return '-';
                         else return number_format($data->qst,2);
                     },
-                    'format'=>['decimal',2]
+                    'format'=>['decimal',2],
+                    'visible' => $showTable->showQst,
                 ],
                 [
                     'attribute' => 'gst',
@@ -99,7 +114,8 @@ $this->title = 'Shipping to USA and Canada';
                         if ($data->gst == 0) return '-';
                         else return number_format($data->gst,2);
                     },
-                    'format'=>['decimal',2]
+                    'format'=>['decimal',2],
+                  'visible' => $showTable->showGst,
                 ],
                 [
                     'attribute' => 'total',
@@ -107,7 +123,8 @@ $this->title = 'Shipping to USA and Canada';
                         if ($data->gst == 0) return '-';
                         else return number_format($data->gst+$data->qst+$data->price,2);
                     },
-                    'format'=>['decimal',2]
+                    'format'=>['decimal',2],
+                    'visible' => $showTable->showTotal,
                 ],
 
                 // 'order_status',

@@ -87,13 +87,19 @@ class SiteController extends Controller
       // Загружаем фильтр из формы
       $filterForm = new ElementFilterForm();
       if(Yii::$app->request->post()) {
-        $filterForm = new ElementFilterForm();
+        $filterForm = new ElementFilterForm(); // форма фильтра
+        $showTable = new ShowParcelTableForm(-1); // форма настройки столбцов таблицы
+        $showTable->load(Yii::$app->request->post());
+        if (($showTable->showSerial!=null)&&($showTable->getAllFlags() != $user->parcelTableOptions)) {
+          $user->parcelTableOptions = $showTable->getAllFlags();
+          if ($user)$user->save();
+        }
         $filterForm->load(Yii::$app->request->post());
         $query['OrderElementSearch'] = $filterForm->toArray();
         $time_to = ['created_at_to' => $filterForm->created_at_to];
         $time_to += ['transport_date_to' => $filterForm->transport_data_to];
       }
-     // var_dump($query);
+
       Yii::$app->params['showAdminPanel'] = 0;
       $user = User::find()->where(['id' => Yii::$app->user->id])->one();
       if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
@@ -103,12 +109,12 @@ class SiteController extends Controller
         if (array_key_exists('OrderElementSearch', $query)) $query['OrderElementSearch'] += ['user_id' => Yii::$app->user->id];
         else $query['OrderElementSearch'] = ['user_id' => Yii::$app->user->id];
       }
+
       $searchModel = new OrderElementSearch();
       $dataProvider = $searchModel->search($query,$time_to);
 
-      $showTable = new ShowParcelTableForm();
-      $showTable->showSerial =1;
-      $showTable->showID =1;
+      $showTable = new ShowParcelTableForm($user->parcelTableOptions);
+
       return $this->render('index', [
         'searchModel' => $searchModel,
         'orderElements' => $dataProvider,
