@@ -24,7 +24,9 @@ $this->title = 'Shipping to USA and Canada';
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
           </div>
         <?php } ?>
-
+        <div class="col-xs-2">
+          <?= Html::a('<i class="fa fa-search"></i>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+        </div>
         <hr class="bottom_line">
         <div class="row">
           <div class="col-md-12 scrit">

@@ -16,6 +16,7 @@ use app\modules\orderElement\models\OrderElement;
 /* @var $form ActiveForm */
 ?>
 <div class="showParcelTableForm">
+  <div id="collapseTableOptions" class="panel panel-collapse collapse">
     <div class="panel-body">
       <?php $form = ActiveForm::begin(['options' => ['class'=>'show-parcel-table-form'],]); ?>
       <div class="row">
@@ -66,5 +67,5 @@ use app\modules\orderElement\models\OrderElement;
     </div>
 
   <?php ActiveForm::end(); ?>
-
+  </div>
 </div><!-- orderFilterForm -->
