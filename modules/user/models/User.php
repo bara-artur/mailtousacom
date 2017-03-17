@@ -19,6 +19,8 @@ class User extends ActiveRecord  implements IdentityInterface
     public $doc0,$doc1,$doc2,$doc3,$doc4,$doc5;
 
     public $userDir;
+    public $user_id;
+    public $user_input;
     public $password;
 
     // Статусы пользователя
@@ -50,7 +52,7 @@ class User extends ActiveRecord  implements IdentityInterface
     {
         return [
             [['email'], 'required'],
-            [['email', 'password_hash','first_name','last_name','phone'], 'string', 'max' => 100],
+            [['email', 'password_hash','first_name','last_name','phone','user_id'], 'string', 'max' => 100],
             ['email', 'email'],
             ['password', 'string', 'min' => 6, 'max' => 61],
             ['ebay_token', 'string'],
@@ -310,9 +312,10 @@ class User extends ActiveRecord  implements IdentityInterface
         if (empty($token)) {
             return false;
         }
-        $parts = explode('_', $token);
-        $timestamp = (int)end($parts);
-        return $timestamp + self::EXPIRE >= time();
+        return true;
+     //   $parts = explode('_', $token);
+     //   $timestamp = (int)end($parts);
+     //   return $timestamp + self::EXPIRE >= time();
     }
 
     /**

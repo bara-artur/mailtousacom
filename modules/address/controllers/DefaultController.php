@@ -40,6 +40,9 @@ class DefaultController extends Controller
      */
     public function actionCreateOrderBilling()
     {
+      if(Yii::$app->user->identity->isManager()){
+          return $this->redirect(['/']);
+      }
       $order = Order::find()->where(['user_id'=>Yii::$app->user->id])->one();
       $update_button =0;
       if ($order) $update_button = 1;

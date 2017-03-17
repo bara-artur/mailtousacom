@@ -69,7 +69,35 @@ class AdminController extends Controller
       ]);
     }
 
+    public function actionFindUser(){
+      $request = Yii::$app->request;
 
+      if ($request->isAjax) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if ($request->isGet) {
+          if (isset($_GET['term'])) {
+            $tmp = $_GET['term'];
+
+            //фомируем список
+            $listdata = User::find()
+              ->orWhere(['like', 'email', $tmp])
+              ->orWhere(['like', 'first_name', $tmp])
+              ->orWhere(['like', 'last_name', $tmp])
+              ->orWhere(['like', 'phone', $tmp])
+              ->select(['id,concat(first_name, \' \',last_name,\', \',phone,\', \',email,\'[server_confirm]\') as value', "concat(first_name, ' ',last_name,', ',phone,', ',email) as label"])
+              ->asArray()
+              ->all();
+
+            return $listdata;
+          } else {
+            return $this->redirect(['/']);
+          }
+        } else {
+          return $this->redirect(['/']);
+        }
+      }
+      return $this->redirect(['/']);
+    }
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -83,7 +111,7 @@ class AdminController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         if ($request->isGet) {
           return [
-            'title' => "Update user " . $model->getFullName(),
+            'title' => "Create user " . $model->getFullName(),
             'content' => $this->renderAjax('update', [
               'model' => $model,
             ]),
@@ -106,12 +134,12 @@ class AdminController extends Controller
 
           return [
             //'forceReload'=>'#crud-datatable-pjax',
-            'title'=> "Create new OrderInclude",
+            'title'=> "User saved",
             'content'=>$content,
             'footer'=>
               Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"]).
               Html::a('Billing address', ['Billing'], [
-                'title' => '',
+                'title' => 'Create billing address',
                 'class'=>'btn btn-success',
                 'role'=>'modal-remote',
                 'data-pjax'=>0,
@@ -134,19 +162,31 @@ class AdminController extends Controller
 
   public function actionBilling()
   {
-    $order = Order::find()->where(['user_id'=>Yii::$app->user->id])->one();
+    $request = Yii::$app->request;
+    if($request->isGet) {
+      $user_id = $request->get('id');
+    }else{
+      if($request->post('Address[user_id]')) {
+        $user_id = $request->post('Address[user_id]');
+      }else{
+        $user_id = $request->post('id');
+      }
+    }
+
+    $order = Order::find()->where(['user_id'=>$user_id])->one();
     $update_button =0;
     if ($order) $update_button = 1;
 
-    $model = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->id])->one();
+    $model = Address::find()->where('user_id = :id', [':id' => $user_id])->one();
     if(!$model){
       $model= new Address();
     }
 
-    $request = Yii::$app->request;
+
     if($request->isAjax) {
       Yii::$app->response->format = Response::FORMAT_JSON;
       if ($request->isGet) {
+        $model->user_id=$user_id;
         return [
           'title' => $update_button==0?'Create billing address':'Update billing address' ,
           'content' => $this->renderAjax("@app/modules/address/views/default/createorderbilling.php", [
@@ -160,21 +200,31 @@ class AdminController extends Controller
         $model->load($request->post()) &&
         ($model->save())
       ){
-        $content='
-              <span class="text-success">Update billing address successful</span>
-              Do you want create order?
-              ';
 
+        $content= $this->renderAjax('bilingSaveOk',[
+          'model'=>new User,
+          'user_id'=>$model->user_id
+        ]);
         return [
           //'forceReload'=>'#crud-datatable-pjax',
-          'title'=> "Create new OrderInclude",
+          'title'=> "Billing address saved 1",
           'content'=>$content,
           'footer'=>
-            Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"])
+            Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"]).
+            Html::button('<i class="fa fa-magic"></i>Create order', [
+              'class' => 'btn btn-success',
+              'type' => "submit"
+            ])
         ];
       }else{
+        $model->user_id=$user_id;
+        $user=$model->getUser();
+        $user_name='';
+        /*if($user && $user->getFullName){
+          $user_name=$user->getFullName();
+        };*/
         return [
-          'title' => "Update user " . $model->getFullName(),
+          'title' => "Update user " . $user_name,
           'content' => $this->renderAjax('update', [
             'model' => $model,
           ]),
@@ -228,7 +278,7 @@ class AdminController extends Controller
         }else if($model->load($request->post())&&($model->save())){
           return [
             'forceReload'=>'#crud-datatable-pjax',
-            'title'=> "Create new OrderInclude",
+            'title'=> "Create new user",
             'content'=>'<span class="text-success">Update user success</span>',
             'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
           ];

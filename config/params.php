@@ -9,6 +9,7 @@ return [
   'data_format_php'=>'j-M-Y',
   'parcelMaxPrice' => '800',
   'showAdminPanel' =>'0',
+  'adminUserChoosing' =>'0',
   'country' => [
     'Canada',
     'China',

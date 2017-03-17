@@ -2,6 +2,7 @@
 
 namespace app\modules\order\controllers;
 
+use app\modules\orderInclude\models\OrderInclude;
 use Yii;
 use app\modules\order\models\Order;
 use app\modules\order\models\OrderSearch;
@@ -10,6 +11,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\modules\user\models\User;
 use \yii\web\Response;
+use yii\helpers\Html;
+use app\modules\order\models\OrderFilterForm;
 
 /**
  * DefaultController implements the CRUD actions for Order model.
@@ -33,44 +36,48 @@ class DefaultController extends Controller
 
   public function actionCreate()
   {
+    if(!Yii::$app->user->identity->isManager()){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'There is not enough user access.'
+        );
+      return $this->redirect(['/']);
+    };
 
+    $model= new User;
     $request = Yii::$app->request;
-
     if ($request->isAjax) {
       Yii::$app->response->format = Response::FORMAT_JSON;
-      if ($request->isGet) {
-        if (isset($_GET['term'])) {
-          $tmp = $_GET['term'];
-
-          //фомируем список
-          $listdata = User::find()
-            ->orWhere(['like', 'email', $tmp])
-            ->orWhere(['like', 'first_name', $tmp])
-            ->orWhere(['like', 'last_name', $tmp])
-            ->orWhere(['like', 'phone', $tmp])
-            ->select(['username as value', 'email as label'])
-            ->asArray()
-            ->all();
-
-          return ['11111111111','2222222222','33333333331','4444444444441','555555555551','5666666666661','77777771','4444444441','3333331',',199999999','8888881'];
-        } else {
-          /*
-          *   Process for ajax request
-          */
-
-          Yii::$app->response->format = Response::FORMAT_JSON;
-
-          return [
-            'title' => "Adding new packages",
-            'content' => $this->renderAjax('createByAdmin'),
-            //'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-            //  Html::button('Save', ['class' => 'btn btn-success', 'type' => "submit"])
-
-          ];
+      if ($request->isPost) {
+        $model->load($request->post());
+        if($model->user_id) {
+          return OrderInclude::createOrder($model->user_id,$this);
+          //$this->redirect('/user/view');
+          //return 'Redirect to order create';
         }
-      } else {
-        return $this->redirect(['/']);
       }
+      Yii::$app->response->format = Response::FORMAT_JSON;
+
+      return [
+        'title' => "Select a user for the new order",
+        'content' => $this->renderAjax('createByAdmin',[
+          'model'=>$model,
+        ]),
+        'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+          Html::a('<i class="fa fa-plus"></i> Create new user', '/user/admin/create', [
+            'class'=>'btn btn-science-blue',
+            'role'=>'modal-remote',
+            'title'=> 'Add User',
+            'data-pjax'=>0,
+          ]).
+          Html::button('<i class="fa fa-magic"></i>Create order', [
+            'class' => 'btn btn-success admin_choose_user',
+            'type' => "submit",
+            'disabled'=>true
+          ])
+      ];
     }
     return $this->redirect(['/']);
   }
@@ -99,19 +106,59 @@ class DefaultController extends Controller
      * Lists all Order models.
      * @return mixed
      */
-    /*    public function actionIndex()
+    public function actionIndex()
     {
-          $searchModel = new OrderSearch();
-          $dataProvider = $searchModel->search(['OrderSearch' => [
-              'user_id' => Yii::$app->user->id,
-          ]]);
-
-          return $this->render('index', [
-              'searchModel' => $searchModel,
-              'dataProvider' => $dataProvider,
-          ]);
+      if (!Yii::$app->user->isGuest) {
+        $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+        if (!$user->isManager()) {
+          $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
+          if (!$haveOneAddress) {
+            return $this->redirect(['/address/create', 'first_address' => '1']);
+          }
+        }
       }
-  */
+      /*        $orderTable = Order::find()->where(['user_id'=>Yii::$app->user->id])->with(['orderElement'])->all();
+            $emptyOrder = null;
+            foreach ($orderTable as $i=>$order){
+                if ($emptyOrder==null){
+                    if (count($order->orderElement)==0) $emptyOrder =$order->id;
+                }
+            }*/
+
+      $query['OrderSearch'] = Yii::$app->request->queryParams;
+      $time_to['created_at_to'] = null;
+      $time_to['transport_date_to'] = null;
+      // Загружаем фильтр из формы
+      $filterForm = new OrderFilterForm();
+      if(Yii::$app->request->post()) {
+        $filterForm = new OrderFilterForm();
+        $filterForm->load(Yii::$app->request->post());
+        $query['OrderSearch'] = $filterForm->toArray();
+        $time_to = ['created_at_to' => $filterForm->created_at_to];
+        $time_to += ['transport_date_to' => $filterForm->transport_data_to];
+      }
+
+      Yii::$app->params['showAdminPanel'] = 0;
+      if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
+
+      $orderSearchModel = new OrderSearch();
+      //$query = Yii::$app->request->queryParams;
+      if (Yii::$app->params['showAdminPanel']==0) {
+        if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
+        else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
+      }
+      $searchModel = new OrderSearch();
+      $orders = $searchModel->search($query,$time_to);
+      //$orders = $orderSearchModel->search(null,null);
+
+      return $this->render('index',[
+        'orders' => $orders,
+        'searchModel' => $orderSearchModel,
+        'filterForm' => $filterForm,
+        //'emptyOrder' => $emptyOrder
+      ]);
+    }
+
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

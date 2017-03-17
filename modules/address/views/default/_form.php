@@ -19,6 +19,12 @@ $state_names = ArrayHelper::map($states,'name','name');
       'id'=>'created_address',
       'validateOnChange' => true,
     ]); ?>
+
+    <?php
+        if($model->user_id) {
+            echo $form->field($model, 'user_id')->hiddenInput()->label(false);
+        }
+    ?>
     <?php if ($update_button<2){ ?>
         <h4 class="modernui-neutral2 margin-bottom-10">
             <?php if ($update_button==0) { ?>

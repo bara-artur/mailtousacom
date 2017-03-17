@@ -32,15 +32,8 @@ $submitOption = [
     <?php } ?>
   </div>
 
-<?php Yii::$app->params['showAdminPanel']=1; ?>
-<?php if (Yii::$app->params['showAdminPanel']==1) { ?>
+<?php if (Yii::$app->user->can('userManager')) { ?>
   <div class="row">
-    <?=Html::a('User choosing', ['/order/create/'],
-      [
-        'role'=>'modal-remote',
-        'class'=>'btn btn-success show_modal',
-       ])?>
-
     <?php
     //echo AutoComplete::widget([
     //  'name' => 'country',
@@ -243,22 +236,6 @@ $submitOption = [
     ])?>
 <?php } ?>
 <?php
-echo '
-    <script>
-      $(document).ready(function() {
-         $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
-             $("#ajaxCrudModal").removeAttr("tabindex");
-        });
-         $( "#crud-datatable-pjax" ).on( "click", ".btn-science-blue", function( event ) { // делегируем событие для динамической кнопки добавить
-              $("#ajaxCrudModal").attr("tabindex",-1);
-        });
-        $(".show_modal").on("click", function() {
-          $("#ajaxCrudModal").attr("tabindex",-1);
-        })
-      });
-  
-    </script>
-';
 if($createNewAddress){
   echo '
     <script>
@@ -270,3 +247,17 @@ if($createNewAddress){
 }
 ?>
 
+<script>
+  //исправить!!!!!!!
+  $(document).ready(function() {
+   $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
+   $("#ajaxCrudModal").removeAttr("tabindex");
+   });
+   $( "#crud-datatable-pjax" ).on( "click", ".btn-science-blue", function( event ) { // делегируем событие для динамической кнопки добавить
+   $("#ajaxCrudModal").attr("tabindex",-1);
+   });
+   $(".show_modal").on("click", function() {
+   $("#ajaxCrudModal").attr("tabindex",-1);
+   })
+   });
+</script>

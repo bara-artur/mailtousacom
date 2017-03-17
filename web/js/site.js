@@ -5,6 +5,8 @@ $(document).ready(function() {
   init_js_validation();
 
   ajax_send_lb_oz_tn_onchange();
+  ajax_send_admin_status_onchange();
+ // ajax_send_admin_user_status_onchange();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -76,16 +78,13 @@ $(document).ready(function() {
 
   $(".reset_filter").on("click", function (){
     event.preventDefault();
-    elements = document.getElementsByTagName('input');
+
+    elements = $(this).parents('form:first').find("input,select");  // выборка внутри формы всех селектов и инпутов
     for (var i = 0; i < elements.length; i++) {
       var input = elements[i];
-      if (input.type != 'hidden') input.value = '';
+      if ((input.type != 'hidden')||((' ' + input.className + ' ').indexOf(' AutoCompleteId ') > -1)) input.value = ''; // проверка наличия класса AutoCompleteId
     }
-    selects = document.getElementsByTagName('select');
-    for (var i = 0; i < selects.length; i++) {
-      var select = selects[i];
-      if (input.type != 'hidden') select.value = '';
-    }
+
   });
 });
 
@@ -474,5 +473,14 @@ function form_parcel_create_type(el){
   }else{
     $('.form_parcel_create_type_1').hide();
     $('.form_parcel_create_type_0').show();
+  }
+}
+
+function AutoCompleteUserSelect(e,ui){
+  if(ui.item.id || ui.item.id>1){
+    $('.admin_choose_user').prop('disabled',false);
+    $('.AutoCompleteId').val(ui.item.id);
+  }else{
+    $('.admin_choose_user').prop('disabled',true);
   }
 }
