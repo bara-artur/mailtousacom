@@ -83,6 +83,8 @@ class OrderElement extends \yii\db\ActiveRecord
             'zip' => 'Zip',
             'phone' => 'Phone',
             'state' => 'State',
+            'qst' => 'PST',
+            'gst' => 'GST/HST',
         ];
     }
 
