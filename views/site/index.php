@@ -25,7 +25,7 @@ $this->title = 'Shipping to USA and Canada';
           </div>
         <?php } ?>
         <div class="col-xs-2">
-          <?= Html::a('<i class="fa fa-search"></i>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+          <?= Html::a('<i class="fa fa-search"></i>', ['#collapse2'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
         <hr class="bottom_line">
         <div class="row">
@@ -60,6 +60,9 @@ $this->title = 'Shipping to USA and Canada';
            //   'userOrder_id',
                 ['attribute'=> 'user_id',
                   'visible' => (($showTable->showID)&&(Yii::$app->params['showAdminPanel']==1)),
+                  'content'=> function($data){ if ($data->user!=null)
+                    return $data->user->lineInfo; else return '-empty-';
+                  }
                 ],
                 ['attribute'=> 'status',
                   'content' => function($data){

@@ -5,6 +5,8 @@ namespace app\modules\orderElement\models;
 use Yii;
 use app\modules\orderInclude\models\OrderInclude;
 use yii\data\ActiveDataProvider;
+use app\modules\user\models\User;
+
 /**
  * This is the model class for table "order_element".
  *
@@ -88,7 +90,12 @@ class OrderElement extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getOrderInclude()
+  public function getUser()
+  {
+    return $this->hasOne(User::className(), ['id' => 'user_id']);
+  }
+
+  public function getOrderInclude()
     {
         return $this->hasMany(OrderInclude::className(),['order_id' => 'id']);
     }
