@@ -106,6 +106,7 @@ class DefaultController extends Controller
       $user_id=false;
       $payments_list=[];
 
+
       foreach ($model as &$pac) {
         if(!$user_id){
           $user_id=$pac->user_id;
@@ -120,6 +121,7 @@ class DefaultController extends Controller
           'track_number_type'=>$pac->track_number_type,
           'weight'=>$pac->weight,
           'source'=>$pac->source,
+          'source_text'=>\Yii::$app->params[package_source_list][$pac->source]
         ];
         $payments_list[$pac->id]=$item;
       }
@@ -182,10 +184,6 @@ class DefaultController extends Controller
         $item['gst']=round($item['price']*$tax['gst']/100,2);
         $tot_pays+=$item['price'];
 
-        if($item['price']<$item['already_price']){
-          Yii::$app->getSession()->setFlash('info', 'For the selected parcels there is an overpayment.');
-          $item['err']='For the this parcel there is an overpayment.';
-        }
         $item['total_price']=$item['price']-$item['already_price'];
         $item['total_qst']=$item['qst']-$item['already_qst'];
         $item['total_gst']=$item['price']-$item['already_gst'];
@@ -194,9 +192,14 @@ class DefaultController extends Controller
         $item['total_qst']=round($item['total_qst'],2);
         $item['total_gst']=round($item['total_gst'],2);
 
-        $total['price']+=$item['total_price'];
-        $total['gst']+=$item['total_qst'];
-        $total['qst']+=$item['total_gst'];
+        if($item['price']<$item['already_price']){
+          Yii::$app->getSession()->setFlash('info', 'For the selected parcels there is an overpayment.');
+          $item['err']='For the this parcel there is an overpayment.';
+        }else {
+          $total['price'] += $item['total_price'];
+          $total['gst'] += $item['total_qst'];
+          $total['qst'] += $item['total_gst'];
+        }
       }
       $tot_pays=round($tot_pays,2);
 
@@ -205,8 +208,8 @@ class DefaultController extends Controller
         return $this->redirect(['/orderInclude/create-order/'.$id]);
       }
 
-      d($total);
-      ddd($payments_list);
+      //d($total);
+      //ddd($payments_list);
       /*
       if($order->payment_state!=0 && !Yii::$app->user->identity->isManager()){
         Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
@@ -342,14 +345,12 @@ class DefaultController extends Controller
           }
         }
       }
-
-      return $this->render('order', [
-        'order_elements' => $model,
-        'createNewAddress'=>!$model,
+*/
+      return $this->render('to_pay', [
         'order_id'=>$id,
         'total'=>$total,
-        'model'=>$order,
-      ]);*/
+        'payments_list'=>$payments_list,
+      ]);
 
     }
 
