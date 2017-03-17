@@ -166,6 +166,7 @@ class DefaultController extends Controller
         $pay['already_price']=round($pay['already_price'],2);
         $pay['already_qst']=round($pay['already_qst'],2);
         $pay['already_gst']=round($pay['already_gst'],2);
+        $pay['already_sum']=round($pay['already_price']+$pay['already_gst']+$pay['already_qst'],2);
         $payments_list[$pay['element_id']]=array_merge($pay,$payments_list[$pay['element_id']]);
         $tot_already_pays+=$pay['already_price'];
       };
@@ -175,6 +176,7 @@ class DefaultController extends Controller
         'price'=>0,
         'gst'=>0,
         'qst'=>0,
+        'sum'=>0
       );
 
       $tot_pays=0;
@@ -182,14 +184,17 @@ class DefaultController extends Controller
         $item['price']=(float)ParcelPrice::widget(['weight'=>$item['weight'],'user'=>$user_id]);
         $item['qst']=round($item['price']*$tax['qst']/100,2);
         $item['gst']=round($item['price']*$tax['gst']/100,2);
+        $item['sum']=$item['price']+$item['qst']+$item['gst'];
         $tot_pays+=$item['price'];
 
         $item['total_price']=$item['price']-$item['already_price'];
         $item['total_qst']=$item['qst']-$item['already_qst'];
-        $item['total_gst']=$item['price']-$item['already_gst'];
+        $item['total_gst']=$item['gst']-$item['already_gst'];
+        $item['total_sum']=$item['total_price']+$item['total_qst']+$item['total_gst'];
 
         $item['total_price']=round($item['total_price'],2);
         $item['total_qst']=round($item['total_qst'],2);
+        $item['total_gst']=round($item['total_gst'],2);
         $item['total_gst']=round($item['total_gst'],2);
 
         if($item['price']<$item['already_price']){
@@ -199,6 +204,7 @@ class DefaultController extends Controller
           $total['price'] += $item['total_price'];
           $total['gst'] += $item['total_qst'];
           $total['qst'] += $item['total_gst'];
+          $total['sum'] +=$total['price']+$total['qst']+$total['gst'];
         }
       }
       $tot_pays=round($tot_pays,2);

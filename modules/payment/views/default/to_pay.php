@@ -36,7 +36,7 @@ $form = ActiveForm::begin([
   Please pay your MailToUSA fees
   </div>
   <?php
-  foreach ($payments_list as $pay){
+  foreach ($payments_list as $pay_id=>$pay){
     ?>
       <p><b>package source type</b> <?=$pay["source_text"];?></p>
       <?php
@@ -50,17 +50,51 @@ $form = ActiveForm::begin([
           <?php
         }
       ?>
-      <p><b>weight</b><?=$pay["weight"];?> Lb</p>
+      <p><b>weight</b><?=number_format($pay["weight"],2);?> Lb</p>
+      <h5>Sum to pay</h5>
+      <p><b>Price</b> <?= number_format($pay["price"],2); ?></p>
+      <p><b>PST</b> <?= number_format($pay["qst"],2); ?></p>
+      <p><b>GST/HST</b> <?= number_format($pay["gst"],2); ?></p>
+      <p><b>Total</b> <?= number_format($pay["sum"],2); ?></p>
     <?php
+    if($pay['already_price']){
+      ?>
+        <h5>already pay</h5>
+        <p><b>Price</b> <?= number_format($pay["already_price"],2); ?></p>
+        <p><b>PST</b> <?= number_format($pay["already_qst"],2); ?></p>
+        <p><b>GST/HST</b> <?= number_format($pay["already_gst"],2); ?></p>
+        <p><b>Total</b> <?= number_format($pay["already_sum"],2); ?></p>
+
+        <h5>Total pay</h5>
+        <p><b>Price</b> <?= number_format($pay["total_price"],2); ?></p>
+        <p><b>PST</b> <?= number_format($pay["total_qst"],2); ?></p>
+        <p><b>GST/HST</b> <?= number_format($pay["total_gst"],2); ?></p>
+        <p><b>Total</b> <?= number_format($pay["total_sum"],2); ?></p>
+      <?php
+    }
+    if($pay['err']){
+      echo "<h5 style='color:red' class='error_control'>".$item['err']."</h5>";
+    }else{
+      if(Yii::$app->user->identity->isManager()){?>
+        <?= Html::checkbox('agree_'.$pay_id, true, ['label' => 'Add to total sum','class'=>"hidden_block_communication"]);?>
+        <br>
+        <label class="agree_<?=$pay_id;?>" style="display: none;">
+          Why not pay?
+          <?= Html::input('text', 'text_not_agree_'.$pay_id, "", []); ?>
+        </label>
+      <?php
+      }
+    }
+
   }
   ?>
     <div class="trans_text text-center">
-        Sum to pay: <span class="trans_count"><?=number_format($total['sum']+$total['gst']+$total['qst'],2);?>$</span>&nbsp;&nbsp;(included vat <?=number_format($total['gst']+$total['qst']);?>$)
+        Sum to pay: <span class="trans_count"><?=number_format($total['sum'],2);?>$</span>&nbsp;&nbsp;(included vat <?=number_format($total['gst']+$total['qst'],2);?>$)
     </div>
     <hr class="podes">
 
   <?php
-    if(Yii::$app->user->identity->isManager()){?>
+    if(!Yii::$app->user->identity->isManager()){?>
       <div class="col-md-offset-2 trans_text custom-radio">
       <?= Html::radioList('payment_type',null,
         [
@@ -122,3 +156,16 @@ $form = ActiveForm::begin([
 </div>
 
 <?php ActiveForm::end(); ?>
+
+<script>
+  $("form").on('submit',function(e){
+    e.preventDefault();
+    return false;
+  });
+  // перехват submit т.к. нужно отправлять форму аяксом
+  $('#w0').on('afterValidate', function(e) {
+    e.preventDefault();
+    console.log(this);
+    return false;
+  });
+</script>
