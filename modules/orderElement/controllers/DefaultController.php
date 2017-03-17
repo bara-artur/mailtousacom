@@ -86,10 +86,7 @@ class DefaultController extends Controller
 
         $request = Yii::$app->request;
         if($request->isAjax) {
-            $oldModel = OrderElement::find()
-                ->where(['order_id' => $order_id])
-                ->andWhere(['id' => $percel_id])
-                ->one();
+            $oldModel = OrderElement::find()->andWhere(['id' => $percel_id])->one();
             if ($oldModel) {
                 if ($_POST['lb'] != null) {
                   $weight = (int)$_POST['lb'];
@@ -147,10 +144,10 @@ class DefaultController extends Controller
         
                 ];         
             }else if($model->load($request->post())  ){
-                $model-> user_id = Yii::$app->user->id;
+                $order = Order::find()->where(['id'=> $_POST['OrderElement']['order_id']])->one();
+                $model-> user_id = $order->user_id;
                 $model-> created_at = time();
                 $model->save();
-                $order = Order::find()->where(['id'=> $_POST['OrderElement']['order_id']])->one();
                 if ($order->el_group==null) {
                   $order->el_group = $model->id;
                 }else{
