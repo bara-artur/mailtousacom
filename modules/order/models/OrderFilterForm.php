@@ -14,6 +14,7 @@ use Yii;
 class OrderFilterForm extends Order
 {
     public $created_at_to;
+    public $user_input;
     /**
      * @inheritdoc
      */

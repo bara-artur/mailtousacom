@@ -22,7 +22,7 @@ class OrderElementSearch extends OrderElement
               'payment_state'], 'integer'],
             [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2',
                'city', 'zip', 'phone', 'state','created_at', 'transport_data',
-               'transport_data_to','created_at_to'], 'safe'],
+               'transport_data_to','created_at_to','user_id','payment_state'], 'safe'],
         ];
     }
 
@@ -42,7 +42,7 @@ class OrderElementSearch extends OrderElement
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$time_to)
     {
         $query = OrderElement::find();
 
@@ -51,18 +51,22 @@ class OrderElementSearch extends OrderElement
         ]);
 
         $this->load($params);
+        $date_from = strtotime($this['created_at']);
+        $date_to =   strtotime($time_to['created_at_to']);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
+          // uncomment the following line if you do not want to return any records when validation fails
+          // $query->where('0=1');
+          return $dataProvider;
         }
-
+        // grid filtering conditions
+        if ($date_from!=null) $query->andFilterWhere(['>=', 'created_at', $date_from]);
+        if ($date_to!=null) $query->andFilterWhere(['<=', 'created_at', $date_to+24*3600]);
         $query->andFilterWhere([
-            'id' => $this->id,
-            'status' => $this->status,
-            'payment_state' => $this->payment_state,
-
+          'id' => $this->id,
+          'user_id' => $this->user_id,
+          'status' => $this->status,
+          'payment_state' => $this->payment_state,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
