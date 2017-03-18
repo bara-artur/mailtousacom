@@ -31,7 +31,7 @@ $form = ActiveForm::begin([
 <h4 class="modernui-neutral2">Print Border Form</h4>
 <div class="row">
     <div class="col-md-offset-4 col-md-4">
-        <div class="trans_text">You added <span class="trans_count"><?=count($order_elements);?>order</span>, value <span class="trans_count"><?=$total['price'];?>$</span>, width <span class="trans_count"><?=$total['weight_lb'];?>lb</span> <span class="trans_count"><?=$total['weight_oz'];?>oz</span></div>
+        <div class="trans_text">You added <span class="trans_count"><?=count($order_elements);?> parcels</span>, value <span class="trans_count"><?=$total['price'];?>$</span>, width <span class="trans_count"><?=$total['weight_lb'];?>lb</span> <span class="trans_count"><?=$total['weight_oz'];?>oz</span></div>
     </div>
 </div>
 <div class="row">
@@ -40,7 +40,7 @@ $form = ActiveForm::begin([
     <div class="row">
     <div class="col-md-12">
    <div class="trans_text">When you need us to transport your orders to The US :</div>
-  <?=$form->field($model, 'transport_data')->widget(DatePicker::className(),[
+  <?= ''/*$form->field($model, 'transport_data')->widget(DatePicker::className(),[
     'name' => 'check_issue_date',
     'removeButton' => false,
     //'value' => date('d-M-Y', strtotime('+1 days')),
@@ -51,7 +51,7 @@ $form = ActiveForm::begin([
       'todayHighlight' => true,
       'autoclose'=>true,
     ]
-  ]);
+  ]);*/
 ?>
     </div>
     </div>
@@ -59,7 +59,7 @@ $form = ActiveForm::begin([
 </div>
 <div class="row">
 <div class="col-md-12 padding-top-10 text-center text_certif" >
-  <?= $form->field($model, 'agreement')->checkbox(['label' => '<span class="fa fa-check otst"></span> I certify..,my undefstanding..Im responsible for cross-bording, law, etc'])->label("") ?>
+  <?= ''/*$form->field($model, 'agreement')->checkbox(['label' => '<span class="fa fa-check otst"></span> I certify..,my undefstanding..Im responsible for cross-bording, law, etc'])->label("") */?>
 
   <?=Html::a('Print Border Form ABC123', ['/orderInclude/border-form-pdf/'.$order_id],
       [
