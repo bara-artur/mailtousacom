@@ -9,7 +9,7 @@ $(document).ready(function() {
         upd_but[0].click();
       }
     });
-  ajax_send_admin_user_status_onchange()
+  ajax_send_admin_user_status_onchange();
 });
 
 function ajax_send_admin_user_status_onchange(){

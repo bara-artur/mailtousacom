@@ -86,6 +86,16 @@ $(document).ready(function() {
     }
 
   });
+
+  $('.hidden_block_communication').on('change',function(){
+    el=$('.'+$(this).attr('name'))
+    if(el.length<1)return;
+    if(this.checked){
+      el.hide();
+    }else {
+      el.show();
+    }
+  })
 });
 
 function show_err(el,txt){

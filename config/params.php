@@ -131,5 +131,9 @@ return [
     'Uruguay',
     'Venezuela',
     'Vietnam',
+  ],
+  'package_source_list'=>[
+    0=>"manual",
+    1=>"eBay"
   ]
 ];
