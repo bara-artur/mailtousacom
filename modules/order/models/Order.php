@@ -10,7 +10,7 @@ use app\modules\user\models\User;
  * This is the model class for table "order".
  *
  * @property integer $id
- * @property integer $el_group
+ * @property string $el_group
  * @property integer $user_id
  * @property string $created_at
  */
@@ -60,6 +60,7 @@ class Order extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [[ 'user_id'], 'integer'],
+            [[ 'el_group'], 'string'],
             [['created_at'], 'safe'],
         ];
     }

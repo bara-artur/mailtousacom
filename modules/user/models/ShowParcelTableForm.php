@@ -85,8 +85,8 @@ class ShowParcelTableForm extends User
       'showPaymentState' => 'Payment State',
       'showPaymentType' => 'Payment Type',
       'showPrice' => 'Price',
-      'showQst' => 'Qst',
-      'showGst' => 'Gst',
+      'showQst' => 'PST',
+      'showGst' => 'GST/HST',
       'showTotal' => 'Total',
 
     ];

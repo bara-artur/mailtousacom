@@ -149,7 +149,7 @@ class DefaultController extends Controller
                 $model-> created_at = time();
                 $model->save();
                 if ($order->el_group==null) {
-                  $order->el_group = $model->id;
+                  $order->el_group = ''.$model->id;
                 }else{
                   $order->el_group = $order->el_group.','.$model->id;
                 }
@@ -160,7 +160,7 @@ class DefaultController extends Controller
                     'content' => '<span class="text-success">Create packages success</span>',
                     'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
                   ];
-                }else throw new NotFoundHttpException('Order not requested');
+                }else  throw new NotFoundHttpException('Order not requested');
             }else{
                 return [
                     'title'=> "Adding new packages",
@@ -235,12 +235,23 @@ class DefaultController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id,$order_id)
     {
       $request = Yii::$app->request;
       OrderInclude::deleteAll(['order_id'=>$id]);
       OrderElement::deleteAll(['id'=>$id]);
+      $order = Order::find()->where(['id' => $order_id])->one();
+      if ($order){
 
+        $arr = explode(',', $order->el_group);
+        $ind=null;
+        foreach ($arr as $i=>$a){
+          if ($a==$id) $ind=$i;
+        }
+        unset($arr[$ind]);
+        $order->el_group = implode(',', $arr);
+        $order->save();
+      }
       if($request->isAjax){
         /*
         *   Process for ajax request

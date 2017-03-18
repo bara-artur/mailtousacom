@@ -54,6 +54,7 @@ class DefaultController extends Controller
       //получаем посылки в заказе
       //  var_dump(Yii::$app->request);
       //$totalPriceArray = [0];
+
       $totalPriceArray=[];
  /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
@@ -74,14 +75,16 @@ class DefaultController extends Controller
       if ($order->el_group != '') {
         foreach ($numbers as $parcel_id) {
           $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
-          $order_elements[] = $parcel;
+          if ($parcel!=null) {
+            $order_elements[] = $parcel;
 
-          $totalPrice = 0;
-          foreach ($parcel->orderInclude as $ordInclude) {
-            $totalPrice += ($ordInclude->price * $ordInclude->quantity);
+            $totalPrice = 0;
+            foreach ($parcel->orderInclude as $ordInclude) {
+              $totalPrice += ($ordInclude->price * $ordInclude->quantity);
+            }
+            if ($totalPrice > Yii::$app->params['parcelMaxPrice']) $hideNext = 1;
+            $totalPriceArray[] = $totalPrice;
           }
-          if ($totalPrice > Yii::$app->params['parcelMaxPrice']) $hideNext = 1;
-          $totalPriceArray[] = $totalPrice;
         }
       }
       $edit_not_prohibited = 1;

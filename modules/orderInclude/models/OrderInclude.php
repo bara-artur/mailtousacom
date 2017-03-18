@@ -63,14 +63,18 @@ class OrderInclude extends \yii\db\ActiveRecord
    * @return mixed
    */
   public static function createOrder($user,$this_){
-    if (Yii::$app->user->can('userManager')&&($user!=0))
+    if (Yii::$app->user->can('userManager')&&($user!=0)) {
       $user_id = $user;
-    else
+    }
+    else {
       $user_id = Yii::$app->user->id;
-
+    }
     $request = Yii::$app->request;
     $emptyOrder = Order::find()->andWhere(['user_id'=>$user_id])->andWhere(['el_group'=>null])->one();
-    if ($emptyOrder!=null) return $this_->redirect('/orderInclude/create-order/' . $emptyOrder['id']);  // actionCreateOrder2
+    if ($emptyOrder!=null) {
+      return $this_->redirect('/orderInclude/create-order/'.$emptyOrder['id']);
+    }
+    // actionCreateOrder2
      /* ->select(['`order_element`.`order_id`','`order`.`id`'])
       ->leftJoin('order_element', '`order`.`id` = `order_element`.`order_id`')
       ->where(['user_id'=>$user_id,'order_id'=>null])
