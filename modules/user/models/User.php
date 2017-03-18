@@ -15,8 +15,7 @@ use JBZoo\Image\Image;
 
 class User extends ActiveRecord  implements IdentityInterface
 {
-
-    public $doc0,$doc1,$doc2,$doc3,$doc4,$doc5;
+  public $doc0,$doc1,$doc2,$doc3,$doc4,$doc5;
 
     public $userDir;
     public $user_id;
@@ -56,6 +55,7 @@ class User extends ActiveRecord  implements IdentityInterface
             ['email', 'email'],
             ['password', 'string', 'min' => 6, 'max' => 61],
             ['ebay_token', 'string'],
+            ['parcelTableOptions', 'integer'],
             [['ebay_account','ebay_last_update'], 'integer'],
             [['doc1','doc2'], 'image',
               'minHeight' => 600,
@@ -390,21 +390,24 @@ class User extends ActiveRecord  implements IdentityInterface
         $class = str_replace('\\', '/', $class);
         $class = explode('/', $class);
         $class = $class[count($class) - 1];
-        $post = $post[$class];
+        if ($class!='User') {
+          $post = $post[$class];
 
-        //print_r($docs);
-        //print_r($this);
 
-        for($i=0;$i<2;$i++){
-          if($file=$this->saveImage('doc'.$i,isset($docs[$i])?$docs[$i]:'-')){
-            $fileToBd['docs'][]=$file;
-            echo 0;
-          }else{
-            if(isset($docs[$i])) {
-              if ($docs[$i] != $post['doc' . $i]) {
-                $this->removeImage($docs[$i]);
-              } else {
-                $fileToBd['docs'][]=$docs[$i];
+          //print_r($docs);
+          //print_r($this);
+
+          for ($i = 0; $i < 2; $i++) {
+            if ($file = $this->saveImage('doc' . $i, isset($docs[$i]) ? $docs[$i] : '-')) {
+              $fileToBd['docs'][] = $file;
+              echo 0;
+            } else {
+              if (isset($docs[$i])) {
+                if ($docs[$i] != $post['doc' . $i]) {
+                  $this->removeImage($docs[$i]);
+                } else {
+                  $fileToBd['docs'][] = $docs[$i];
+                }
               }
             }
           }

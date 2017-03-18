@@ -17,7 +17,6 @@ use Yii;
  * @property int $created_at
  * @property int $transport_data
  * @property int $agreement
- * @property int $payment_type
  * @property int $payment_state
  * @property double $price
  * @property double $qst
@@ -39,7 +38,7 @@ class ElementFilterForm extends OrderElement
     return [
       [['id','user_id',
         'transport_data','transport_data_to','created_at','created_at_to',
-        'status','group_index','payment_state','payment_type','user_input'], 'safe']
+        'status','group_index','payment_state','user_input'], 'safe']
     ];
   }
 

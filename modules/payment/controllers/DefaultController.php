@@ -9,6 +9,7 @@ namespace app\modules\payment\controllers;
 
 use Yii;
 use app\modules\payment\models\PaymentsList;
+use app\modules\payment\models\PaymentInclude;
 use app\modules\payment\models\PaymentSearch;
 use app\modules\payment\models\DoPayment;
 use app\modules\order\models\Order;
@@ -94,6 +95,60 @@ class DefaultController extends Controller
 
       $session = Yii::$app->session;
       $session->set('last_order',$id);
+
+      if(strlen($order->el_group)<1){
+        throw new NotFoundHttpException('There is no data for payment.');
+      };
+
+      $el_group=explode(',',$order->el_group);
+
+      $model = OrderElement::find()->where(['id'=>$el_group])->all();
+      $user_id=false;
+      foreach ($model as &$pac) {
+        if(!$user_id){
+          $user_id=$pac->user_id;
+        }else{
+          if($user_id!=$pac->user_id){
+            throw new NotFoundHttpException('You can not pay parcels for different users.');
+          }
+        }
+      }
+
+      if(!Yii::$app->user->identity->isManager() && $user_id!=Yii::$app->user->identity->id){
+        throw new NotFoundHttpException('You can pay only for your packages.');
+      }
+
+      $total=array(
+        'price'=>0,
+        'weight'=>0,
+        'quantity'=>0,
+        'gst'=>0,
+        'qst'=>0,
+        'sum'=>0,
+      );
+
+      $query = new Query;
+      $query->select('state')
+        ->from('new_address')
+        ->where(['user_id'=>$user_id]);
+      $row = $query->one();
+
+      if(!$row){
+        Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
+        return $this->redirect(['/']);
+      }
+
+      $state=$row['state'];
+
+      $query = new Query;
+      $query->select(['qst','gst'])
+        ->from('state')
+        ->where(['name'=>$state]);
+      $tax = $query->one();
+
+
+      ddd($tax);
+      exit;
 
       if($order->payment_state!=0 && !Yii::$app->user->identity->isManager()){
         Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');

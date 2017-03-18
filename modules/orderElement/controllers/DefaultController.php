@@ -2,6 +2,7 @@
 
 namespace app\modules\orderElement\controllers;
 
+use app\modules\order\models\Order;
 use Yii;
 use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderElement\models\OrderElement;
@@ -85,10 +86,7 @@ class DefaultController extends Controller
 
         $request = Yii::$app->request;
         if($request->isAjax) {
-            $oldModel = OrderElement::find()
-                ->where(['order_id' => $order_id])
-                ->andWhere(['id' => $percel_id])
-                ->one();
+            $oldModel = OrderElement::find()->andWhere(['id' => $percel_id])->one();
             if ($oldModel) {
                 if ($_POST['lb'] != null) {
                   $weight = (int)$_POST['lb'];
@@ -145,14 +143,24 @@ class DefaultController extends Controller
                                 Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
         
                 ];         
-            }else if($model->load($request->post()) && $model->save()){
-
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Adding new packages",
-                    'content'=>'<span class="text-success">Create packages success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
-                ];
+            }else if($model->load($request->post())  ){
+                $order = Order::find()->where(['id'=> $_POST['OrderElement']['order_id']])->one();
+                $model-> user_id = $order->user_id;
+                $model-> created_at = time();
+                $model->save();
+                if ($order->el_group==null) {
+                  $order->el_group = ''.$model->id;
+                }else{
+                  $order->el_group = $order->el_group.','.$model->id;
+                }
+                if ($order->save()) {
+                  return [
+                    'forceReload' => '#crud-datatable-pjax',
+                    'title' => "Adding new packages",
+                    'content' => '<span class="text-success">Create packages success</span>',
+                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                  ];
+                }else  throw new NotFoundHttpException('Order not requested');
             }else{
                 return [
                     'title'=> "Adding new packages",
@@ -227,12 +235,23 @@ class DefaultController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDelete($id,$order_id)
     {
       $request = Yii::$app->request;
       OrderInclude::deleteAll(['order_id'=>$id]);
       OrderElement::deleteAll(['id'=>$id]);
+      $order = Order::find()->where(['id' => $order_id])->one();
+      if ($order){
 
+        $arr = explode(',', $order->el_group);
+        $ind=null;
+        foreach ($arr as $i=>$a){
+          if ($a==$id) $ind=$i;
+        }
+        unset($arr[$ind]);
+        $order->el_group = implode(',', $arr);
+        $order->save();
+      }
       if($request->isAjax){
         /*
         *   Process for ajax request

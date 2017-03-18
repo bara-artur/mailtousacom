@@ -48,9 +48,6 @@ use yii\helpers\Url;
             ]);?>
           </div>
          <?php } ?>
-          <div class="col-md-2">
-             <?= $form->field($model, 'order_status')->dropDownList( Order::getTextStatus()) ?>
-          </div>
           <div class="col-md-3">
         <?= $form->field($model,'created_at')->widget(DatePicker::className(),[
           'name' => 'created_at',
@@ -62,12 +59,6 @@ use yii\helpers\Url;
             'format' => \Yii::$app->params['data_format_js']
           ]
         ]);?>
-          </div>
-          <div class="col-md-2">
-             <?= $form->field($model, 'payment_type')->dropDownList(PaymentsList::getPayStatus()) ?>
-          </div>
-          <div class="col-md-2">
-             <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
           </div>
           <div class="col-md-2">
               <label class="control-label">Action</label>

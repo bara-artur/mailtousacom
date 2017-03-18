@@ -140,9 +140,7 @@ $submitOption = [
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="row">
           <div class="col-md-12">
             <h5 class="total_package padding-top-10">Total</h5>
             <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
@@ -197,7 +195,7 @@ $submitOption = [
             <div class="col-md-6 btn-group-md bord_butt text-right">
               <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
                 ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
-              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id],
+              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
                 [
                   'role'=>'modal-remote',
                   'title'=> 'Delete',
@@ -209,8 +207,9 @@ $submitOption = [
                 ])?>
             </div>
           </div>
-        </div>
+
         <?php Pjax::end(); ?>
+        </div>
         <hr>
       <?php } ?>
     <?php } ?>

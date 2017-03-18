@@ -5,6 +5,8 @@ namespace app\modules\orderElement\models;
 use Yii;
 use app\modules\orderInclude\models\OrderInclude;
 use yii\data\ActiveDataProvider;
+use app\modules\user\models\User;
+
 /**
  * This is the model class for table "order_element".
  *
@@ -59,7 +61,7 @@ class OrderElement extends \yii\db\ActiveRecord
             [['first_name', 'last_name','company_name', 'adress_1','city', 'zip', 'phone', 'state'], 'required'],
             [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
             [['company_name'], 'string', 'max' => 128],
-            [['order_id','track_number'], 'integer'],
+            [['track_number'], 'string'],
             [['weight'], 'double'],
             [['track_number_type'], 'integer'],
             [['address_type','weight','track_number','track_number_type'], 'safe'],
@@ -83,10 +85,17 @@ class OrderElement extends \yii\db\ActiveRecord
             'zip' => 'Zip',
             'phone' => 'Phone',
             'state' => 'State',
+            'qst' => 'PST',
+            'gst' => 'GST/HST',
         ];
     }
 
-    public function getOrderInclude()
+  public function getUser()
+  {
+    return $this->hasOne(User::className(), ['id' => 'user_id']);
+  }
+
+  public function getOrderInclude()
     {
         return $this->hasMany(OrderInclude::className(),['order_id' => 'id']);
     }
