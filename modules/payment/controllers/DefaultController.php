@@ -49,17 +49,28 @@ class DefaultController extends Controller
      */
     public function behaviors()
     {
-        return [
+        /*return [
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
             ],
-        ];
+        ];*/
+        return [];
     }
 
-    /**
+  public function beforeAction($action)
+  {
+    // ...set `$this->enableCsrfValidation` here based on some conditions...
+    // call parent method that will check CSRF if such property is true.
+    if ($action->id === 'order') {
+      # code...
+      $this->enableCsrfValidation = false;
+    }
+    return parent::beforeAction($action);
+  }
+  /**
      * Lists all PaymentsList models.
      * @return mixed
      */
@@ -91,6 +102,7 @@ class DefaultController extends Controller
      * @return mixed
      */
     public function actionOrder($id){
+
       $order = Order::findOne($id);
 
       $session = Yii::$app->session;
@@ -109,7 +121,28 @@ class DefaultController extends Controller
 
       foreach ($model as &$pac) {
         if(!$user_id){
+          //если это 1-я запись то берем из нее пользователя
           $user_id=$pac->user_id;
+
+          //и узнаем его налог
+          $query = new Query;
+          $query->select('state')
+            ->from('new_address')
+            ->where(['user_id'=>$user_id]);
+          $row = $query->one();
+
+          if(!$row){
+            Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
+            return $this->redirect(['/']);
+          }
+
+          $state=$row['state'];
+
+          $query = new Query;
+          $query->select(['qst','gst'])
+            ->from('state')
+            ->where(['name'=>$state]);
+          $tax = $query->one();
         }else{
           if($user_id!=$pac->user_id){
             throw new NotFoundHttpException('You can not pay parcels for different users.');
@@ -123,32 +156,19 @@ class DefaultController extends Controller
           'source'=>$pac->source,
           'source_text'=>\Yii::$app->params[package_source_list][$pac->source]
         ];
+        $item['price']=(float)ParcelPrice::widget(['weight'=>$item['weight'],'user'=>$user_id]);
+        $item['qst']=round($item['price']*$tax['qst']/100,2);
+        $item['gst']=round($item['price']*$tax['gst']/100,2);
+        $pac->price=$item['price'];
+        $pac->qst=$item['qst'];
+        $pac->gst=$item['gst'];
+
         $payments_list[$pac->id]=$item;
       }
 
       if(!Yii::$app->user->identity->isManager() && $user_id!=Yii::$app->user->identity->id){
         throw new NotFoundHttpException('You can pay only for your packages.');
       }
-
-      $query = new Query;
-      $query->select('state')
-        ->from('new_address')
-        ->where(['user_id'=>$user_id]);
-      $row = $query->one();
-
-      if(!$row){
-        Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
-        return $this->redirect(['/']);
-      }
-
-      $state=$row['state'];
-
-      $query = new Query;
-      $query->select(['qst','gst'])
-        ->from('state')
-        ->where(['name'=>$state]);
-      $tax = $query->one();
-
 
       $payments=PaymentInclude::find()
         ->select(['element_id','sum(price) as already_price','sum(qst) as already_qst','sum(gst) as already_gst'])
@@ -181,9 +201,6 @@ class DefaultController extends Controller
 
       $tot_pays=0;
       foreach ($payments_list as &$item) {
-        $item['price']=(float)ParcelPrice::widget(['weight'=>$item['weight'],'user'=>$user_id]);
-        $item['qst']=round($item['price']*$tax['qst']/100,2);
-        $item['gst']=round($item['price']*$tax['gst']/100,2);
         $item['sum']=$item['price']+$item['qst']+$item['gst'];
         $tot_pays+=$item['price'];
 
@@ -195,7 +212,7 @@ class DefaultController extends Controller
         $item['total_price']=round($item['total_price'],2);
         $item['total_qst']=round($item['total_qst'],2);
         $item['total_gst']=round($item['total_gst'],2);
-        $item['total_gst']=round($item['total_gst'],2);
+        $item['total_sum']=round($item['total_sum'],2);
 
         if($item['price']<$item['already_price']){
           Yii::$app->getSession()->setFlash('info', 'For the selected parcels there is an overpayment.');
@@ -214,6 +231,56 @@ class DefaultController extends Controller
         return $this->redirect(['/orderInclude/create-order/'.$id]);
       }
 
+      $request = Yii::$app->request;
+      if($request->isPost) {
+        //d($request->post());
+        //Обработчик для админа
+
+        //помечаем посылки как принятые на точку выдачи
+        $order->setData(['status'=>2,'payment_state'=>2]);
+
+        if($total['price']==0) {
+          //все оплаченно
+          \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
+          return $this->redirect(['/']);
+        }
+
+        //За посылки прянята оплата налом
+        $pays=PaymentsList::create([
+          'client_id'=>$user_id,
+          'type'=>3,
+          'status'=>1,
+          'pay_time'=>time()
+        ]);
+
+        //d($pays);
+        if(Yii::$app->user->identity->isManager()){
+          foreach ($payments_list as $item) {
+            //только для посылок с стоимостью оплаты более 0
+            if($item['total_price']>0){
+              $pay_include=new PaymentInclude();
+              $pay_include->payment_id=$pays->id;
+              $pay_include->element_id=$item['element_id'];
+              $pay_include->element_type=0;
+              $pay_include->status=1; //оплачен
+              $pay_include->create_at=time();
+
+              //если посылку отказались платить
+              if(!$request->post('agree_'.$item['element_id'])){
+                $pay_include->status=-1;//Отказ от оплаты
+                $pay_include->comment=$request->post('text_not_agree_'.$item['element_id']);//Отказ от оплаты
+              }
+              $pay_include->save();
+              \Yii::$app->getSession()->setFlash('success', 'The order is payd and accepted to the warehouse and is waiting for dispatch.');
+              return $this->redirect(['/']);
+            }
+          }
+        }else{
+          //для обычного пользователя
+
+        }
+        exit;
+      }
       //d($total);
       //ddd($payments_list);
       /*

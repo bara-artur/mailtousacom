@@ -34,8 +34,8 @@ class PaymentInclude extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'element_id', 'element_type', 'create_at'], 'required'],
-            [['user_id', 'element_id', 'element_type', 'status', 'create_at'], 'integer'],
+            [['element_id', 'element_type', 'payment_id'], 'required'],
+            [['element_id', 'element_type', 'status', 'payment_id'], 'integer'],
             [['price', 'qst', 'gst'], 'number'],
             [['comment'], 'string', 'max' => 255],
         ];
@@ -53,7 +53,7 @@ class PaymentInclude extends \yii\db\ActiveRecord
             'element_type' => 'Element Type',
             'comment' => 'Comment',
             'status' => 'Status',
-            'create_at' => 'Create At',
+            'payment_id' => 'payment id',
             'price' => 'Price',
             'qst' => 'Qst',
             'gst' => 'Gst',

@@ -94,7 +94,18 @@ $(document).ready(function() {
       el.hide();
     }else {
       el.show();
+      el.removeClass('has-error')
+      el.find('.help-block').remove()
     }
+    els=$('.hidden_block_communication:checked');
+    sum=0;
+    vat=0;
+    for (i=0;i<els.length;i++){
+      sum+=parseFloat(els.eq(i).attr('sum'));
+      vat+=parseFloat(els.eq(i).attr('vat'));
+    }
+    $('.total_sum').text(sum.toFixed(2));
+    $('.total_vat').text(vat.toFixed(2));
   })
 });
 

@@ -24,11 +24,8 @@ $submitOption = [
   'class' => 'btn btn-lg btn-success'
 ];
 
-$form = ActiveForm::begin([
-  'options' => ['class'=>''],
-  'validateOnChange' => true,
-]);
 ?>
+<form id="w0" class=""  method="post">
 <h4 class="modernui-neutral2">Order payment</h4>
 <div class="row">
 <div class="col-md-offset-4 col-md-4">
@@ -76,7 +73,7 @@ $form = ActiveForm::begin([
       echo "<h5 style='color:red' class='error_control'>".$item['err']."</h5>";
     }else{
       if(Yii::$app->user->identity->isManager()){?>
-        <?= Html::checkbox('agree_'.$pay_id, true, ['label' => 'Add to total sum','class'=>"hidden_block_communication"]);?>
+        <?= Html::checkbox('agree_'.$pay_id, true, ['label' => 'Add to total sum','class'=>"hidden_block_communication",'sum'=>$pay["total_sum"],'vat'=>$pay["total_gst"]+$pay["total_qst"]]);?>
         <br>
         <label class="agree_<?=$pay_id;?>" style="display: none;">
           Why not pay?
@@ -89,7 +86,15 @@ $form = ActiveForm::begin([
   }
   ?>
     <div class="trans_text text-center">
-        Sum to pay: <span class="trans_count"><?=number_format($total['sum'],2);?>$</span>&nbsp;&nbsp;(included vat <?=number_format($total['gst']+$total['qst'],2);?>$)
+        Sum to pay:
+          <span class="trans_count">
+            <span class="total_sum"><?=number_format($total['sum'],2);?></span>
+            $
+          </span>&nbsp;&nbsp;
+          (included vat
+          <span class="total_vat">
+            <?=number_format($total['gst']+$total['qst'],2);?>
+          </span>$)
     </div>
     <hr class="podes">
 
@@ -104,7 +109,7 @@ $form = ActiveForm::begin([
           'item' => function($index, $label, $name, $checked, $value) {
 
             $return = '<label>';
-            $return .= '<input type="radio" name="' . $name . '" value="' . $value . '">';
+            $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" >';
             $return .= '<span></span>&nbsp;&nbsp;';
             $return .= ucwords($label);
             $return .= '</label><br>';
@@ -155,17 +160,39 @@ $form = ActiveForm::begin([
 </div>
 </div>
 
-<?php ActiveForm::end(); ?>
+</form>
 
 <script>
+  function vaidate_comment(){
+    validate=true;
+    els=$('.hidden_block_communication:not(:checked)');
+    for (i=0;i<els.length;i++){
+      el=$('[name=text_not_'+els.eq(i).attr('name')+"]");
+      if(el.val().length<5){
+        validate=false;
+        show_err(el.parent(),'Field scale required');
+        //Добписать валидацию
+      }else{
+        hide_err(el.parent());
+      }
+    }
+    return validate;
+  }
+
   $("form").on('submit',function(e){
-    e.preventDefault();
-    return false;
+    validate=vaidate_comment();
+    if(!validate){
+      gritterAdd('Error','For non-payment, you must specify the reason.','gritter-danger');
+      e.preventDefault();
+      return false;
+    }
+
+    return true;
   });
-  // перехват submit т.к. нужно отправлять форму аяксом
-  $('#w0').on('afterValidate', function(e) {
-    e.preventDefault();
-    console.log(this);
-    return false;
-  });
+
+  $('[name^="text_not_agree_"]').keyup(function(){
+    if(this.value.length>5){
+      hide_err($(this).parent());
+    }
+  })
 </script>

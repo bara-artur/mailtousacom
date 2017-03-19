@@ -56,14 +56,14 @@ class PaymentsList extends \yii\db\ActiveRecord
         return 'payments';
     }
 
-    /**
+     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-          [['type', 'order_id', 'price', 'code','client_id'], 'required'],
-          [['type', 'order_id', 'status','client_id','pay_time','create_time'], 'integer'],
+          [['type','client_id'], 'required'],
+          [['type', 'status','client_id','pay_time','create_time'], 'integer'],
           [['price','qst','gst'], 'number'],
           [['code'], 'string', 'max' => 100],
         ];
@@ -83,4 +83,26 @@ class PaymentsList extends \yii\db\ActiveRecord
           'gst' => 'GST/HST (%)',
         ];
     }
+
+  public static function create($option){
+    $base_option=[
+      'client_id'=>Yii::$app->user->identity->id,
+      'user_id'=>Yii::$app->user->identity->id,
+      'type'=>0,
+      'create_time'=>time(),
+    ];
+    $option=array_merge($base_option,$option);
+
+    $pay=new PaymentsList();
+    foreach ($option as $k=>$v){
+      $pay->$k=$v;
+    }
+    if($pay->save()){
+      return $pay;
+    }else{
+      throw new NotFoundHttpException('Error creating order.');
+    }
+
+  }
+
 }

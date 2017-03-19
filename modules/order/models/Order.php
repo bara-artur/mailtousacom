@@ -79,4 +79,10 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+    public function setData($data){
+      Yii::$app->db->createCommand()
+      ->update('order_element', $data, ['id' => explode(',',$this->el_group)])
+      ->execute();
+    }
+
 }
