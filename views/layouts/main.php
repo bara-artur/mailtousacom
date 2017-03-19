@@ -51,6 +51,19 @@ AppAsset::register($this);
                 . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
                 . '</li>';
             }
+            if(true){
+                $user_menu[]='<li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-wrench"></i> Configuration <span class="caret"></span></a>
+                   <ul class="dropdown-menu">
+                        <li>'
+                            . Html::a('Tariffs', ['/tariff/'], ['class' => 'profile-link'])
+                        .'</li>
+                        <li>'
+                            . Html::a('Taxes', ['/state/'], ['class' => 'profile-link'])
+                        .'</li>'
+                    .'</ul>'
+                .'</li>';
+            }
             $user_menu[] ='<li>'.Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link']);
         }else{
             $user_menu[] ='<li class="dropdown">
