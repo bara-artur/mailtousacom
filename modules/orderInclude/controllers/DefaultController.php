@@ -468,7 +468,7 @@ class DefaultController extends Controller
       'total'=>$total,
       'address'=>$address
     ]);
-    return 0;
+
     //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
     //return $content;
     // setup kartik\mpdf\Pdf component

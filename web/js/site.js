@@ -3,6 +3,7 @@ $(document).ready(function() {
   $('.show_after_all_button').hide();
   init_address_edit();
   init_js_validation();
+  init_main_table_checkbox();
 
   ajax_send_lb_oz_tn_onchange();
   ajax_send_admin_status_onchange();
@@ -483,4 +484,24 @@ function AutoCompleteUserSelect(e,ui){
   }else{
     $('.admin_choose_user').prop('disabled',true);
   }
+}
+
+function init_main_table_checkbox(){
+  $(".checkBoxParcelMainTable").on('change',function(){
+    if ($(this).prop("checked")) {
+      if ($(".checkBoxParcelMainTable:checked").length > 1){
+        if (($(this).attr('name')!=$(".checkBoxParcelMainTable:checked")[0].name)||
+            ($(this).attr('name')!=$(".checkBoxParcelMainTable:checked")[1].name))  {
+          gritterAdd('Error',"You can't combine parcels with Draft and the other Status",'gritter-danger');
+          console.log($(this).attr('name'));
+          console.log($(".checkBoxParcelMainTable:checked")[0].name);
+          console.log($(".checkBoxParcelMainTable:checked")[1].name);
+          $(this).prop("checked",false);
+        }
+      }
+    }
+    else {
+      console.log(2);
+    }
+  })
 }
