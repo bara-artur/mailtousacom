@@ -60,7 +60,7 @@
         </TD>
         <TD class="border" colspan="2">
           7. Date of Arrival
-          <P class="user_inp"><?=date('d-m-Y',$order->transport_data);?></P>
+          <P class="user_inp"><?=date('d-m-Y',$transport_data);?></P>
         </TD>
       </TR>
     </TABLE>

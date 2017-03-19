@@ -463,12 +463,12 @@ class DefaultController extends Controller
 
     $content = $this->renderPartial($tpl,[
       'order_elements' => $order_elements,
-      'order'=>$order,
+      'transport_data'=>$pac->transport_data,
       'order_id'=>$id,
       'total'=>$total,
       'address'=>$address
     ]);
-
+    return 0;
     //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
     //return $content;
     // setup kartik\mpdf\Pdf component
@@ -483,7 +483,6 @@ class DefaultController extends Controller
         //'SetFooter'=>['{PAGENO}'],
       ]
     ]);
-
     // return the pdf output as per the destination setting
     return $pdf->render();
   }
