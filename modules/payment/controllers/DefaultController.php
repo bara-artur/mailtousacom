@@ -150,6 +150,7 @@ class DefaultController extends Controller
         }
 
         $item=[
+          'element_id'=>$pac->id,
           'track_number'=>$pac->track_number,
           'track_number_type'=>$pac->track_number_type,
           'weight'=>$pac->weight,
@@ -183,13 +184,14 @@ class DefaultController extends Controller
 
       $tot_already_pays=0;
       foreach ($payments as $pay) {
-        $pay['already_price']=round($pay['already_price'],2);
+         $pay['already_price']=round($pay['already_price'],2);
         $pay['already_qst']=round($pay['already_qst'],2);
         $pay['already_gst']=round($pay['already_gst'],2);
         $pay['already_sum']=round($pay['already_price']+$pay['already_gst']+$pay['already_qst'],2);
         $payments_list[$pay['element_id']]=array_merge($pay,$payments_list[$pay['element_id']]);
         $tot_already_pays+=$pay['already_price'];
       };
+
       $tot_already_pays=round($tot_already_pays,2);
 
       $total=array(
@@ -226,7 +228,7 @@ class DefaultController extends Controller
       }
       $tot_pays=round($tot_pays,2);
 
-      if($tot_already_pays==$tot_pays){
+      if($tot_already_pays==$tot_pays && !Yii::$app->user->identity->isManager()){
         Yii::$app->getSession()->setFlash('error', 'All selected orders have already been paid.');
         return $this->redirect(['/orderInclude/create-order/'.$id]);
       }
@@ -235,190 +237,123 @@ class DefaultController extends Controller
       if($request->isPost) {
         //d($request->post());
         //Обработчик для админа
-
-        //помечаем посылки как принятые на точку выдачи
-        $order->setData(['status'=>2,'payment_state'=>2]);
-
-        if($total['price']==0) {
-          //все оплаченно
-          \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
-        }
-
-        //За посылки прянята оплата налом
-        $pays=PaymentsList::create([
-          'client_id'=>$user_id,
-          'type'=>3,
-          'status'=>1,
-          'pay_time'=>time()
-        ]);
-
-        //d($pays);
         if(Yii::$app->user->identity->isManager()){
+          //помечаем посылки как принятые на точку выдачи
+          $order->setData(['status'=>2,'payment_state'=>2]);
+
+          if($total['price']==0) {
+            //все оплаченно
+            \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
+            return $this->redirect(['/']);
+          }
+
+          //посылки пряняты, оплата налом
+          $pays=PaymentsList::create([
+            'client_id'=>$user_id,
+            'type'=>3,
+            'status'=>1,
+            'pay_time'=>time(),
+          ]);
+
+          $price=0;
+          $qst=0;
+          $gst=0;
+          //d($pays);
+
           foreach ($payments_list as $item) {
             //только для посылок с стоимостью оплаты более 0
             if($item['total_price']>0){
               $pay_include=new PaymentInclude();
               $pay_include->payment_id=$pays->id;
               $pay_include->element_id=$item['element_id'];
+              $pay_include->price=$item['total_price'];
+              $pay_include->qst=$item['total_qst'];
+              $pay_include->gst=$item['total_gst'];
               $pay_include->element_type=0;
               $pay_include->status=1; //оплачен
               $pay_include->create_at=time();
+
 
               //если посылку отказались платить
               if(!$request->post('agree_'.$item['element_id'])){
                 $pay_include->status=-1;//Отказ от оплаты
                 $pay_include->comment=$request->post('text_not_agree_'.$item['element_id']);//Отказ от оплаты
+              }else{
+                $price+=$item['total_price'];
+                $qst+=$item['total_qst'];
+                $gst+=$item['total_gst'];
               }
               $pay_include->save();
               \Yii::$app->getSession()->setFlash('success', 'The order is payd and accepted to the warehouse and is waiting for dispatch.');
               return $this->redirect(['/']);
             }
           }
+          $pays->price=$price;
+          $pays->qst=$qst;
+          $pays->gst=$gst;
+          $pays->save();
         }else{
+          //d($request->post());
           //для обычного пользователя
 
+          //Когда выбрали оплату на терминале
+          if($request->post('payment_type')==2){
+            //помечаем посылки как принятые на точку выдачи
+            $order->setData(['status'=>1,'payment_state'=>1]);
+            \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
+            return $this->redirect(['/']);
+          };
+
+          //Когда выбрали оплату paypal
+          if($request->post('payment_type')==1){
+            $pay = new DoPayment();
+
+            foreach ($payments_list as $pac) {
+              if($pac['total_price']>0) {
+                $item_ = [
+                  'name' => 'Pac #' . $pac['element_id'],
+                  'vat' => $pac['total_gst'] + $pac['total_qst'],
+                  'price'=>$pac['total_price']
+                ];
+                $pay->addItem($item_);
+              }
+            }
+            $payment = $pay->make_payment();
+
+            $pays=PaymentsList::create([
+              'client_id'=>$user_id,
+              'type'=>1,
+              'status'=>0,
+              'code'=>$payment->getId(),
+              'price'=>$total['price'],
+              'qst'=> $total['gst'],
+              'gst'=>$total['qst']
+            ]);
+
+            foreach ($payments_list as $pac) {
+              if ($pac['total_price'] > 0) {
+                $pay_include = new PaymentInclude();
+                $pay_include->payment_id = $pays->id;
+                $pay_include->element_id = $pac['element_id'];
+                $pay_include->price=$pac['total_price'];
+                $pay_include->qst=$pac['total_qst'];
+                $pay_include->gst=$pac['total_gst'];
+                $pay_include->element_type = 0;
+                $pay_include->status = 0; //оплачен
+                $pay_include->create_at = time();
+                $pay_include->save();
+              }
+            }
+
+            $session->set('last_pays',$pays->id);
+            $approvalUrl = $payment->getApprovalLink();
+            return $this->redirect($approvalUrl);
+          }
         }
-        exit;
-      }
-      //d($total);
-      //ddd($payments_list);
-      /*
-      if($order->payment_state!=0 && !Yii::$app->user->identity->isManager()){
-        Yii::$app->getSession()->setFlash('info', 'Order paid previously and can not be re-paid.');
+        \Yii::$app->getSession()->setFlash('error', 'Your order error. Check the order or try again later.');
         return $this->redirect(['/']);
       }
 
-      if($order->transport_data<time())$order->transport_data=strtotime('+1 days');
-      $order->transport_data=date('d-M-Y', $order->transport_data);
-
-      $model = OrderElement::find()->where(['order_id'=>$id])->all();
-
-      $payments=array();
-
-
-      $total=array(
-        'price'=>0,
-        'weight'=>0,
-        'quantity'=>0,
-        'gst'=>0,
-        'qst'=>0,
-        'sum'=>0,
-      );
-
-      $query = new Query;
-      $query->select('state')
-        ->from('new_address')
-        ->where(['id'=>$order->billing_address_id]);
-      $row = $query->one();
-      $state=$row['state'];
-
-      $query = new Query;
-      $query->select(['qst','gst'])
-        ->from('state')
-        ->where(['name'=>$state]);
-      $tax = $query->one();
-
-
-      foreach ($model as &$pac) {
-        $pac->includes_packs = $pac->getIncludes();
-        $this_weight = 0;
-        foreach ($pac->includes_packs as $pack) {
-          $total['price'] += $pack['price'] * $pack['quantity'];
-          $total['quantity'] += $pack['quantity'];
-        }
-        $total['weight'] = $pac->weight;
-        $this_weight += $pac->weight;
-        $t=array();
-        $t['price']=(float)ParcelPrice::widget(['weight'=>$this_weight]);
-        $t['qst']=round($t['price']*$tax['qst']/100,2);
-        $t['gst']=round($t['price']*$tax['gst']/100,2);
-        $t['vat']=$t['qst']+$t['gst'];
-        $t['name']='parcel #'.$pac->id;
-        $t['quantity']=1;
-
-        $pac->price=$t['price'];
-        $pac->qst=$t['qst'];
-        $pac->gst=$t['gst'];
-        $pac->save();
-
-        $total['sum']+=$t['price'];
-        $total['qst']+=$t['qst'];
-        $total['gst']+=$t['gst'];
-
-        $payments[]=$t;
-      }
-
-      $order->price=$total['sum'];
-      $order->qst=$total['qst'];
-      $order->gst=$total['gst'];
-      $order->save();
-
-      $request = Yii::$app->request;
-      if($request->isPost) {
-        if ($order->payment_type == -1 && Yii::$app->user->identity->isManager()) {
-          $order->order_status=2;
-          $order->save();
-          \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
-        } else {
-          if ($order->order_status < 2 && $order->load($request->post()) && $order->save()) {
-            if (!Yii::$app->user->identity->isManager()) {
-              if ($order->payment_type == 1) {
-                $pay = new DoPayment();
-
-                foreach ($payments as $item) {
-                  $pay->addItem($item);
-                }
-
-                $payment = $pay->make_payment();
-
-                $customer = new PaymentsList();
-                $customer->type = 1;
-                $customer->order_id = $id;
-                $customer->create_time = time();
-                $customer->price = $total['sum'];
-                $customer->qst = $total['qst'];
-                $customer->gst = $total['gst'];
-                $customer->client_id = Yii::$app->user->getId();
-                $customer->code = $payment->getId();
-                $customer->save();
-
-                $approvalUrl = $payment->getApprovalLink();
-
-                return $this->redirect($approvalUrl);
-              }
-              if ($order->payment_type == 2) {
-                \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
-                return $this->redirect(['/']);
-              }
-            } else {
-              if ($order->payment_type == 3) {
-                $customer = new PaymentsList();
-                $customer->type = 3;
-                $customer->order_id = $id;
-                $customer->create_time = time();
-                $customer->price = $total['sum'];
-                $customer->qst = $total['qst'];
-                $customer->gst = $total['gst'];
-                $customer->client_id = Yii::$app->user->getId();
-                $customer->code = '';
-                $customer->save();
-
-                $order->order_status=2;
-                $order->save();
-
-                \Yii::$app->getSession()->setFlash('success', 'Payment received. The order is accepted to the warehouse and is waiting for dispatch.');
-                return $this->redirect(['/']);
-              }
-            }
-          } else {
-            \Yii::$app->getSession()->setFlash('error', 'Your order error. Check the order or try again later.');
-            return $this->redirect(['/']);
-          }
-        }
-      }
-*/
       return $this->render('to_pay', [
         'order_id'=>$id,
         'total'=>$total,
@@ -447,11 +382,7 @@ class DefaultController extends Controller
         $pay->status = 1;
         $pay->pay_time = time();
         $pay->save();
-
-        $order=Order::find()->where(['id'=>$pay->order_id])->one();
-        $order->payment_type=1;
-        $order->payment_state=1;
-        $order->save();
+        $pay->setData(['status'=>1]);
 
         \Yii::$app->getSession()->setFlash('success', 'Payment for your order was successful.');
         return $this->redirect(['/']);
@@ -485,6 +416,12 @@ class DefaultController extends Controller
       if(!$last_order){
         return $this->redirect(['/']);
       }else{
+        $last_pays=$session->get('last_pays');
+        $pay=PaymentsList::findOne($last_pays);
+        $pay->status=-1;
+        $pay->save();
+        $pay->setData(['status'=>-1]);
+
         return $this->redirect(['/payment/order/'.$last_order]);
       }
     }

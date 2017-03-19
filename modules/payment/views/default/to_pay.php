@@ -54,25 +54,32 @@ $submitOption = [
       <p><b>GST/HST</b> <?= number_format($pay["gst"],2); ?></p>
       <p><b>Total</b> <?= number_format($pay["sum"],2); ?></p>
     <?php
-    if($pay['already_price']){
+    if($pay['already_price']) {
       ?>
-        <h5>already pay</h5>
-        <p><b>Price</b> <?= number_format($pay["already_price"],2); ?></p>
-        <p><b>PST</b> <?= number_format($pay["already_qst"],2); ?></p>
-        <p><b>GST/HST</b> <?= number_format($pay["already_gst"],2); ?></p>
-        <p><b>Total</b> <?= number_format($pay["already_sum"],2); ?></p>
-
+      <h5>already pay</h5>
+      <p><b>Price</b> <?= number_format($pay["already_price"], 2); ?></p>
+      <p><b>PST</b> <?= number_format($pay["already_qst"], 2); ?></p>
+      <p><b>GST/HST</b> <?= number_format($pay["already_gst"], 2); ?></p>
+      <p><b>Total</b> <?= number_format($pay["already_sum"], 2); ?></p>
+      <?php
+      if($pay["total_price"]>0){
+        ?>
         <h5>Total pay</h5>
         <p><b>Price</b> <?= number_format($pay["total_price"],2); ?></p>
         <p><b>PST</b> <?= number_format($pay["total_qst"],2); ?></p>
         <p><b>GST/HST</b> <?= number_format($pay["total_gst"],2); ?></p>
         <p><b>Total</b> <?= number_format($pay["total_sum"],2); ?></p>
-      <?php
+        <?php
+      }else {
+        ?>
+          <h6>The pack is fully paid. Click next to take it to the warehouse.</h6>
+        <?php
+      }
     }
     if($pay['err']){
       echo "<h5 style='color:red' class='error_control'>".$item['err']."</h5>";
     }else{
-      if(Yii::$app->user->identity->isManager()){?>
+      if(Yii::$app->user->identity->isManager() && $pay["total_price"]>0){?>
         <?= Html::checkbox('agree_'.$pay_id, true, ['label' => 'Add to total sum','class'=>"hidden_block_communication",'sum'=>$pay["total_sum"],'vat'=>$pay["total_gst"]+$pay["total_qst"]]);?>
         <br>
         <label class="agree_<?=$pay_id;?>" style="display: none;">
@@ -82,8 +89,8 @@ $submitOption = [
       <?php
       }
     }
-
   }
+  if($total["total_sum"]>0){
   ?>
     <div class="trans_text text-center">
         Sum to pay:
@@ -96,6 +103,7 @@ $submitOption = [
             <?=number_format($total['gst']+$total['qst'],2);?>
           </span>$)
     </div>
+  <?php };?>
     <hr class="podes">
 
   <?php

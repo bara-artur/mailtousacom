@@ -105,4 +105,9 @@ class PaymentsList extends \yii\db\ActiveRecord
 
   }
 
+  public function setData($data){
+    Yii::$app->db->createCommand()
+      ->update('payment_include', $data, ['payment_id' => $this->id])
+      ->execute();
+  }
 }
