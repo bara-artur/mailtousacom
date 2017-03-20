@@ -25,7 +25,7 @@ $this->title = 'Shipping to USA and Canada';
           </div>
         <?php } ?>
         <div class="col-xs-2">
-          <?= Html::a('<i class="fa fa-search"></i>', ['#collapse2'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+          <?= Html::a('<i class="fa fa-search"></i>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
         <hr class="bottom_line">
         <div class="row">
@@ -48,13 +48,33 @@ $this->title = 'Shipping to USA and Canada';
             ])?>
         </div>
 
+        <div class="col-xs-3 pull-right">
+            <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
+        </div>
+
+        <div class="col-xs-3 pull-right">
+            <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
+        </div>
+
+        <div class="col-xs-3 pull-right">
+            <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-delete']); ?>
+        </div>
+      <div>
+        <p id = 'for_group_actions'>Checked parcels: empty</p>
+      </div>
+
     </div>
+
     <hr class="bottom_line">
 
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $orderElements,
             'columns' => [
+                ['content'=> function($data){
+                    return Html::checkbox(($data->status>0)?'InSystem':'Draft',false,['class'=>'checkBoxParcelMainTable','id'=>$data->id]);
+                  }
+                ],
                 ['class' => 'yii\grid\SerialColumn',
                   'visible' => $showTable->showSerial,],
            //   'userOrder_id',
@@ -135,15 +155,15 @@ $this->title = 'Shipping to USA and Canada';
                 // 'order_status',
                 // 'created_at',
                 // 'transport_data',
-              //  ['attribute' => 'Action','content' => function($data){
-              //      switch ($data->order_status) {
-              //          case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-info']); break;
-              //          case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-sm btn btn-danger']);break;
-                //        case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-sm btn-warning']);break;
-                  //      case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-sm btn-info']);break;
-              //          default: return "Unknown status - ".$data->order_status;
-                //    }
-                //}],
+                /*['attribute' => 'Action','content' => function($data){
+                    switch ($data->order_status) {
+                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-info']); break;
+                        case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-sm btn btn-danger']);break;
+                        case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-sm btn-warning']);break;
+                        case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-sm btn-info']);break;
+                        default: return "Unknown status - ".$data->order_status;
+                    }
+                }],*/
             ],
         ]); ?>
     </div>

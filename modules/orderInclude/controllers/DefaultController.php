@@ -293,10 +293,8 @@ class DefaultController extends Controller
         }
       }
 
-      if($order->transport_data<time())$order->transport_data=strtotime('+1 days');
-      $order->transport_data=date(\Yii::$app->params['data_format_php'], $order->transport_data);
-
-      $model = OrderElement::find()->where(['order_id'=>$id])->all();
+      $el_group = $order->el_group;
+      $arr = explode(',', $order->el_group);
 
       $total=array(
         'price'=>0,
@@ -313,7 +311,16 @@ class DefaultController extends Controller
       $row = $query->one();
       $max_weight=$row['weight'];
 
-      foreach ($model as $pac) {
+      $order_elements = [];
+      foreach ($arr as $parcel_id) {
+        $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
+        $order_elements[] = $pac;
+        if($pac->transport_data<time()){
+          $pac->transport_data=strtotime('+1 days');
+        }
+
+        $pac->transport_data=date(\Yii::$app->params['data_format_php'], $pac->transport_data);
+
         $pac->includes_packs = $pac->getIncludes();
         if (count($pac->includes_packs) == 0) {
           Yii::$app
@@ -360,8 +367,8 @@ class DefaultController extends Controller
       }
 
       return $this->render('BorderForm', [
-        'order_elements' => $model,
-        'createNewAddress'=>!$model,
+        'order_elements' => $order_elements,
+        'createNewAddress'=>!$order_elements,
         'order_id'=>$id,
         'total'=>$total,
         'model'=>$order,
@@ -392,9 +399,9 @@ class DefaultController extends Controller
     $headers->add('Content-Type', 'application/pdf');
 
     $order = Order::findOne($id);
-    if($order->transport_data<time())$order->transport_data=strtotime('+1 days');
 
-    $model = OrderElement::find()->where(['order_id'=>$id])->all();
+    $el_group = $order->el_group;
+    $arr = explode(',', $order->el_group);
 
     $total=array(
       'price'=>0,
@@ -411,7 +418,14 @@ class DefaultController extends Controller
     $row = $query->one();
     $max_weight=$row['weight'];
 
-    foreach ($model as &$pac) {
+    $order_elements = [];
+    foreach ($arr as &$parcel_id) {
+      $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
+      $order_elements[] = $pac;
+
+      if($pac->transport_data<time()){
+        $pac->transport_data=strtotime('+1 days');
+      }
       $pac->includes_packs = $pac->getIncludes();
       if (count($pac->includes_packs) == 0) {
         Yii::$app
@@ -441,14 +455,15 @@ class DefaultController extends Controller
 
     $total['weight_lb']=floor($total['weight']);
     $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
+    $user = User::find()->where(['id'=>$pac->user_id])->one();
 
-    $address=Address::findOne($order->billing_address_id);
+    $address=Address::findOne(['user_id' => $user->id]);
 
-    $tpl=count($model)==1?'borderFormPdf_one_pac':'borderFormPdf';
+    $tpl=count($order_elements)==1?'borderFormPdf_one_pac':'borderFormPdf';
 
     $content = $this->renderPartial($tpl,[
-      'order_elements' => $model,
-      'order'=>$order,
+      'order_elements' => $order_elements,
+      'transport_data'=>$pac->transport_data,
       'order_id'=>$id,
       'total'=>$total,
       'address'=>$address
@@ -468,7 +483,6 @@ class DefaultController extends Controller
         //'SetFooter'=>['{PAGENO}'],
       ]
     ]);
-
     // return the pdf output as per the destination setting
     return $pdf->render();
   }
