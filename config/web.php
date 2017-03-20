@@ -159,19 +159,22 @@ $config = [
       ],
       'order' => [
             'class' => 'app\modules\order\Module',
-        ],
+      ],
       'orderElement' => [
             'class' => 'app\modules\orderElement\Module',
-        ],
+      ],
       'orderInclude' => [
             'class' => 'app\modules\orderInclude\Module',
-        ],
+      ],
       'gridview' => [
             'class' => '\kartik\grid\Module',
-        ],
+      ],
       'logs' => [
             'class' => 'app\modules\logs\Module',
-        ],
+      ],
+      'receiving_points' => [
+        'class' => 'app\modules\receiving_points\Module',
+      ],
     ]
 ];
 
