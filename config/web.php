@@ -92,9 +92,10 @@ $config = [
                 'address/<action>'=>'address/default/<action>',
                 'order/<action>'=>'order/default/<action>',
 
-                'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
+
                 'orderElement/<action>'=>'orderElement/default/<action>',
                 'orderElement/create/<id:\d+>'=>'orderElement/default/create',
+                'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
 
                 'orderInclude/<action>'=>'orderInclude/default/<action>',
                 'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',

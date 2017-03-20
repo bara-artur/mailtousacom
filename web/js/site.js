@@ -407,7 +407,7 @@ function init_js_validation()
 function ajax_send_lb_oz_tn_onchange(){
   $( ".lb-oz-tn-onChange" ).change(function() {
     elemForm = this;
-    index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
+    index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /4);
     if(!valid_order_create(elemForm))return false;
 
     var msg   = $(this).parents('form:first').serialize();
@@ -417,6 +417,7 @@ function ajax_send_lb_oz_tn_onchange(){
       data: msg,
       success: function(data) {
         $('.resInd'+index).html(data).css( "color", "blue");
+        gritterAdd('Error','Error: Goooood'+index);
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
@@ -511,12 +512,19 @@ function main_table_checkbox(current_element){
   elem_checked = $(".checkBoxParcelMainTable:checked");
   if ($(current_element).prop("checked")) {
     if (elem_checked.length > 1) { // выделено больше одного элемента - поэтому надо проверять на типы статусов
-      if (($(current_element).attr('name') != elem_checked[0].name) ||
-        ($(current_element).attr('name') != elem_checked[1].name)) { // разные статусы у выделения. Надо отменить
-        gritterAdd('Error', "You can't combine parcels with Draft and the other Status", 'gritter-danger');
+      if (($(current_element).attr('user') != elem_checked[0].getAttribute('user')) ||   // проверка необходима для работы админа
+        ($(current_element).attr('user') != elem_checked[1].getAttribute('user'))) {
+        gritterAdd('Error', "You can't combine parcels of 2 different users", 'gritter-danger');
         $(current_element).prop("checked", false);
         elem_checked = $(".checkBoxParcelMainTable:checked"); // убираем из списка отмененное выше выделение
-      } else {// выделение корректно
+      }else {
+        if (($(current_element).attr('name') != elem_checked[0].name) ||
+          ($(current_element).attr('name') != elem_checked[1].name)) { // разные статусы у выделения. Надо отменить
+          gritterAdd('Error', "You can't combine parcels with Draft and the other Status", 'gritter-danger');
+          $(current_element).prop("checked", false);
+          elem_checked = $(".checkBoxParcelMainTable:checked"); // убираем из списка отмененное выше выделение
+        } else {// выделение корректно
+        }
       }
     }
   }
