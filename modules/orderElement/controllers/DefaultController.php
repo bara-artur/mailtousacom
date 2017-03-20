@@ -267,16 +267,57 @@ class DefaultController extends Controller
 
     }
 
-    public function actionGroupDelete($id){
-      return $id;
+    public function actionGroupUpdate($parcels_id){
+      $arr = explode('_', $parcels_id);
+      asort($arr);
+      $user_id = null;
+      $flag = 0;
+      foreach ($arr as $id)
+      {
+        if ($flag == 0){
+          $parcel = OrderElement::findOne(['id'=> $id]);
+          if ($parcel) {
+            $user_id = $parcel->user_id;
+            $flag = 1;
+          }
+        }
+      }
+
+      if ($flag == 1){  // посылки существуют
+        $parcels_id = implode(',', $arr);
+
+        $order = Order::find()->where(["el_group" => $parcels_id])->one();
+        if ($order) {
+          $this->redirect(['/orderInclude/create-order/'.$order->id]);
+          return $order->id;
+        }
+        else{
+          $order = new Order();
+          $order->el_group = $parcels_id;
+          $order->created_at = time();
+          $order->user_id = $user_id;
+          $order->save();
+          $this->redirect(['/orderInclude/create-order/'.$order->id]);
+          return $order->id;
+        }
+        return $parcels_id;
+      }
+     // $this->redirect(['/','message'=>"Parcels that you have chosen already don't exist"]);
+      return "Parcels that you have chosen already don't exist";
     }
 
-    public function actionGroupPrint($id){
-      return $id;
+    public function actionGroupPrint($parcels_id){
+      $arr = explode('_', $parcels_id);
+      $arr = asort($arr);
+      $parcels_id = implode(',', $arr);
+      return $parcels_id;
     }
 
-    public function actionGroupUpdate($id){
-      return $id;
+    public function actionGroupDelete($parcels_id){
+      $arr = explode('_', $parcels_id);
+      $arr = asort($arr);
+      $parcels_id = implode(',', $arr);
+      return $parcels_id;
     }
     /**
      * Finds the OrderElement model based on its primary key value.
