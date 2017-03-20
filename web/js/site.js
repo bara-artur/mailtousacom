@@ -486,35 +486,41 @@ function AutoCompleteUserSelect(e,ui){
   }
 }
 
-function init_main_table_checkbox(){
-  $(".checkBoxParcelMainTable").on('change',function(){
-    elem_checked = $(".checkBoxParcelMainTable:checked");
-    if ($(this).prop("checked")) {
-      if (elem_checked.length > 1) { // выделено больше одного элемента - поэтому надо проверять на типы статусов
-        if (($(this).attr('name') != elem_checked[0].name) ||
-          ($(this).attr('name') != elem_checked[1].name)) { // разные статусы у выделения. Надо отменить
-          gritterAdd('Error', "You can't combine parcels with Draft and the other Status", 'gritter-danger');
-          $(this).prop("checked", false);
-          elem_checked = $(".checkBoxParcelMainTable:checked"); // убираем из списка отмененное выше выделение
-        } else {// выделение корректно
-        }
+function main_table_checkbox(current_element){
+  elem_checked = $(".checkBoxParcelMainTable:checked");
+  if ($(current_element).prop("checked")) {
+    if (elem_checked.length > 1) { // выделено больше одного элемента - поэтому надо проверять на типы статусов
+      if (($(current_element).attr('name') != elem_checked[0].name) ||
+        ($(current_element).attr('name') != elem_checked[1].name)) { // разные статусы у выделения. Надо отменить
+        gritterAdd('Error', "You can't combine parcels with Draft and the other Status", 'gritter-danger');
+        $(current_element).prop("checked", false);
+        elem_checked = $(".checkBoxParcelMainTable:checked"); // убираем из списка отмененное выше выделение
+      } else {// выделение корректно
       }
     }
-    parcel_ids ="";
-    string = "empty";
-    elem_checked.each(function(i,elem) {
-      if (parcel_ids == "") {
-        parcel_ids = this.id;
-        string = this.id;
-      }else {
-        string = string + " " + this.id;
-        parcel_ids = parcel_ids + "_" + this.id;
-      }
-    });
-    if (string!="empty") string = string + " ( " + elem_checked[0].name+" type)";
-    $("#for_group_actions").text("Checked parcels: " + string);
-    $("#group-update").attr("href","/orderElement/group-update/"+parcel_ids);
-    $("#group-print").attr("href","/orderElement/group-print/"+parcel_ids);
-    $("#group-delete").attr("href","/orderElement/group-delete/"+parcel_ids);
+  }
+  parcel_ids ="";
+  string = "empty";
+  elem_checked.each(function(i,elem) {
+    if (parcel_ids == "") {
+      parcel_ids = this.id;
+      string = this.id;
+    }else {
+      string = string + " " + this.id;
+      parcel_ids = parcel_ids + "_" + this.id;
+    }
+  });
+  if (string!="empty") string = string + " ( " + elem_checked[0].name+" type)";
+  $("#for_group_actions").text("Checked parcels: " + string);
+  $("#group-update").attr("href","/orderElement/group-update/"+parcel_ids);
+  $("#group-print").attr("href","/orderElement/group-print/"+parcel_ids);
+  $("#group-delete").attr("href","/orderElement/group-delete/"+parcel_ids);
+}
+
+function init_main_table_checkbox(){
+  main_table_checkbox();
+  $(".checkBoxParcelMainTable").on('change',function(){
+    main_table_checkbox(this);
+
   })
 }
