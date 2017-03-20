@@ -19,53 +19,62 @@ use app\modules\orderElement\models\OrderElement;
   <div id="collapseTableOptions" class="panel panel-collapse collapse">
     <div class="panel-body">
       <?php $form = ActiveForm::begin(['options' => ['class'=>'show-parcel-table-form'],]); ?>
-      <div class="row">
-        <div class="col-md-1">
-          <?= $form->field($model, 'showSerial')->checkbox(['class'=>'form-control']) ?>
-        </div>
+      <div class="col-md-10">
+          <div class="row">
+              <div class="col-md-2">
+          <?= $form->field($model, 'showSerial')->checkbox(['class'=>'']) ?>
+              </div>
         <?php if (Yii::$app->params['showAdminPanel']==1) { ?>
-          <div class="col-md-1">
-            <?= $form->field($model, 'showID')->checkbox(['class'=>'form-control']) ?>
-          </div>
+              <div class="col-md-2">
+            <?= $form->field($model, 'showID')->checkbox(['class'=>'']) ?>
+              </div>
         <?php } ?>
-        <div class="col-md-1">
-          <?= $form->field($model, 'showStatus')->checkbox(['class'=>'form-control'])?>
-        </div>
+              <div class="col-md-2">
+          <?= $form->field($model, 'showStatus')->checkbox(['class'=>''])?>
+              </div>
 
-        <div class="col-md-1">
-          <?= $form->field($model, 'showCreatedAt')->checkbox(['class'=>'form-control'])?>
-        </div>
+                  <div class="col-md-2">
+          <?= $form->field($model, 'showCreatedAt')->checkbox(['class'=>''])?>
+                  </div>
 
-        <div class="col-md-1">
-          <?= $form->field($model, 'showPaymentState')->checkbox(['class'=>'form-control'])?>
-        </div>
+                      <div class="col-md-2">
+          <?= $form->field($model, 'showPaymentState')->checkbox(['class'=>''])?>
+                      </div>
         <?php if (false){?>
-        <div class="col-md-1">
-          <?= $form->field($model, 'showPaymentType')->checkbox(['class'=>'form-control'])?>
-        </div>
+                          <div class="col-md-2">
+          <?= $form->field($model, 'showPaymentType')->checkbox(['class'=>''])?>
+                          </div>
         <?php }?>
-        <div class="col-md-1">
-          <?= $form->field($model, 'showPrice')->checkbox(['class'=>'form-control'])?>
-        </div>
+      </div>
 
-        <div class="col-md-1">
-          <?= $form->field($model, 'showQst')->checkbox(['class'=>'form-control'])?>
-        </div>
+        <div class="row">
 
-        <div class="col-md-1">
-          <?= $form->field($model, 'showGst')->checkbox([ 'class'=>'form-control'])?>
-        </div>
+            <div class="col-md-2">
+          <?= $form->field($model, 'showPrice')->checkbox(['class'=>''])?>
+            </div>
 
-        <div class="col-md-1">
-          <?= $form->field($model, 'showTotal')->checkbox(['class'=>'form-control'])?>
-        </div>
+            <div class="col-md-2">
+          <?= $form->field($model, 'showQst')->checkbox(['class'=>''])?>
+            </div>
 
-        <div class="col-md-2">
-          <?= Html::submitButton('Refresh table', ['class' => 'btn btn-success but_top']) ?>
+                <div class="col-md-2">
+          <?= $form->field($model, 'showGst')->checkbox([ 'class'=>''])?>
+                </div>
+
+                    <div class="col-md-2">
+          <?= $form->field($model, 'showTotal')->checkbox(['class'=>''])?>
+                    </div>
+        </div>
+    </div>
+            <div class="col-md-2">
+          <?= Html::submitButton('Update columns table', ['class' => 'btn btn-success but_top text-right']) ?>
+            </div>
         </div>
       </div>
-    </div>
+
+
 
   <?php ActiveForm::end(); ?>
-  </div>
-</div><!-- orderFilterForm -->
+</div>
+
+<!-- orderFilterForm -->

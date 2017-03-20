@@ -20,14 +20,15 @@ $this->title = 'Shipping to USA and Canada';
     <div class="row">
 <div class="col-md-12">
         <?php if ($orderElements) { ?>
-          <div class="col-xs-2 padding-off-left">
+          <div class="col-md-2 col-xs-12  padding-off-left">
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
 
         <?php } ?>
 
           <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
-    <div class="col-xs-10 text-right">
+    <div class="col-md-10 hidden-xs text-right">
+
         <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-update']); ?>
         <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-md btn-danger', 'id'=>'group-delete']); ?>
         <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print']); ?>
@@ -36,6 +37,18 @@ $this->title = 'Shipping to USA and Canada';
             [
                 'role'=>'modal-remote',
                 'class'=>'btn btn-success show_modal',
+            ])?>
+
+    </div>
+    <div class="col-xs-12 visible-xs text-center margin-top-10">
+        <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
+        <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-danger', 'id'=>'group-delete']); ?>
+        <?=Html::a('Print PDF', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
+
+        <?=Html::a('Create order', ['/order/create/'],
+            [
+                'role'=>'modal-remote',
+                'class'=>'btn btn-success btn-sm show_modal',
             ])?>
     </div>
 </div>

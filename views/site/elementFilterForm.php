@@ -85,14 +85,14 @@ use app\modules\orderElement\models\OrderElement;
           <label class="control-label">Action</label>
           <div class="row">
 
-            <div class="col-md-3 padding-off-right">
+            <div class="col-xs-3 padding-off-right">
               <?=  Html::resetButton('<i class="fa fa-refresh"></i>',['class' => 'btn btn-neutral-border but_top fix reset_filter']) ?>
             </div>
-            <div class="col-md-6 padding-off-left padding-off-right">
+            <div class="col-xs-6 padding-off-left padding-off-right">
 
               <?= Html::submitButton('<i class="fa fa-search"></i>', ['class' => 'btn btn-success but_top']) ?>
             </div>
-            <div class="col-md-3 padding-off-left">
+            <div class="col-xs-3 padding-off-left">
               <?= Html::a('<i class="fa fa-remove"></i>',['#collapse'],['class' => 'btn btn-neutral-border but_top fix','data-toggle' => 'collapse']) ?>
 
             </div>
