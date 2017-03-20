@@ -20,14 +20,17 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'name',
             'address',
-            'active',
+            ['attribute' => 'active',
+             'content' => function($data){ if ($data->active!=0) return "Active";
+             else return '-';
+            },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
