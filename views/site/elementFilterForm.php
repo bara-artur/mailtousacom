@@ -23,9 +23,9 @@ use app\modules\orderElement\models\OrderElement;
         <div class="col-md-1">
           <?= $form->field($model, 'id')->textInput () ?>
         </div>
-
         <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
-          <div class="col-md-1">
+          <div class="col-md-2">
+              <label class="control-label">Fast search</label>
             <?=$form->field($model, 'user_input')->widget(AutoComplete::classname(),[
               'name' => 'user',
               'clientOptions' => [
@@ -37,7 +37,7 @@ use app\modules\orderElement\models\OrderElement;
               ],
               'options' =>
                 [
-                  'placeholder' =>'name, phone or email',
+                  'placeholder' =>'Write Name,Phone or Email',
                   'tabindex'=>'10',
                   'z-index'=>'9999',
                   'class'=>'modal_user_choosing form-control',
@@ -49,9 +49,16 @@ use app\modules\orderElement\models\OrderElement;
             ]);?>
           </div>
         <?php } ?>
-        <div class="col-md-2">
+          <?php if (Yii::$app->params['showAdminPanel'] == 0) {?>
+        <div class="col-md-3">
           <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
         </div>
+          <?php } ?>
+          <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
+              <div class="col-md-2">
+                  <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
+              </div>
+          <?php } ?>
         <div class="col-md-3">
           <?= $form->field($model,'created_at')->widget(DatePicker::className(),[
             'name' => 'created_at',
@@ -64,21 +71,28 @@ use app\modules\orderElement\models\OrderElement;
             ]
           ]);?>
         </div>
+          <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
         <div class="col-md-2">
           <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
         </div>
+          <?php } ?>
+          <?php if (Yii::$app->params['showAdminPanel'] == 0) {?>
+              <div class="col-md-3">
+                  <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
+              </div>
+          <?php } ?>
         <div class="col-md-2">
           <label class="control-label">Action</label>
           <div class="row">
 
-            <div class="col-xs-3 padding-off-right">
+            <div class="col-md-3 padding-off-right">
               <?=  Html::resetButton('<i class="fa fa-refresh"></i>',['class' => 'btn btn-neutral-border but_top fix reset_filter']) ?>
             </div>
-            <div class="col-xs-6 padding-off-left padding-off-right">
+            <div class="col-md-6 padding-off-left padding-off-right">
 
               <?= Html::submitButton('<i class="fa fa-search"></i>', ['class' => 'btn btn-success but_top']) ?>
             </div>
-            <div class="col-xs-3 padding-off-left">
+            <div class="col-md-3 padding-off-left">
               <?= Html::a('<i class="fa fa-remove"></i>',['#collapse'],['class' => 'btn btn-neutral-border but_top fix','data-toggle' => 'collapse']) ?>
 
             </div>
@@ -86,7 +100,6 @@ use app\modules\orderElement\models\OrderElement;
 
           </div>
         </div>
-
       </div>
     </div>
   </div>
