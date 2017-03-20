@@ -174,7 +174,7 @@ $submitOption = [
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
               <p><b>Cost of delivery : </b>
-                <span id="results resInd<?=$k?>">
+                <span id="results" class="resInd<?=$k?>">
                         <?php
                         if($percel->weight>0) {
                           $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);

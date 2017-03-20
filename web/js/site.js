@@ -386,7 +386,8 @@ function init_js_validation()
 function ajax_send_lb_oz_tn_onchange(){
   $( ".lb-oz-tn-onChange" ).change(function() {
     elemForm = this;
-    index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
+    console.log($('.lb-oz-tn-onChange').index(elemForm));
+    index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /4);
     if(!valid_order_create(elemForm))return false;
 
     var msg   = $(this).parents('form:first').serialize();
@@ -396,6 +397,7 @@ function ajax_send_lb_oz_tn_onchange(){
       data: msg,
       success: function(data) {
         $('.resInd'+index).html(data).css( "color", "blue");
+        gritterAdd('Error','Error: Goooood'+index);
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
