@@ -315,9 +315,13 @@ class DefaultController extends Controller
 
     public function actionGroupDelete($parcels_id){
       $arr = explode('_', $parcels_id);
-      $arr = asort($arr);
-      $parcels_id = implode(',', $arr);
-      return $parcels_id;
+      asort($arr);
+      foreach ($arr as $parcel_id){
+        OrderInclude::deleteAll(['order_id'=>$parcel_id]);
+        OrderElement::deleteAll(['id'=>$parcel_id]);
+      }
+      $this->redirect(['/']);
+      return "Parcels delete complete successfully";
     }
     /**
      * Finds the OrderElement model based on its primary key value.
