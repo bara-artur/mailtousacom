@@ -267,6 +267,17 @@ class DefaultController extends Controller
 
     }
 
+    public function actionGroupDelete($id){
+      return $id;
+    }
+
+    public function actionGroupPrint($id){
+      return $id;
+    }
+
+    public function actionGroupUpdate($id){
+      return $id;
+    }
     /**
      * Finds the OrderElement model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

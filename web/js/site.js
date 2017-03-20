@@ -488,20 +488,33 @@ function AutoCompleteUserSelect(e,ui){
 
 function init_main_table_checkbox(){
   $(".checkBoxParcelMainTable").on('change',function(){
+    elem_checked = $(".checkBoxParcelMainTable:checked");
     if ($(this).prop("checked")) {
-      if ($(".checkBoxParcelMainTable:checked").length > 1){
-        if (($(this).attr('name')!=$(".checkBoxParcelMainTable:checked")[0].name)||
-            ($(this).attr('name')!=$(".checkBoxParcelMainTable:checked")[1].name))  {
-          gritterAdd('Error',"You can't combine parcels with Draft and the other Status",'gritter-danger');
-          console.log($(this).attr('name'));
-          console.log($(".checkBoxParcelMainTable:checked")[0].name);
-          console.log($(".checkBoxParcelMainTable:checked")[1].name);
-          $(this).prop("checked",false);
+      if (elem_checked.length > 1) { // выделено больше одного элемента - поэтому надо проверять на типы статусов
+        if (($(this).attr('name') != elem_checked[0].name) ||
+          ($(this).attr('name') != elem_checked[1].name)) { // разные статусы у выделения. Надо отменить
+          gritterAdd('Error', "You can't combine parcels with Draft and the other Status", 'gritter-danger');
+          $(this).prop("checked", false);
+          elem_checked = $(".checkBoxParcelMainTable:checked"); // убираем из списка отмененное выше выделение
+        } else {// выделение корректно
         }
       }
     }
-    else {
-      console.log(2);
-    }
+    parcel_ids ="";
+    string = "empty";
+    elem_checked.each(function(i,elem) {
+      if (parcel_ids == "") {
+        parcel_ids = this.id;
+        string = this.id;
+      }else {
+        string = string + " " + this.id;
+        parcel_ids = parcel_ids + "_" + this.id;
+      }
+    });
+    if (string!="empty") string = string + " ( " + elem_checked[0].name+" type)";
+    $("#for_group_actions").text("Checked parcels: " + string);
+    $("#group-update").attr("href","/orderElement/group-update/"+parcel_ids);
+    $("#group-print").attr("href","/orderElement/group-print/"+parcel_ids);
+    $("#group-delete").attr("href","/orderElement/group-delete/"+parcel_ids);
   })
 }

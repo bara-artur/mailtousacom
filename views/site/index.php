@@ -49,16 +49,19 @@ $this->title = 'Shipping to USA and Canada';
         </div>
 
         <div class="col-xs-3 pull-right">
-            <?=Html::a('Update parcels', ['/orderInclude/group-update/'], ['class' => 'btn btn-sm btn-info']); ?>
+            <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
         </div>
 
         <div class="col-xs-3 pull-right">
-            <?=Html::a('Print PDF for parcels', ['/orderInclude/group-print/'], ['class' => 'btn btn-sm btn-info']); ?>
+            <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
         </div>
 
         <div class="col-xs-3 pull-right">
-            <?=Html::a('Delete parcels', ['/orderInclude/group-delete/'], ['class' => 'btn btn-sm btn-info']); ?>
+            <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-delete']); ?>
         </div>
+      <div>
+        <p id = 'for_group_actions'>Checked parcels: empty</p>
+      </div>
 
     </div>
 
