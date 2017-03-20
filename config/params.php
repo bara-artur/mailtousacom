@@ -135,5 +135,6 @@ return [
   'package_source_list'=>[
     0=>"manual",
     1=>"eBay"
-  ]
+  ],
+  'choose_receiving_point' => '1',
 ];

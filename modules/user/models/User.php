@@ -458,6 +458,7 @@ class User extends ActiveRecord  implements IdentityInterface
             'login_at' => date('Y-m-d H:i:s'),
             'last_online'=> time(),
         ], ['id' => $id])->execute();
+        if (Yii::$app->user->can("takeParcel")) Yii::$app->getSession()->setFlash('choose_receiving_point','1');
     }
 
     /**
