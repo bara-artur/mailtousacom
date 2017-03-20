@@ -72,7 +72,11 @@ $this->title = 'Shipping to USA and Canada';
             'dataProvider' => $orderElements,
             'columns' => [
                 ['content'=> function($data){
-                    return Html::checkbox(($data->status>0)?'InSystem':'Draft',false,['class'=>'checkBoxParcelMainTable','id'=>$data->id]);
+                    return Html::checkbox(($data->status>0)?'InSystem':'Draft',false,[
+                      'class'=>'checkBoxParcelMainTable',
+                      'id'=>$data->id,
+                      'user'=> $data->user_id,
+                    ]);
                   }
                 ],
                 ['class' => 'yii\grid\SerialColumn',
