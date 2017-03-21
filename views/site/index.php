@@ -27,7 +27,7 @@ $this->title = 'Shipping to USA and Canada';
 
           <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
-    <div class="col-md-10 hidden-xs text-right">
+    <div class="col-md-10 hidden-xs text-right padding-off-right">
 
         <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-update']); ?>
         <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-md btn-danger', 'id'=>'group-delete']); ?>
