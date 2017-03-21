@@ -18,14 +18,14 @@ $this->title = 'Shipping to USA and Canada';
     <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
 
     <div class="row">
-<div class="col-md-12">
-        <?php if ($orderElements) { ?>
-          <div class="col-md-2 col-xs-12  padding-off-left">
-            <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+      <div class="col-md-12">
 
-        <?php } ?>
+        <div class="col-md-2 col-xs-12  padding-off-left">
+          <?php if ($orderElements) { ?>
+            <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+          <?php } ?>
 
-          <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+          <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
     <div class="col-md-10 hidden-xs text-right padding-off-right">
 
@@ -56,6 +56,7 @@ $this->title = 'Shipping to USA and Canada';
         <hr class="bottom_line">
 <?php if(Yii::$app->user->can("takeParcel")){?>
   <div class="col-xs-3 pull-right">
+    <span>Current Receiving point : <?= $receiving_point ?></span>
     <?=Html::a('Choose Receiving point', ['/receiving_points/choose/'],
       [
         'id'=>'choose_receiving_point',
@@ -180,15 +181,40 @@ $this->title = 'Shipping to USA and Canada';
                 // 'order_status',
                 // 'created_at',
                 // 'transport_data',
-                /*['attribute' => 'Action','content' => function($data){
-                    switch ($data->order_status) {
-                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-info']); break;
-                        case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-sm btn btn-danger']);break;
-                        case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-sm btn-warning']);break;
-                        case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-sm btn-info']);break;
+                ['attribute' => 'Action','content' => function($data){
+                    switch ($data->status) {
+                        case '0' : {
+
+                          return Html::a('Update Order', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-info']).
+                                 Html::a('Delete',
+                                   ['/orderElement/group-delete/'.$data->id],
+                                   [
+                                     'class' => 'btn btn-sm btn-danger' ,
+                                     'data-confirm'=>'Are you sure you want to delete this item?',
+                                   ]);
+                        } break;
+                        case '1' : {
+                          return Html::a('Order has been paid', ['/orderElement/group-print/'.$data->id], ['class' => 'btn btn-sm btn btn-warning']).
+                                 Html::a('Delete',
+                                  ['/orderElement/group-delete/'.$data->id],
+                                  [
+                                    'class' => 'btn btn-sm btn-danger' ,
+                                    'data-confirm'=>'Are you sure you want to delete this item?',
+                                  ]);
+                        }break;
+                        case '2' : {
+                          return Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']).
+                                Html::a('Delete',
+                                  ['/orderElement/group-delete/'.$data->id],
+                                  [
+                                    'class' => 'btn btn-sm btn-danger' ,
+                                    'data-confirm'=>'Are you sure you want to delete this item?',
+                                  ]);
+                        }break;
+
                         default: return "Unknown status - ".$data->order_status;
                     }
-                }],*/
+                }],
             ],
         ]); ?>
     </div>

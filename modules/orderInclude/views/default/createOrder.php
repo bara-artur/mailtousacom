@@ -55,13 +55,12 @@ $submitOption = [
         <div class="row">
           <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
           <div class="col-md-3 marg_p">
-            <h5 class="deliv_address">Delivery address</h5>
+            <h5 class="deliv_address">Delivery address</h5><p><b>First name:</b>  <?=$percel->first_name;?></p>
               <?php
               if($percel->source==1){
                   echo "<p><b>Import from : </b><span class='from_ebay'></span></p>";
               }
               ?>
-            <p><b>First name:</b>  <?=$percel->first_name;?></p>
             <p><b>Last name:</b>  <?=$percel->last_name;?></p>
             <?php if($percel->address_type==1){
               echo '<p><b>Company name:</b>  '.$percel->company_name.'</p>';
@@ -72,7 +71,6 @@ $submitOption = [
             <p><b>ZIP:</b>  <?=$percel->zip;?></p>
             <p><b>Phone:</b>  <?=$percel->phone;?></p>
             <p><b>State:</b>  <?=$percel->state;?></p>
-
             <?php if ($edit_not_prohibited) {?>
               <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$percel->id],
                 [
@@ -174,7 +172,6 @@ $submitOption = [
               <hr class="bor_bottom">
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
-            <div class="row">
               <div class="col-md-6 cost_del"><b>Cost of delivery : </b>
                 <span id="results" class="resInd<?=$k?>">
                         <?php
@@ -209,7 +206,7 @@ $submitOption = [
                   'data-confirm-message'=>"Are you sure want to delete this packages",
                 ])?>
             </div>
-        </div>
+
         <?php Pjax::end(); ?>
         </div>
         <hr>

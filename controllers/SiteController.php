@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\modules\receiving_points\models\ReceivingPointsSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -14,7 +15,7 @@ use app\modules\user\models\User;
 use app\modules\orderElement\models\ElementFilterForm;
 use app\modules\user\models\ShowParcelTableForm;
 use app\modules\address\models\Address;
-
+use app\modules\receiving_points\models\ReceivingPoints;
 
 class SiteController extends Controller
 {
@@ -73,12 +74,18 @@ class SiteController extends Controller
       }
 
       $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+
+      if (Yii::$app->user->can("takeParcel")){
+        $receiving_point = ReceivingPoints::findOne(['id' => $user->last_receiving_points]);
+      }
+
       if (!Yii::$app->user->identity->isManager()) {
         $haveOneAddress = Address::find()->where('user_id = :id', [':id' => Yii::$app->user->identity->id])->one();
         if (!$haveOneAddress) {
           return $this->redirect(['/address/create-order-billing', 'first_address' => '1']);
         }
       }
+
       $show_modal_for_point = 1;
       if (Yii::$app->session->getFlash('choose_receiving_point')=='1') {
          Yii::$app->getSession()->setFlash('choose_receiving_point','0');
@@ -125,6 +132,7 @@ class SiteController extends Controller
         'showTable' => $showTable,
         'filterForm' => $filterForm,
         'show_modal_for_point' => $show_modal_for_point,
+        'receiving_point' => (isset($receiving_point))?($receiving_point->address):(''),
       ]);
     }
 
