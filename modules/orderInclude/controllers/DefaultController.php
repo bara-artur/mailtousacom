@@ -291,7 +291,7 @@ class DefaultController extends Controller
       if(($request->isPost)&&($_POST['OrderElement']['agreement'])=="1"){ // юзер выбрал дату транспортип=ровки и подписал соглашение
         $pac = new OrderElement();
         $pac->load($request->post());
-        $transport_date = $_POST['OrderElement']['transport_data'];
+        $transport_date = strtotime($_POST['OrderElement']['transport_data']);
         $arr = explode(',', $order->el_group);
         foreach ($arr as $parcel_id){                            // редактируем дату доставки и соглашение для всех посылок в заказе
           $pac = OrderElement::findOne(['id'=>$parcel_id]);
