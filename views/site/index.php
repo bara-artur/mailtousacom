@@ -24,34 +24,33 @@ $this->title = 'Shipping to USA and Canada';
           <?php if ($orderElements) { ?>
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
           <?php } ?>
-
           <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
-    <div class="col-md-10 hidden-xs text-right padding-off-right">
+        <div class="col-md-10 hidden-xs text-right padding-off-right">
 
-        <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-update']); ?>
-        <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-md btn-danger', 'id'=>'group-delete']); ?>
-        <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print']); ?>
+            <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-update']); ?>
+            <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-md btn-danger', 'id'=>'group-delete']); ?>
+            <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print']); ?>
 
-        <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
-            [
-                'role'=>'modal-remote',
-                'class'=>'btn btn-success show_modal',
-            ])?>
+            <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
+                [
+                    'role'=>'modal-remote',
+                    'class'=>'btn btn-success show_modal',
+                ])?>
 
-    </div>
-    <div class="col-xs-12 visible-xs text-center margin-top-10">
-        <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
-        <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-danger', 'id'=>'group-delete']); ?>
-        <?=Html::a('Print PDF', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
+        </div>
+        <div class="col-xs-12 visible-xs text-center margin-top-10">
+            <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
+            <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-danger', 'id'=>'group-delete']); ?>
+            <?=Html::a('Print PDF', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
 
-        <?=Html::a('Create order', ['/order/create/'],
-            [
-                'role'=>'modal-remote',
-                'class'=>'btn btn-success btn-sm show_modal',
-            ])?>
-    </div>
-</div>
+            <?=Html::a('Create order', ['/order/create/'],
+                [
+                    'role'=>'modal-remote',
+                    'class'=>'btn btn-success btn-sm show_modal',
+                ])?>
+        </div>
+      </div>
     </div>
         <hr class="bottom_line">
 <?php if(Yii::$app->user->can("takeParcel")){?>
@@ -83,8 +82,6 @@ $this->title = 'Shipping to USA and Canada';
       <div class="row">
         <div class="col-md-12" id = 'for_group_actions'>Checked parcels: empty</div>
       </div>
-
-
 
     <hr class="bottom_line">
 

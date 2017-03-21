@@ -230,11 +230,12 @@ $submitOption = [
       'class'=>'btn btn-default show_modal',
       'id' => 'open_add_order_address',
     ])?>
-
-  <?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
-    [
-      'class'=>'btn btn-success pull-right go_to_order'
-    ])?>
+   <?php if ($hideNext==0) { ?>
+    <?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
+      [
+        'class'=>'btn btn-success pull-right go_to_order'
+      ])?>
+     <?php } ?>
 <?php } ?>
 <?php
 if($createNewAddress){

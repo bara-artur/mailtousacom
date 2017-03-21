@@ -565,6 +565,7 @@ function main_table_checkbox(current_element){
   $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
   $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
   $("#group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
+  console.log($("#group-update").attr("href"));
 }
 
 function init_main_table_checkbox(){
