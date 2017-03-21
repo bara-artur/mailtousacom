@@ -218,9 +218,11 @@ $this->title = 'Shipping to USA and Canada';
     <?php if ($show_modal_for_point == 1) {
       echo "
         <script>
-        console.log(111);
            $(document).ready(function() {
-              $('#choose_receiving_point').click();
+              console.log('111');
+              setTimeout( function(){
+                $('#choose_receiving_point').click();
+                },200);
               });
         </script>
       ";

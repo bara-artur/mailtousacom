@@ -86,7 +86,7 @@ class SiteController extends Controller
         }
       }
 
-      $show_modal_for_point = 1;
+      $show_modal_for_point = 0;
       if (Yii::$app->session->getFlash('choose_receiving_point')=='1') {
          Yii::$app->getSession()->setFlash('choose_receiving_point','0');
          $show_modal_for_point =1;
