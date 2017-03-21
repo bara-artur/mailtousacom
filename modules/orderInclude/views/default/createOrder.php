@@ -140,12 +140,12 @@ $submitOption = [
               </div>
             </div>
           </div>
-
+<div class="row">
           <div class="col-md-12">
             <h5 class="total_package padding-top-10">Total</h5>
-            <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h3 class="btn-warning">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h3> <?php } ?>
+            <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h5 class="btn-warning max_price">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h5> <?php } ?>
             <form id="lb-oz-tn-form" title="" method="post">
-              <div class="label_valid col-md-6 padding-off-left padding-off-right">
+              <div class="label_valid col-md-5 padding-off-left padding-off-right">
                 <div class="form-control-addon-fill">
                   <div class="input-group">
                     <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
@@ -158,7 +158,7 @@ $submitOption = [
                   </div>
                 </div>
               </div>
-              <div class="label_valid col-md-5 col-md-offset-1 padding-off-right padding-off-left bor">
+              <div class="label_valid col-md-4 bor">
                 <div class="form-control-addon-fill">
                   <div class="input-group" <?php if($percel->track_number_type==1) { echo 'style="display:none;"';}?>>
                     <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
@@ -166,14 +166,15 @@ $submitOption = [
                   </div>
                 </div>
               </div>
-
-              <span class="input-group-addon fint_input padding-off-left"> Track Number not required :</span>
-              <input type="checkbox" id="track_number_type" class="lb-oz-tn-onChange form-control" name = "track_number_type" <?php if($percel->track_number_type==1) { echo 'checked';}?>>
-
+              <div class="col-md-3">
+              <span class="input-group-addon fint_input"><label><input type="checkbox" id="track_number_type" class="lb-oz-tn-onChange form-control" name = "track_number_type" <?php if($percel->track_number_type==1) { echo 'checked';} ?>><span class="fa fa-check otst"></span>I have no Track Number</label></span>
+              </div>
+          </div>
+</div>
               <hr class="bor_bottom">
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
-              <p><b>Cost of delivery : </b>
+              <div class="col-md-6 cost_del"><b>Cost of delivery : </b>
                 <span id="results" class="resInd<?=$k?>">
                         <?php
                         if($percel->weight>0) {
@@ -189,25 +190,25 @@ $submitOption = [
                         echo $ParcelPrice;
                         ?>
                     </span>
-              </p>
+              </div>
+
             </form>
-              <?php if ($edit_not_prohibited){?>
-                <div class="col-md-6 btn-group-md bord_butt text-right">
-                  <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
-                    ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
-                  <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
-                    [
-                      'role'=>'modal-remote',
-                      'title'=> 'Delete',
-                      'data-pjax'=>0,
-                      'class'=>'btn btn-danger',
-                      'data-request-method'=>"post",
-                      'data-confirm-title'=>"Are you sure?",
-                      'data-confirm-message'=>"Are you sure want to delete this packages",
-                    ])?>
-                </div>
-              <?php } ?>
+        <?php if ($edit_not_prohibited){?>
+            <div class="col-md-6 bord_butt text-right">
+              <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
+                ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-md btn-science-blue'])?>
+              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
+                [
+                  'role'=>'modal-remote',
+                  'title'=> 'Delete',
+                  'data-pjax'=>0,
+                  'class'=>'btn btn-danger',
+                  'data-request-method'=>"post",
+                  'data-confirm-title'=>"Are you sure?",
+                  'data-confirm-message'=>"Are you sure want to delete this packages",
+                ])?>
             </div>
+        <?php } ?>
 
         <?php Pjax::end(); ?>
         </div>
