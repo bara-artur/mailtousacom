@@ -528,6 +528,20 @@ function main_table_checkbox(current_element){
       }
     }
   }
+
+  $(".select_prohibited").prop("disabled",false);
+  $(".select_prohibited").removeClass('select_prohibited');
+  if (elem_checked.length>0){
+    if (elem_checked[0].name == 'InSystem') {
+      elem_type = 'Draft';
+    }else{
+      elem_type = 'InSystem';
+    }
+    $("[name='"+elem_type+"']").addClass('select_prohibited');
+    $(".select_prohibited").prop("disabled",true);
+  }
+
+
   parcel_ids ="";
   string = "empty";
   elem_checked.each(function(i,elem) {
