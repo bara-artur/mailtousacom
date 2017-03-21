@@ -181,15 +181,25 @@ $this->title = 'Shipping to USA and Canada';
                 // 'order_status',
                 // 'created_at',
                 // 'transport_data',
-                /*['attribute' => 'Action','content' => function($data){
-                    switch ($data->order_status) {
-                        case '0' : return  Html::a('Update Order', ['/orderInclude/create-order/'.$data->id], ['class' => 'btn btn-sm btn-info']); break;
-                        case '1' : return Html::a('Order has been paid', ['/payment/index'], ['class' => 'btn btn-sm btn btn-danger']);break;
-                        case '2' : return Html::a('Update PDF', ['/'], ['class' => 'btn btn-sm btn-warning']);break;
-                        case '3' : return Html::a('View', ['/order/view/'.$data->id], ['class' => 'btn btn-sm btn-info']);break;
+                ['attribute' => 'Action','content' => function($data){
+                    switch ($data->status) {
+                        case '0' : {
+
+                          return Html::a('Update Order', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-info']).
+                                 Html::a('Delete', ['/orderElement/group-delete/'.$data->id], ['class' => 'btn btn-sm btn-danger']);
+                        } break;
+                        case '1' : {
+                          return Html::a('Order has been paid', ['/orderElement/group-print/'.$data->id], ['class' => 'btn btn-sm btn btn-warning']).
+                                 Html::a('Delete', ['/orderElement/group-delete/'.$data->id], ['class' => 'btn btn-sm btn-danger']);
+                        }break;
+                        case '2' : {
+                          return Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']).
+                                 Html::a('Delete', ['/orderElement/group-delete/'.$data->id], ['class' => 'btn btn-sm btn-danger']);
+                        }break;
+
                         default: return "Unknown status - ".$data->order_status;
                     }
-                }],*/
+                }],
             ],
         ]); ?>
     </div>

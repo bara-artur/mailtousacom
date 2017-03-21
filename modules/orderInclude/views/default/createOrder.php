@@ -191,22 +191,23 @@ $submitOption = [
                     </span>
               </p>
             </form>
-
-            <div class="col-md-6 btn-group-md bord_butt text-right">
-              <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
-                ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
-              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
-                [
-                  'role'=>'modal-remote',
-                  'title'=> 'Delete',
-                  'data-pjax'=>0,
-                  'class'=>'btn btn-danger',
-                  'data-request-method'=>"post",
-                  'data-confirm-title'=>"Are you sure?",
-                  'data-confirm-message'=>"Are you sure want to delete this packages",
-                ])?>
+              <?php if ($edit_not_prohibited){?>
+                <div class="col-md-6 btn-group-md bord_butt text-right">
+                  <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
+                    ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-science-blue'])?>
+                  <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
+                    [
+                      'role'=>'modal-remote',
+                      'title'=> 'Delete',
+                      'data-pjax'=>0,
+                      'class'=>'btn btn-danger',
+                      'data-request-method'=>"post",
+                      'data-confirm-title'=>"Are you sure?",
+                      'data-confirm-message'=>"Are you sure want to delete this packages",
+                    ])?>
+                </div>
+              <?php } ?>
             </div>
-          </div>
 
         <?php Pjax::end(); ?>
         </div>

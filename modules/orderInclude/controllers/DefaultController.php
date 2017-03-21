@@ -70,6 +70,7 @@ class DefaultController extends Controller
       }
       $numbers = explode(',',$order->el_group);
 
+      $edit_not_prohibited = 1;
       $hideNext = 0;
       $order_elements = [];
       if ($order->el_group != '') {
@@ -77,7 +78,9 @@ class DefaultController extends Controller
           $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
           if ($parcel!=null) {
             $order_elements[] = $parcel;
-
+            if ($parcel->status > 0){
+              $edit_not_prohibited = 0;
+            }
             $totalPrice = 0;
             foreach ($parcel->orderInclude as $ordInclude) {
               $totalPrice += ($ordInclude->price * $ordInclude->quantity);
@@ -87,7 +90,7 @@ class DefaultController extends Controller
           }
         }
       }
-      $edit_not_prohibited = 1;
+
       $message_for_edit_prohibited_order = 'Editing order prohibited';
    /*   $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
       $message_for_edit_prohibited_order = " ";
