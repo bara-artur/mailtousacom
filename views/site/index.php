@@ -56,6 +56,7 @@ $this->title = 'Shipping to USA and Canada';
         <hr class="bottom_line">
 <?php if(Yii::$app->user->can("takeParcel")){?>
   <div class="col-xs-3 pull-right">
+    <span>Current Receiving point : <?= $receiving_point ?></span>
     <?=Html::a('Choose Receiving point', ['/receiving_points/choose/'],
       [
         'id'=>'choose_receiving_point',
