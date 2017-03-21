@@ -90,7 +90,7 @@ $submitOption = [
       }
     }
   }
-  if($total["total_sum"]>0){
+  if($total["price"]>0){
   ?>
     <div class="trans_text text-center">
         Sum to pay:
@@ -139,10 +139,9 @@ $submitOption = [
       }else{
         ?>
         <h4>
-          The order has not been paid yet. Take payment in cash.
+          The order has not been paid yet.
         </h4>
         <?php
-        $pay_text="The customer paid me the order.";
         echo Html::hiddenInput('payment_type', 3, []);
       }
     }?>
@@ -156,8 +155,26 @@ $submitOption = [
 <?php
   if(Yii::$app->user->identity->isManager()){
     echo Html::a('Return to orders list', ['/'], ['class' => 'btn btn-default pull-left']);
-    if($model->order_status<2){
-      echo Html::submitButton($pay_text.'Accept the order for the receiving point.', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success pull-right']);
+    if($item->status<2){
+      //админ может принимать платеж и это необходимо сделать
+      if(Yii::$app->user->can("takePay") && $total['price']>0){
+        //админ может принимать посылки
+        if(Yii::$app->user->can("takeParcel")){
+          //принять посылку и оплату
+          echo Html::submitButton('The customer paid me the order. Accept the order for the receiving point.', ['class' => 'btn btn-success pull-right']);
+        }else{
+          //принять деньги. Посылка остается у клиента.
+          echo Html::submitButton('The customer paid me the order.', ['class' => 'btn btn-success pull-right']);
+        }
+      }else{
+        //админ может принимать посылки
+        if(Yii::$app->user->can("takeParcel")){
+          //принять посылку. Все уже оплачено
+          echo Html::submitButton('Accept the order for the receiving point.', ['class' => 'btn btn-success pull-right']);
+        }
+      }
+    }else{
+
     }
 
   }else{
