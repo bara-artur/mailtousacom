@@ -726,3 +726,12 @@ span.from_ebay{
     display: inline-block;
     float: right;
 }
+.pay_list{padding: 2px 0px;
+border-bottom: 1px dotted #ddd;}
+.pay_list2 {padding: 2px 0px;
+    border-bottom: 1px dotted #606060;;}
+.pay_list3{padding: 2px 0px;
+    border-bottom: 1px solid #ddd;}
+.pay_list4{padding: 2px 0px;
+    border-bottom: 1px solid #a2a2a2;}
+.trans_text2{padding-top:4px;margin-bottom:20px;font-size:17px;}
