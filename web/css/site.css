@@ -718,3 +718,11 @@ span#results.resInd0{color:#05389F !important;}
 h5.max_price{padding: 4px;
     font-size: 18px;
     text-align: center;}
+span.from_ebay{
+    background: url("/img/ebay_from.jpg");
+    width: 60px;
+    background-size: cover !important;
+    height: 24px;
+    display: inline-block;
+    float: right;
+}
