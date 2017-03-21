@@ -267,90 +267,96 @@ class DefaultController extends Controller
 
     }
 
-    public function actionGroupUpdate($parcels_id){
-      $arr = explode('_', $parcels_id);
-      asort($arr);
-      $user_id = null;
-      $flag = 0;
-      foreach ($arr as $id)
-      {
-        if ($flag == 0){
-          $parcel = OrderElement::findOne(['id'=> $id]);
-          if ($parcel) {
-            $user_id = $parcel->user_id;
-            $flag = 1;
+    public function actionGroupUpdate($parcels_id = null){
+      if ($parcels_id) {
+        $arr = explode('_', $parcels_id);
+        asort($arr);
+        $user_id = null;
+        $flag = 0;
+        foreach ($arr as $id) {
+          if ($flag == 0) {
+            $parcel = OrderElement::findOne(['id' => $id]);
+            if ($parcel) {
+              $user_id = $parcel->user_id;
+              $flag = 1;
+            }
           }
         }
-      }
 
-      if ($flag == 1){  // посылки существуют
-        $parcels_id = implode(',', $arr);
+        if ($flag == 1) {  // посылки существуют
+          $parcels_id = implode(',', $arr);
 
-        $order = Order::find()->where(["el_group" => $parcels_id])->one();
-        if ($order) {
-          $this->redirect(['/orderInclude/create-order/'.$order->id]);
-          return $order->id;
+          $order = Order::find()->where(["el_group" => $parcels_id])->one();
+          if ($order) {
+            $this->redirect(['/orderInclude/create-order/' . $order->id]);
+            return $order->id;
+          } else {
+            $order = new Order();
+            $order->el_group = $parcels_id;
+            $order->created_at = time();
+            $order->user_id = $user_id;
+            $order->save();
+            $this->redirect(['/orderInclude/create-order/' . $order->id]);
+            return $order->id;
+          }
+          return $parcels_id;
         }
-        else{
-          $order = new Order();
-          $order->el_group = $parcels_id;
-          $order->created_at = time();
-          $order->user_id = $user_id;
-          $order->save();
-          $this->redirect(['/orderInclude/create-order/'.$order->id]);
-          return $order->id;
+        // $this->redirect(['/','message'=>"Parcels that you have chosen already don't exist"]);
+        return "Parcels that you have chosen already don't exist";
+      }
+      return $this->redirect(['/']);
+    }
+
+    public function actionGroupPrint($parcels_id=null){
+      if ($parcels_id) {
+        $arr = explode('_', $parcels_id);
+        asort($arr);
+        $user_id = null;
+        $flag = 0;
+        foreach ($arr as $id) {
+          if ($flag == 0) {
+            $parcel = OrderElement::findOne(['id' => $id]);
+            if ($parcel) {
+              $user_id = $parcel->user_id;
+              $flag = 1;
+            }
+          }
+        }
+
+        if ($flag == 1) {  // посылки существуют
+          $parcels_id = implode(',', $arr);
+
+          $order = Order::find()->where(["el_group" => $parcels_id])->one();
+          if ($order) {
+            $this->redirect(['/orderInclude/border-form-pdf/' . $order->id]);
+            return "Create pdf for order " . $order->id;
+          } else {
+            $order = new Order();
+            $order->el_group = $parcels_id;
+            $order->created_at = time();
+            $order->user_id = $user_id;
+            $order->save();
+            $this->redirect(['/orderInclude/border-form-pdf/' . $order->id]);
+            return "Create pdf for order " . $order->id;
+          }
         }
         return $parcels_id;
       }
-     // $this->redirect(['/','message'=>"Parcels that you have chosen already don't exist"]);
-      return "Parcels that you have chosen already don't exist";
+      return $this->redirect(['/']);
     }
 
-    public function actionGroupPrint($parcels_id){
-      $arr = explode('_', $parcels_id);
-      asort($arr);
-      $user_id = null;
-      $flag = 0;
-      foreach ($arr as $id)
-      {
-        if ($flag == 0){
-          $parcel = OrderElement::findOne(['id'=> $id]);
-          if ($parcel) {
-            $user_id = $parcel->user_id;
-            $flag = 1;
+    public function actionGroupDelete($parcels_id=null){
+        if ($parcels_id) {
+          $arr = explode('_', $parcels_id);
+          asort($arr);
+          foreach ($arr as $parcel_id) {
+            OrderInclude::deleteAll(['order_id' => $parcel_id]);
+            OrderElement::deleteAll(['id' => $parcel_id]);
           }
+          $this->redirect(['/']);
+          return "Parcels delete complete successfully";
         }
-      }
-
-      if ($flag == 1){  // посылки существуют
-        $parcels_id = implode(',', $arr);
-
-        $order = Order::find()->where(["el_group" => $parcels_id])->one();
-        if ($order) {
-          $this->redirect(['/orderInclude/border-form-pdf/'.$order->id]);
-          return "Create pdf for order ".$order->id;
-        }else{
-          $order = new Order();
-          $order->el_group = $parcels_id;
-          $order->created_at = time();
-          $order->user_id = $user_id;
-          $order->save();
-          $this->redirect(['/orderInclude/border-form-pdf/'.$order->id]);
-          return "Create pdf for order ".$order->id;
-        }
-      }
-      return $parcels_id;
-    }
-
-    public function actionGroupDelete($parcels_id){
-      $arr = explode('_', $parcels_id);
-      asort($arr);
-      foreach ($arr as $parcel_id){
-        OrderInclude::deleteAll(['order_id'=>$parcel_id]);
-        OrderElement::deleteAll(['id'=>$parcel_id]);
-      }
-      $this->redirect(['/']);
-      return "Parcels delete complete successfully";
+      return $this->redirect(['/']);
     }
     /**
      * Finds the OrderElement model based on its primary key value.

@@ -109,10 +109,14 @@ class DefaultController extends Controller
       Yii::$app->response->format = Response::FORMAT_JSON;
       if($request->isGet){
         $select_number = $user->last_receiving_points;
-        $points = ReceivingPoints::find()->select(['id','address'])->andWhere(['!=', 'active', '0'])->all();
+        $points = ReceivingPoints::find()->andWhere(['!=', 'active', '0'])->all();
         $arr =[];
         foreach ($points as $i=>$p){
-          $arr[$p->id] = $p->address;
+          if ($p->address!=null){
+            $arr[$p->id] = $p->name.' ( '.$p->address.' )';
+          }else{
+            $arr[$p->id] = $p->name;
+          }
         }
 
         return [
@@ -131,11 +135,11 @@ class DefaultController extends Controller
            $user->save();
          }
         //$model->order_id = $request->post('order_id');
-         $this->redirect(['/']);
-        return $user->last_receiving_points;
+
+        return $this->redirect(['/'],200);
       }else{
         $this->redirect(['/']);
-        return '2';
+        return $this->redirect(['/'],200);
       }
     }else{
 

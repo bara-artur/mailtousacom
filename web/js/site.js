@@ -4,6 +4,7 @@ $(document).ready(function() {
   init_address_edit();
   init_js_validation();
   init_main_table_checkbox();
+  init_collapse_buttons();
 
   ajax_send_lb_oz_tn_onchange();
   ajax_send_admin_status_onchange();
@@ -417,7 +418,6 @@ function ajax_send_lb_oz_tn_onchange(){
       data: msg,
       success: function(data) {
         $('.resInd'+index).html(data).css( "color", "blue");
-        gritterAdd('Error','Error: Goooood'+index);
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
@@ -532,7 +532,7 @@ function main_table_checkbox(current_element){
   string = "empty";
   elem_checked.each(function(i,elem) {
     if (parcel_ids == "") {
-      parcel_ids = this.id;
+      parcel_ids = '/'+this.id;
       string = this.id;
     }else {
       string = string + " " + this.id;
@@ -541,15 +541,26 @@ function main_table_checkbox(current_element){
   });
   if (string!="empty") string = string + " ( " + elem_checked[0].name+" type)";
   $("#for_group_actions").text("Checked parcels: " + string);
-  $("#group-update").attr("href","/orderElement/group-update/"+parcel_ids);
-  $("#group-print").attr("href","/orderElement/group-print/"+parcel_ids);
-  $("#group-delete").attr("href","/orderElement/group-delete/"+parcel_ids);
+  $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
+  $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
+  $("#group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
 }
 
 function init_main_table_checkbox(){
   main_table_checkbox();
   $(".checkBoxParcelMainTable").on('change',function(){
     main_table_checkbox(this);
-
   })
 }
+
+function init_collapse_buttons(){
+  $("#collapse_filter").on("click", function(){
+    $("#collapseTableOptions").collapse("hide");
+    console.log(111);
+  });
+  $("#collapse_columns").on("click", function(){
+    $("#collapse").collapse("hide");
+    console.log(444);
+  })
+}
+
