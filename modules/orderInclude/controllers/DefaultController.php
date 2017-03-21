@@ -287,13 +287,21 @@ class DefaultController extends Controller
     public function actionBorderForm($id){
       $order = Order::findOne($id);
       $request = Yii::$app->request;
-      if($request->isPost){
-        if($order->load($request->post()) && $order->save()){
-          return $this->redirect(['/payment/order/'.$id]);
+
+      if(($request->isPost)&&($_POST['OrderElement']['agreement'])=="1"){ // юзер выбрал дату транспортип=ровки и подписал соглашение
+        $pac = new OrderElement();
+        $pac->load($request->post());
+        $transport_date = $_POST['OrderElement']['transport_data'];
+        $arr = explode(',', $order->el_group);
+        foreach ($arr as $parcel_id){                            // редактируем дату доставки и соглашение для всех посылок в заказе
+          $pac = OrderElement::findOne(['id'=>$parcel_id]);
+          $pac->transport_data = $transport_date;
+          $pac->agreement = '1';
+          $pac->save();
         }
+        return $this->redirect(['/payment/order/'.$id]);
       }
 
-      $el_group = $order->el_group;
       $arr = explode(',', $order->el_group);
 
       $total=array(
@@ -371,7 +379,7 @@ class DefaultController extends Controller
         'createNewAddress'=>!$order_elements,
         'order_id'=>$id,
         'total'=>$total,
-        'model'=>$order,
+        'model'=>$pac,
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
