@@ -59,7 +59,12 @@ $form = ActiveForm::begin([
 </div>
 <div class="row">
 <div class="col-md-12 padding-top-10 text-center text_certif" >
-  <?= $form->field($model, 'agreement')->checkbox(['label' => '<span class="fa fa-check otst"></span> I certify..,my undefstanding..Im responsible for cross-bording, law, etc'])->label("") ?>
+  <?= $form->field($model, 'agreement')->checkbox([
+    'label' => '
+        <span class="fa fa-check otst"></span>
+        I certify..,my undefstanding..Im responsible for cross-bording, law, etc',
+    'id'=>'order-agreement',
+    ])->label("") ?>
 
   <?=Html::a('Print Border Form ABC123', ['/orderInclude/border-form-pdf/'.$order_id],
       [
@@ -87,6 +92,6 @@ $form = ActiveForm::begin([
 <script>
   $(document).ready(function() {
     init_order_border()
-  })
+  });
   var odrer_id=<?=$order_id;?>;
 </script>

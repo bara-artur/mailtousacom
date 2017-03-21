@@ -623,7 +623,7 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
     color: #565656 !important;
 }
 .label_valid{margin-bottom : 14px;}
-.cost_del {
+.cost_del{
     font-weight: 600;
     padding-top: 8px;
     color: #454545;
@@ -710,6 +710,11 @@ div.icon_integ_ebay:hover,div.icon_integ_amazon:hover,div.icon_integ_shop:hover{
 }
 .text_b input[type=checkbox]{display:none;}
 /*21032017*/
-.showParcelTableForm .form-group{margin-bottom:0px !important;}
+.showParcelTableForm.form-group{margin-bottom:0px !important;}
 .showParcelTableForm input[type=checkbox]{display:none !important;}
 .check_hide input[type=checkbox]{display:none !important;}
+span.input-group-addon.fint_input input[type=checkbox]{display:none !important;}
+span#results.resInd0{color:#05389F !important;}
+h5.max_price{padding: 4px;
+    font-size: 18px;
+    text-align: center;}
