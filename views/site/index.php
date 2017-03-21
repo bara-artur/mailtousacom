@@ -59,6 +59,18 @@ $this->title = 'Shipping to USA and Canada';
         <div class="col-xs-3 pull-right">
             <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-delete']); ?>
         </div>
+
+        <?php if(Yii::$app->user->can("takeParcel")){?>
+          <div class="col-xs-3 pull-right">
+            <?=Html::a('Choose Receiving point', ['/receiving_points/choose/'],
+              [
+                'id'=>'choose_receiving_point',
+                'role'=>'modal-remote',
+                'class'=>'btn btn-default show_modal',
+              ]
+            ); ?>
+          </div>
+        <?php }?>
       <div>
         <p id = 'for_group_actions'>Checked parcels: empty</p>
       </div>
@@ -171,7 +183,16 @@ $this->title = 'Shipping to USA and Canada';
             ],
         ]); ?>
     </div>
-
+    <?php if ($show_modal_for_point == 1) {
+      echo "
+        <script>
+        console.log(111);
+           $(document).ready(function() {
+              $('#choose_receiving_point').click();
+              });
+        </script>
+      ";
+} ?>
 
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",

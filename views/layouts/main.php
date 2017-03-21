@@ -61,6 +61,9 @@ AppAsset::register($this);
                         <li>'
                             . Html::a('Taxes', ['/state/'], ['class' => 'profile-link'])
                         .'</li>'
+                        .'<li>'
+                            . Html::a('Receiving points', ['/receiving_points/'], ['class' => 'profile-link'])
+                        .'</li>'
                     .'</ul>'
                 .'</li>';
             }

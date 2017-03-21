@@ -79,7 +79,11 @@ class SiteController extends Controller
           return $this->redirect(['/address/create-order-billing', 'first_address' => '1']);
         }
       }
-
+      $show_modal_for_point = 1;
+      if (Yii::$app->session->getFlash('choose_receiving_point')=='1') {
+         Yii::$app->getSession()->setFlash('choose_receiving_point','0');
+         $show_modal_for_point =1;
+      }
 
       $query['OrderElementSearch'] = Yii::$app->request->queryParams;
       $time_to['created_at_to'] = null;
@@ -120,6 +124,7 @@ class SiteController extends Controller
         'orderElements' => $dataProvider,
         'showTable' => $showTable,
         'filterForm' => $filterForm,
+        'show_modal_for_point' => $show_modal_for_point,
       ]);
     }
 

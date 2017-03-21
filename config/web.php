@@ -97,6 +97,8 @@ $config = [
                 'orderElement/create/<id:\d+>'=>'orderElement/default/create',
                 'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
 
+                'receiving_points/<action>'=>'receiving_points/default/<action>',
+
                 'orderInclude/<action>'=>'orderInclude/default/<action>',
                 'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
                 'orderInclude/<action:border-form|border-form-pdf>/<id:\d+>'=>'orderInclude/default/<action>/',
@@ -160,19 +162,22 @@ $config = [
       ],
       'order' => [
             'class' => 'app\modules\order\Module',
-        ],
+      ],
       'orderElement' => [
             'class' => 'app\modules\orderElement\Module',
-        ],
+      ],
       'orderInclude' => [
             'class' => 'app\modules\orderInclude\Module',
-        ],
+      ],
       'gridview' => [
             'class' => '\kartik\grid\Module',
-        ],
+      ],
       'logs' => [
             'class' => 'app\modules\logs\Module',
-        ],
+      ],
+      'receiving_points' => [
+        'class' => 'app\modules\receiving_points\Module',
+      ],
     ]
 ];
 
