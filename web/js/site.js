@@ -6,7 +6,7 @@ $(document).ready(function() {
   init_main_table_checkbox();
   init_collapse_buttons();
 
-  ajax_send_lb_oz_tn_onchange();
+  init_ajax_send_lb_oz_tn();
   ajax_send_admin_status_onchange();
  // ajax_send_admin_user_status_onchange();
 
@@ -405,13 +405,20 @@ function init_js_validation()
           $('body').on('keypress', '.num', no_letters_in_input);
 }
 
-function ajax_send_lb_oz_tn_onchange(){
-  $( ".lb-oz-tn-onChange" ).change(function() {
-    elemForm = this;
-    index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /4);
-    if(!valid_order_create(elemForm))return false;
+function init_ajax_send_lb_oz_tn(){
+  $( ".lb-oz-tn-onChange" ).on("change",function(){ajax_send_lb_oz_tn(this)});
+  $( ".lb-oz-tn-onChange" ).on("keypress", function (e){
+    if (e.keyCode == 13) {
+      ajax_send_lb_oz_tn(this);
+    }
+  });
+}
 
-    var msg   = $(this).parents('form:first').serialize();
+function ajax_send_lb_oz_tn(elemForm) {
+    index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /4); // высчитываем номер посылки, которая вызвала данное событие
+    if(!valid_order_create(elemForm))return false;
+    var msg   = $(elemForm).parents('form:first').serialize();
+
     $.ajax({
       type: 'POST',
       url: 'orderElement/create-order',
@@ -423,8 +430,8 @@ function ajax_send_lb_oz_tn_onchange(){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
       }
     });
-  });
 }
+
 
 function ajax_send_admin_status_onchange(){
   $( ".status_droplist" ).change(function() {
