@@ -18,16 +18,55 @@ $this->title = 'Shipping to USA and Canada';
     <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
 
     <div class="row">
-
+<div class="col-md-12">
         <?php if ($orderElements) { ?>
-          <div class="col-xs-2">
+          <div class="col-md-2 col-xs-12  padding-off-left">
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
-          </div>
+
         <?php } ?>
-        <div class="col-xs-2">
-          <?= Html::a('<i class="fa fa-search"></i>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+
+          <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
+    <div class="col-md-10 hidden-xs text-right">
+
+        <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-update']); ?>
+        <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-md btn-danger', 'id'=>'group-delete']); ?>
+        <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print']); ?>
+
+        <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
+            [
+                'role'=>'modal-remote',
+                'class'=>'btn btn-success show_modal',
+            ])?>
+
+    </div>
+    <div class="col-xs-12 visible-xs text-center margin-top-10">
+        <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
+        <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-danger', 'id'=>'group-delete']); ?>
+        <?=Html::a('Print PDF', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
+
+        <?=Html::a('Create order', ['/order/create/'],
+            [
+                'role'=>'modal-remote',
+                'class'=>'btn btn-success btn-sm show_modal',
+            ])?>
+    </div>
+</div>
+    </div>
         <hr class="bottom_line">
+<?php if(Yii::$app->user->can("takeParcel")){?>
+  <div class="col-xs-3 pull-right">
+    <?=Html::a('Choose Receiving point', ['/receiving_points/choose/'],
+      [
+        'id'=>'choose_receiving_point',
+        'role'=>'modal-remote',
+        'class'=>'btn btn-default show_modal',
+      ]
+    ); ?>
+  </div>
+<?php }?>
+
+
         <div class="row">
           <div class="col-md-12 scrit">
             <?= $this->render('elementFilterForm', ['model' => $filterForm]);?>
@@ -35,51 +74,20 @@ $this->title = 'Shipping to USA and Canada';
         </div>
 
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-12 scrit">
             <?= $this->render('showParcelTableForm', ['model' => $showTable]);?>
           </div>
         </div>
 
-        <div class="col-xs-3 pull-right">
-          <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
-            [
-              'role'=>'modal-remote',
-              'class'=>'btn btn-success show_modal',
-            ])?>
-        </div>
-
-        <div class="col-xs-3 pull-right">
-            <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
-        </div>
-
-        <div class="col-xs-3 pull-right">
-            <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
-        </div>
-
-        <div class="col-xs-3 pull-right">
-            <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-delete']); ?>
-        </div>
-
-        <?php if(Yii::$app->user->can("takeParcel")){?>
-          <div class="col-xs-3 pull-right">
-            <?=Html::a('Choose Receiving point', ['/receiving_points/choose/'],
-              [
-                'id'=>'choose_receiving_point',
-                'role'=>'modal-remote',
-                'class'=>'btn btn-default show_modal',
-              ]
-            ); ?>
-          </div>
-        <?php }?>
-      <div>
-        <p id = 'for_group_actions'>Checked parcels: empty</p>
+      <div class="row">
+        <div class="col-md-12" id = 'for_group_actions'>Checked parcels: empty</div>
       </div>
 
-    </div>
+
 
     <hr class="bottom_line">
 
-    <div class="table-responsive">
+    <div class="table-responsive check_hide">
         <?= GridView::widget([
             'dataProvider' => $orderElements,
             'columns' => [
@@ -88,6 +96,7 @@ $this->title = 'Shipping to USA and Canada';
                       'class'=>'checkBoxParcelMainTable',
                       'id'=>$data->id,
                       'user'=> $data->user_id,
+                      'label' => '<span class="fa fa-check"></span>',
                     ]);
                   }
                 ],

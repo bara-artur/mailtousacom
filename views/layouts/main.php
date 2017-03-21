@@ -44,7 +44,10 @@ AppAsset::register($this);
     }else{
         if(Yii::$app->user->identity->isManager()) {
             if (Yii::$app->user->can('userManager')) {
-                $user_menu[] = '<li>' . Html::a('Users', ['/user/admin'], ['class' => 'profile-link']) . '</li>';
+                $user_menu[] = '<li>' .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Parcels', ['/'], ['class' => 'profile-link']). '</li>'
+                    .'<li>'
+                    . Html::a('<i class="fa fa-users"></i>&nbsp;&nbsp;Users', ['/user/admin'], ['class' => 'profile-link'])
+                    .'</li>';
             }
             if(false){
                 $user_menu[]='<li>'
@@ -67,30 +70,35 @@ AppAsset::register($this);
                     .'</ul>'
                 .'</li>';
             }
-            $user_menu[] ='<li>'.Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link']);
+            $user_menu[] = '<li>'
+                . Html::a('<i class="icon-metro-user-2"></i>&nbsp;&nbsp;Update profile', ['/profile/'], ['class' => 'profile-link'])
+            .'</li>';
+
         }else{
-            $user_menu[] ='<li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-metro-user-2"></i>&nbsp;&nbsp;Profile <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>'
-            . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
-            .'</li>'
-            .'<li>'
-            .Html::a('Update my billing address', ['/address/create-order-billing'], ['class' => 'profile-link'])
-            .'</li>'
-            .'<li>'
-            .Html::a('View return address', ['/address/addressusa'], ['class' => 'profile-link'])
-            //.'</li>'
-            //.'<li>'
-            //. Html::a('Upgrade my account', ['/upgrade/'], ['class' => 'profile-link'])
-            //.'</li>'
-            .'</ul>'
-            .'</li>'
-            .'<li>'
+            $user_menu[] = '<li>'
             .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/'], ['class' => 'profile-link'])
             .'</li>'
+            .'<li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-metro-user-2"></i>&nbsp;&nbsp;My Profile <span class="caret"></span></a>
+             <ul class="dropdown-menu">
+             <li>'
+                . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
+                .'</li>'
+                .'</ul>'
+                .'</li>'
+                .'<li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-metro-location"></i>&nbsp;&nbsp;My Address <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                <li>'
+                .Html::a('Update my billing address', ['/address/create-order-billing'], ['class' => 'profile-link'])
+                .'</li>'
+                .'<li>'
+                .Html::a('View return address', ['/address/addressusa'], ['class' => 'profile-link'])
+                .'</li>'
+                .'</ul>'
+              .'</li>'
               .'<li>'
-              . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
+              . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;My Payments', ['/payment/'], ['class' => 'profile-link'])
               . '</li>';
         };
 

@@ -589,7 +589,7 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
     border-bottom: 1px solid #eeeeee;
 }
 .panel-body {
-    padding: 15px 0px;
+    padding: 6px 0px;
 }
 /*02032017*/
 @media screen and (max-width: 767px){
@@ -709,3 +709,7 @@ div.icon_integ_ebay:hover,div.icon_integ_amazon:hover,div.icon_integ_shop:hover{
     line-height:18px;
 }
 .text_b input[type=checkbox]{display:none;}
+/*21032017*/
+.showParcelTableForm .form-group{margin-bottom:0px !important;}
+.showParcelTableForm input[type=checkbox]{display:none !important;}
+.check_hide input[type=checkbox]{display:none !important;}
