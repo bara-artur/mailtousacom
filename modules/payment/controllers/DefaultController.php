@@ -78,8 +78,9 @@ class DefaultController extends Controller
     {
         $filterForm = new PaymentFilterForm();
 
-        if (Yii::$app->user->isGuest) return $this->redirect(['/']);
-        else {
+        if (Yii::$app->user->isGuest) {
+          return $this->redirect(['/']);
+        }else {
 
             if(Yii::$app->request->post()) {
                 $filterForm->load(Yii::$app->request->post());
@@ -247,51 +248,58 @@ class DefaultController extends Controller
             return $this->redirect(['/']);
           }
 
-          //посылки пряняты, оплата налом
-          $pays=PaymentsList::create([
-            'client_id'=>$user_id,
-            'type'=>3,
-            'status'=>1,
-            'pay_time'=>time(),
-          ]);
-
-          $price=0;
-          $qst=0;
-          $gst=0;
-          //d($pays);
-
-          foreach ($payments_list as $item) {
-            //только для посылок с стоимостью оплаты более 0
-            if($item['total_price']>0){
-              $pay_include=new PaymentInclude();
-              $pay_include->payment_id=$pays->id;
-              $pay_include->element_id=$item['element_id'];
-              $pay_include->price=$item['total_price'];
-              $pay_include->qst=$item['total_qst'];
-              $pay_include->gst=$item['total_gst'];
-              $pay_include->element_type=0;
-              $pay_include->status=1; //оплачен
-              $pay_include->create_at=time();
-
-
-              //если посылку отказались платить
-              if(!$request->post('agree_'.$item['element_id'])){
-                $pay_include->status=-1;//Отказ от оплаты
-                $pay_include->comment=$request->post('text_not_agree_'.$item['element_id']);//Отказ от оплаты
-              }else{
-                $price+=$item['total_price'];
-                $qst+=$item['total_qst'];
-                $gst+=$item['total_gst'];
-              }
-              $pay_include->save();
-              \Yii::$app->getSession()->setFlash('success', 'The order is payd and accepted to the warehouse and is waiting for dispatch.');
-              return $this->redirect(['/']);
-            }
+          if(Yii::$app->user->can("takeParcel")) {
+            //посылки пряняты, оплата налом
+            $pays = PaymentsList::create([
+              'client_id' => $user_id,
+              'type' => 3,
+              'status' => 1,
+              'pay_time' => time(),
+            ]);
+            \Yii::$app->getSession()->setFlash('success', 'The order is waiting for dispatch.');
           }
-          $pays->price=$price;
-          $pays->qst=$qst;
-          $pays->gst=$gst;
-          $pays->save();
+
+          if(Yii::$app->user->can("takePay") && $total['sum']>0) {
+            $price = 0;
+            $qst = 0;
+            $gst = 0;
+            //d($pays);
+
+            foreach ($payments_list as $item) {
+              //только для посылок с стоимостью оплаты более 0
+              if ($item['total_price'] > 0) {
+                $pay_include = new PaymentInclude();
+                $pay_include->payment_id = $pays->id;
+                $pay_include->element_id = $item['element_id'];
+                $pay_include->price = $item['total_price'];
+                $pay_include->qst = $item['total_qst'];
+                $pay_include->gst = $item['total_gst'];
+                $pay_include->element_type = 0;
+                $pay_include->status = 1; //оплачен
+                $pay_include->create_at = time();
+
+
+                //если посылку отказались платить
+                if (!$request->post('agree_' . $item['element_id'])) {
+                  $pay_include->status = -1;//Отказ от оплаты
+                  $pay_include->comment = $request->post('text_not_agree_' . $item['element_id']);//Отказ от оплаты
+                } else {
+                  $price += $item['total_price'];
+                  $qst += $item['total_qst'];
+                  $gst += $item['total_gst'];
+                }
+                $pay_include->save();
+
+                \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse and is waiting for dispatch.');
+
+                return $this->redirect(['/']);
+              }
+            }
+            $pays->price = $price;
+            $pays->qst = $qst;
+            $pays->gst = $gst;
+            $pays->save();
+          }
         }else{
           //d($request->post());
           //для обычного пользователя
@@ -358,6 +366,7 @@ class DefaultController extends Controller
         'order_id'=>$id,
         'total'=>$total,
         'payments_list'=>$payments_list,
+        'item'=>$pac
       ]);
 
     }
