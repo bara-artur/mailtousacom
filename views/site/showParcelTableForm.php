@@ -22,27 +22,27 @@ use app\modules\orderElement\models\OrderElement;
       <div class="col-md-10">
           <div class="row">
               <div class="col-md-2">
-          <?= $form->field($model, 'showSerial')->checkbox(['class'=>'']) ?>
+          <?= $form->field($model, 'showSerial')->checkbox(['label' => '<span class="fa fa-check otst"></span> Serial','class'=>'']) ?>
               </div>
         <?php if (Yii::$app->params['showAdminPanel']==1) { ?>
               <div class="col-md-2">
-            <?= $form->field($model, 'showID')->checkbox(['class'=>'']) ?>
+            <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span> ID','class'=>'']) ?>
               </div>
         <?php } ?>
               <div class="col-md-2">
-          <?= $form->field($model, 'showStatus')->checkbox(['class'=>''])?>
+          <?= $form->field($model, 'showStatus')->checkbox(['label' => '<span class="fa fa-check otst"></span> Status','class'=>''])?>
               </div>
 
                   <div class="col-md-2">
-          <?= $form->field($model, 'showCreatedAt')->checkbox(['class'=>''])?>
+          <?= $form->field($model, 'showCreatedAt')->checkbox(['label' => '<span class="fa fa-check otst"></span> Created At','class'=>''])?>
                   </div>
 
                       <div class="col-md-2">
-          <?= $form->field($model, 'showPaymentState')->checkbox(['class'=>''])?>
+          <?= $form->field($model, 'showPaymentState')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment State','class'=>''])?>
                       </div>
         <?php if (false){?>
                           <div class="col-md-2">
-          <?= $form->field($model, 'showPaymentType')->checkbox(['class'=>''])?>
+          <?= $form->field($model, 'showPaymentType')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment Type','class'=>''])?>
                           </div>
         <?php }?>
       </div>
@@ -50,19 +50,19 @@ use app\modules\orderElement\models\OrderElement;
         <div class="row">
 
             <div class="col-md-2">
-          <?= $form->field($model, 'showPrice')->checkbox(['class'=>''])?>
+          <?= $form->field($model, 'showPrice')->checkbox(['label' => '<span class="fa fa-check otst"></span> Price','class'=>''])?>
             </div>
 
             <div class="col-md-2">
-          <?= $form->field($model, 'showQst')->checkbox(['class'=>''])?>
+          <?= $form->field($model, 'showQst')->checkbox(['label' => '<span class="fa fa-check otst"></span> PST','class'=>''])?>
             </div>
 
                 <div class="col-md-2">
-          <?= $form->field($model, 'showGst')->checkbox([ 'class'=>''])?>
+          <?= $form->field($model, 'showGst')->checkbox(['label' => '<span class="fa fa-check otst"></span> GST/HST','class'=>''])?>
                 </div>
 
                     <div class="col-md-2">
-          <?= $form->field($model, 'showTotal')->checkbox(['class'=>''])?>
+          <?= $form->field($model, 'showTotal')->checkbox(['label' => '<span class="fa fa-check otst"></span> Total','class'=>''])?>
                     </div>
         </div>
     </div>

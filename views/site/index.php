@@ -77,12 +77,12 @@ $this->title = 'Shipping to USA and Canada';
 
     <hr class="bottom_line">
 
-    <div class="table-responsive">
+    <div class="table-responsive check_hide">
         <?= GridView::widget([
             'dataProvider' => $orderElements,
             'columns' => [
                 ['content'=> function($data){
-                    return Html::checkbox(($data->status>0)?'InSystem':'Draft',false,['class'=>'checkBoxParcelMainTable','id'=>$data->id]);
+                    return Html::checkbox(($data->status>0)?'InSystem':'Draft',false,['label' => '<span class="fa fa-check"></span>','class'=>'checkBoxParcelMainTable','id'=>$data->id]);
                   }
                 ],
                 ['class' => 'yii\grid\SerialColumn',

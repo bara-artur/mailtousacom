@@ -710,4 +710,6 @@ div.icon_integ_ebay:hover,div.icon_integ_amazon:hover,div.icon_integ_shop:hover{
 }
 .text_b input[type=checkbox]{display:none;}
 /*21032017*/
-.showParcelTableForm .form-group{margin-bottom:0px;}
+.showParcelTableForm .form-group{margin-bottom:0px !important;}
+.showParcelTableForm input[type=checkbox]{display:none !important;}
+.check_hide input[type=checkbox]{display:none !important;}
