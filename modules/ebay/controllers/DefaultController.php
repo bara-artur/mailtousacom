@@ -41,10 +41,10 @@ class DefaultController extends Controller
     if($order->user_id!=\Yii::$app->user->identity->id){
       throw new NotFoundHttpException('Order can editing only by creator.');
     }
-
+/*
     if($order->payment_state>0 || $order->order_status>1){
       throw new NotFoundHttpException('You can not edit your order.');
-    }
+    }*/
 
     $request = Yii::$app->request;
     if($request->isPost){
