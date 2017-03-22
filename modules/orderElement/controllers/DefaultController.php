@@ -147,20 +147,32 @@ class DefaultController extends Controller
                 $order = Order::find()->where(['id'=> $_POST['OrderElement']['order_id']])->one();
                 $model-> user_id = $order->user_id;
                 $model-> created_at = time();
-                $model->save();
-                if ($order->el_group==null) {
-                  $order->el_group = ''.$model->id;
+                if ($model->save()) {
+                  if ($order->el_group == null) {
+                    $order->el_group = '' . $model->id;
+                  } else {
+                    $order->el_group = $order->el_group . ',' . $model->id;
+                  }
+                  if ($order->save()) {
+                    return [
+                      'forceReload' => '#crud-datatable-pjax',
+                      'title' => "Adding new packages",
+                      'content' => '<span class="text-success">Create packages success</span>',
+                      'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                    ];
+                  } else  throw new NotFoundHttpException('Order not requested');
                 }else{
-                  $order->el_group = $order->el_group.','.$model->id;
-                }
-                if ($order->save()) {
                   return [
-                    'forceReload' => '#crud-datatable-pjax',
-                    'title' => "Adding new packages",
-                    'content' => '<span class="text-success">Create packages success</span>',
-                    'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                    'title'=> "Adding new packages",
+                    'content'=>$this->renderAjax('create', [
+                      'model' => $model,
+                      'order_id'=>$id,
+                    ]),
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+                      Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
+
                   ];
-                }else  throw new NotFoundHttpException('Order not requested');
+                }
             }else{
                 return [
                     'title'=> "Adding new packages",
@@ -170,8 +182,8 @@ class DefaultController extends Controller
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
-        
-                ];         
+
+                ];
             }
         }else{
           throw new NotFoundHttpException('Invalid request.');
