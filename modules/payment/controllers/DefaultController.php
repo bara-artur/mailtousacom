@@ -240,7 +240,14 @@ class DefaultController extends Controller
         //Обработчик для админа
         if(Yii::$app->user->identity->isManager()){
           //помечаем посылки как принятые на точку выдачи
-          $order->setData(['status'=>2,'payment_state'=>2]);
+          if(Yii::$app->user->can("takeParcel")) {
+            $order->setData([
+              'status'=>2,
+              'payment_state'=>2,
+              'status_dop'=>Yii::$app->user->identity->last_receiving_points,
+            ]);
+            \Yii::$app->getSession()->setFlash('success', 'The order is waiting for dispatch.');
+          }
 
           if($total['price']==0) {
             //все оплаченно
@@ -248,7 +255,7 @@ class DefaultController extends Controller
             return $this->redirect(['/']);
           }
 
-          if(Yii::$app->user->can("takeParcel")) {
+          if(Yii::$app->user->can("takePay") && $total['sum']>0) {
             //посылки пряняты, оплата налом
             $pays = PaymentsList::create([
               'client_id' => $user_id,
@@ -256,10 +263,7 @@ class DefaultController extends Controller
               'status' => 1,
               'pay_time' => time(),
             ]);
-            \Yii::$app->getSession()->setFlash('success', 'The order is waiting for dispatch.');
-          }
 
-          if(Yii::$app->user->can("takePay") && $total['sum']>0) {
             $price = 0;
             $qst = 0;
             $gst = 0;
@@ -280,7 +284,7 @@ class DefaultController extends Controller
 
 
                 //если посылку отказались платить
-                if (!$request->post('agree_' . $item['element_id'])) {
+                if ($request->post('agree_' . $item['element_id'])) {
                   $pay_include->status = -1;//Отказ от оплаты
                   $pay_include->comment = $request->post('text_not_agree_' . $item['element_id']);//Отказ от оплаты
                 } else {

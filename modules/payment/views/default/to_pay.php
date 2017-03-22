@@ -82,7 +82,7 @@ $submitOption = [
     }else{
       if(Yii::$app->user->identity->isManager() && $pay["total_price"]>0){?>
           <div class="block_adm">
-        <?= Html::checkbox('agree_'.$pay_id, true, ['label' => '<span class="fa fa-check otst"></span> Client has refused payment','class'=>"hidden_block_communication",'sum'=>$pay["total_sum"],'vat'=>$pay["total_gst"]+$pay["total_qst"]]);?>
+        <?= Html::checkbox('agree_'.$pay_id, false, ['label' => '<span class="fa fa-check otst"></span> Client has refused payment','class'=>"hidden_block_communication",'sum'=>$pay["total_sum"],'vat'=>$pay["total_gst"]+$pay["total_qst"]]);?>
         <div class="agree_<?=$pay_id;?> vertic" style="display: none;">
             <label>Please, enter the non-payment reason</label>
             <div class="row">
@@ -198,7 +198,7 @@ $submitOption = [
 <script>
   function vaidate_comment(){
     validate=true;
-    els=$('.hidden_block_communication:not(:checked)');
+    els=$('.hidden_block_communication:checked');
     for (i=0;i<els.length;i++){
       el=$('[name=text_not_'+els.eq(i).attr('name')+"]");
       if(el.val().length<5){
