@@ -14,6 +14,15 @@ use yii\filters\VerbFilter;
  */
 class DefaultController extends Controller
 {
+
+  function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest || !Yii::$app->user->can('admin_reference')) {
+      throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+      return false;
+    }
+    return true;
+  }
     /**
      * @inheritdoc
      */

@@ -17,6 +17,15 @@ use yii\helpers\Html;
  */
 class DefaultController extends Controller
 {
+
+  function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest || !Yii::$app->user->can('admin_reference')) {
+      throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+      return false;
+    }
+    return true;
+  }
     /**
      * @inheritdoc
      */
@@ -38,17 +47,14 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-      if (Yii::$app->user->can("takeParcel")) {
-        $searchModel = new ReceivingPointsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+      $searchModel = new ReceivingPointsSearch();
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-          'searchModel' => $searchModel,
-          'dataProvider' => $dataProvider,
-        ]);
-      }else{
-       $this->redirect("/");
-      }
+      return $this->render('index', [
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+      ]);
+
     }
 
     /**
