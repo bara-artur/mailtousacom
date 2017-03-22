@@ -169,11 +169,16 @@ class DefaultController extends Controller
         return $this->redirect('/orderInclude/create-order/'.$id);
       }
 
-      foreach ($orders as $order) {
+      if(strlen($order->el_group)<1){
+        $el_group=[];
+      }else{
+        $el_group=explode(',',$order->el_group);
+      };
+      foreach ($orders as $order_) {
         $box = new OrderElement();
-        $shippingAddress = $order->ShippingAddress;
+        $shippingAddress = $order_->ShippingAddress;
         $name=explode(' ',$shippingAddress->Name );
-        $box->order_id=$id;
+        //$box->order_id=$id;
         $box->first_name=$name[0];
         unset($name[0]);
         $box->last_name=implode(' ',$name);
@@ -184,10 +189,11 @@ class DefaultController extends Controller
         $box->zip=(String)$shippingAddress->PostalCode;
         $box->phone=(String)$shippingAddress->Phone;
         $box->state=(String)$shippingAddress->StateOrProvince;
+        $box->created_at=time();
         $box->address_type=0;
         $box->source=1;
 
-        $transactions = $order->TransactionArray;
+        $transactions = $order_->TransactionArray;
 
         if($box->save() && $transactions){
           foreach ($transactions->Transaction as $transaction) {
@@ -203,8 +209,13 @@ class DefaultController extends Controller
             d($transaction->Item);*/
             $item->save();
           }
+          $el_group[]=$box->id;
         }
       }
+
+      $order->el_group=implode(',',$el_group);
+      $order->save();
+
       \Yii::$app
         ->getSession()
         ->setFlash(
