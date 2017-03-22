@@ -29,9 +29,21 @@ $this->title = 'Shipping to USA and Canada';
         <div class="col-md-10 hidden-xs text-right padding-off-right">
 
             <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-update']); ?>
-            <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-md btn-danger', 'id'=>'group-delete']); ?>
+            <?=Html::a('Delete',
+              ['/orderElement/group-delete/'],
+              [
+                'id'=>'group-delete',
+                'class' => 'btn btn-danger btn-sm but_tab_marg',
+                'data' => [
+                  'confirm-message' => 'Are you sure to delete this item?',
+                  'confirm-title'=>"Delete",
+                  'pjax'=>'false',
+                  'toggle'=>"tooltip",
+                  'request-method'=>"post",
+                ],
+                'role'=>"modal-remote",
+              ]); ?>
             <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print']); ?>
-
             <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
                 [
                     'role'=>'modal-remote',
@@ -41,9 +53,21 @@ $this->title = 'Shipping to USA and Canada';
         </div>
         <div class="col-xs-12 visible-xs text-center margin-top-10">
             <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
-            <?=Html::a('Delete parcels', ['/orderElement/group-delete/'], ['class' => 'btn btn-sm btn-danger', 'id'=>'group-delete']); ?>
+            <?=Html::a('Delete',
+                ['/orderElement/group-delete/'],
+                [
+                  'id'=>'group-delete',
+                  'class' => 'btn btn-danger btn-sm but_tab_marg',
+                  'data' => [
+                    'confirm-message' => 'Are you sure to delete this item?',
+                    'confirm-title'=>"Delete",
+                    'pjax'=>'false',
+                    'toggle'=>"tooltip",
+                    'request-method'=>"post",
+                  ],
+                  'role'=>"modal-remote",
+                ]); ?>
             <?=Html::a('Print PDF', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
-
             <?=Html::a('Create order', ['/order/create/'],
                 [
                     'role'=>'modal-remote',
@@ -182,14 +206,21 @@ $this->title = 'Shipping to USA and Canada';
                     switch ($data->status) {
                         case '0' : {
                           if ($data->payment_state > 1){
-                            return Html::a('Update Order', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
+                            return Html::a('Update parcel', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
                           }else {
-                            return Html::a('Update Order', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']) .
+                            return Html::a('Update parcel', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']) .
                               Html::a('Delete',
                                 ['/orderElement/group-delete/' . $data->id],
                                 [
-                                  'class' => 'btn btn-sm btn-danger',
-                                  'data-confirm' => 'Are you sure you want to delete this item?',
+                                  'class' => 'btn btn-danger btn-sm but_tab_marg',
+                                  'data' => [
+                                    'confirm-message' => 'Are you sure to delete this item?',
+                                    'confirm-title'=>"Delete",
+                                    'pjax'=>'false',
+                                    'toggle'=>"tooltip",
+                                    'request-method'=>"post",
+                                  ],
+                                  'role'=>"modal-remote",
                                 ]);
                           }
                         } break;
@@ -198,12 +229,19 @@ $this->title = 'Shipping to USA and Canada';
                             return Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-warning']);
                           }else {
                             return Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-warning']) .
-                              Html::a('Delete',
-                                ['/orderElement/group-delete/' . $data->id],
-                                [
-                                  'class' => 'btn btn-sm btn-danger',
-                                  'data-confirm' => 'Are you sure you want to delete this item?',
-                                ]);
+                                   Html::a('Delete',
+                                    ['/orderElement/group-delete/' . $data->id],
+                                    [
+                                      'class' => 'btn btn-danger btn-sm but_tab_marg',
+                                      'data' => [
+                                        'confirm-message' => 'Are you sure to delete this item?',
+                                        'confirm-title'=>"Delete",
+                                        'pjax'=>'false',
+                                        'toggle'=>"tooltip",
+                                        'request-method'=>"post",
+                                      ],
+                                      'role'=>"modal-remote",
+                                    ]);
                           }
                         }break;
                       case '2' :case '3' :case '4' :case '5' :
