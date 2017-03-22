@@ -69,7 +69,6 @@ class DefaultController extends Controller
         'order_id' => $id
       ]);
     };
-
     $model=\Yii::$app->getModule('ebay');;
     global $EBAY;
     $EBAY=$model->config;
@@ -133,6 +132,7 @@ class DefaultController extends Controller
     $response = simplexml_import_dom($responseDoc);
     $entries = $response->PaginationResult->TotalNumberOfEntries;
 
+
     //if there are error nodes
     if ($errors->length > 0) {
       //display each error
@@ -174,6 +174,7 @@ class DefaultController extends Controller
       }else{
         $el_group=explode(',',$order->el_group);
       };
+
       foreach ($orders as $order_) {
         $box = new OrderElement();
         $shippingAddress = $order_->ShippingAddress;
@@ -189,10 +190,10 @@ class DefaultController extends Controller
         $box->zip=(String)$shippingAddress->PostalCode;
         $box->phone=(String)$shippingAddress->Phone;
         $box->state=(String)$shippingAddress->StateOrProvince;
+        $box->user_id=Yii::$app->user->identity->id;
         $box->created_at=time();
         $box->address_type=0;
         $box->source=1;
-
         $transactions = $order_->TransactionArray;
 
         if($box->save() && $transactions){
@@ -211,6 +212,7 @@ class DefaultController extends Controller
           }
           $el_group[]=$box->id;
         }
+        ddd($box);
       }
 
       $order->el_group=implode(',',$el_group);
