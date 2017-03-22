@@ -35,7 +35,7 @@ $submitOption = [
   <?php
   foreach ($payments_list as $pay_id=>$pay){
     ?>
-      <div class="pay_list"><b>Package type : </b><span class="pull-right"><?=$pay["source_text"];?></span></div>
+      <div class="pay_list padding-top-10 margin-top-10"><b>Package type : </b><span class="pull-right"><?=$pay["source_text"];?></span></div>
       <?php
         if($pay["track_number_type"]==0){
           ?>
@@ -50,12 +50,12 @@ $submitOption = [
       <div class="pay_list"><b>Weight : </b><span class="pull-right"><?=number_format($pay["weight"],2);?> lb</span></div>
       <div class="pay_list2"><b>Price : </b><span class="pull-right"><?= number_format($pay["price"],2); ?> $</span></div>
       <div class="pay_list2"><b>PST : </b><span class="pull-right"><?= number_format($pay["qst"],2); ?> $</span></div>
-      <div class="pay_list4"><b>GST/HST : </b><span class="pull-right"><?= number_format($pay["gst"],2); ?> $</span></div>
-      <div class="hidden"><b>Total</b><span class="pull-right"> <?= number_format($pay["sum"],2); ?></span></div>
+      <div class="pay_list2"><b>GST/HST : </b><span class="pull-right"><?= number_format($pay["gst"],2); ?> $</span></div>
+      <div class="pay_list4"><b>Total</b><span class="pull-right"> <?= number_format($pay["sum"],2); ?></span></div>
     <?php
     if($pay['already_price']) {
       ?>
-      <h5>already pay</h5>
+      <h5>Already pay</h5>
       <p><b>Price : </b><span class="pull-right"><?= number_format($pay["already_price"], 2); ?></p>
       <p><b>PST : </b><span class="pull-right"><?= number_format($pay["already_qst"], 2); ?></p>
       <p><b>GST/HST : </b><span class="pull-right"><?= number_format($pay["already_gst"], 2); ?></p>

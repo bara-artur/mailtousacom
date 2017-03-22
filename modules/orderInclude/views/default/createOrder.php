@@ -28,7 +28,9 @@ $submitOption = [
       <h4 class="modernui-neutral2">Order #<?=$order_id?> for Transportation</h4>
     </div>
     <?php if (!$edit_not_prohibited) {?>
-      <div class="prohibit_editing"><p><?=$message_for_edit_prohibited_order?> </p></div>
+        <div class="col-md-12">
+      <div class="prohibit_editing text-warning"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></div>
+        </div>
     <?php } ?>
   </div>
 
