@@ -22,9 +22,9 @@ class DefaultController extends Controller
       throw new NotFoundHttpException('Order can editing only by creator.');
     }
 
-    if($order->payment_state>0 || $order->order_status>1){
+    /*if($order->payment_state>0 || $order->order_status>1){
       throw new NotFoundHttpException('You can not edit your order.');
-    }
+    }*/
 
     //Если нет то получаем новый токен
     if (strlen(\Yii::$app->user->identity->ebay_token)<30){
