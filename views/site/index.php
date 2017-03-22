@@ -209,17 +209,7 @@ $this->title = 'Shipping to USA and Canada';
                       case '2' :case '3' :case '4' :case '5' :
                       case '6' :case '7' :case '8' :
                         {
-                          if ($data->payment_state > 1){
-                            return Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
-                          }else {
-                            return Html::a('View', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-warning']) .
-                              Html::a('Delete',
-                                ['/orderElement/group-delete/' . $data->id],
-                                [
-                                  'class' => 'btn btn-sm btn-danger',
-                                  'data-confirm' => 'Are you sure you want to delete this item?',
-                                ]);
-                          }
+                          return Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
                         }break;
 
                         default: return "Unknown status - ".$data->order_status;
