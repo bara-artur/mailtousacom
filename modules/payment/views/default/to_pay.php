@@ -51,7 +51,7 @@ $submitOption = [
       <div class="pay_list2"><b>Price : </b><span class="pull-right"><?= number_format($pay["price"],2); ?> $</span></div>
       <div class="pay_list2"><b>PST : </b><span class="pull-right"><?= number_format($pay["qst"],2); ?> $</span></div>
       <div class="pay_list4"><b>GST/HST : </b><span class="pull-right"><?= number_format($pay["gst"],2); ?> $</span></div>
-      <!--<p><b>Total</b> <?= number_format($pay["sum"],2); ?></p>-->
+      <div class="hidden"><b>Total</b><span class="pull-right"> <?= number_format($pay["sum"],2); ?></span></div>
     <?php
     if($pay['already_price']) {
       ?>
@@ -79,12 +79,17 @@ $submitOption = [
       echo "<h5 style='color:red' class='error_control'>".$item['err']."</h5>";
     }else{
       if(Yii::$app->user->identity->isManager() && $pay["total_price"]>0){?>
-        <?= Html::checkbox('agree_'.$pay_id, true, ['label' => 'Add to total sum','class'=>"hidden_block_communication",'sum'=>$pay["total_sum"],'vat'=>$pay["total_gst"]+$pay["total_qst"]]);?>
-        <br>
-        <label class="agree_<?=$pay_id;?>" style="display: none;">
-          Why not pay?
-          <?= Html::input('text', 'text_not_agree_'.$pay_id, "", []); ?>
-        </label>
+          <div class="block_adm">
+        <?= Html::checkbox('agree_'.$pay_id, true, ['label' => '<span class="fa fa-check otst"></span> Client has refused payment','class'=>"hidden_block_communication",'sum'=>$pay["total_sum"],'vat'=>$pay["total_gst"]+$pay["total_qst"]]);?>
+        <div class="agree_<?=$pay_id;?> vertic" style="display: none;">
+            <label>Please, enter the non-payment reason</label>
+            <div class="row">
+            <div class="col-md-12 full_width">
+                <?= Html::textarea('text_not_agree_'.$pay_id, "",['class'=>'']); ?>
+            </div>
+            </div>
+        </div>
+          </div>
       <?php
       }
     }
@@ -130,16 +135,18 @@ $submitOption = [
     }else{
       if($model->payment_state!=0){
         ?>
-          <h4>
-            The order has already been paid.
-          </h4>
+          <h6 class="bg-success text-center fg-white padding-10">
+              <span class="glyphicon glyphicon-ok-sign"></span> order paid
+          </h6>
+          <div class="paid_img"></div>
         <?php
         echo Html::hiddenInput('payment_type', -1, []);
       }else{
         ?>
-        <h4>
-          The order has not been paid yet.
-        </h4>
+        <h6 class="bg-warning text-center fg-white padding-10">
+            <i class="icon-metro-warning"></i> order isn't paid yet
+        </h6>
+          <div class="notpaid_img"></div>
         <?php
         echo Html::hiddenInput('payment_type', 3, []);
       }
@@ -153,7 +160,7 @@ $submitOption = [
     <?=Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/'.$order_id], ['class' => 'btn btn-default pull-left']) ?>
 <?php
   if(Yii::$app->user->identity->isManager()){
-    echo Html::a('Return to orders list', ['/'], ['class' => 'btn btn-default pull-left']);
+    echo Html::a('Return to orders list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);
     if($item->status<2){
       //админ может принимать платеж и это необходимо сделать
       if(Yii::$app->user->can("takePay") && $total['price']>0){

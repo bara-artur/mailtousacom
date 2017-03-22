@@ -735,3 +735,28 @@ border-bottom: 1px dotted #ddd;}
 .pay_list4{padding: 2px 0px;
     border-bottom: 1px solid #a2a2a2;}
 .trans_text2{padding-top:4px;margin-bottom:20px;font-size:17px;}
+input.hidden_block_communication{display:none !important;}
+.full_width textarea{width:360px;height:50px}
+.vertic{padding-top:10px;color:#05389F;}
+.hidden_block_communication{padding-top:20px;}
+div.paid_img{background: url("/img/paid.png");
+    width: 120px;
+    background-size: cover !important;
+    height: 101px;
+    position: absolute;
+    top: 100px;
+    right: 34%;}
+div.notpaid_img{background: url("/img/notpaid.png");
+    width: 120px;
+    background-size: cover !important;
+    height: 101px;
+    position: absolute;
+    top: 100px;
+    right: 34%;}
+.block_adm{
+    margin:10px 0px;
+    border-top:1px dotted #ccc;
+    border-bottom:1px dotted #ccc;
+    padding:10px 0px;
+    background-color: #F9F9F9;
+}
