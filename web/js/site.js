@@ -516,6 +516,7 @@ function AutoCompleteUserSelect(e,ui){
 }
 
 function main_table_checkbox(current_element){
+ // $(current_element).parents('td:first').css("background-color","red");
   elem_checked = $(".checkBoxParcelMainTable:checked");
   if ($(current_element).prop("checked")) {
     if (elem_checked.length > 1) { // выделено больше одного элемента - поэтому надо проверять на типы статусов
@@ -536,17 +537,27 @@ function main_table_checkbox(current_element){
     }
   }
 
-  $(".select_prohibited").prop("disabled",false);
-  $(".select_prohibited").removeClass('select_prohibited');
   if (elem_checked.length>0){
     if (elem_checked[0].name == 'InSystem') {
       elem_type = 'Draft';
     }else{
       elem_type = 'InSystem';
     }
-    $("[name='"+elem_type+"']").addClass('select_prohibited');
-    $(".select_prohibited").prop("disabled",true);
+    user_id = elem_checked[0].getAttribute('user');
+    // берем элементы с другим статусом ИЛИ другого user_id
+    elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
+    console.log(elems_prohibeted.length);
+    elems_prohibeted.addClass('select_prohibited').css("background-color","red");
+    elems_prohibeted.parents('td').fadeTo(500, 0.2);
+    elems_prohibeted.prop("disabled",true);
+
+  }else{
+    elems_prohibeted = $(".select_prohibited");
+    elems_prohibeted.parents('td').fadeTo(500, 1);
+    elems_prohibeted.prop("disabled",false);
+    elems_prohibeted.removeClass('select_prohibited');
   }
+
 
 
   parcel_ids ="";
@@ -565,7 +576,6 @@ function main_table_checkbox(current_element){
   $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
   $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
   $("#group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
-  console.log($("#group-update").attr("href"));
 }
 
 function init_main_table_checkbox(){
@@ -578,11 +588,9 @@ function init_main_table_checkbox(){
 function init_collapse_buttons(){
   $("#collapse_filter").on("click", function(){
     $("#collapseTableOptions").collapse("hide");
-    console.log(111);
   });
   $("#collapse_columns").on("click", function(){
     $("#collapse").collapse("hide");
-    console.log(444);
   })
 }
 
