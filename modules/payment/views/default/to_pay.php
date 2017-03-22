@@ -51,23 +51,25 @@ $submitOption = [
       <div class="pay_list2"><b>Price : </b><span class="pull-right"><?= number_format($pay["price"],2); ?> $</span></div>
       <div class="pay_list2"><b>PST : </b><span class="pull-right"><?= number_format($pay["qst"],2); ?> $</span></div>
       <div class="pay_list2"><b>GST/HST : </b><span class="pull-right"><?= number_format($pay["gst"],2); ?> $</span></div>
-      <div class="pay_list4"><b>Total</b><span class="pull-right"> <?= number_format($pay["sum"],2); ?></span></div>
+      <div class="pay_list4"><b>Total</b><span class="pull-right"><b><?= number_format($pay["sum"],2); ?> $</b></span></div>
     <?php
     if($pay['already_price']) {
       ?>
-      <h5>Already pay</h5>
-      <p><b>Price : </b><span class="pull-right"><?= number_format($pay["already_price"], 2); ?></p>
-      <p><b>PST : </b><span class="pull-right"><?= number_format($pay["already_qst"], 2); ?></p>
-      <p><b>GST/HST : </b><span class="pull-right"><?= number_format($pay["already_gst"], 2); ?></p>
-      <p><b>Total : </b><span class="pull-right"><?= number_format($pay["already_sum"], 2); ?></p>
-      <?php
+        <div class="paid_run">
+            <div class="paid_img2"></div>
+        <div class="pay_list2"><b>Price : </b><span class="pull-right"><?= number_format($pay["already_price"], 2); ?>  $</span></div>
+        <div class="pay_list2"><b>PST : </b><span class="pull-right"><?= number_format($pay["already_qst"], 2); ?>  $</span></div>
+        <div class="pay_list2"><b>GST/HST : </b><span class="pull-right"><?= number_format($pay["already_gst"], 2); ?>  $</span></div>
+            <div class="pay_list4"><b>Total : </b><span class="pull-right"><b><?= number_format($pay["already_sum"], 2); ?>  $</b></span></div>
+        </div>
+            <?php
       if($pay["total_price"]>0){
         ?>
-        <h5>Total pay</h5>
-        <p><b>Price</b> <?= number_format($pay["total_price"],2); ?></p>
-        <p><b>PST</b> <?= number_format($pay["total_qst"],2); ?></p>
-        <p><b>GST/HST</b> <?= number_format($pay["total_gst"],2); ?></p>
-        <p><b>Total</b> <?= number_format($pay["total_sum"],2); ?></p>
+        <div class="tot_tot">Total for payment</div>
+          <div class="pay_list2"><b>Price</b><span class="pull-right"><b><?= number_format($pay["total_price"],2); ?>  $</b></span></div>
+          <div class="pay_list2"><b>PST</b><span class="pull-right"><b><?= number_format($pay["total_qst"],2); ?>  $</b></span></div>
+          <div class="pay_list2"><b>GST/HST</b><span class="pull-right"><b><?= number_format($pay["total_gst"],2); ?>  $</b></span></div>
+          <div class="pay_list4"><b>Total</b><span class="pull-right"><b><?= number_format($pay["total_sum"],2); ?>  $</b></span></div>
         <?php
       }else {
         ?>
@@ -167,10 +169,10 @@ $submitOption = [
         //админ может принимать посылки
         if(Yii::$app->user->can("takeParcel")){
           //принять посылку и оплату
-          echo Html::submitButton('The customer paid me the order. Accept the order for the receiving point.', ['class' => 'btn btn-success pull-right']);
+          echo Html::submitButton('Customer paid order. Accept the order for the receiving point.', ['class' => 'btn btn-success pull-right']);
         }else{
           //принять деньги. Посылка остается у клиента.
-          echo Html::submitButton('The customer paid me the order.', ['class' => 'btn btn-success pull-right']);
+          echo Html::submitButton('Customer paid order.', ['class' => 'btn btn-success pull-right']);
         }
       }else{
         //админ может принимать посылки
