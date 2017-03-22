@@ -12,12 +12,14 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="receiving-points-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
+<div class="row">
+    <div class="col-md-12 text-right">
         <?= Html::a('Create Receiving Points', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+</div>
+</div>
+    <hr class="bottom_line">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
