@@ -181,32 +181,45 @@ $this->title = 'Shipping to USA and Canada';
                 ['attribute' => 'Action','content' => function($data){
                     switch ($data->status) {
                         case '0' : {
-
-                          return Html::a('Update Order', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-info']).
-                                 Html::a('Delete',
-                                   ['/orderElement/group-delete/'.$data->id],
-                                   [
-                                     'class' => 'btn btn-sm btn-danger' ,
-                                     'data-confirm'=>'Are you sure you want to delete this item?',
-                                   ]);
+                          if ($data->payment_state > 1){
+                            return Html::a('Update Order', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
+                          }else {
+                            return Html::a('Update Order', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']) .
+                              Html::a('Delete',
+                                ['/orderElement/group-delete/' . $data->id],
+                                [
+                                  'class' => 'btn btn-sm btn-danger',
+                                  'data-confirm' => 'Are you sure you want to delete this item?',
+                                ]);
+                          }
                         } break;
                         case '1' : {
-                          return Html::a('Order has been paid', ['/orderElement/group-print/'.$data->id], ['class' => 'btn btn-sm btn btn-warning']).
-                                 Html::a('Delete',
-                                  ['/orderElement/group-delete/'.$data->id],
-                                  [
-                                    'class' => 'btn btn-sm btn-danger' ,
-                                    'data-confirm'=>'Are you sure you want to delete this item?',
-                                  ]);
+                          if ($data->payment_state > 1){
+                            return Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-warning']);
+                          }else {
+                            return Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-warning']) .
+                              Html::a('Delete',
+                                ['/orderElement/group-delete/' . $data->id],
+                                [
+                                  'class' => 'btn btn-sm btn-danger',
+                                  'data-confirm' => 'Are you sure you want to delete this item?',
+                                ]);
+                          }
                         }break;
-                        case '2' : {
-                          return Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']).
-                                Html::a('Delete',
-                                  ['/orderElement/group-delete/'.$data->id],
-                                  [
-                                    'class' => 'btn btn-sm btn-danger' ,
-                                    'data-confirm'=>'Are you sure you want to delete this item?',
-                                  ]);
+                      case '2' :case '3' :case '4' :case '5' :
+                      case '6' :case '7' :case '8' :
+                        {
+                          if ($data->payment_state > 1){
+                            return Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
+                          }else {
+                            return Html::a('View', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-warning']) .
+                              Html::a('Delete',
+                                ['/orderElement/group-delete/' . $data->id],
+                                [
+                                  'class' => 'btn btn-sm btn-danger',
+                                  'data-confirm' => 'Are you sure you want to delete this item?',
+                                ]);
+                          }
                         }break;
 
                         default: return "Unknown status - ".$data->order_status;

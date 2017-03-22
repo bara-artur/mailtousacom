@@ -38,13 +38,17 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+      if (Yii::$app->user->can("takeParcel")) {
         $searchModel = new ReceivingPointsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+          'searchModel' => $searchModel,
+          'dataProvider' => $dataProvider,
         ]);
+      }else{
+       $this->redirect("/");
+      }
     }
 
     /**
@@ -54,15 +58,18 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
+      if (Yii::$app->user->can("takeParcel")) {
         $model = new ReceivingPoints();
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/receiving_points']);
+          return $this->redirect(['/receiving_points']);
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+          return $this->render('create', [
+            'model' => $model,
+          ]);
         }
+      }else{
+        $this->redirect("/");
+      }
     }
 
     /**
@@ -73,15 +80,19 @@ class DefaultController extends Controller
      */
     public function actionUpdate($id)
     {
+      if (Yii::$app->user->can("takeParcel")) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/receiving_points']);
+          return $this->redirect(['/receiving_points']);
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+          return $this->render('update', [
+            'model' => $model,
+          ]);
         }
+      }else{
+        $this->redirect("/");
+      }
     }
 
     /**
@@ -92,9 +103,10 @@ class DefaultController extends Controller
      */
     public function actionDelete($id)
     {
+      if (Yii::$app->user->can("takeParcel")) {
         $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+      }
+      return $this->redirect(['index']);
     }
 
   public function actionChoose() // Выбор receiving Point
