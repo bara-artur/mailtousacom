@@ -7,7 +7,7 @@ use app\modules\address\models\Address;
 use \yii\web\Response;
 use yii\helpers\Html;
 use Yii;
-use app\modules\logs\models\Log;
+
 
 /**
  * This is the model class for table "order_include".
@@ -104,8 +104,8 @@ class OrderInclude extends \yii\db\ActiveRecord
         $model->user_id = $user_id;
         $model->created_at = time();
         if ($model->save()) {
-          $log = new Log;
-          $log->createLog($model->user_id, $model->id, "Draft");
+          //$log = new Log;
+          //$log->createLog($model->user_id, $model->id, "Draft");
 
           if ($request->isAjax) {
             $this_->redirect('/orderInclude/create-order/' . $model->id);

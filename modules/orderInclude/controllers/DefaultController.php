@@ -19,7 +19,6 @@ use \yii\web\Response;
 use yii\helpers\Html;
 use yii\db\Query;
 use kartik\mpdf\Pdf;
-use app\modules\logs\models\Log;
 use app\modules\user\models\User;
 /**
  * DefaultController implements the CRUD actions for OrderInclude model.

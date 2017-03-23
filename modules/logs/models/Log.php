@@ -49,9 +49,13 @@ class Log extends \yii\db\ActiveRecord
         ];
     }
 
-  public function createLog($user_id,$order_id,$description){
+  public static function addLog($order_id,$data){
+
+    if($data['test']){
+      $description=$data['text'];
+    }
     $model = new Log();
-    $model->user_id = $user_id;
+    $model->user_id = Yii::$app->user->identity->getId();
     $model->order_id = $order_id;
     $model->description = $description;
     $model->created_at = time();
