@@ -6,6 +6,7 @@ use Yii;
 use app\modules\orderInclude\models\OrderInclude;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\User;
+use app\modules\logs\models\Log;
 
 /**
  * This is the model class for table "order_element".
@@ -122,5 +123,22 @@ class OrderElement extends \yii\db\ActiveRecord
   public function getIncludes(){
     $query = OrderInclude::find()->where(['order_id'=>$this->id])->asArray()->all();
     return $query;
+  }
+
+  public function afterSave($insert, $changedAttributes)
+  {
+    parent::afterSave($insert, $changedAttributes);
+    if ($insert) {
+      // Да это новая запись (insert)
+      if($this->source){
+        Log::addLog($this->id,1,$this->source);
+      }else{
+        Log::addLog($this->id,0);
+      }
+    } else {
+      // Нет, старая (update)
+      $changedAttributes;
+    }
+    exit;
   }
 }

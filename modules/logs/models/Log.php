@@ -23,6 +23,13 @@ class Log extends \yii\db\ActiveRecord
         return 'log';
     }
 
+    public static function getMsg($i){
+      $msg= [
+        0=>"Created parcel",
+        1=>"Import parcel from $1",
+      ];
+      return $msg[$i];
+    }
     /**
      * @inheritdoc
      */
@@ -49,9 +56,19 @@ class Log extends \yii\db\ActiveRecord
         ];
     }
 
-  public static function addLog($order_id,$data){
-
-    if($data['test']){
+  public static function addLog($order_id,$data,$order=false){
+    if(is_numeric($data)){
+      $description=Log::getMsg($data);
+      if($data==1){
+        $txt="somewhere";
+        switch ($order) {
+          case 1:
+            $txt='eBay';
+            break;
+        }
+        $description=str_replace('$1',$txt,$description);
+      }
+    }else if($data['test']){
       $description=$data['text'];
     }
     $model = new Log();
@@ -60,6 +77,6 @@ class Log extends \yii\db\ActiveRecord
     $model->description = $description;
     $model->created_at = time();
     $model->save();
-
+    var_dump($model);
   }
 }
