@@ -9,7 +9,7 @@ class m170315_105838_system_reorganization extends Migration
 
   public function up()
     {
-      $this->dropTable('order_items');
+      //$this->dropTable('order_items');
       $this->dropTable('address');
       $this->dropTable('order');
       $this->createTable('order', [

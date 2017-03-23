@@ -158,7 +158,7 @@ $this->title = 'Shipping to USA and Canada';
                // ],
                 ['attribute'=> 'payment_state',
                   'content' => function($data){
-                    return PaymentsList::statusText($data->payment_state);
+                    return PaymentsList::statusTextParcel($data->payment_state);
                   },
                   'visible' => $showTable->showPaymentState,
                 ],

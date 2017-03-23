@@ -31,6 +31,14 @@ class PaymentsList extends \yii\db\ActiveRecord
         if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown status';
     }
+
+    public static function statusTextParcel($param)
+    {
+        $textForStatus = PaymentsList::getTextStatusParcel();
+        if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
+        else return 'Unknown status';
+    }
+
     public static function getPayStatus(){
         return array(
             ''=>'All',
@@ -39,6 +47,15 @@ class PaymentsList extends \yii\db\ActiveRecord
             '2'=>'At the point',
             '3'=>'Per month',
             '4'=>'Unknown'
+        );
+    }
+
+    public static function getTextStatusParcel(){
+        return array(
+            ''=>'All',
+            '0'=>"Not pay",
+            '1'=>'Awaiting review',
+            '2'=>'Payment accepted',
         );
     }
 

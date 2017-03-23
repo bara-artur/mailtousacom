@@ -22,9 +22,9 @@ class DefaultController extends Controller
       throw new NotFoundHttpException('Order can editing only by creator.');
     }
 
-    if($order->payment_state>0 || $order->order_status>1){
+    /*if($order->payment_state>0 || $order->order_status>1){
       throw new NotFoundHttpException('You can not edit your order.');
-    }
+    }*/
 
     //Если нет то получаем новый токен
     if (strlen(\Yii::$app->user->identity->ebay_token)<30){
@@ -41,10 +41,10 @@ class DefaultController extends Controller
     if($order->user_id!=\Yii::$app->user->identity->id){
       throw new NotFoundHttpException('Order can editing only by creator.');
     }
-
+/*
     if($order->payment_state>0 || $order->order_status>1){
       throw new NotFoundHttpException('You can not edit your order.');
-    }
+    }*/
 
     $request = Yii::$app->request;
     if($request->isPost){
@@ -69,7 +69,6 @@ class DefaultController extends Controller
         'order_id' => $id
       ]);
     };
-
     $model=\Yii::$app->getModule('ebay');;
     global $EBAY;
     $EBAY=$model->config;
@@ -133,6 +132,7 @@ class DefaultController extends Controller
     $response = simplexml_import_dom($responseDoc);
     $entries = $response->PaginationResult->TotalNumberOfEntries;
 
+
     //if there are error nodes
     if ($errors->length > 0) {
       //display each error
@@ -169,11 +169,17 @@ class DefaultController extends Controller
         return $this->redirect('/orderInclude/create-order/'.$id);
       }
 
-      foreach ($orders as $order) {
+      if(strlen($order->el_group)<1){
+        $el_group=[];
+      }else{
+        $el_group=explode(',',$order->el_group);
+      };
+
+      foreach ($orders as $order_) {
         $box = new OrderElement();
-        $shippingAddress = $order->ShippingAddress;
+        $shippingAddress = $order_->ShippingAddress;
         $name=explode(' ',$shippingAddress->Name );
-        $box->order_id=$id;
+        //$box->order_id=$id;
         $box->first_name=$name[0];
         unset($name[0]);
         $box->last_name=implode(' ',$name);
@@ -184,10 +190,11 @@ class DefaultController extends Controller
         $box->zip=(String)$shippingAddress->PostalCode;
         $box->phone=(String)$shippingAddress->Phone;
         $box->state=(String)$shippingAddress->StateOrProvince;
+        $box->user_id=Yii::$app->user->identity->id;
+        $box->created_at=time();
         $box->address_type=0;
         $box->source=1;
-
-        $transactions = $order->TransactionArray;
+        $transactions = $order_->TransactionArray;
 
         if($box->save() && $transactions){
           foreach ($transactions->Transaction as $transaction) {
@@ -203,8 +210,14 @@ class DefaultController extends Controller
             d($transaction->Item);*/
             $item->save();
           }
+          $el_group[]=$box->id;
         }
+        ddd($box);
       }
+
+      $order->el_group=implode(',',$el_group);
+      $order->save();
+
       \Yii::$app
         ->getSession()
         ->setFlash(

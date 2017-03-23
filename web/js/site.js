@@ -92,14 +92,14 @@ $(document).ready(function() {
   $('.hidden_block_communication').on('change',function(){
     el=$('.'+$(this).attr('name'))
     if(el.length<1)return;
-    if(this.checked){
+    if(!this.checked){
       el.hide();
     }else {
       el.show();
       el.removeClass('has-error')
       el.find('.help-block').remove()
     }
-    els=$('.hidden_block_communication:checked');
+    els=$('.hidden_block_communication:not(:checked)');
     sum=0;
     vat=0;
     for (i=0;i<els.length;i++){

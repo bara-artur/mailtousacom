@@ -28,7 +28,9 @@ $submitOption = [
       <h4 class="modernui-neutral2">Order #<?=$order_id?> for Transportation</h4>
     </div>
     <?php if (!$edit_not_prohibited) {?>
-      <div class="prohibit_editing"><p><?=$message_for_edit_prohibited_order?> </p></div>
+        <div class="col-md-12">
+      <div class="prohibit_editing text-warning"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></div>
+        </div>
     <?php } ?>
   </div>
 
@@ -55,8 +57,12 @@ $submitOption = [
         <div class="row">
           <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
           <div class="col-md-3 marg_p">
-            <h5 class="deliv_address">Delivery address</h5>
-            <p><b>First name:</b>  <?=$percel->first_name;?></p>
+            <h5 class="deliv_address">Delivery address</h5><p><b>First name:</b>  <?=$percel->first_name;?></p>
+              <?php
+              if($percel->source==1){
+                  echo "<p><b>Import from : </b><span class='from_ebay'></span></p>";
+              }
+              ?>
             <p><b>Last name:</b>  <?=$percel->last_name;?></p>
             <?php if($percel->address_type==1){
               echo '<p><b>Company name:</b>  '.$percel->company_name.'</p>';
@@ -67,12 +73,6 @@ $submitOption = [
             <p><b>ZIP:</b>  <?=$percel->zip;?></p>
             <p><b>Phone:</b>  <?=$percel->phone;?></p>
             <p><b>State:</b>  <?=$percel->state;?></p>
-
-            <?php
-            if($percel->source==1){
-              echo "<h4>Import from eBay</h4>";
-            }
-            ?>
             <?php if ($edit_not_prohibited) {?>
               <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$percel->id],
                 [
@@ -193,7 +193,7 @@ $submitOption = [
               </div>
 
             </form>
-        <?php if ($edit_not_prohibited){?>
+
             <div class="col-md-6 bord_butt text-right">
               <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
                 ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-md btn-science-blue'])?>
@@ -208,7 +208,6 @@ $submitOption = [
                   'data-confirm-message'=>"Are you sure want to delete this packages",
                 ])?>
             </div>
-        <?php } ?>
 
         <?php Pjax::end(); ?>
         </div>
