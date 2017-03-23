@@ -7,6 +7,7 @@ use app\modules\orderInclude\models\OrderInclude;
 use yii\data\ActiveDataProvider;
 use app\modules\user\models\User;
 use app\modules\logs\models\Log;
+use app\modules\receiving_points\models\ReceivingPoints;
 
 /**
  * This is the model class for table "order_element".
@@ -33,7 +34,7 @@ class OrderElement extends \yii\db\ActiveRecord
       ''=>'All',
       '0'=>'Draft',
       '1'=>'Awaiting at MailtoUSA facility',
-      '2'=>'Received at MailtoUSA facility',
+      '2'=>'Received at MailtoUSA facility ZZZ',
       '3'=>'On route to USA border',
       '4'=>'Transferred to XXX faclitity',
       '5'=>'YYY status',
@@ -46,6 +47,19 @@ class OrderElement extends \yii\db\ActiveRecord
     $textForStatus =  OrderElement::getTextStatus();
     if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
     else return 'Unknown status';
+  }
+
+
+  //Получение полного статуса прописью в зависимости от текущего статуса и доп поля
+  public function getFullTextStatus()
+  {
+    $textForStatus =  OrderElement::getTextStatus();
+    $txt=$textForStatus[$this->status];
+    if($this->status==2){
+      $point=ReceivingPoints::findOne($this->status_dop);
+      $txt=str_replace('ZZZ',$point->name,$txt);
+    }
+    return $txt;
   }
 
     public static function tableName()
@@ -137,8 +151,13 @@ class OrderElement extends \yii\db\ActiveRecord
       }
     } else {
       // Нет, старая (update)
-      $changedAttributes;
+      if($this->status>0 AND isset($changedAttributes->weight)){
+        Log::addLog($this->id,2,[$changedAttributes->weight,$this->weight]);
+      }
+
+      if(isset($changedAttributes->status)||($changedAttributes->status_dop)){
+        Log::addLog($this->id,['text'=>'Change status to "'.$this->getFullTextStatus().'"']);
+      }
     }
-    exit;
   }
 }

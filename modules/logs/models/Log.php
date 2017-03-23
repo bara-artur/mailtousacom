@@ -27,6 +27,7 @@ class Log extends \yii\db\ActiveRecord
       $msg= [
         0=>"Created parcel",
         1=>"Import parcel from $1",
+        2=>"Change in weight from $1 lb to $2 lb",
       ];
       return $msg[$i];
     }
@@ -59,6 +60,7 @@ class Log extends \yii\db\ActiveRecord
   public static function addLog($order_id,$data,$order=false){
     if(is_numeric($data)){
       $description=Log::getMsg($data);
+      //импорт из...
       if($data==1){
         $txt="somewhere";
         switch ($order) {
@@ -68,7 +70,14 @@ class Log extends \yii\db\ActiveRecord
         }
         $description=str_replace('$1',$txt,$description);
       }
-    }else if($data['test']){
+
+      //смана веса с .. на..
+      if($data==2){
+        $description=str_replace('$1',$order[0],$description);
+        $description=str_replace('$2',$order[1],$description);
+      }
+
+    }else if($data['text']){
       $description=$data['text'];
     }
     $model = new Log();
