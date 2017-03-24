@@ -15,22 +15,32 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'user_id',
-            'order_id',
-            'description',
-            [
-                'attribute'=> 'created_at',
-                 'content' => function($data){
-                     return date("Y.m.d - h:i:s",$data->created_at);
-                 },
-        ],
-            ['class' => 'yii\grid\ActionColumn'
-                ,'template' => '{view}{delete}' ],
-        ],
-    ]); ?>
+    <table class="table">
+      <tr>
+        <td>#</td>
+        <td>Date</td>
+        <td>Description</td>
+        <td>User</td>
+      </tr>
+      <?php
+        $i=1;
+        foreach ($model as $item){
+          ?>
+            <tr>
+              <td><?=$i;?></td>
+              <td>
+                <?=date(Yii::$app->params['data_time_format_php'],$item->created_at);?>
+              </td>
+              <td>
+                <?=$item->description;?>
+              </td>
+              <td>
+                <?=$item->user->fullName;?>
+              </td>
+            </tr>
+          <?php
+          $i++;
+        }
+      ?>
+    </table>
 </div>

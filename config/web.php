@@ -74,6 +74,7 @@ $config = [
                 'ebay/default/<action>/<action2>'=>'404',
                 'ebay/default/<action>'=>'404',
                 '/site/<action>'=>'404',
+                '/logs/<action>/<action2>'=>'404',
                 '/'=>'/site/index',
                 //получение города по стране
                 'city/get/<id:\d+>' => 'city/get',
@@ -108,6 +109,8 @@ $config = [
 
                 'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',
                 'ebay/<action:callback>'=>'ebay/default/<action>/',
+
+                'logs/<id:\d+>'=>'logs/default/index/',
             ],
         ],
     ],
