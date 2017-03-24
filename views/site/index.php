@@ -129,7 +129,7 @@ $this->title = 'Shipping to USA and Canada';
             'dataProvider' => $orderElements,
             'columns' => [
                 ['content'=> function($data){
-                    return Html::checkbox(($data->status>0)?'InSystem':'Draft',false,[
+                    return Html::checkbox(($data->status>1)?'InSystem':'Draft',false,[
                       'class'=>'checkBoxParcelMainTable',
                       'id'=>$data->id,
                       'user'=> $data->user_id,
@@ -237,17 +237,13 @@ $this->title = 'Shipping to USA and Canada';
                       ]);
                     switch ($data->status) {
                         case '0' : {
-                          if ($data->payment_state > 1){
-                            return $button_update_parcel.$button_print_pdf;
-                          }else {
                             return $button_update_parcel . $button_print_pdf.$button_delete_parcel;
-                          }
                         } break;
                         case '1' : {
-                          if ($data->payment_state > 1){
-                            return $button_print_pdf;
+                          if ($data->payment_state > 0){
+                            return $button_update_parcel .$button_print_pdf;
                           }else {
-                            return $button_print_pdf . $button_delete_parcel;
+                            return $button_update_parcel .$button_print_pdf . $button_delete_parcel;
                           }
                         }break;
                       case '2' :case '3' :case '4' :case '5' :

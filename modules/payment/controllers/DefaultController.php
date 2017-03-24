@@ -165,6 +165,7 @@ class DefaultController extends Controller
         $pac->price=$item['price'];
         $pac->qst=$item['qst'];
         $pac->gst=$item['gst'];
+        $pac->save();
 
         $payments_list[$pac->id]=$item;
       }
@@ -186,7 +187,7 @@ class DefaultController extends Controller
 
       $tot_already_pays=0;
       foreach ($payments as $pay) {
-         $pay['already_price']=round($pay['already_price'],2);
+        $pay['already_price']=round($pay['already_price'],2);
         $pay['already_qst']=round($pay['already_qst'],2);
         $pay['already_gst']=round($pay['already_gst'],2);
         $pay['already_sum']=round($pay['already_price']+$pay['already_gst']+$pay['already_qst'],2);
