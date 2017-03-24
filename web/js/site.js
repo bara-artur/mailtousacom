@@ -9,6 +9,7 @@ $(document).ready(function() {
   init_ajax_send_lb_oz_tn();
   ajax_send_admin_status_onchange();
  // ajax_send_admin_user_status_onchange();
+  init_show_include_payments();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -548,7 +549,7 @@ function main_table_checkbox(current_element){
     elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
     console.log(elems_prohibeted.length);
     elems_prohibeted.addClass('select_prohibited').css("background-color","red");
-    elems_prohibeted.parents('td').fadeTo(500, 0.2);
+    elems_prohibetedc
     elems_prohibeted.prop("disabled",true);
 
   }else{
@@ -593,4 +594,20 @@ function init_collapse_buttons(){
     $("#collapse").collapse("hide");
   })
 }
-
+ function init_show_include_payments(){
+   $(".show_include_payments").on("click", function(event){
+     id = $(this).attr('payment_id');
+     event.preventDefault();
+     $.ajax({
+       type: 'POST',
+       url: 'payment/includes',
+       data: {payment_id: $(this).attr('payment_id')},// payment_id'+$(this).attr('payment_id'),
+       success: function(data) {
+         $("[payment_id = '"+id+"']").parents('td').html(data);
+       },
+       error:  function(xhr, str){
+         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+       }
+     });
+   })
+ }
