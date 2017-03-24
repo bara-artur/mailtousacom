@@ -57,7 +57,7 @@ class OrderElement extends \yii\db\ActiveRecord
     $txt=$textForStatus[$this->status];
     if($this->status==2){
       $point=ReceivingPoints::findOne($this->status_dop);
-      $txt=str_replace('ZZZ',$point->name,$txt);
+      if ($point) $txt=str_replace('ZZZ',$point->name,$txt);
     }
     return $txt;
   }
