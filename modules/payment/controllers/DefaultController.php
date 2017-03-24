@@ -17,6 +17,9 @@ use app\modules\orderInclude\models\OrderInclude;
 use app\modules\orderElement\models\OrderElement;
 use yii\db\Query;
 use app\modules\payment\models\PaymentFilterForm;
+use yii\data\ActiveDataProvider;
+use yii\helpers\Html;
+use \yii\web\Response;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -440,20 +443,30 @@ class DefaultController extends Controller
       }
     }
 
-    public function actionIncludes(){
-      $result = 'Payment empty';
-      $payment = PaymentsList::findOne(['id' => $_POST['payment_id']]);
-      $a=9;
-      if ($payment) {
-        $payment->include_pay = $payment->paymentInclude;
-        if ($payment->include_pay){
-          $result = "";
-          foreach ($payment->include_pay as $i=>$elem){
-            $result = $result.'<p>'.($i+1).'. '.$elem->comment.'</p>';
-          }
+    public function actionShowIncludes($id){
+      $request = Yii::$app->request;
+
+      if($request->isAjax) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if($request->isGet){
+
+          $query = PaymentInclude::find();
+
+          $dataProvider = new ActiveDataProvider(['query' => $query,'sort'=>new \yii\data\Sort(['attributes'=>['empty']])]);
+          $query->andFilterWhere([
+            'payment_id' => $id,
+          ]);
+
+          return [
+            'title'=> "View Payment Includes",
+            'content'=>$this->renderAjax('viewPaymentsInclude', [
+              'dataProvider' => $dataProvider,
+            ]),
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+          ];
         }
-        $result = $result;
+
+
       }
-      return $result;
     }
 }

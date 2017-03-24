@@ -2,9 +2,13 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use app\modules\payment\models\PaymentsList;
+use johnitvn\ajaxcrud\CrudAsset;
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\payment\models\PaymentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+CrudAsset::register($this);
+
 $this->title = 'Personal Payments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -70,10 +74,21 @@ $this->params['breadcrumbs'][] = $this->title;
       [
         'header' => 'Include Payments',
         'content' => function ($data){
-        return Html::a('Show includes payments', ['/payment/'],['class' => 'show_include_payments', 'payment_id'=> $data->id,]);
+           return Html::a('More..', ['/payment/show-includes/'.$data->id],
+            [
+              'id'=>'payment-show-includes',
+              'role'=>'modal-remote',
+              'class'=>'btn btn-default show_modal',
+            ]
+            );
         },
       ],
       ],
   ]); ?>
     </div>
 </div>
+<?php Modal::begin([
+  "id"=>"ajaxCrudModal",
+  "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>
