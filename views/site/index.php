@@ -28,12 +28,16 @@ $this->title = 'Shipping to USA and Canada';
         </div>
         <div class="col-md-10 hidden-xs text-right padding-off-right">
 
-            <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-update']); ?>
+            <?=Html::a('Update parcels', ['/orderElement/group-update/'], [
+              'class' => 'btn btn-md btn-info InSystem_show Draft_show gr_update_text',
+              'id'=>'group-update',
+              'disabled'=>true,
+            ]); ?>
             <?=Html::a('Delete',
               ['/orderElement/group-delete/'],
               [
                 'id'=>'group-delete',
-                'class' => 'btn btn-danger btn-sm but_tab_marg',
+                'class' => 'btn btn-danger btn-mb but_tab_marg Draft_show',
                 'data' => [
                   'confirm-message' => 'Are you sure to delete this item?',
                   'confirm-title'=>"Delete",
@@ -41,10 +45,20 @@ $this->title = 'Shipping to USA and Canada';
                   'toggle'=>"tooltip",
                   'request-method'=>"post",
                 ],
+                'disabled'=>true,
                 'role'=>"modal-remote",
               ]); ?>
-            <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print']); ?>
-            <?=Html::a('Print advanced PDF', ['/orderElement/group-print-advanced/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print-advanced']); ?>
+            <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], [
+              'class' => 'btn btn-md btn-info InSystem_show Draft_show',
+              'id'=>'group-print',
+              'disabled'=>true,
+            ]); ?>
+            <?=Html::a('Print advanced PDF', ['/orderElement/group-print-advanced/'],
+              [
+                'class' => 'btn btn-md btn-info InSystem_show Draft_show',
+                'id'=>'group-print-advanced',
+                'disabled'=>true,
+              ]); ?>
             <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
                 [
                     'role'=>'modal-remote',
