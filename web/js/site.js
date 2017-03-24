@@ -565,13 +565,26 @@ function main_table_checkbox(current_element){
   elem_checked.each(function(i,elem) {
     if (parcel_ids == "") {
       parcel_ids = '/'+this.id;
-      string = this.id;
+      //string = this.id;
+      string=1;
     }else {
-      string = string + " " + this.id;
       parcel_ids = parcel_ids + "_" + this.id;
+      //string = string + " " + this.id;
+      string++;
     }
   });
-  if (string!="empty") string = string + " ( " + elem_checked[0].name+" type)";
+  if (string!="empty"){
+    string = string + " ( " + elem_checked[0].name+" type)";
+    $('.'+elem_checked[0].name+'_show').attr('disabled',false)
+    if(elem_checked[0].name=="InSystem"){
+      $('.gr_update_text').text("View parcels")
+    }else{
+      $('.gr_update_text').text("Update parcels")
+    }
+  }else{
+    $('.InSystem_show,.Draft_show').attr('disabled',true)
+  }
+
   $("#for_group_actions").text("Checked parcels: " + string);
   $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
   $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
