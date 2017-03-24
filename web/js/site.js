@@ -549,7 +549,6 @@ function main_table_checkbox(current_element){
     elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
     console.log(elems_prohibeted.length);
     elems_prohibeted.addClass('select_prohibited').css("background-color","red");
-    elems_prohibetedc
     elems_prohibeted.prop("disabled",true);
 
   }else{
@@ -576,6 +575,7 @@ function main_table_checkbox(current_element){
   $("#for_group_actions").text("Checked parcels: " + string);
   $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
   $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
+  $("#group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
   $("#group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
 }
 

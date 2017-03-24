@@ -44,6 +44,7 @@ $this->title = 'Shipping to USA and Canada';
                 'role'=>"modal-remote",
               ]); ?>
             <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print']); ?>
+            <?=Html::a('Print advanced PDF', ['/orderElement/group-print-advanced/'], ['class' => 'btn btn-md btn-info', 'id'=>'group-print-advanced']); ?>
             <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
                 [
                     'role'=>'modal-remote',
@@ -203,51 +204,41 @@ $this->title = 'Shipping to USA and Canada';
                 // 'created_at',
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
+                    $button_print_pdf = Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-success']);
+                    $button_update_parcel = Html::a('Update parcel', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
+                    $button_view_parcel = Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
+                    $button_delete_parcel = Html::a('Delete',
+                      ['/orderElement/group-delete/' . $data->id],
+                      [
+                        'class' => 'btn btn-danger btn-sm but_tab_marg',
+                        'data' => [
+                          'confirm-message' => 'Are you sure to delete this item?',
+                          'confirm-title'=>"Delete",
+                          'pjax'=>'false',
+                          'toggle'=>"tooltip",
+                          'request-method'=>"post",
+                        ],
+                        'role'=>"modal-remote",
+                      ]);
                     switch ($data->status) {
                         case '0' : {
                           if ($data->payment_state > 1){
-                            return Html::a('Update parcel', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
+                            return $button_update_parcel.$button_print_pdf;
                           }else {
-                            return Html::a('Update parcel', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']) .
-                              Html::a('Delete',
-                                ['/orderElement/group-delete/' . $data->id],
-                                [
-                                  'class' => 'btn btn-danger btn-sm but_tab_marg',
-                                  'data' => [
-                                    'confirm-message' => 'Are you sure to delete this item?',
-                                    'confirm-title'=>"Delete",
-                                    'pjax'=>'false',
-                                    'toggle'=>"tooltip",
-                                    'request-method'=>"post",
-                                  ],
-                                  'role'=>"modal-remote",
-                                ]);
+                            return $button_update_parcel . $button_print_pdf.$button_delete_parcel;
                           }
                         } break;
                         case '1' : {
                           if ($data->payment_state > 1){
-                            return Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-warning']);
+                            return $button_print_pdf;
                           }else {
-                            return Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-warning']) .
-                                   Html::a('Delete',
-                                    ['/orderElement/group-delete/' . $data->id],
-                                    [
-                                      'class' => 'btn btn-danger btn-sm but_tab_marg',
-                                      'data' => [
-                                        'confirm-message' => 'Are you sure to delete this item?',
-                                        'confirm-title'=>"Delete",
-                                        'pjax'=>'false',
-                                        'toggle'=>"tooltip",
-                                        'request-method'=>"post",
-                                      ],
-                                      'role'=>"modal-remote",
-                                    ]);
+                            return $button_print_pdf . $button_delete_parcel;
                           }
                         }break;
                       case '2' :case '3' :case '4' :case '5' :
                       case '6' :case '7' :case '8' :
                         {
-                          return Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
+                          return $button_view_parcel . $button_print_pdf;
                         }break;
 
                         default: return "Unknown status - ".$data->order_status;
