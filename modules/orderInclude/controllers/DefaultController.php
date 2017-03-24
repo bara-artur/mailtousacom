@@ -496,6 +496,91 @@ class DefaultController extends Controller
     // return the pdf output as per the destination setting
     return $pdf->render();
   }
+
+  public function actionPdf($id){
+    $this->layout = 'pdf';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+    $headers = Yii::$app->response->headers;
+    $headers->add('Content-Type', 'application/pdf');
+
+    $order = Order::findOne($id);
+
+    $arr = explode(',', $order->el_group);
+
+    $total=array(
+      'price'=>0,
+      'weight'=>0,
+      'quantity'=>0,
+    );
+
+    $query = new Query;
+    $query->select('weight')
+      ->from('tariffs')
+      ->orderBy([
+        'weight' => SORT_DESC
+      ]);
+    $row = $query->one();
+    $max_weight=$row['weight'];
+
+    $order_elements = [];
+    foreach ($arr as &$parcel_id) {
+      $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
+
+      if($pac->transport_data<time()){
+        $pac->transport_data=strtotime('+1 days');
+      }
+      $pac->includes_packs = $pac->getIncludes();
+      $order_elements[] = $pac;
+      if (count($pac->includes_packs) == 0) {
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'The package must have at least one attachment.'
+          );
+        return $this->redirect('/orderInclude/create-order/' . $id);
+      }
+      foreach ($pac->includes_packs as $pack) {
+        $total['price'] += $pack['price'] * $pack['quantity'];
+        $total['quantity'] += $pack['quantity'];
+      }
+      $this_weight=$pac->weight;
+      $total['weight']+=$this_weight;
+      if($this_weight>$max_weight){
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'Allowable weight of the parcel is '.$max_weight.'lb.'
+          );
+        return $this->redirect('/orderInclude/create-order/' . $id);
+      }
+    }
+
+
+    $tpl='orderIncludePdf';
+
+    $content = $this->renderPartial($tpl,[
+      'order_elements' => $order_elements,
+    ]);
+
+    //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
+    //return $content;
+    // setup kartik\mpdf\Pdf component
+    $pdf = new Pdf([
+      'content' => $content,
+      //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+      'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
+      'cssInline' => '.kv-heading-1{font-size:180px}',
+      'options' => ['title' => 'CBP Form 7533 for order №'.$id],
+      'methods' => [
+        //'SetHeader'=>['Krajee Report Header'],
+        //'SetFooter'=>['{PAGENO}'],
+      ]
+    ]);
+    // return the pdf output as per the destination setting
+    return $pdf->render();
+  }
     /**
      * Finds the OrderInclude model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

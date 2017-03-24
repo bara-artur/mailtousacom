@@ -9,6 +9,7 @@ $(document).ready(function() {
   init_ajax_send_lb_oz_tn();
   ajax_send_admin_status_onchange();
  // ajax_send_admin_user_status_onchange();
+  init_show_include_payments();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -548,7 +549,6 @@ function main_table_checkbox(current_element){
     elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
     console.log(elems_prohibeted.length);
     elems_prohibeted.addClass('select_prohibited').css("background-color","red");
-    elems_prohibeted.parents('td').fadeTo(500, 0.2);
     elems_prohibeted.prop("disabled",true);
 
   }else{
@@ -565,16 +565,30 @@ function main_table_checkbox(current_element){
   elem_checked.each(function(i,elem) {
     if (parcel_ids == "") {
       parcel_ids = '/'+this.id;
-      string = this.id;
+      //string = this.id;
+      string=1;
     }else {
-      string = string + " " + this.id;
       parcel_ids = parcel_ids + "_" + this.id;
+      //string = string + " " + this.id;
+      string++;
     }
   });
-  if (string!="empty") string = string + " ( " + elem_checked[0].name+" type)";
+  if (string!="empty"){
+    string = string + " ( " + elem_checked[0].name+" type)";
+    $('.'+elem_checked[0].name+'_show').attr('disabled',false)
+    if(elem_checked[0].name=="InSystem"){
+      $('.gr_update_text').text("View parcels")
+    }else{
+      $('.gr_update_text').text("Update parcels")
+    }
+  }else{
+    $('.InSystem_show,.Draft_show').attr('disabled',true)
+  }
+
   $("#for_group_actions").text("Checked parcels: " + string);
   $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
   $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
+  $("#group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
   $("#group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
 }
 
@@ -593,4 +607,20 @@ function init_collapse_buttons(){
     $("#collapse").collapse("hide");
   })
 }
-
+ function init_show_include_payments(){
+   $(".show_include_payments").on("click", function(event){
+     id = $(this).attr('payment_id');
+     event.preventDefault();
+     $.ajax({
+       type: 'POST',
+       url: 'payment/includes',
+       data: {payment_id: $(this).attr('payment_id')},// payment_id'+$(this).attr('payment_id'),
+       success: function(data) {
+         $("[payment_id = '"+id+"']").parents('td').html(data);
+       },
+       error:  function(xhr, str){
+         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');
+       }
+     });
+   })
+ }

@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="table-responsive">
   <?= GridView::widget([
     'dataProvider' => $dataProvider,
-    'filterModel' => $searchModel,
+  //  'filterModel' => $searchModel,
     'columns' => [
       ['class' => 'yii\grid\SerialColumn'],
       ['attribute'=> 'status',
@@ -67,7 +67,13 @@ $this->params['breadcrumbs'][] = $this->title;
           else return date(\Yii::$app->params['data_time_format_php'],$data->pay_time);
         },
       ],
-    ],
+      [
+        'header' => 'Include Payments',
+        'content' => function ($data){
+        return Html::a('Show includes payments', ['/payment/'],['class' => 'show_include_payments', 'payment_id'=> $data->id,]);
+        },
+      ],
+      ],
   ]); ?>
     </div>
 </div>

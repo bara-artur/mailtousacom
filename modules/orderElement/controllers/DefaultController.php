@@ -358,6 +358,48 @@ class DefaultController extends Controller
       return $this->redirect(['/']);
     }
 
+    public function findOrCreateOrder(){
+
+    }
+
+    public function actionGroupPrintAdvanced($parcels_id=null){
+      if ($parcels_id) {
+        $arr = explode('_', $parcels_id);
+        asort($arr);
+        $user_id = null;
+        $flag = 0;
+        foreach ($arr as $id) {
+          if ($flag == 0) {
+            $parcel = OrderElement::findOne(['id' => $id]);
+            if ($parcel) {
+              $user_id = $parcel->user_id;
+              $flag = 1;
+            }
+          }
+        }
+
+        if ($flag == 1) {  // посылки существуют
+          $parcels_id = implode(',', $arr);
+
+          $order = Order::find()->where(["el_group" => $parcels_id])->one();
+          if ($order) {
+            $this->redirect(['/orderInclude/pdf/' . $order->id]);
+            return "Create pdf for order " . $order->id;
+          } else {
+            $order = new Order();
+            $order->el_group = $parcels_id;
+            $order->created_at = time();
+            $order->user_id = $user_id;
+            $order->save();
+            $this->redirect(['/orderInclude/pdf/' . $order->id]);
+            return "Create pdf for order " . $order->id;
+          }
+        }
+        return $parcels_id;
+      }
+      return $this->redirect(['/']);
+    }
+
     public function actionGroupDelete($parcels_id=null){
         if ($parcels_id) {
           $arr = explode('_', $parcels_id);

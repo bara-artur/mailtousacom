@@ -3,6 +3,7 @@
 namespace app\modules\payment\models;
 
 use Yii;
+use app\modules\payment\models\PaymentInclude;
 
 /**
  * This is the model class for table "payments_list".
@@ -14,6 +15,8 @@ use Yii;
  */
 class PaymentsList extends \yii\db\ActiveRecord
 {
+  public $include_pay;
+
     public static function getTextStatus(){
         return array(
             ''=>'All',
@@ -120,6 +123,11 @@ class PaymentsList extends \yii\db\ActiveRecord
       throw new NotFoundHttpException('Error creating order.');
     }
 
+  }
+
+  public function getPaymentInclude()
+  {
+    return $this->hasMany(PaymentInclude::className(),['payment_id' => 'id']);
   }
 
   public function setData($data){

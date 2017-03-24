@@ -81,11 +81,12 @@ class DefaultController extends Controller
         if (Yii::$app->user->isGuest) {
           return $this->redirect(['/']);
         }else {
-
+            $query = null;
+            $time_to = null;
             if(Yii::$app->request->post()) {
                 $filterForm->load(Yii::$app->request->post());
                 $query['PaymentSearch'] = $filterForm->toArray();
-                $time_to = ['pay_time_to' => $filterForm->pay_time_to];
+              $time_to = ['pay_time_to' => $filterForm->pay_time_to];
             }
 
             $searchModel = new PaymentSearch();
@@ -164,6 +165,7 @@ class DefaultController extends Controller
         $pac->price=$item['price'];
         $pac->qst=$item['qst'];
         $pac->gst=$item['gst'];
+        $pac->save();
 
         $payments_list[$pac->id]=$item;
       }
@@ -185,7 +187,7 @@ class DefaultController extends Controller
 
       $tot_already_pays=0;
       foreach ($payments as $pay) {
-         $pay['already_price']=round($pay['already_price'],2);
+        $pay['already_price']=round($pay['already_price'],2);
         $pay['already_qst']=round($pay['already_qst'],2);
         $pay['already_gst']=round($pay['already_gst'],2);
         $pay['already_sum']=round($pay['already_price']+$pay['already_gst']+$pay['already_qst'],2);
@@ -437,5 +439,22 @@ class DefaultController extends Controller
 
         return $this->redirect(['/payment/order/'.$last_order]);
       }
+    }
+
+    public function actionIncludes(){
+      $result = 'Payment empty';
+      $payment = PaymentsList::findOne(['id' => $_POST['payment_id']]);
+      $a=9;
+      if ($payment) {
+        $payment->include_pay = $payment->paymentInclude;
+        if ($payment->include_pay){
+          $result = "";
+          foreach ($payment->include_pay as $i=>$elem){
+            $result = $result.'<p>'.($i+1).'. '.$elem->comment.'</p>';
+          }
+        }
+        $result = $result;
+      }
+      return $result;
     }
 }
