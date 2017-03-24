@@ -149,11 +149,18 @@ $submitOption = [
                 <div class="form-control-addon-fill">
                   <div class="input-group">
                     <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
-                    <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
+                    <?php if ($edit_not_prohibited) {?>
+                      <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
+                    <?php }else{ ?>
+                      <span class="input-group-addon fint_input"><?=$percel->weight_lb;?></span>
+                    <?php } ?>
                     <span class="input-group-addon fint_input">lb</span>
 
-
-                    <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
+                    <?php if ($edit_not_prohibited) {?>
+                      <input size="5" type="text" id="oz" class="lb-oz-tn-onChange num form_oz form-control" name="oz" maxlength="2" max=16 value="<?=$percel->weight_oz;?>">
+                    <?php }else{ ?>
+                      <span class="input-group-addon fint_input"><?=$percel->weight_oz;?></span>
+                    <?php } ?>
                     <span class="input-group-addon fint_input">oz</span>
                   </div>
                 </div>
@@ -162,12 +169,25 @@ $submitOption = [
                 <div class="form-control-addon-fill">
                   <div class="input-group" <?php if($percel->track_number_type==1) { echo 'style="display:none;"';}?>>
                     <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
-                    <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
+                    <?php if ($edit_not_prohibited) {?>
+                      <input type="text" id="track_number" class="lb-oz-tn-onChange form_tn form-control" name="track_number" value="<?=$percel->track_number;?>">
+                    <?php }else{ ?>
+                      <span class="input-group-addon fint_input"><?=$percel->track_number;?></span>
+                    <?php } ?>
                   </div>
                 </div>
               </div>
               <div class="col-md-3">
-              <span class="input-group-addon fint_input"><label><input type="checkbox" id="track_number_type" class="lb-oz-tn-onChange form-control" name = "track_number_type" <?php if($percel->track_number_type==1) { echo 'checked';} ?>><span class="fa fa-check otst"></span>I have no Track Number</label></span>
+              <span class="input-group-addon fint_input">
+                <label><input type="checkbox"
+                              id="track_number_type"
+                              class="lb-oz-tn-onChange form-control"
+                              name = "track_number_type"
+                              <?php if($percel->track_number_type==1) { echo 'checked';} ?>
+                              <?php if($edit_not_prohibited==0) { echo 'disabled';} ?>
+                       >
+                <span class="fa fa-check otst"></span>I have no Track Number</label>
+              </span>
               </div>
           </div>
 </div>
@@ -194,20 +214,22 @@ $submitOption = [
 
             </form>
 
-            <div class="col-md-6 bord_butt text-right">
-              <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
-                ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-md btn-science-blue'])?>
-              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
-                [
-                  'role'=>'modal-remote',
-                  'title'=> 'Delete',
-                  'data-pjax'=>0,
-                  'class'=>'btn btn-danger',
-                  'data-request-method'=>"post",
-                  'data-confirm-title'=>"Are you sure?",
-                  'data-confirm-message'=>"Are you sure want to delete this packages",
-                ])?>
-            </div>
+            <?php if ($edit_not_prohibited) {?>
+              <div class="col-md-6 bord_butt text-right">
+                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
+                  ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-md btn-science-blue'])?>
+                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
+                  [
+                    'role'=>'modal-remote',
+                    'title'=> 'Delete',
+                    'data-pjax'=>0,
+                    'class'=>'btn btn-danger',
+                    'data-request-method'=>"post",
+                    'data-confirm-title'=>"Are you sure?",
+                    'data-confirm-message'=>"Are you sure want to delete this packages",
+                  ])?>
+              </div>
+            <?php } ?>
 
         <?php Pjax::end(); ?>
         </div>

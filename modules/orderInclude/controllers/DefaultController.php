@@ -77,7 +77,7 @@ class DefaultController extends Controller
           $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
           if ($parcel!=null) {
             $order_elements[] = $parcel;
-            if ($parcel->status > 0){
+            if ($parcel->status > 1){
               $edit_not_prohibited = 0;
             }
             $totalPrice = 0;
@@ -91,17 +91,7 @@ class DefaultController extends Controller
       }
 
       $message_for_edit_prohibited_order = 'Editing order prohibited';
-   /*   $payment = PaymentsList::find()->where(['order_id'=>$id])->one();
-      $message_for_edit_prohibited_order = " ";
-      $edit_not_prohibited = 1;
-      if ($payment['status'] > 0) {
-          $edit_not_prohibited = 0;
-          $message_for_edit_prohibited_order = "Editing order prohibited, because the order has been paid.";
-      }*/
-  /*    if ($order->order_status > 1) {
-          $edit_not_prohibited = 0;
-          $message_for_edit_prohibited_order = $message_for_edit_prohibited_order."<br>Editing order prohibited, because the order has been received at MailtoUSA facility.";
-      }*/
+
       return $this->render('createOrder', [
         'edit_not_prohibited' => $edit_not_prohibited,
         'order_elements' => $order_elements,

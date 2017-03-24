@@ -236,20 +236,15 @@ $this->title = 'Shipping to USA and Canada';
                         'role'=>"modal-remote",
                       ]);
                     switch ($data->status) {
-                        case '0' : {
-                            return $button_update_parcel . $button_print_pdf.$button_delete_parcel;
+                        case '0' : case '1' :{
+                            return $button_update_parcel . $button_print_pdf.
+                              (($data->payment_state==0)?($button_delete_parcel):(""));
                         } break;
-                        case '1' : {
-                          if ($data->payment_state > 0){
-                            return $button_update_parcel .$button_print_pdf;
-                          }else {
-                            return $button_update_parcel .$button_print_pdf . $button_delete_parcel;
-                          }
-                        }break;
                       case '2' :case '3' :case '4' :case '5' :
                       case '6' :case '7' :case '8' :
                         {
-                          return $button_view_parcel . $button_print_pdf;
+                          return $button_view_parcel . $button_print_pdf.
+                                 (($data->payment_state==0)?($button_delete_parcel):(""));
                         }break;
 
                         default: return "Unknown status - ".$data->order_status;

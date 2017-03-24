@@ -92,7 +92,6 @@ class DefaultController extends Controller
                 if ($_POST['lb'] != null) {
                   $weight = (int)$_POST['lb'];
                 }
-
                 if ($_POST['oz'] != null) {
                   $weight += ((int)$_POST['oz']) / 16;//oldModel->oz = $_POST['oz'];
                 }
@@ -106,7 +105,6 @@ class DefaultController extends Controller
                   $oldModel->track_number_type = 1;
                 else
                   $oldModel->track_number_type = 0;
-
                 $oldModel->save();
             }
             $ParcelPrice=ParcelPrice::widget(['weight'=>$weight]);
@@ -358,10 +356,15 @@ class DefaultController extends Controller
           $arr = explode('_', $parcels_id);
           asort($arr);
           foreach ($arr as $parcel_id) {
-            OrderInclude::deleteAll(['order_id' => $parcel_id]);
-            OrderElement::deleteAll(['id' => $parcel_id]);
+            $parcel = OrderElement::findOne(['id' => $parcel_id]);
+            if ($parcel){
+              if ($parcel->payment_state==0) {
+                OrderInclude::deleteAll(['order_id' => $parcel_id]);
+                OrderElement::deleteAll(['id' => $parcel_id]);
+              }
+            }
           }
-          $this->redirect(['/']);
+          $this->redirect(['/'],200);
           return "Parcels delete complete successfully";
         }
       return $this->redirect(['/']);
