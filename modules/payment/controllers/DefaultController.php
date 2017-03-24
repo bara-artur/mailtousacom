@@ -81,11 +81,12 @@ class DefaultController extends Controller
         if (Yii::$app->user->isGuest) {
           return $this->redirect(['/']);
         }else {
-
+            $query = null;
+            $time_to = null;
             if(Yii::$app->request->post()) {
                 $filterForm->load(Yii::$app->request->post());
                 $query['PaymentSearch'] = $filterForm->toArray();
-                $time_to = ['pay_time_to' => $filterForm->pay_time_to];
+              $time_to = ['pay_time_to' => $filterForm->pay_time_to];
             }
 
             $searchModel = new PaymentSearch();
@@ -437,5 +438,22 @@ class DefaultController extends Controller
 
         return $this->redirect(['/payment/order/'.$last_order]);
       }
+    }
+
+    public function actionIncludes(){
+      $result = 'Payment empty';
+      $payment = PaymentsList::findOne(['id' => $_POST['payment_id']]);
+      $a=9;
+      if ($payment) {
+        $payment->include_pay = $payment->paymentInclude;
+        if ($payment->include_pay){
+          $result = "";
+          foreach ($payment->include_pay as $i=>$elem){
+            $result = $result.'<p>'.($i+1).'. '.$elem->comment.'</p>';
+          }
+        }
+        $result = $result;
+      }
+      return $result;
     }
 }

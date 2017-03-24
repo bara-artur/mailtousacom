@@ -101,11 +101,13 @@ $config = [
 
                 'orderInclude/<action>'=>'orderInclude/default/<action>',
                 'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
-                'orderInclude/<action:border-form|border-form-pdf>/<id:\d+>'=>'orderInclude/default/<action>/',
+                'orderInclude/<action:border-form|border-form-pdf|pdf>/<id:\d+>'=>'orderInclude/default/<action>/',
 
 
                 'payment/<action:order>/<id:\d+>'=>'payment/default/<action>/',
                 'payment/<action:finish>'=>'payment/default/<action>/',
+                'payment/<action>'=>'payment/default/<action>/',
+
 
                 'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',
                 'ebay/<action:callback>'=>'ebay/default/<action>/',
