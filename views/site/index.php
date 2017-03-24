@@ -134,7 +134,8 @@ $this->title = 'Shipping to USA and Canada';
                 ],
                 ['attribute'=> 'status',
                   'content' => function($data){
-                        return $data::elementStatusText($data->status);
+                        //return $data::elementStatusText($data->status);
+                        return $data->getFullTextStatus();
                     },
                   'visible' => $showTable->showStatus,
                 ],
