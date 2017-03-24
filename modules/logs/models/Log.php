@@ -3,6 +3,7 @@
 namespace app\modules\logs\models;
 
 use Yii;
+use app\modules\user\models\User;
 
 /**
  * This is the model class for table "log".
@@ -56,6 +57,11 @@ class Log extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
+
+  public function getUser()
+  {
+    return $this->hasOne(User::className(), ['id' => 'user_id']);
+  }
 
   public static function addLog($order_id,$data,$order=false){
     if(is_numeric($data)){
