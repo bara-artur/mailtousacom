@@ -462,6 +462,7 @@ class DefaultController extends Controller
             'title'=> "View Payment Includes",
             'content'=>$this->renderAjax('viewPaymentsInclude', [
               'dataProvider' => $dataProvider,
+              'routing' => 'paymentTable',
             ]),
             'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
           ];
@@ -489,6 +490,7 @@ class DefaultController extends Controller
           'title'=> "View Payment Includes for Parcel",
           'content'=>$this->renderAjax('viewPaymentsInclude', [
             'dataProvider' => $dataProvider,
+            'routing' => 'parcel',
           ]),
           'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
         ];

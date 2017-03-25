@@ -19,7 +19,19 @@ $this->params['breadcrumbs'][] = $this->title;
     'columns' => [
       ['class' => 'yii\grid\SerialColumn'],
       'comment',
-      'payment_id',
+      (($routing == 'parcel')?
+        ([
+          'attribute' => 'payment_id',
+          'content' => function ($data){
+            return Html::a('View more info', ['/payment/show-includes/'.$data->payment_id],
+              [
+                'id'=>'payment-show-includes',
+                'role'=>'modal-remote',
+                'class'=>'btn btn-sm btn-info',
+              ]
+            );
+          },
+        ]):('element_id')),
      ],
   ]); ?>
 </div>
