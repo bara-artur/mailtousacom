@@ -53,7 +53,15 @@ $submitOption = [
     Pjax::begin();
     if($order_elements){
       foreach ($order_elements as $k=>$percel) {
-        ?>
+        if ($edit_not_prohibited==0) {
+          echo Html::a('Payments view', ['/payment/show-parcel-includes/' . $percel->id],
+            [
+              'id' => 'payment-show-includes',
+              'role' => 'modal-remote',
+              'class' => 'btn btn-default show_modal',
+            ]
+          );
+        }?>
         <div class="row">
           <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
           <div class="col-md-3 marg_p">
