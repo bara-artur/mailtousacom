@@ -470,4 +470,31 @@ class DefaultController extends Controller
 
       }
     }
+
+  public function actionShowParcelIncludes($id){
+    $request = Yii::$app->request;
+
+    if($request->isAjax) {
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if($request->isGet){
+
+        $query = PaymentInclude::find();
+
+        $dataProvider = new ActiveDataProvider(['query' => $query,'sort'=>new \yii\data\Sort(['attributes'=>['empty']])]);
+        $query->andFilterWhere([
+          'element_id' => $id,
+        ]);
+
+        return [
+          'title'=> "View Payment Includes for Parcel",
+          'content'=>$this->renderAjax('viewPaymentsInclude', [
+            'dataProvider' => $dataProvider,
+          ]),
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+        ];
+      }
+
+
+    }
+  }
 }

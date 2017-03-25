@@ -235,6 +235,13 @@ $this->title = 'Shipping to USA and Canada';
                         ],
                         'role'=>"modal-remote",
                       ]);
+                    $button_payments =  Html::a('Payments view', ['/payment/show-parcel-includes/'.$data->id],
+                        [
+                          'id'=>'payment-show-includes',
+                          'role'=>'modal-remote',
+                          'class'=>'btn btn-default show_modal',
+                        ]
+                      );
                     switch ($data->status) {
                         case '0' : case '1' :{
                             return $button_update_parcel . $button_print_pdf.
@@ -243,7 +250,7 @@ $this->title = 'Shipping to USA and Canada';
                       case '2' :case '3' :case '4' :case '5' :
                       case '6' :case '7' :case '8' :
                         {
-                          return $button_view_parcel . $button_print_pdf.
+                          return $button_view_parcel . $button_print_pdf. $button_payments.
                                  (($data->payment_state==0)?($button_delete_parcel):(""));
                         }break;
 
