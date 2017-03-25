@@ -242,20 +242,10 @@ $this->title = 'Shipping to USA and Canada';
                           'class'=>'btn btn-default show_modal',
                         ]
                       );
-                    switch ($data->status) {
-                        case '0' : case '1' :{
-                            return $button_update_parcel . $button_print_pdf.
-                              (($data->payment_state==0)?($button_delete_parcel):(""));
-                        } break;
-                      case '2' :case '3' :case '4' :case '5' :
-                      case '6' :case '7' :case '8' :
-                        {
-                          return $button_view_parcel . $button_print_pdf. $button_payments.
-                                 (($data->payment_state==0)?($button_delete_parcel):(""));
-                        }break;
-
-                        default: return "Unknown status - ".$data->order_status;
-                    }
+                    return (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
+                           (($data->payment_state==0)?($button_delete_parcel):("")).          // удаление посылок
+                            $button_print_pdf.                                                // печать PDF
+                           (($data->status>2)?($button_payments):(""));                       // история платежей
                 }],
             ],
         ]); ?>
