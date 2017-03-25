@@ -456,6 +456,8 @@ class DefaultController extends Controller
           $dataProvider = new ActiveDataProvider(['query' => $query,'sort'=>new \yii\data\Sort(['attributes'=>['empty']])]);
           $query->andFilterWhere([
             'payment_id' => $id,
+           // 'client_id' => Yii::$app->user->id
+           // 'user_id' => Yii::$app->user->id
           ]);
 
           return [
@@ -484,6 +486,8 @@ class DefaultController extends Controller
         $dataProvider = new ActiveDataProvider(['query' => $query,'sort'=>new \yii\data\Sort(['attributes'=>['empty']])]);
         $query->andFilterWhere([
           'element_id' => $id,
+         // 'client_id' => Yii::$app->user->id
+         // 'user_id' => Yii::$app->user->id
         ]);
 
         return [

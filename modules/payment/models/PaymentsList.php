@@ -24,7 +24,8 @@ class PaymentsList extends \yii\db\ActiveRecord
             '1'=>'Through Paypal',
             '2'=>'On the delivery address',
             '3'=>'Per Month',
-            '4'=>'Unknown'
+            '4'=>'Unknown',
+            '-1'=>'Canceled',
         );
     }
 
@@ -38,6 +39,7 @@ class PaymentsList extends \yii\db\ActiveRecord
     public static function statusTextParcel($param)
     {
         $textForStatus = PaymentsList::getTextStatusParcel();
+        if ($param=='-1') return 'Canceled';
         if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown status';
     }
@@ -65,6 +67,7 @@ class PaymentsList extends \yii\db\ActiveRecord
     public static function statusPayText($param)
     {
         $textForStatus = PaymentsList::getPayStatus();
+        if ($param=='-1') return 'Canceled';
         if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown pay system';
     }
