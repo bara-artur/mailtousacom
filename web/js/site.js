@@ -19,14 +19,14 @@ $(document).ready(function() {
     }
   });
 
-  $("button[name='signup-button']" ).prop("disabled",true);;
+  $("#w1 button[name='signup-button']" ).prop("disabled",true);
   $("input[name='I_accept']" ).on( "change", function() {
     if($("input[name='I_accept']").prop("checked")) {
-      $("button[name='signup-button']").prop("disabled",false);
+      $("#w1 button[name='signup-button']").prop("disabled",false);
       //$("input[name='I_accept']").prop('checked', true);
     }
     else{
-      $("button[name='signup-button']").prop("disabled",true);
+      $("#w1 button[name='signup-button']").prop("disabled",true);
       //$("input[name='I_accept']").prop('checked', false);
     }
   });
@@ -406,6 +406,7 @@ function  only_no_foreign_letters_in_input(evt){
             ( evt.keyCode >= 65 && evt.keyCode <= 90 )||
             (evt.keyCode==44)||    // запятая
             (evt.keyCode==46)||    // точка
+            (evt.keyCode==64)||    // @
             (evt.keyCode==32) )   // пробел
             return;
         else evt.preventDefault();

@@ -386,7 +386,7 @@ class User extends ActiveRecord  implements IdentityInterface
               $fileToBd['docs'][] = $file;
               echo 0;
             } else {
-              if (isset($docs[$i])) {
+              if (isset($docs[$i])&&isset($post['doc' . $i])) {
                 if ($docs[$i] != $post['doc' . $i]) {
                   $this->removeImage($docs[$i]);
                 } else {
