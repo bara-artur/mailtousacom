@@ -34,7 +34,21 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             ],
 
-            ['class' => 'yii\grid\ActionColumn','template'=>'{update}{delete}',],
+            ['class' => 'yii\grid\ActionColumn','template'=>'{update}{delete}',
+
+                'buttons' => [
+                    'update' => function ($url) {
+                        return Html::a(
+                            '<button class="btn btn-sm btn-info"><i class="fa fa-pencil"></i> Update</button>',
+                            $url);
+                    },
+                    'delete' => function ($url) {
+                        return Html::a('<button class="btn btn-sm btn-danger but_tab_marg"><i class="fa fa-trash"></i> Delete</button>', $url);
+                    },
+                ],
+
+
+            ],
         ],
     ]); ?>
 </div>
