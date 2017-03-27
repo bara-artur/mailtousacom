@@ -20,14 +20,12 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-    <?= $form->field($model, 'first_name')->textInput(['maxlength' => true, 'class'=>'letters form-control']) ?>
+    <?= $form->field($model, 'first_name')->textInput(['maxlength' => true, 'class'=>'letters form-control first_name']) ?>
         </div>
         <div class="col-md-6">
-    <?= $form->field($model, 'last_name')->textInput(['maxlength' => true, 'class'=>'letters form-control']) ?>
+    <?= $form->field($model, 'last_name')->textInput(['maxlength' => true, 'class'=>'letters form-control last_name']) ?>
         </div>
     </div>
-<?= $model->address_type?>
-<?= $model->company_name?>
    <div class="no_check"> <?= $form->field($model, 'address_type')->checkbox(['label' => '<span class="fa fa-check otst"></span> I will use company address', 'class'=>'show_company'])->label("") ?></div>
 
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true, 'class'=>'no_foreign_letters company_name form-control']) ?>

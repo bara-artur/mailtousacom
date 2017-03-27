@@ -19,14 +19,14 @@ $(document).ready(function() {
     }
   });
 
-  $("#w0 button[name='signup-button']" ).prop("disabled",true);;
+  $("button[name='signup-button']" ).prop("disabled",true);;
   $("input[name='I_accept']" ).on( "change", function() {
     if($("input[name='I_accept']").prop("checked")) {
-      $("#w0 button[name='signup-button']").prop("disabled",false);
+      $("button[name='signup-button']").prop("disabled",false);
       //$("input[name='I_accept']").prop('checked', true);
     }
     else{
-      $("#w0 button[name='signup-button']").prop("disabled",true);
+      $("button[name='signup-button']").prop("disabled",true);
       //$("input[name='I_accept']").prop('checked', false);
     }
   });
@@ -333,18 +333,29 @@ function table_change_fail(){
 }
 
 function init_address_edit(){
+
+  function check_name_input(){
+    if ($('.first_name').val() == "") $('.first_name').val("-");
+    if ($('.last_name').val() == "") $('.last_name').val("-");
+  }
+
   function on_address_submit(){
     if ($(".show_company").prop('checked')==false) {
       $('.company_name').val('Personal address');
     }
     else {
-      if ($('.first_name').val()=="") $('.first_name').val("-");
-      if ($('.last_name').val()=="") $('.last_name').val("-");
+      check_name_input();
     }
     return true;
   }
 
-  $('.add_new_address').submit(on_address_submit);
+  $('.first_name, .last_name').on('change', function (){
+    if ($(".show_company").prop('checked')==true) {
+      check_name_input();
+    }
+  });
+
+  $('.add_new_address').submit(on_address_submit());
 
   company_blk=$('.company_name.form-control').parent();
   if ($('.show_company').prop('checked')==false){
@@ -363,6 +374,7 @@ function init_address_edit(){
       company_blk.hide(500);
     }else{
       $('.company_name').val($('.company_name').data('val'));
+      check_name_input();
       company_blk.show(500);
     }
   });
