@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\payment\models\PaymentsList;
+use yii\jui\AutoComplete;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 use kartik\widgets\DatePicker;
 
 /* @var $this yii\web\View */
@@ -14,24 +17,50 @@ use kartik\widgets\DatePicker;
         <div class="panel-body">
     <?php $form = ActiveForm::begin(); ?>
 <div class="row">
+        <?php if ($admin == 1) {?>
+          <div class="col-md-2">
+            <label class="control-label">Fast search</label>
+            <?=$form->field($model, 'user_input')->widget(AutoComplete::classname(),[
+              'name' => 'user',
+              'clientOptions' => [
+                'source' => Url::to(['/user/admin/find-user']),
+                'autoFill'=>true,
+                'autoFocus'=> false,
+                'select' => new JsExpression("AutoCompleteUserSelect"),
+                'focus' => new JsExpression("AutoCompleteUserSelect"),
+              ],
+              'options' =>
+                [
+                  'placeholder' =>'Write Name,Phone or Email',
+                  'tabindex'=>'10',
+                  'z-index'=>'9999',
+                  'class'=>'modal_user_choosing form-control',
+                ],
+            ])->label(false);
+            ?>
+            <?=Html::activeHiddenInput($model, 'client_id',[
+              'class'=>"AutoCompleteId"
+            ]);?>
+          </div>
+        <?php } ?>
        <div class="col-md-3">
            <?= $form->field($model, 'type')->dropDownList( PaymentsList::getPayStatus()) ?>
        </div>
         <div class="col-md-3">
         <?= $form->field($model, 'status')->dropDownList( PaymentsList::getTextStatus()) ?>
         </div>
-            <div class="col-md-3">
-    <?= $form->field($model,'pay_time')->widget(DatePicker::className(),[
-      'name' => 'pay_time',
-      'type' => DatePicker::TYPE_RANGE,
-      'name2' => 'pay_time_to',
-      'attribute2' => 'pay_time_to',
-      'pluginOptions' => [
-        'autoclose'=>true,
-        'format' => \Yii::$app->params['data_format_js']
-      ]
-    ]);?>
-            </div>
+        <div class="col-md-3">
+            <?= $form->field($model,'pay_time')->widget(DatePicker::className(),[
+              'name' => 'pay_time',
+              'type' => DatePicker::TYPE_RANGE,
+              'name2' => 'pay_time_to',
+              'attribute2' => 'pay_time_to',
+              'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => \Yii::$app->params['data_format_js']
+              ]
+            ]);?>
+        </div>
             <div class="col-md-3">
                 <label class="control-label">Action</label>
                 <div class="row">

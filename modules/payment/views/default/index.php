@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr class="bottom_line">
     <div class="row">
         <div class="col-md-12 scrit margin-bottom-10">
-  <?= $this->render('paymentFilterForm', ['model' => $filterForm]);?>
+  <?= $this->render('paymentFilterForm', ['model' => $filterForm, 'admin' => $admin]);?>
         </div>
     </div>
     <div class="table-responsive">
@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
   //  'filterModel' => $searchModel,
     'columns' => [
       ['class' => 'yii\grid\SerialColumn'],
+       'client_id',
       ['attribute'=> 'status',
         'content' => function($data){
           return $data::statusText($data->status);
@@ -41,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
       ],
       ['attribute'=> 'type',
         'content' => function($data){
-          return $data::statusPayText($data->status);
+          return $data::statusPayText($data->type);
         },
         'filter' => PaymentsList::getPayStatus(),
       ],
