@@ -450,7 +450,7 @@ input[type=checkbox]:checked+span::before {
 
 .modal-dialog {max-height: calc(100vh - 50px);overflow: auto;}
 /*begin_art_bara17022017*/
-#created_address.add_new_address,#return_address,.state-create,.state-update,.receiving-points-create
+#created_address.add_new_address,#return_address,.state-create,.state-update,.receiving-points-create,.receiving-points-update
 {
     max-width: 460px;
     margin: 0 auto;
