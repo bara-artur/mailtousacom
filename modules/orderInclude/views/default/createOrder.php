@@ -209,6 +209,7 @@ $submitOption = [
               <hr class="bor_bottom">
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
+            <div class="row">
               <div class="col-md-6 cost_del"><b>Cost of delivery : </b>
                 <span id="results" class="resInd<?=$k?>">
                         <?php
@@ -245,6 +246,7 @@ $submitOption = [
                   ])?>
               </div>
             <?php } ?>
+        </div>
 
         <?php Pjax::end(); ?>
         </div>
