@@ -71,6 +71,9 @@ AppAsset::register($this);
                 .'</li>';
             }
             $user_menu[] = '<li>'
+              . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
+              . '</li>';
+            $user_menu[] = '<li>'
                 . Html::a('<i class="icon-metro-user-2"></i>&nbsp;&nbsp;Update profile', ['/profile/'], ['class' => 'profile-link'])
             .'</li>';
 

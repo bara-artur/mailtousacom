@@ -61,6 +61,13 @@ $submitOption = [
               'class' => 'btn btn-default show_modal',
             ]
           );
+          echo Html::a('History view', ['/logs/' . $percel->id],
+            [
+              'id' => 'payment-show-includes',
+              'role' => 'modal-remote',
+              'class' => 'btn btn-default show_modal',
+            ]
+          );
         }?>
         <div class="row">
           <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>

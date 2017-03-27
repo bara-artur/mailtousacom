@@ -47,7 +47,8 @@ class OrderElementSearch extends OrderElement
         $query = OrderElement::find();
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+          'query' => $query,
+          'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]],
         ]);
 
         $this->load($params);
