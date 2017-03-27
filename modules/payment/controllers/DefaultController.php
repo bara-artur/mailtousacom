@@ -459,14 +459,23 @@ class DefaultController extends Controller
            // 'client_id' => Yii::$app->user->id
            // 'user_id' => Yii::$app->user->id
           ]);
-
+          $footer=Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]);
+          if($request->get('back')){
+            $footer.=Html::a('Back', ['/payment/show-parcel-includes/'.(int)$request->get('back')],
+              [
+                'id'=>'payment-show-includes',
+                'role'=>'modal-remote',
+                'class'=>'btn btn-default btn-info',
+              ]
+            );
+          }
           return [
             'title'=> "View Payment Includes",
             'content'=>$this->renderAjax('viewPaymentsInclude', [
               'dataProvider' => $dataProvider,
               'routing' => 'paymentTable',
             ]),
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+            'footer'=> $footer
           ];
         }
 

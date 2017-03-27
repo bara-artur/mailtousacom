@@ -9,29 +9,69 @@ use yii\grid\GridView;
 
 $this->title = 'Payments Include';
 $this->params['breadcrumbs'][] = $this->title;
+$data=$dataProvider->getModels();
 ?>
 <div class="payments-include-index">
 
   <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-  <?= GridView::widget([
-    'dataProvider' => $dataProvider,
-    'columns' => [
-      ['class' => 'yii\grid\SerialColumn'],
-      'comment',
-      (($routing == 'parcel')?
-        ([
-          'attribute' => 'payment_id',
-          'content' => function ($data){
-            return Html::a('View more info', ['/payment/show-includes/'.$data->payment_id],
+  <table class="table">
+    <tr>
+      <th>#</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Vat</th>
+      <th>Total</th>
+      <?php
+        if(Yii::$app->user->identity->isManager()) {
+          ?>
+          <th>Comment</th>
+          <?php
+        }
+      if($routing == 'parcel') {
+        ?>
+          <th></th>
+        <?php
+      }
+      ?>
+    </tr>
+  <?php
+    foreach ($data as $k =>$item){
+      //d($item);
+      $description=$item->generateTextStatus();
+      if($routing == 'parcel' && $item->status==0) {
+        $description.=" <span style='color:orange'>Not pay</span>";
+      }
+      ?>
+      <tr>
+        <td><?=$k+1;?></td>
+        <td><?=$description;?></td>
+        <td><?=number_format($item->price,2,'.',' ');?></td>
+        <td><?=number_format($item->qst+$item->gst,2,'.',' ');?></td>
+        <td><?=number_format($item->qst+$item->gst+$item->price,2,'.',' ');?></td>
+        <?php
+          if(Yii::$app->user->identity->isManager()) {
+            ?>
+            <td><?=$item->comment;?></td>
+            <?php
+          }
+          if($routing == 'parcel') {
+            ?>
+            <td>
+              <?=Html::a('View more info', ['/payment/show-includes/'.$item->payment_id.'?back='.$item->element_id],
               [
-                'id'=>'payment-show-includes',
-                'role'=>'modal-remote',
-                'class'=>'btn btn-sm btn-info',
+              'id'=>'payment-show-includes',
+              'role'=>'modal-remote',
+              'class'=>'btn btn-sm btn-info',
               ]
-            );
-          },
-        ]):('element_id')),
-     ],
-  ]); ?>
+              );?>
+            </td>
+            <?php
+          }
+        ?>
+      </tr>
+      <?php
+    }
+  ?>
+  </table>
 </div>

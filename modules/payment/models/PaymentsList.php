@@ -71,7 +71,8 @@ class PaymentsList extends \yii\db\ActiveRecord
         if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown pay system';
     }
-    /**
+
+   /**
      * @inheritdoc
      */
     public static function tableName()

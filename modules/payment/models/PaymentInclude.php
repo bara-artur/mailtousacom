@@ -41,6 +41,11 @@ class PaymentInclude extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getElementTypeList(){
+      return [
+        "parcel"
+      ];
+    }
     /**
      * @inheritdoc
      */
@@ -58,5 +63,16 @@ class PaymentInclude extends \yii\db\ActiveRecord
             'qst' => 'Qst',
             'gst' => 'Gst',
         ];
+    }
+
+    public function generateTextStatus(){
+      $lst=PaymentInclude::getElementTypeList();
+
+      $txt='Payment for '.$lst[$this->element_type];
+
+      if($this->status==-1){
+        $txt.="<span style='color:red;'> Refusal</span>";
+      }
+      return $txt;
     }
 }
