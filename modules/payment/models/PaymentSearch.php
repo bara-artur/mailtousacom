@@ -18,7 +18,7 @@ class PaymentSearch extends PaymentsList
     public function rules()
     {
         return [
-            [['status','type','pay_time'], 'safe'],
+            [['status','type','pay_time','client_id'], 'safe'],
         ];
     }
 
@@ -69,8 +69,8 @@ class PaymentSearch extends PaymentsList
         $query->andFilterWhere([
             'status' => $this->status,
             'type' => $this->type,
+            'client_id' => $this->client_id,
         ]);
-
         return $dataProvider;
     }
 }

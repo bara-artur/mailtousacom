@@ -25,6 +25,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\ParcelPrice;
+use app\modules\user\models\User;
 
 use PayPal\Api\Address;
 use PayPal\Api\CreditCard;
@@ -81,14 +82,21 @@ class DefaultController extends Controller
     {
         $filterForm = new PaymentFilterForm();
 
+        $admin = 0;
+        $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+        if (($user!=null)&&($user->isManager())){
+          $admin = 1;
+        }
+
+
         if (Yii::$app->user->isGuest) {
           return $this->redirect(['/']);
         }else {
             $query = null;
             $time_to = null;
             if(Yii::$app->request->post()) {
-                $filterForm->load(Yii::$app->request->post());
-                $query['PaymentSearch'] = $filterForm->toArray();
+              $filterForm->load(Yii::$app->request->post());
+              $query['PaymentSearch'] = $filterForm->toArray();
               $time_to = ['pay_time_to' => $filterForm->pay_time_to];
             }
 
@@ -98,6 +106,7 @@ class DefaultController extends Controller
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'filterForm' => $filterForm,
+                'admin' => $admin,
             ]);
         }
     }

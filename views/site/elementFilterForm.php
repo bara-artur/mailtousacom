@@ -20,9 +20,6 @@ use app\modules\orderElement\models\OrderElement;
     <div class="panel-body">
       <?php $form = ActiveForm::begin(['options' => ['class'=>'element-filter-form'],]); ?>
       <div class="row">
-        <div class="col-md-1">
-          <?= $form->field($model, 'id')->textInput () ?>
-        </div>
         <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
           <div class="col-md-2">
               <label class="control-label">Fast search</label>

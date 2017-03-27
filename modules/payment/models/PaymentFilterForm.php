@@ -22,6 +22,7 @@ use Yii;
 class PaymentFilterForm extends PaymentsList
 {
     public $pay_time_to;
+    public $user_input;
     /**
      * @inheritdoc
     /**
@@ -30,7 +31,7 @@ class PaymentFilterForm extends PaymentsList
     public function rules()
     {
         return [
-            [['type','status', 'pay_time', 'pay_time_to'], 'safe'],
+            [['type','client_id','status', 'pay_time', 'pay_time_to', 'user_input'], 'safe'],
         ];
     }
 }
