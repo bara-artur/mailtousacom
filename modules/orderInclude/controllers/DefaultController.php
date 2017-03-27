@@ -315,7 +315,13 @@ class DefaultController extends Controller
       foreach ($arr as $parcel_id) {
         $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
         $order_elements[] = $pac;
-        if($pac->transport_data<time()){
+        $max_time=
+          time()+
+          (Yii::$app->params[
+            'receive_max_time'
+            .Yii::$app->user->identity->isManager()?'_admin':''
+          ]-24)*60*60;
+        if($pac->transport_data<$max_time){
           $pac->transport_data=strtotime('+1 days');
         }
 
@@ -422,8 +428,13 @@ class DefaultController extends Controller
     foreach ($arr as &$parcel_id) {
       $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
       $order_elements[] = $pac;
-
-      if($pac->transport_data<time()){
+      $max_time=
+        time()+
+        (Yii::$app->params[
+          'receive_max_time'
+          .Yii::$app->user->identity->isManager()?'_admin':''
+          ]-24)*60*60;
+      if($pac->transport_data<$max_time){
         $pac->transport_data=strtotime('+1 days');
       }
       $pac->includes_packs = $pac->getIncludes();
@@ -516,9 +527,6 @@ class DefaultController extends Controller
     foreach ($arr as &$parcel_id) {
       $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
 
-      if($pac->transport_data<time()){
-        $pac->transport_data=strtotime('+1 days');
-      }
       $pac->includes_packs = $pac->getIncludes();
       $order_elements[] = $pac;
       if (count($pac->includes_packs) == 0) {

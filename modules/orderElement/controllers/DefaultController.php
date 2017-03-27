@@ -88,7 +88,7 @@ class DefaultController extends Controller
         $request = Yii::$app->request;
         if($request->isAjax) {
             $oldModel = OrderElement::find()->andWhere(['id' => $percel_id])->one();
-            $user_id = $oldModel->client_id;
+            $user_id = $oldModel->user_id;
             if ($oldModel) {
                 if ($_POST['lb'] != null) {
                   $weight = (int)$_POST['lb'];
