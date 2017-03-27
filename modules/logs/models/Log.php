@@ -92,6 +92,5 @@ class Log extends \yii\db\ActiveRecord
     $model->description = $description;
     $model->created_at = time();
     $model->save();
-    var_dump($model);
   }
 }
