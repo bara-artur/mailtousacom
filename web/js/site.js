@@ -406,6 +406,7 @@ function  only_no_foreign_letters_in_input(evt){
             ( evt.keyCode >= 65 && evt.keyCode <= 90 )||
             (evt.keyCode==44)||    // запятая
             (evt.keyCode==46)||    // точка
+            (evt.keyCode==64)||    // @
             (evt.keyCode==32) )   // пробел
             return;
         else evt.preventDefault();
