@@ -70,6 +70,7 @@ class UserController extends Controller
         $model = new RegistrationForm();
         $check_the_mail = 'Check mail after registration';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return 9;
             //обработка поступивших данных
             Yii::$app
                 ->getSession()
