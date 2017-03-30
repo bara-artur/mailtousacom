@@ -160,4 +160,23 @@ class OrderElement extends \yii\db\ActiveRecord
       }
     }
   }
+
+  public function clearParcels($userID,$stringGroup){
+    $query = OrderElement::find();
+    $dataProvider = new ActiveDataProvider([
+      'query' => $query,
+    ]);
+
+    $query->andFilterWhere(['user_id' => $userID]);
+    $el_group=explode(',',$stringGroup);
+    $query->andFilterWhere(['in', 'id', $el_group]);
+
+    $arr = array();
+    foreach ($dataProvider->models as $parcel){
+      $arr[] = $parcel->id;
+    }
+    $string = implode(',',$arr);
+    return $string;
+  }
+
 }
