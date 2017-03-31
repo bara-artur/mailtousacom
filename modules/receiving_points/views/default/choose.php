@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
       'item' => function($index, $label, $name, $checked, $value) {
           $return = '<label>';
-          $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" >';
+          $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" '. $checked?"checked":"" .'>';
           $return .= '<span></span>&nbsp;&nbsp;';
           $return .= ucwords($label);
           $return .= '</label><br>';
