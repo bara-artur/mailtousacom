@@ -21,29 +21,32 @@ use app\modules\orderElement\models\OrderElement;
       <?php $form = ActiveForm::begin(['options' => ['class'=>'show-parcel-table-form'],]); ?>
       <div class="col-md-10">
           <div class="row">
-              <div class="col-md-2">
-          <?= $form->field($model, 'showSerial')->checkbox(['label' => '<span class="fa fa-check otst"></span> Serial','class'=>'']) ?>
-              </div>
+            <div class="col-md-2">
+              <?= $form->field($model, 'showSerial')->checkbox(['label' => '<span class="fa fa-check otst"></span> Serial','class'=>'']) ?>
+            </div>
         <?php if (Yii::$app->params['showAdminPanel']==1) { ?>
-              <div class="col-md-2">
-            <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span> ID','class'=>'']) ?>
-              </div>
+            <div class="col-md-2">
+              <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span> ID','class'=>'']) ?>
+            </div>
         <?php } ?>
-              <div class="col-md-2">
-          <?= $form->field($model, 'showStatus')->checkbox(['label' => '<span class="fa fa-check otst"></span> Status','class'=>''])?>
-              </div>
+            <div class="col-md-2">
+              <?= $form->field($model, 'showStatus')->checkbox(['label' => '<span class="fa fa-check otst"></span> Status','class'=>''])?>
+            </div>
 
-                  <div class="col-md-2">
-          <?= $form->field($model, 'showCreatedAt')->checkbox(['label' => '<span class="fa fa-check otst"></span> Created At','class'=>''])?>
-                  </div>
+            <div class="col-md-2">
+              <?= $form->field($model, 'showCreatedAt')->checkbox(['label' => '<span class="fa fa-check otst"></span> Created At','class'=>''])?>
+            </div>
 
-                      <div class="col-md-2">
-          <?= $form->field($model, 'showPaymentState')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment State','class'=>''])?>
-                      </div>
+            <div class="col-md-2">
+              <?= $form->field($model, 'showPaymentState')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment State','class'=>''])?>
+            </div>
+            <div class="col-md-2">
+              <?= $form->field($model, 'showTrackNumber')->checkbox(['label' => '<span class="fa fa-check otst"></span> Track Number','class'=>''])?>
+            </div>
         <?php if (false){?>
-                          <div class="col-md-2">
-          <?= $form->field($model, 'showPaymentType')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment Type','class'=>''])?>
-                          </div>
+            <div class="col-md-2">
+              <?= $form->field($model, 'showPaymentType')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment Type','class'=>''])?>
+            </div>
         <?php }?>
       </div>
 

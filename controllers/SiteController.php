@@ -103,6 +103,7 @@ class SiteController extends Controller
         $showTable->load(Yii::$app->request->post());
         if (($showTable->showSerial!=null)&&($showTable->getAllFlags() != $user->parcelTableOptions)) {
           $user->parcelTableOptions = $showTable->getAllFlags();
+          var_dump($showTable->getAllFlags());
           if ($user)$user->save();
         }
         $filterForm->load(Yii::$app->request->post());
