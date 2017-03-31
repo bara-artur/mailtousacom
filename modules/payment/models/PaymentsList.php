@@ -49,8 +49,8 @@ class PaymentsList extends \yii\db\ActiveRecord
             ''=>'All',
             '0'=>"-",
             '1'=>'PayPal',
-            '2'=>'At the point',
-            '3'=>'Per month',
+            '2'=>'Per month',
+            '3'=>'At the point',
             '4'=>'Unknown'
         );
     }
@@ -72,6 +72,14 @@ class PaymentsList extends \yii\db\ActiveRecord
         else return 'Unknown pay system';
     }
 
+    public function getStatusPay()
+    {
+      $param=$this->type;
+      $textForStatus = PaymentsList::getPayStatus();
+      if ($param=='-1') return 'Canceled';
+      if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
+      else return 'Unknown pay system';
+    }
    /**
      * @inheritdoc
      */
@@ -136,6 +144,10 @@ class PaymentsList extends \yii\db\ActiveRecord
 
   public function getUser(){
     return User::find()->where(['id'=>$this->user_id])->one();
+  }
+
+  public function getClient(){
+    return User::find()->where(['id'=>$this->client_id])->one();
   }
 
   public function setData($data){
