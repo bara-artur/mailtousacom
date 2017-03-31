@@ -590,15 +590,15 @@ function main_table_checkbox(current_element){
     string = string + " ( " + elem_checked[0].name+" type)";
     $('.'+elem_checked[0].name+'_show').attr('disabled',false)
     if(elem_checked[0].name=="InSystem"){
-      $('.gr_update_text').text("View parcels")
+      $('.gr_update_text').html('<span class="fa fa-eye"></span> View')
     }else{
-      $('.gr_update_text').text("Update parcels")
+      $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
     }
   }else{
     $('.InSystem_show,.Draft_show').attr('disabled',true)
   }
 
-  $("#for_group_actions").text("Checked parcels: " + string);
+  $("#for_group_actions").html('<b>Checked parcels:</b> ' + string);
   $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
   $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
   $("#group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
