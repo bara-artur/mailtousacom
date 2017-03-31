@@ -4,6 +4,7 @@ namespace app\modules\payment\models;
 
 use Yii;
 use app\modules\payment\models\PaymentInclude;
+use app\modules\user\models\User;
 
 /**
  * This is the model class for table "payments_list".
@@ -131,6 +132,11 @@ class PaymentsList extends \yii\db\ActiveRecord
   public function getPaymentInclude()
   {
     return $this->hasMany(PaymentInclude::className(),['payment_id' => 'id']);
+  }
+
+  public function getUser()
+  {
+    return $this->hasOne(User::className(), ['id' => 'client_id']);
   }
 
   public function setData($data){

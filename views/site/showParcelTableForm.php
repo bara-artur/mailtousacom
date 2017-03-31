@@ -36,7 +36,6 @@ use app\modules\orderElement\models\OrderElement;
             <div class="col-md-2">
               <?= $form->field($model, 'showCreatedAt')->checkbox(['label' => '<span class="fa fa-check otst"></span> Created At','class'=>''])?>
             </div>
-
             <div class="col-md-2">
               <?= $form->field($model, 'showPaymentState')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment State','class'=>''])?>
             </div>

@@ -155,7 +155,7 @@ class OrderElement extends \yii\db\ActiveRecord
         Log::addLog($this->id,2,[$changedAttributes->weight,$this->weight]);
       }
 
-      if(isset($changedAttributes->status)||isset(($changedAttributes->status_dop))){
+      if(isset($changedAttributes->status)||isset($changedAttributes->status_dop)){
         Log::addLog($this->id,['text'=>'Change status to "'.$this->getFullTextStatus().'"']);
       }
     }

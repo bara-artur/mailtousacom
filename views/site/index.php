@@ -214,7 +214,14 @@ $this->title = 'Shipping to USA and Canada';
                     'format'=>['decimal',2],
                     'visible' => $showTable->showTotal,
                 ],
-
+                [
+                  'attribute' => 'track_number',
+                  'content'=> function($data){
+                    if ($data->track_number == 0) return '-';
+                    else return $data->track_number;
+                  },
+                  'visible' => $showTable->showTrackNumber,
+                ],
                 // 'order_status',
                 // 'created_at',
                 // 'transport_data',

@@ -73,7 +73,7 @@ class ShowParcelTableForm extends User
   {
     return [
       [['showSerial','showID','showStatus','showCreatedAt','showPaymentState','showPaymentType',
-        'showPrice','showQst','showGst','showTotal'], 'safe']
+        'showPrice','showQst','showGst','showTotal','showTrackNumber'], 'safe']
     ];
   }
 
@@ -93,6 +93,7 @@ class ShowParcelTableForm extends User
       'showQst' => 'PST',
       'showGst' => 'GST/HST',
       'showTotal' => 'Total',
+      'showTrackNumber' => 'Track number',
 
     ];
   }
