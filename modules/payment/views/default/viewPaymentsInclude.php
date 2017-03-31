@@ -23,6 +23,21 @@ $data=$dataProvider->getModels();
       <th>Vat</th>
       <th>Total</th>
       <?php
+        if($routing == 'parcel') {
+      ?>
+        <th>Date</th>
+        <?php
+          if(Yii::$app->user->identity->isManager()) {
+            ?>
+            <th>User</th>
+            <?php
+          }
+        ?>
+        <th>Method</th>
+        <?php
+        }
+      ;?>
+      <?php
         if(Yii::$app->user->identity->isManager()) {
           ?>
           <th>Comment</th>
@@ -42,6 +57,8 @@ $data=$dataProvider->getModels();
       if($routing == 'parcel' && $item->status==0) {
         $description.=" <span style='color:orange'>Not pay</span>";
       }
+      $payment=$item->getTotpayment();
+
       ?>
       <tr>
         <td><?=$k+1;?></td>
@@ -49,6 +66,21 @@ $data=$dataProvider->getModels();
         <td><?=number_format($item->price,2,'.',' ');?></td>
         <td><?=number_format($item->qst+$item->gst,2,'.',' ');?></td>
         <td><?=number_format($item->qst+$item->gst+$item->price,2,'.',' ');?></td>
+        <?php
+        if($routing == 'parcel') {
+          ?>
+          <td>Date</td>
+          <?php
+          if(Yii::$app->user->identity->isManager()) {
+            ?>
+            <td><?=$payment->getUser()->getLineInfo();?></td>
+            <?php
+          }
+          ?>
+          <td>Method</td>
+        <?php
+        }
+        ;?>
         <?php
           if(Yii::$app->user->identity->isManager()) {
             ?>

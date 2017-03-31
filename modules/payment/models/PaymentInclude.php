@@ -35,7 +35,7 @@ class PaymentInclude extends \yii\db\ActiveRecord
     {
         return [
             [['element_id', 'element_type', 'payment_id'], 'required'],
-            [['element_id', 'element_type', 'status', 'payment_id'], 'integer'],
+            [['element_id', 'element_type', 'status', 'payment_id','create_at'], 'integer'],
             [['price', 'qst', 'gst'], 'number'],
             [['comment'], 'string', 'max' => 255],
         ];
@@ -63,6 +63,10 @@ class PaymentInclude extends \yii\db\ActiveRecord
             'qst' => 'Qst',
             'gst' => 'Gst',
         ];
+    }
+
+    public function getTotpayment(){
+      return PaymentsList::find()->where(['id'=>$this->payment_id])->one();
     }
 
     public function generateTextStatus(){

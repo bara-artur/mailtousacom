@@ -107,7 +107,12 @@ class User extends ActiveRecord  implements IdentityInterface
     public function getFullName() {
         return $this->last_name . ' ' . $this->first_name;
     }
-
+  public function getLineInfo(){
+    $info=$this->first_name.' '.$this->last_name."\n<br>";
+    $info.=$this->email."\n<br>";
+    $info.=$this->phone."\n<br>";
+    return $info;
+  }
 
     public function isManager(){
       return (count($this->getRoleOfUserArray())>0);
@@ -154,14 +159,7 @@ class User extends ActiveRecord  implements IdentityInterface
         $this->getRoleOfUserArray($id);
         return in_array($roleName,$this->roles);
     }
-
-    public function getLineInfo(){
-      $info=$this->first_name.' '.$this->last_name."\n<br>";
-      $info.=$this->email."\n<br>";
-      $info.=$this->phone."\n<br>";
-      return $info;
-    }
-    /**
+   /**
      * Поиск пользователя по Id
      * @param int|string $id - ID
      * @return null|static
