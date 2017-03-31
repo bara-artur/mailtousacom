@@ -819,3 +819,7 @@ div.notpaid_img{background: url("/img/notpaid.png");
     padding: 10px 0px;
     padding-bottom: 2px;
 }
+/*31032017*/
+.modal {
+    position: fixed !important;
+}
