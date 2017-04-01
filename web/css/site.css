@@ -404,7 +404,11 @@ input[type=checkbox]:checked+span::before {
 }
 
 .gritter-close:after {
-    content: 'X';
+    content: '×' !important;
+    font-size: 21px;
+    font-weight: 700 !important;
+    line-height: 1;
+    color: #fff !important;
 }
 .thumbnail {
     background-color: #FFFFFF;}
@@ -413,8 +417,8 @@ input[type=checkbox]:checked+span::before {
     -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);}
 /*.gritter-close{font-family: 'Arial', sans-serif;}*/
-.gritter-title{font-size:20px;}
-.gritter-item{font-size:16px;}
+.gritter-title{font-size:20px !important;}
+.gritter-item{font-size:16px !important;;}
 .navbar-default .navbar-nav> li > a:hover{border-bottom: 4px solid #FFC800;
     background-color: #FFFFFF;color:#354346;}
 .navbar-default .navbar-nav> li > a:focus{background-color: #FFFFFF;color:#354346;}
@@ -890,3 +894,12 @@ div.icon_integ_shop{
     background-color: #006AC1 !important;
     color: #fff !important;
 }
+.gritter-danger .gritter-item {
+    background: #E51400 !important;
+    color: white;
+    border: 1px solid #E51400 !important;
+}
+.gritter-item:hover,.gritter-item:focus,.gritter-item {
+    box-shadow: none !important;
+}
+.gritter-item-wrapper.hover{border:2px solid #ffffff !important;}
