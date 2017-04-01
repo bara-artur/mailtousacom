@@ -530,7 +530,7 @@ class DefaultController extends Controller
             'dataProvider' => $dataProvider,
             'routing' => 'parcel',
           ]),
-          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-right','data-dismiss'=>"modal"])
         ];
       }
 

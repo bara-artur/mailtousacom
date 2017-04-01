@@ -16,5 +16,4 @@ use yii\widgets\DetailView;
             'quantity',
         ],
     ]) ?>
-
 </div>
