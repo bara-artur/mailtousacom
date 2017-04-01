@@ -107,12 +107,13 @@ class User extends ActiveRecord  implements IdentityInterface
     public function getFullName() {
         return $this->last_name . ' ' . $this->first_name;
     }
-  public function getLineInfo(){
-    $info=$this->first_name.' '.$this->last_name."\n<br>";
-    $info.=$this->email."\n<br>";
-    $info.=$this->phone."\n<br>";
-    return $info;
-  }
+
+    public function getLineInfo(){
+      $info=$this->first_name.' '.$this->last_name."\n<br>";
+      $info.=$this->email."\n<br>";
+      $info.=$this->phone."\n<br>";
+      return $info;
+    }
 
     public function isManager(){
       return (count($this->getRoleOfUserArray())>0);
