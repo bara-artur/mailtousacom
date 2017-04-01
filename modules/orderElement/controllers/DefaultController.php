@@ -227,7 +227,7 @@ class DefaultController extends Controller
                 ];    
             }else{
                  return [
-                    'title'=> "Chaaaa999ange the recipient data #".$id,
+                    'title'=> "Change the recipient data #".$id,
                     'content'=>$this->renderAjax('update', [
                         'model' => $model,
                     ]),

@@ -11,7 +11,7 @@ use yii\helpers\Html;
 <?php
     if(!Yii::$app->user->identity->isManager()){
 ?>
-<div class="form_parcel_create_type_0">
+<div class="form_parcel_create_type_0 push-up-margin-thin">
     <div class="row">
         <div class="col-md-12"><h6 class="modernui-neutral4">Please connect you stores with our WMS ( warehouse
                 management software )</h6>
@@ -22,24 +22,24 @@ use yii\helpers\Html;
             </a>
         </div>
         <div class="col-md-4 text-center">
-            <a href="/">
+            <a>
                 <div class="icon_integ_amazon"></div>
             </a>
         </div>
         <div class="col-md-4">
-            <a href="">
+            <a>
                 <div class="icon_integ_shop"></div>
             </a>
         </div>
     </div>
 </div>
-<div class="row push-down-margin-thin">
-    <div class="col-md-12 text-center">
-        <div class="form-group text_b">
+<div class="row">
+    <div class="col-md-12">
+        <div class="text_b margin-left-10 dot_bot">
             <label>
                 <input type="checkbox" onchange="form_parcel_create_type(this)">
                 <span class="fa fa-check otst"></span>
-                Skip integration,I will inter my orders manually
+                Skip integration,I will enter my orders manually
             </label>
         </div>
     </div>
@@ -54,7 +54,7 @@ use yii\helpers\Html;
 <?php
     }
 ?>
-    <h5 class="modernui-neutral4">Please enter recipient's address</h5>
+    <h5 class="modernui-neutral4 color_fiol">Please enter recipient's address</h5>
     <div class="order-element-create">
         <?= $this->render('_form', [
             'model' => $model,

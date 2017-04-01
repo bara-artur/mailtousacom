@@ -824,3 +824,14 @@ div.notpaid_img{background: url("/img/notpaid.png");
     position: fixed !important;
 }
 /*01042017*/
+/*integration_indev*/
+div.icon_integ_amazon{
+    background:url("/img/amazon_logo_hide.png");
+}
+
+div.icon_integ_shop{
+    background:url("/img/shop_logo_hide.png");
+}
+/*end_integration_indev*/
+.dot_bot{border-bottom:1px dotted #ccc;}
+.color_fiol{color:#05389F;}

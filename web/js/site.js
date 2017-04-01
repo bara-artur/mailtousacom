@@ -512,11 +512,13 @@ $(function () {
 
 function form_parcel_create_type(el){
   if($(el).prop('checked')){
-    $('.form_parcel_create_type_1').show();
-    $('.form_parcel_create_type_0').hide();
+    $('.form_parcel_create_type_1').slideDown(500);
+    $('.form_parcel_create_type_0').slideUp(500);
+    $('.modal-title').slideUp(500);
   }else{
-    $('.form_parcel_create_type_1').hide();
-    $('.form_parcel_create_type_0').show();
+    $('.form_parcel_create_type_1').slideUp(500);
+    $('.form_parcel_create_type_0').slideDown(500);
+    $('.modal-title').slideDown(500);
   }
 }
 
