@@ -12,8 +12,22 @@ use yii\widgets\ActiveForm;
 <div class="receiving-point-form">
 
   <?php $form = ActiveForm::begin(); ?>
+    <div class="col-md-offset-1 trans_text custom-radio">
+  <?= $form->field($model, 'last_receiving_points')->radioList($points,[
 
-  <?= $form->field($model, 'last_receiving_points')->radioList($points); ?>
+      'item' => function($index, $label, $name, $checked, $value) {
+          $return = '<label>';
+          $return .= '<input type="radio" name="' . $name . '" '. ($checked?"checked":"") .' value="' . $value . '">';
+          $return .= '<span></span>&nbsp;&nbsp;';
+          $return .= ucwords($label);
+          $return .= '</label><br>';
+          return $return;
+      }
+  ]
+
+      ); ?>
+    </div>
+
 
   <?php if (!Yii::$app->request->isAjax){ ?>
       <div class="form-group">

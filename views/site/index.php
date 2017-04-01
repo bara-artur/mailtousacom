@@ -26,14 +26,13 @@ $this->title = 'Shipping to USA and Canada';
           <?php } ?>
           <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
-        <div class="col-md-10 hidden-xs text-right padding-off-right">
-
-            <?=Html::a('Update parcels', ['/orderElement/group-update/'], [
+        <div class="col-md-6 text-center">
+            <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
               'class' => 'btn btn-md btn-info InSystem_show Draft_show gr_update_text',
               'id'=>'group-update',
               'disabled'=>true,
             ]); ?>
-            <?=Html::a('Delete',
+            <?=Html::a('<i class="icon-metro-remove"></i> Delete',
               ['/orderElement/group-delete/'],
               [
                 'id'=>'group-delete',
@@ -48,27 +47,40 @@ $this->title = 'Shipping to USA and Canada';
                 'disabled'=>true,
                 'role'=>"modal-remote",
               ]); ?>
-            <?=Html::a('Print PDF for parcels', ['/orderElement/group-print/'], [
-              'class' => 'btn btn-md btn-info InSystem_show Draft_show',
+            <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
+              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
               'id'=>'group-print',
               'disabled'=>true,
             ]); ?>
-            <?=Html::a('Print advanced PDF', ['/orderElement/group-print-advanced/'],
+            <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
               [
-                'class' => 'btn btn-md btn-info InSystem_show Draft_show',
+                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
               ]); ?>
-            <?=Html::a('<i class="fa fa-magic"></i>Create new order', ['/order/create/'],
-                [
-                    'role'=>'modal-remote',
-                    'class'=>'btn btn-success show_modal',
-                ])?>
-
+            <div class="col-md-12 group_text"><div class="group_text2">group management</div></div>
         </div>
-        <div class="col-xs-12 visible-xs text-center margin-top-10">
-            <?=Html::a('Update parcels', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
-            <?=Html::a('Delete',
+          <div class="col-md-4 text-right padding-off-right">
+
+              <?php if(Yii::$app->user->can("takeParcel")){?>
+                  <?=Html::a('<i class="icon-metro-location"></i> Choose Receiving point', ['/receiving_points/choose/'],
+                      [
+                          'id'=>'choose_receiving_point',
+                          'role'=>'modal-remote',
+                          'class'=>'btn btn-neutral-border  show_modal',
+                      ]
+                  ); ?>
+              <?php }?>
+
+              <?=Html::a('<i class="fa fa-magic"></i> Create new order', ['/order/create/'],
+                  [
+                      'role'=>'modal-remote',
+                      'class'=>'btn btn-success show_modal',
+                  ])?>
+          </div>
+        <!--<div class="col-xs-12 visible-xs text-center margin-top-10">
+            <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
+            <?=Html::a('<i class="icon-metro-remove"></i> Delete',
                 ['/orderElement/group-delete/'],
                 [
                   'id'=>'group-delete',
@@ -82,30 +94,16 @@ $this->title = 'Shipping to USA and Canada';
                   ],
                   'role'=>"modal-remote",
                 ]); ?>
-            <?=Html::a('Print PDF', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-print']); ?>
+            <?=Html::a('Print', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-blue-gem', 'id'=>'group-print']); ?>
             <?=Html::a('Create order', ['/order/create/'],
                 [
                     'role'=>'modal-remote',
                     'class'=>'btn btn-success btn-sm show_modal',
                 ])?>
-        </div>
+        </div>-->
       </div>
     </div>
-        <hr class="bottom_line">
-<?php if(Yii::$app->user->can("takeParcel")){?>
-  <div class="col-xs-3 pull-right">
-    <span>Current Receiving point : <?= $receiving_point ?></span>
-    <?=Html::a('Choose Receiving point', ['/receiving_points/choose/'],
-      [
-        'id'=>'choose_receiving_point',
-        'role'=>'modal-remote',
-        'class'=>'btn btn-default show_modal',
-      ]
-    ); ?>
-  </div>
-<?php }?>
-
-
+        <hr class="bottom_line2">
         <div class="row">
           <div class="col-md-12 scrit">
             <?= $this->render('elementFilterForm', ['model' => $filterForm]);?>
@@ -118,15 +116,32 @@ $this->title = 'Shipping to USA and Canada';
           </div>
         </div>
 
-      <div class="row">
-        <div class="col-md-12" id = 'for_group_actions'>Checked parcels: empty</div>
-      </div>
+      <div class="row pad_row">
+          <div class="col-md-3">
+        <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
+          </div>
 
-    <hr class="bottom_line">
+<div class="col-md-6 text-center">
+ <?php if(Yii::$app->user->can("takeParcel")){?>
+     <span><b>Current Receiving point :</b> <?= $receiving_point ?></span>
+ <?php }?>
+
+    </div>
+
+          <div class="col-md-3 text-right">
+              <?= GridView::widget([
+                  'dataProvider' => $orderElements,
+                  'layout' => '{summary}'
+              ]); ?>
+
+          </div>
+
+      </div>
 
     <div class="table-responsive check_hide">
         <?= GridView::widget([
             'dataProvider' => $orderElements,
+            'summary'=>'',
             'columns' => [
                 ['content'=> function($data){
                     return Html::checkbox(($data->status>1)?'InSystem':'Draft',false,[
@@ -226,8 +241,8 @@ $this->title = 'Shipping to USA and Canada';
                 // 'created_at',
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
-                    $button_print_pdf = Html::a('Print PDF', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-success']);
-                    $button_update_parcel = Html::a('Update parcel', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
+                    $button_print_pdf = Html::a('Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem']);
+                    $button_update_parcel = Html::a('Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
                     $button_view_parcel = Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
                     $button_delete_parcel = Html::a('Delete',
                       ['/orderElement/group-delete/' . $data->id],

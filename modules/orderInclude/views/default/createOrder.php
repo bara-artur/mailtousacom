@@ -61,6 +61,13 @@ $submitOption = [
               'class' => 'btn btn-default show_modal',
             ]
           );
+          echo Html::a('History view', ['/logs/' . $percel->id],
+            [
+              'id' => 'payment-show-includes',
+              'role' => 'modal-remote',
+              'class' => 'btn btn-default show_modal',
+            ]
+          );
         }?>
         <div class="row">
           <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
@@ -202,6 +209,7 @@ $submitOption = [
               <hr class="bor_bottom">
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
+            <div class="row">
               <div class="col-md-6 cost_del"><b>Cost of delivery : </b>
                 <span id="results" class="resInd<?=$k?>">
                         <?php
@@ -238,6 +246,7 @@ $submitOption = [
                   ])?>
               </div>
             <?php } ?>
+        </div>
 
         <?php Pjax::end(); ?>
         </div>

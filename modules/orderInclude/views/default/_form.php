@@ -14,7 +14,9 @@ use yii\bootstrap\Modal;
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'class' => 'no_foreign_letters form-control']) ?>
 
-    <?= $form->field($model, 'price')->textInput() ?>
+    <?= $form->field($model, 'price')->textInput([
+      'autocomplete'=>"off"
+    ]) ?>
 
     <?= $form->field($model, 'country')->widget(Select2::classname(), [
         'data' => Yii::$app->params['country'],
@@ -25,7 +27,9 @@ use yii\bootstrap\Modal;
         ],
     ]);?>
 
-    <?= $form->field($model, 'quantity')->textInput() ?>
+    <?= $form->field($model, 'quantity')->textInput([
+      'autocomplete'=>"off"
+    ]) ?>
 
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">

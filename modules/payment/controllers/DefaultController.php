@@ -102,7 +102,23 @@ class DefaultController extends Controller
 
             $searchModel = new PaymentSearch();
             $dataProvider = $searchModel->search($query,$time_to);
-
+            $user_array = [];
+            foreach ($dataProvider->models as $p){
+              $user_array[] = $p->client_id;            // создаем массив id пользователей
+            }
+            $user_array = array_unique($user_array);  // оставляем только уникальные id
+            $users = User::find()->andWhere(['in', 'id', $user_array])->all();
+            $info = [];
+            foreach ($users as $user) {           // создаем ассоциативный массив id -> lineinfo
+              $info[$user->id] = $user->lineinfo;
+            }
+            foreach ($dataProvider->models as $p){   // заменяем id на развернутое описание
+              if (array_key_exists($p->client_id,$info)) {
+                $p->client_id = $info[$p->client_id];
+              }else{
+                $p->client_id = '-empty-';
+              }
+            }
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'filterForm' => $filterForm,
@@ -468,14 +484,23 @@ class DefaultController extends Controller
            // 'client_id' => Yii::$app->user->id
            // 'user_id' => Yii::$app->user->id
           ]);
-
+          $footer=Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]);
+          if($request->get('back')){
+            $footer.=Html::a('Back', ['/payment/show-parcel-includes/'.(int)$request->get('back')],
+              [
+                'id'=>'payment-show-includes',
+                'role'=>'modal-remote',
+                'class'=>'btn btn-default btn-info',
+              ]
+            );
+          }
           return [
             'title'=> "View Payment Includes",
             'content'=>$this->renderAjax('viewPaymentsInclude', [
               'dataProvider' => $dataProvider,
               'routing' => 'paymentTable',
             ]),
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+            'footer'=> $footer
           ];
         }
 

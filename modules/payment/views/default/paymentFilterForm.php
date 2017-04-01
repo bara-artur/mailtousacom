@@ -43,12 +43,26 @@ use kartik\widgets\DatePicker;
             ]);?>
           </div>
         <?php } ?>
-       <div class="col-md-3">
+    <?php if ($admin == 1) {?>
+       <div class="col-md-2">
            <?= $form->field($model, 'type')->dropDownList( PaymentsList::getPayStatus()) ?>
        </div>
+    <?php } ?>
+    <?php if ($admin == 0) {?>
         <div class="col-md-3">
+            <?= $form->field($model, 'type')->dropDownList( PaymentsList::getPayStatus()) ?>
+        </div>
+    <?php } ?>
+    <?php if ($admin == 1) {?>
+        <div class="col-md-2">
         <?= $form->field($model, 'status')->dropDownList( PaymentsList::getTextStatus()) ?>
         </div>
+    <?php } ?>
+    <?php if ($admin == 0) {?>
+        <div class="col-md-3">
+            <?= $form->field($model, 'status')->dropDownList( PaymentsList::getTextStatus()) ?>
+        </div>
+    <?php } ?>
         <div class="col-md-3">
             <?= $form->field($model,'pay_time')->widget(DatePicker::className(),[
               'name' => 'pay_time',

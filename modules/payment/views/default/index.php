@@ -34,9 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'columns' => [
       ['class' => 'yii\grid\SerialColumn'],
        [ 'attribute'=> 'client_id',
-         'content'=> function($data){ if ($data->user!=null)
-           return $data->user->lineInfo; else return '-empty-';
-         }
+         'format'=> 'raw',
        ],
       ['attribute'=> 'status',
         'content' => function($data){

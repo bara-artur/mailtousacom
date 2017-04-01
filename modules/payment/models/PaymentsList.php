@@ -72,7 +72,8 @@ class PaymentsList extends \yii\db\ActiveRecord
         if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
         else return 'Unknown pay system';
     }
-    /**
+
+   /**
      * @inheritdoc
      */
     public static function tableName()
@@ -134,9 +135,8 @@ class PaymentsList extends \yii\db\ActiveRecord
     return $this->hasMany(PaymentInclude::className(),['payment_id' => 'id']);
   }
 
-  public function getUser()
-  {
-    return $this->hasOne(User::className(), ['id' => 'client_id']);
+  public function getUser(){
+    return User::find()->where(['id'=>$this->user_id])->one();
   }
 
   public function setData($data){

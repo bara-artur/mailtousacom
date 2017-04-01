@@ -137,4 +137,6 @@ return [
     1=>"eBay"
   ],
   'choose_receiving_point' => '1',
+  'receive_max_time'=>13,//Количество часов до полуночи когда посылку можно отправить сегодня
+  'receive_max_time_admin'=>5,
 ];

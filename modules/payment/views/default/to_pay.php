@@ -135,7 +135,7 @@ $submitOption = [
       </div>
     <?php
     }else{
-      if($model->payment_state!=0){
+      if($total['price']==0){
         ?>
           <h6 class="bg-success text-center fg-white padding-10">
               <span class="glyphicon glyphicon-ok-sign"></span> order paid
@@ -186,7 +186,7 @@ $submitOption = [
     }
 
   }else{
-    echo Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-success pull-right']);
+    echo Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['class' =>'btn btn-success pull-right']);
   }
     ?>
 </div>
