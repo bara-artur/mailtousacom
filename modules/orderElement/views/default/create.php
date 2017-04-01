@@ -35,7 +35,7 @@ use yii\helpers\Html;
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="text_b margin-left-10 dot_bot">
+        <div class="text_b padding-left-10 dot_bot">
             <label>
                 <input type="checkbox" onchange="form_parcel_create_type(this)">
                 <span class="fa fa-check otst"></span>
