@@ -5,6 +5,7 @@ namespace app\modules\payment\models;
 use Yii;
 use app\modules\payment\models\PaymentInclude;
 use app\modules\user\models\User;
+
 /**
  * This is the model class for table "payments_list".
  *

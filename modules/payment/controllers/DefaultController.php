@@ -102,7 +102,23 @@ class DefaultController extends Controller
 
             $searchModel = new PaymentSearch();
             $dataProvider = $searchModel->search($query,$time_to);
-
+            $user_array = [];
+            foreach ($dataProvider->models as $p){
+              $user_array[] = $p->client_id;            // создаем массив id пользователей
+            }
+            $user_array = array_unique($user_array);  // оставляем только уникальные id
+            $users = User::find()->andWhere(['in', 'id', $user_array])->all();
+            $info = [];
+            foreach ($users as $user) {           // создаем ассоциативный массив id -> lineinfo
+              $info[$user->id] = $user->lineinfo;
+            }
+            foreach ($dataProvider->models as $p){   // заменяем id на развернутое описание
+              if (array_key_exists($p->client_id,$info)) {
+                $p->client_id = $info[$p->client_id];
+              }else{
+                $p->client_id = '-empty-';
+              }
+            }
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'filterForm' => $filterForm,

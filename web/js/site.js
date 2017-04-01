@@ -531,6 +531,42 @@ function AutoCompleteUserSelect(e,ui){
   }
 }
 
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function sendCheckedToCookie(elem_checked){
+  var stringCoockies = '';
+  setCookie('parcelCheckedId','456',1);
+  parcelsID= getCookie('parcelCheckedId');
+  for(var i = 0; i <elem_checked.length; i++) {
+    stringCoockies = stringCoockies + elem_checked[i].getAttribute('id');
+    if(i!=(elem_checked.length -1)) {
+      stringCoockies = stringCoockies+',';
+    }
+  }
+  setCookie('parcelCheckedId',stringCoockies,1);
+}
+
 function main_table_checkbox(current_element){
  // $(current_element).parents('td:first').css("background-color","red");
   elem_checked = $(".checkBoxParcelMainTable:checked");
@@ -553,6 +589,8 @@ function main_table_checkbox(current_element){
     }
   }
 
+  sendCheckedToCookie(elem_checked);
+
   if (elem_checked.length>0){
     if (elem_checked[0].name == 'InSystem') {
       elem_type = 'Draft';
@@ -565,7 +603,6 @@ function main_table_checkbox(current_element){
     console.log(elems_prohibeted.length);
     elems_prohibeted.addClass('select_prohibited').css("background-color","red");
     elems_prohibeted.prop("disabled",true);
-
   }else{
     elems_prohibeted = $(".select_prohibited");
     elems_prohibeted.parents('td').fadeTo(500, 1);
