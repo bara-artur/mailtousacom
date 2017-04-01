@@ -101,8 +101,10 @@ class SiteController extends Controller
         $filterForm = new ElementFilterForm(); // форма фильтра
         $showTable = new ShowParcelTableForm(-1); // форма настройки столбцов таблицы
         $showTable->load(Yii::$app->request->post());
+
         if (($showTable->showSerial!=null)&&($showTable->getAllFlags() != $user->parcelTableOptions)) {
           $user->parcelTableOptions = $showTable->getAllFlags();
+
           if ($user)$user->save();
         }
         $filterForm->load(Yii::$app->request->post());

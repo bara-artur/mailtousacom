@@ -7,16 +7,17 @@ use Yii;
 
 class ShowParcelTableForm extends User
 {
-  public $parcelTableSerial= 0x0001;
-  public $parcelTableID= 0x0002;
-  public $parcelTableStatus= 0x0004;
-  public $parcelTableCreatedAt= 0x0008;
-  public $parcelTablePaymentState= 0x0010;
-  public $parcelTablePaymentType= 0x0020;
-  public $parcelTablePrice= 0x0040;
-  public $parcelTableQst= 0x0080;
-  public $parcelTableGst= 0x0100;
-  public $parcelTableTotal= 0x0200;
+  public $parcelTableSerial= 'serial';
+  public $parcelTableID= 'user_id';
+  public $parcelTableStatus= 'status';
+  public $parcelTableCreatedAt= 'created_at';
+  public $parcelTablePaymentState= 'payment_state';
+  public $parcelTablePaymentType= 'payment_type';
+  public $parcelTablePrice= 'price';
+  public $parcelTableQst= 'qst';
+  public $parcelTableGst= 'gst';
+  public $parcelTableTotal= 'total';
+  public $parcelTableTrackNumber= 'track_number';
 
   public $showSerial;
   public $showID;
@@ -28,20 +29,22 @@ class ShowParcelTableForm extends User
   public $showQst;
   public $showGst;
   public $showTotal;
+  public $showTrackNumber;
 
  public function getAllFlags(){
-   $allFlags = 0;
-   if ($this->showSerial) $allFlags|=$this->parcelTableSerial;
-   if ($this->showID) $allFlags|=$this->parcelTableID;
-   if ($this->showStatus) $allFlags|=$this->parcelTableStatus;
-   if ($this->showCreatedAt) $allFlags|=$this->parcelTableCreatedAt;
-   if ($this->showPaymentState) $allFlags|=$this->parcelTablePaymentState;
-   if ($this->showPaymentType) $allFlags|=$this->parcelTablePaymentType;
-   if ($this->showPrice) $allFlags|=$this->parcelTablePrice;
-   if ($this->showQst) $allFlags|=$this->parcelTableQst;
-   if ($this->showGst) $allFlags|=$this->parcelTableGst;
-   if ($this->showTotal) $allFlags|=$this->parcelTableTotal;
-   return $allFlags;
+   $arr = [];
+   if ($this->showSerial) $arr[]=$this->parcelTableSerial;
+   if ($this->showID) $arr[]=$this->parcelTableID;
+   if ($this->showStatus) $arr[]=$this->parcelTableStatus;
+   if ($this->showCreatedAt) $arr[]=$this->parcelTableCreatedAt;
+   if ($this->showPaymentState) $arr[]=$this->parcelTablePaymentState;
+   if ($this->showPaymentType) $arr[]=$this->parcelTablePaymentType;
+   if ($this->showPrice) $arr[]=$this->parcelTablePrice;
+   if ($this->showQst) $arr[]=$this->parcelTableQst;
+   if ($this->showGst) $arr[]=$this->parcelTableGst;
+   if ($this->showTotal) $arr[]=$this->parcelTableTotal;
+   if ($this->showTrackNumber) $arr[]=$this->parcelTableTrackNumber;
+   return implode(',',$arr);
  }
 
   public function __construct($parcelTableOptions = 0xffff)
@@ -49,16 +52,18 @@ class ShowParcelTableForm extends User
     if ($parcelTableOptions == -1) {
       $this->showSerial = null;
     } else {
-      $this->showSerial = $parcelTableOptions & $this->parcelTableSerial;
-      $this->showID = (($parcelTableOptions & $this->parcelTableID) != 0);
-      $this->showStatus = (($parcelTableOptions & $this->parcelTableStatus) != 0);
-      $this->showCreatedAt = (($parcelTableOptions & $this->parcelTableCreatedAt) != 0);
-      $this->showPaymentState = (($parcelTableOptions & $this->parcelTablePaymentState) != 0);
-      $this->showPaymentType = (($parcelTableOptions & $this->parcelTablePaymentType) != 0);
-      $this->showPrice = (($parcelTableOptions & $this->parcelTablePrice) != 0);
-      $this->showQst = (($parcelTableOptions & $this->parcelTableQst) != 0);
-      $this->showGst = (($parcelTableOptions & $this->parcelTableGst) != 0);
-      $this->showTotal = (($parcelTableOptions & $this->parcelTableTotal) != 0);
+      $arr_showColumns=explode(',',$parcelTableOptions);
+      $this->showSerial = in_array($this->parcelTableSerial,$arr_showColumns);
+      $this->showID = in_array($this->parcelTableID,$arr_showColumns);
+      $this->showStatus = in_array($this->parcelTableStatus,$arr_showColumns);
+      $this->showCreatedAt = in_array($this->parcelTableCreatedAt,$arr_showColumns);
+      $this->showPaymentState = in_array($this->parcelTablePaymentState,$arr_showColumns);
+      $this->showPaymentType = in_array($this->parcelTablePaymentType,$arr_showColumns);
+      $this->showPrice =in_array($this->parcelTablePrice,$arr_showColumns);
+      $this->showQst = in_array($this->parcelTableQst,$arr_showColumns);
+      $this->showGst = in_array($this->parcelTableGst,$arr_showColumns);
+      $this->showTotal = in_array($this->parcelTableTotal,$arr_showColumns);
+      $this->showTrackNumber = in_array($this->parcelTableTrackNumber,$arr_showColumns);
     }
   }
   /**
@@ -68,7 +73,7 @@ class ShowParcelTableForm extends User
   {
     return [
       [['showSerial','showID','showStatus','showCreatedAt','showPaymentState','showPaymentType',
-        'showPrice','showQst','showGst','showTotal'], 'safe']
+        'showPrice','showQst','showGst','showTotal','showTrackNumber'], 'safe']
     ];
   }
 
@@ -88,6 +93,7 @@ class ShowParcelTableForm extends User
       'showQst' => 'PST',
       'showGst' => 'GST/HST',
       'showTotal' => 'Total',
+      'showTrackNumber' => 'Track number',
 
     ];
   }

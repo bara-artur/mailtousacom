@@ -33,7 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
   //  'filterModel' => $searchModel,
     'columns' => [
       ['class' => 'yii\grid\SerialColumn'],
-       'client_id',
+       [ 'attribute'=> 'client_id',
+         'content'=> function($data){ if ($data->user!=null)
+           return $data->user->lineInfo; else return '-empty-';
+         }
+       ],
       ['attribute'=> 'status',
         'content' => function($data){
           return $data::statusText($data->status);
