@@ -13,7 +13,23 @@ $data=$dataProvider->getModels();
 ?>
 <div class="payments-include-index">
 
-  <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+  <?php
+    if($routing != 'parcel') {
+      $payment=$data[0]->getTotpayment();
+      ?>
+        <p> Payment time: <?=date(\Yii::$app->params['data_time_format_php'],$payment->pay_time);?></p>
+  <?php
+  if(Yii::$app->user->identity->isManager()) {
+    ?>
+    <p>Payment create by: <?=$payment->getUser()->getLineInfo();?></p>
+    <p>Order create by: <?=$payment->getClient()->getLineInfo();?></p>
+    <?php
+  }
+  ?>
+  <p>Payment method: <?=$payment->getStatusPay();?></p>
+<?php
+    };
+  ?>
 
   <table class="table">
     <tr>
@@ -57,8 +73,9 @@ $data=$dataProvider->getModels();
       if($routing == 'parcel' && $item->status==0) {
         $description.=" <span style='color:orange'>Not pay</span>";
       }
-      $payment=$item->getTotpayment();
-
+      if($routing == 'parcel') {
+        $payment = $item->getTotpayment();
+      };
       ?>
       <tr>
         <td><?=$k+1;?></td>
@@ -69,7 +86,7 @@ $data=$dataProvider->getModels();
         <?php
         if($routing == 'parcel') {
           ?>
-          <td>Date</td>
+          <td><?=date(\Yii::$app->params['data_time_format_php'],$payment->pay_time);?></td>
           <?php
           if(Yii::$app->user->identity->isManager()) {
             ?>
@@ -77,7 +94,7 @@ $data=$dataProvider->getModels();
             <?php
           }
           ?>
-          <td>Method</td>
+          <td><?=$payment->getStatusPay();?></td>
         <?php
         }
         ;?>
