@@ -109,9 +109,9 @@ class User extends ActiveRecord  implements IdentityInterface
     }
 
     public function getLineInfo(){
-      $info=$this->first_name.' '.$this->last_name."\n<br>";
-      $info.=$this->email."\n<br>";
-      $info.=$this->phone."\n<br>";
+      $info=$this->first_name.' '.$this->last_name."<div>\n</div>";
+      $info.=$this->email."<div>\n</div>";
+      $info.=$this->phone."<div>\n</div>";
       return $info;
     }
 
