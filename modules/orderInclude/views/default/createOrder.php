@@ -24,14 +24,14 @@ $submitOption = [
 ];
 ?>
   <div class="row">
-    <div class="col-md-12">
-      <h4 class="modernui-neutral2">Order #<?=$order_id?> for Transportation</h4>
+      <div class="col-md-12">
+          <h4 class="modernui-neutral2">Order #<?=$order_id?> for Transportation</br>
+          <?php if (!$edit_not_prohibited) {?>
+              <span class="prohibit_editing text-danger"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></span>
+          <?php } ?>
+          </h4>
     </div>
-    <?php if (!$edit_not_prohibited) {?>
-        <div class="col-md-12">
-      <div class="prohibit_editing text-warning"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></div>
-        </div>
-    <?php } ?>
+
   </div>
 
 <?php if (Yii::$app->user->can('userManager')) { ?>
@@ -49,26 +49,12 @@ $submitOption = [
 <?php } ?>
 
   <div id=crud-datatable-pjax>
+
     <?php
     Pjax::begin();
     if($order_elements){
-      foreach ($order_elements as $k=>$percel) {
-        if ($edit_not_prohibited==0) {
-          echo Html::a('Payments view', ['/payment/show-parcel-includes/' . $percel->id],
-            [
-              'id' => 'payment-show-includes',
-              'role' => 'modal-remote',
-              'class' => 'btn btn-default show_modal',
-            ]
-          );
-          echo Html::a('History view', ['/logs/' . $percel->id],
-            [
-              'id' => 'payment-show-includes',
-              'role' => 'modal-remote',
-              'class' => 'btn btn-default show_modal',
-            ]
-          );
-        }?>
+
+      foreach ($order_elements as $k=>$percel) {?>
         <div class="row">
           <div class="col-md-12"><h5 class="modern_border">Attachment # <?=$percel->id;?> in Order </h5></div>
           <div class="col-md-3 marg_p">
@@ -229,9 +215,10 @@ $submitOption = [
               </div>
 
             </form>
+                <div class="col-md-6 bord_butt text-right">
 
             <?php if ($edit_not_prohibited) {?>
-              <div class="col-md-6 bord_butt text-right">
+
                 <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
                   ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-md btn-science-blue'])?>
                 <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
@@ -244,8 +231,30 @@ $submitOption = [
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this packages",
                   ])?>
-              </div>
+
+
+
             <?php } ?>
+
+
+                <?php if ($edit_not_prohibited==0) {?>
+                    <?=Html::a('<i class="fa fa-credit-card"></i> Payments view', ['/payment/show-parcel-includes/' . $percel->id],
+                [
+                'id' => 'payment-show-includes',
+                'role' => 'modal-remote',
+                'class' => 'btn btn-science-blue show_modal',
+                ]
+                )?>
+                 <?=Html::a('<i class="fa fa-list"></i> History view', ['/logs/' . $percel->id],
+                [
+                'id' => 'payment-show-includes',
+                'role' => 'modal-remote',
+                'class' => 'btn btn-science-blue margin-left-10 show_modal',
+                ]
+                )?>
+
+         <?php } ?>
+              </div>
         </div>
 
         <?php Pjax::end(); ?>

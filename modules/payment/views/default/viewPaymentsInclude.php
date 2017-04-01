@@ -11,11 +11,11 @@ $this->title = 'Payments Include';
 $this->params['breadcrumbs'][] = $this->title;
 $data=$dataProvider->getModels();
 ?>
-<div class="payments-include-index">
+<div class="table-responsive payments-include-index">
 
   <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-  <table class="table">
+  <table class="table table-striped table-bordered">
     <tr>
       <th>#</th>
       <th>Description</th>
