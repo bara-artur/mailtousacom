@@ -276,7 +276,6 @@ $this->title = 'Shipping to USA and Canada';
       echo "
         <script>
            $(document).ready(function() {
-              console.log('111');
               setTimeout( function(){
                 $('#choose_receiving_point').click();
                 },200);
