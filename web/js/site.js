@@ -5,6 +5,8 @@ $(document).ready(function() {
   init_js_validation();
   init_main_table_checkbox();
   init_collapse_buttons();
+  init_button_clearParcelsIdCookie();
+  init_button_updateParcelsIdCookie();
 
   init_ajax_send_lb_oz_tn();
   ajax_send_admin_status_onchange();
@@ -554,16 +556,27 @@ function getCookie(cname) {
   return "";
 }
 
-function sendCheckedToCookie(elem_checked){
+function init_button_clearParcelsIdCookie(){
+  $(".clearParcelsIdCookie").on('click', function (){
+    setCookie('parcelCheckedId','',1);
+  })
+}
+function init_button_updateParcelsIdCookie(){
+  $("#updateParcelsIdCookie").on('click', function (){
+  })
+}
+
+function sendCheckedToCookie(elem_checked, oldCookie){
   var stringCoockies = '';
-  setCookie('parcelCheckedId','456',1);
+  for (i=0; i<oldCookie.length;i++){
+    if (($("#" + oldCookie[i]).length==0)&&(oldCookie[i]!='')) stringCoockies = stringCoockies+oldCookie[i]+',';
+  }
   parcelsID= getCookie('parcelCheckedId');
   for(var i = 0; i <elem_checked.length; i++) {
-    stringCoockies = stringCoockies + elem_checked[i].getAttribute('id');
-    if(i!=(elem_checked.length -1)) {
-      stringCoockies = stringCoockies+',';
-    }
+    stringCoockies = stringCoockies + elem_checked[i].getAttribute('id')+',';
   }
+  stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1); // удаляем запятую
+
   setCookie('parcelCheckedId',stringCoockies,1);
 }
 
@@ -574,9 +587,9 @@ function main_table_checkbox(current_element){
     current_id = $(current_element).prop('id');
   }
 
-  arr = getCookie('parcelCheckedId').split(',');        // все чекбоксы со всех страниц
-  for (i = 0; i < arr.length; i++) {                           // выделяем чекбоксы - для обновления по f5
-    if (arr[i] != current_id) $("#" + arr[i]).prop("checked", true);
+  oldCookie = getCookie('parcelCheckedId').split(',');        // все чекбоксы со всех страниц
+  for (i = 0; i < oldCookie.length; i++) {                           // выделяем чекбоксы - для обновления по f5
+    if (oldCookie[i] != current_id) $("#" + oldCookie[i]).prop("checked", true);
   }
   elem_checked = $(".checkBoxParcelMainTable:checked");// выделенные чекбоксы на этой странице
 
@@ -598,8 +611,7 @@ function main_table_checkbox(current_element){
       }
     }
   }
-
-  sendCheckedToCookie(elem_checked);
+  sendCheckedToCookie(elem_checked, oldCookie);
   if (elem_checked.length>0){
     if (elem_checked[0].name == 'InSystem') {
       elem_type = 'Draft';
@@ -617,8 +629,6 @@ function main_table_checkbox(current_element){
     elems_prohibeted.prop("disabled",false);
     elems_prohibeted.removeClass('select_prohibited');
   }
-
-
 
   parcel_ids ="";
   string = "empty";
