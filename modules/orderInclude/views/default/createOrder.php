@@ -48,7 +48,7 @@ $submitOption = [
   </div>
 <?php } ?>
   <div class="row">
-    <?=Html::a('Back', ['/'],['class'=>'btn btn-info btn-xs2','id' => 'updateParcelsIdCookie',])?>
+    <?=Html::a('Back', ['/'],['class'=>'btn btn-info btn-xs2','id' => 'updateParcelsIdCookie','data-forCookie'=> $ids])?>
   </div>
   <div id=crud-datatable-pjax>
 
