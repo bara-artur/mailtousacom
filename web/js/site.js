@@ -5,6 +5,8 @@ $(document).ready(function() {
   init_js_validation();
   init_main_table_checkbox();
   init_collapse_buttons();
+  init_button_clearParcelsIdCookie();
+  init_button_updateParcelsIdCookie();
 
   init_ajax_send_lb_oz_tn();
   ajax_send_admin_status_onchange();
@@ -554,17 +556,33 @@ function getCookie(cname) {
   return "";
 }
 
-function sendCheckedToCookie(elem_checked){
+function init_button_clearParcelsIdCookie(){
+  $(".clearParcelsIdCookie").on('click', function (){
+    setCookie('parcelCheckedId','',1);
+  })
+}
+function init_button_updateParcelsIdCookie(){
+  $("#updateParcelsIdCookie").on('click', function (){
+    setCookie('parcelCheckedId',$("#updateParcelsIdCookie").data('forcookie'),1);
+  })
+}
+
+function sendCheckedToCookie(elem_checked, oldCookie){
   var stringCoockies = '';
-  setCookie('parcelCheckedId','456',1);
+  for (i=0; i<oldCookie.length;i++){
+    if (($("#" + oldCookie[i]).length==0)&&(oldCookie[i]!='')) stringCoockies = stringCoockies+oldCookie[i]+',';
+  }
   parcelsID= getCookie('parcelCheckedId');
   for(var i = 0; i <elem_checked.length; i++) {
-    stringCoockies = stringCoockies + elem_checked[i].getAttribute('id');
-    if(i!=(elem_checked.length -1)) {
-      stringCoockies = stringCoockies+',';
-    }
+    stringCoockies = stringCoockies + elem_checked[i].getAttribute('id')+',';
   }
+  stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1); // удаляем запятую
+
   setCookie('parcelCheckedId',stringCoockies,1);
+  if (elem_checked.length>0) {
+    setCookie('parcel_elem_type', elem_checked[0].getAttribute('name'), 1);
+    setCookie('parcel_user_id', elem_checked[0].getAttribute('user'), 1);
+  }
 }
 
 function main_table_checkbox(current_element){
@@ -574,9 +592,9 @@ function main_table_checkbox(current_element){
     current_id = $(current_element).prop('id');
   }
 
-  arr = getCookie('parcelCheckedId').split(',');        // все чекбоксы со всех страниц
-  for (i = 0; i < arr.length; i++) {                           // выделяем чекбоксы - для обновления по f5
-    if (arr[i] != current_id) $("#" + arr[i]).prop("checked", true);
+  oldCookie = getCookie('parcelCheckedId').split(',');        // все чекбоксы со всех страниц
+  for (i = 0; i < oldCookie.length; i++) {                           // выделяем чекбоксы - для обновления по f5
+    if (oldCookie[i] != current_id) $("#" + oldCookie[i]).prop("checked", true);
   }
   elem_checked = $(".checkBoxParcelMainTable:checked");// выделенные чекбоксы на этой странице
 
@@ -598,31 +616,40 @@ function main_table_checkbox(current_element){
       }
     }
   }
-
-  sendCheckedToCookie(elem_checked);
-  if (elem_checked.length>0){
-    if (elem_checked[0].name == 'InSystem') {
+  sendCheckedToCookie(elem_checked, oldCookie);
+  if (getCookie('parcelCheckedId')!=''){
+    if (getCookie('parcel_elem_type') == 'InSystem') {
       elem_type = 'Draft';
     }else{
       elem_type = 'InSystem';
     }
-    user_id = elem_checked[0].getAttribute('user');
+    //user_id = elem_checked[0].getAttribute('user');
+    user_id = getCookie('parcel_user_id');
     // берем элементы с другим статусом ИЛИ другого user_id
     elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
     elems_prohibeted.addClass('select_prohibited').css("background-color","red");
     elems_prohibeted.prop("disabled",true);
   }else{
+    setCookie('parcel_elem_type','',1);
+    setCookie('parcel_user_id','',1);
     elems_prohibeted = $(".select_prohibited");
     elems_prohibeted.parents('td').fadeTo(500, 1);
     elems_prohibeted.prop("disabled",false);
     elems_prohibeted.removeClass('select_prohibited');
   }
 
-
-
   parcel_ids ="";
-  string = "empty";
-  elem_checked.each(function(i,elem) {
+  stringCoockies = getCookie('parcelCheckedId');
+  if (stringCoockies.length>0){
+    if (stringCoockies.substr(-1)==',') stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1);
+    string = stringCoockies;
+    parcel_ids = '/'+stringCoockies.replace(',','_');
+  }else{
+    string = "empty";
+    parcel_ids = '/'+this.id;
+  }
+
+ /* elem_checked.each(function(i,elem) {
     if (parcel_ids == "") {
       parcel_ids = '/'+this.id;
       //string = this.id;
@@ -632,11 +659,12 @@ function main_table_checkbox(current_element){
       //string = string + " " + this.id;
       string++;
     }
-  });
+  });*/
   if (string!="empty"){
-    string = string + " ( " + elem_checked[0].name+" type)";
-    $('.'+elem_checked[0].name+'_show').attr('disabled',false)
-    if(elem_checked[0].name=="InSystem"){
+    type = getCookie('parcel_elem_type');
+    string = string + " ( " + type +" type)";
+    $('.'+ type +'_show').attr('disabled',false);
+    if(type=="InSystem"){
       $('.gr_update_text').html('<span class="fa fa-eye"></span> View')
     }else{
       $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')

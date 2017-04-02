@@ -121,7 +121,7 @@ $this->title = 'Shipping to USA and Canada';
           <div class="col-md-3">
         <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
             <span>
-              <?=Html::a('Clear', [''],['class'=>'btn btn-success btn-sm show_modal',])?>
+              <?=Html::a('Clear', [''],['class'=>'btn btn-success btn-sm clearParcelsIdCookie',])?>
             </span>
           </div>
 

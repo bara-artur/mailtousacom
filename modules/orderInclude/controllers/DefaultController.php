@@ -72,10 +72,12 @@ class DefaultController extends Controller
     $edit_not_prohibited = 1;
     $hideNext = 0;
     $order_elements = [];
+    $ids = '';
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
         if ($parcel!=null) {
+          $ids = $ids.$parcel->id.',';
           $order_elements[] = $parcel;
           if ($parcel->status > 1){
             $edit_not_prohibited = 0;
@@ -100,6 +102,7 @@ class DefaultController extends Controller
       'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
       'totalPriceArray' => $totalPriceArray,
       'hideNext' => $hideNext,
+      'ids' =>$ids,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
