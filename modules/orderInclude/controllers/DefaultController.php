@@ -164,18 +164,32 @@ class DefaultController extends Controller
   public function actionChooseStatus($id){
     $request = Yii::$app->request;
     $order = Order::find()->where(['id'=>$id])->one();
-    $status_list=[];
+
+    $status_list=OrderElement::getTextStatus();
+    foreach($status_list as $k=>&$v){
+      if(strlen($k)==0 || $k<0){
+        unset($status_list[$k]);
+      }
+    }
     if($request->isAjax) {
       Yii::$app->response->format = Response::FORMAT_JSON;
       if ($request->isGet) {
         return [
-          'title' => "Adding new packages",
+          'title' => "Choose status to parcels",
           'content' => $this->renderAjax('chooseStatus', [
-            'model' => $status_list,
+            'status_list' => $status_list,
             'order_id' => $id,
           ]),
           'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
             Html::button('Save', ['class' => 'btn btn-success', 'type' => "submit"])
+
+        ];
+      }else{
+        return [
+          'title' => "Choose status to parcels",
+          'content' => "Status successfully updated",
+          'forceReload'=>'#crud-datatable-pjax',
+          'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
 
         ];
       }
