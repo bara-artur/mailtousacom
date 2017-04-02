@@ -256,7 +256,7 @@ $submitOption = [
                 [
                 'id' => 'payment-show-includes',
                 'role' => 'modal-remote',
-                'class' => 'btn btn-science-blue show_modal',
+                'class' => 'btn btn-science-blue show_modal big_model',
                 ]
                 )?>
                  <?=Html::a('<i class="fa fa-list"></i> History view', ['/logs/' . $percel->id],
@@ -278,11 +278,14 @@ $submitOption = [
     <?php } ?>
     <?php Pjax::end(); ?>
   </div>
+
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",
   "footer"=>"",// always need it for jquery plugin
 ])?>
 <?php Modal::end(); ?>
+
+
 <?php if ($edit_not_prohibited) {?>
   <?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
     [
@@ -322,5 +325,4 @@ if($createNewAddress){
    $(".show_modal").on("click", function() {
    $("#ajaxCrudModal").attr("tabindex",-1);
    })
-   });
 </script>

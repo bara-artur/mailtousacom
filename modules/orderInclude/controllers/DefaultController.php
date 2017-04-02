@@ -205,7 +205,7 @@ class DefaultController extends Controller
         return [
           'title' => "Choose status to parcels",
           'content' => "Status successfully updated",
-          //'forceReload'=>'#crud-datatable-pjax',
+          'forceReload'=>'#crud-datatable-pjax',
           'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
 
         ];

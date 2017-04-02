@@ -7,6 +7,7 @@
 
 namespace app\modules\payment\controllers;
 
+use yii\bootstrap\Modal;
 use Yii;
 use app\modules\payment\models\PaymentsList;
 use app\modules\payment\models\PaymentInclude;
@@ -490,7 +491,7 @@ class DefaultController extends Controller
               [
                 'id'=>'payment-show-includes',
                 'role'=>'modal-remote',
-                'class'=>'btn btn-default btn-info',
+                'class'=>'btn btn-default btn-info big_model',
               ]
             );
           }
@@ -530,7 +531,7 @@ class DefaultController extends Controller
             'dataProvider' => $dataProvider,
             'routing' => 'parcel',
           ]),
-          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-right','data-dismiss'=>"modal"])
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-right','data-dismiss'=>"modal"]),
         ];
       }
 

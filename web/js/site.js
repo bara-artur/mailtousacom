@@ -112,6 +112,15 @@ $(document).ready(function() {
     $('.total_sum').text(sum.toFixed(2));
     $('.total_vat').text(vat.toFixed(2));
   })
+
+  $('body').on('click','[role="modal-remote"]',function(){
+    if($(this).hasClass('big_model')) {
+      $('#ajaxCrudModal').addClass("<?=Modal::SIZE_LARGE;?>")
+    }else{
+      $('#ajaxCrudModal').removeClass("<?=Modal::SIZE_LARGE;?>")
+    }
+  })
+});
 });
 
 function show_err(el,txt){
