@@ -133,7 +133,7 @@ $submitOption = [
                                   'data-confirm-message'=>"Are you sure want to delete this item",
                                 ])?>
                             <?php } ?>
-                          </div>
+                               </div>
                         </td>
                       </tr>
                     <?php }?>
@@ -237,7 +237,19 @@ $submitOption = [
 
 
             <?php } ?>
-
+            <?=Html::a('Remove from this order',
+              ['/orderInclude/group-remove/'.$order_id."/".$percel->id],
+              [
+                'class' => 'btn btn-danger btn-sm',
+                'data' => [
+                  'confirm-message' => 'Are you sure to remove this item from this order?',
+                  'confirm-title'=>"Remove",
+                  'pjax'=>'false',
+                  'toggle'=>"tooltip",
+                  'request-method'=>"post",
+                ],
+                'role'=>"modal-remote",
+              ]); ?>
 
                 <?php if ($edit_not_prohibited==0) {?>
                     <?=Html::a('<i class="fa fa-credit-card"></i> Payments view', ['/payment/show-parcel-includes/' . $percel->id],

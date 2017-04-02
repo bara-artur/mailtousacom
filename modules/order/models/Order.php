@@ -50,7 +50,7 @@ class Order extends \yii\db\ActiveRecord
 
     public function getOrderElement()
     {
-        return $this->hasMany(OrderElement::className(),['order_id' => 'id']);
+        return $this->hasMany(OrderElement::className(),['id' =>explode(',',$this->el_group)]);
     }
     /**
      * @inheritdoc
@@ -85,4 +85,48 @@ class Order extends \yii\db\ActiveRecord
       ->execute();
     }
 
+  public function setStatus($status,$send_mail){
+    $numbers = explode(',',$this->el_group);
+    $parcels = OrderElement::find()->where(['id' => $numbers])->all();
+
+    $users=[];
+    $users_parcel=[];
+    $total=[
+      'weight'=>0,
+      'weight_by_user'=>[]
+    ];
+
+    foreach($parcels as &$parcel){
+      if(!$users_parcel[$parcel->user_id]){
+        $users_parcel[$parcel->user_id]=[];
+        $total['weight_by_user'][$parcel->user_id]=0;
+        $users[]=$parcel->user_id;
+      }
+      $total['weight']+=$parcel->weight;
+      $total['weight_by_user'][$parcel->user_id]+=$parcel->weight;
+      $users_parcel[$parcel->user_id][]=$parcel;
+
+      $parcel->status=$status;
+      $parcel->status_dop='';
+      $parcel->save();
+    }
+
+    \Yii::$app->getSession()->setFlash('success', 'Status of parcels updated.');
+
+    if($send_mail){
+      $users=User::find()->where(['id' => $users])->all();
+      foreach ($users as $user) {
+        \Yii::$app->mailer->compose('new_status', [
+          'user' => $user,
+          'parcels' => $users_parcel[$user->id],
+          'total_weight'=>$total['weight_by_user'][$user->id]
+        ])
+          ->setFrom(\Yii::$app->params['adminEmail'])
+          ->setTo($user->email)
+          ->setSubject('Status of parcels updated')
+          ->send();
+      }
+    }
+    //$users=User::find()->where(['id' => $users])->all();
+  }
 }

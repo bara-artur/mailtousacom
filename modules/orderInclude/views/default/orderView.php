@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr class="bottom_line">
 <div class="table-responsive">
 <?php Pjax::begin(); ?>
-<table class="table table-art">
+<table class="table table-art" id="crud-datatable-pjax">
   <tr>
     <th>#</th>
     <th>User</th>
@@ -84,7 +84,10 @@ $this->params['breadcrumbs'][] = $this->title;
                   <td><?=$parcel->qst;?></td>
                   <td><?=$parcel->gst;?></td>
                   <td><?=PaymentsList::statusTextParcel($parcel->payment_state);?></td>
-                  <td><?=$parcel->weight;?></td>
+                  <td>
+                    <?=floor($parcel->weight);?> Lb
+                    <?=floor(($parcel->weight-floor($parcel->weight))*16);?> Oz
+                  </td>
                   <td><?=Html::a('Remove from order',
                       ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
                       [

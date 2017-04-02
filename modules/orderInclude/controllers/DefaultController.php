@@ -111,10 +111,15 @@ class DefaultController extends Controller
 
 
   public function actionViewOrder($id){
+    if(!Yii::$app->user->can('orderChangeForAdmin')){
+      throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+      return false;
+    }
+
     $order = Order::find()->where(['id'=>$id])->one();
     $numbers = explode(',',$order->el_group);
 
-    $parcels = OrderElement::find()->where(['id' => $numbers])->with(['orderInclude'])->all();
+    $parcels = OrderElement::find()->where(['id' => $numbers])->all();
 
     $users=[];
     $users_parcel=[];
@@ -149,6 +154,10 @@ class DefaultController extends Controller
 
   public function actionGroupRemove($order_id,$id)
   {
+    if(!Yii::$app->user->can('orderChangeForAdmin')){
+      throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+      return false;
+    }
     $order = Order::find()->where(['id'=>$order_id])->one();
     $numbers = explode(',',$order->el_group);
     $numbers_new=[];
@@ -165,6 +174,10 @@ class DefaultController extends Controller
   }
 
   public function actionChooseStatus($id){
+    if(!Yii::$app->user->can('orderChangeForAdmin')){
+      throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+      return false;
+    }
     $request = Yii::$app->request;
     $order = Order::find()->where(['id'=>$id])->one();
 
@@ -188,10 +201,11 @@ class DefaultController extends Controller
 
         ];
       }else{
+        $order->setStatus($request->post('status'),$request->post('send_mail'));
         return [
           'title' => "Choose status to parcels",
           'content' => "Status successfully updated",
-          'forceReload'=>'#crud-datatable-pjax',
+          //'forceReload'=>'#crud-datatable-pjax',
           'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
 
         ];
