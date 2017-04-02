@@ -58,7 +58,6 @@ $this->params['breadcrumbs'][] = $this->title;
       <tr id="user_parcels_<?=$user->id;?>" class="collapse">
 
         <td colspan="4" class="padding-off-top">
-
           <table class="table table-pod">
             <tr>
               <th>#</th>
