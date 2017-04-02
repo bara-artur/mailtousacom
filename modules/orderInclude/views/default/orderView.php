@@ -3,6 +3,7 @@ use app\modules\payment\models\PaymentsList;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use johnitvn\ajaxcrud\CrudAsset;
+use yii\widgets\Pjax;
 
 CrudAsset::register($this);
 
@@ -24,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
   ]
 ); ?>
 
-<table class="table">
+<?php Pjax::begin(); ?>
+<table class="table" id="crud-datatable-pjax">
   <tr>
     <th>#</th>
     <th>User</th>
@@ -73,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   <td><?=PaymentsList::statusTextParcel($parcel->payment_state);?></td>
                   <td><?=$parcel->weight;?></td>
                   <td><?=Html::a('Remove from order',
-                      ['/orderInclude/group-remove/'.$order_id],
+                      ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
                       [
                         'class' => 'btn btn-danger btn-sm',
                         'data' => [
@@ -98,6 +100,8 @@ $this->params['breadcrumbs'][] = $this->title;
     }
   ?>
 </table>
+
+<?php Pjax::end(); ?>
 
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",

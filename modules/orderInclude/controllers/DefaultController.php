@@ -144,9 +144,42 @@ class DefaultController extends Controller
     ]);
   }
 
-  public function actionGroupRemove($id)
+  public function actionGroupRemove($order_id,$id)
   {
-    return $id;
+    $order = Order::find()->where(['id'=>$order_id])->one();
+    $numbers = explode(',',$order->el_group);
+    $numbers_new=[];
+    foreach ($numbers as $i){
+      if($i!=$id){
+        $numbers_new[]=$i;
+      }
+    }
+    $order->el_group=implode(',',$numbers_new);
+    $order->save();
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+  }
+
+  public function actionChooseStatus($id){
+    $request = Yii::$app->request;
+    $order = Order::find()->where(['id'=>$id])->one();
+    $status_list=[];
+    if($request->isAjax) {
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if ($request->isGet) {
+        return [
+          'title' => "Adding new packages",
+          'content' => $this->renderAjax('chooseStatus', [
+            'model' => $status_list,
+            'order_id' => $id,
+          ]),
+          'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+            Html::button('Save', ['class' => 'btn btn-success', 'type' => "submit"])
+
+        ];
+      }
+    }
   }
   /**
    * Displays a single OrderInclude model.

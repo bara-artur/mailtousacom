@@ -8,6 +8,7 @@ use yii\jui\DatePicker;
 use kartik\daterange\DateRangePicker;
 use yii\bootstrap\Modal;
 use johnitvn\ajaxcrud\CrudAsset;
+use yii\widgets\Pjax;
 
 CrudAsset::register($this);
 /* @var $this yii\web\View */
