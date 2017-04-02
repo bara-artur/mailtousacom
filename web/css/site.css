@@ -903,3 +903,46 @@ div.icon_integ_shop{
     box-shadow: none !important;
 }
 .gritter-item-wrapper.hover{border:2px solid #ffffff !important;}
+
+div.trans_count {
+    font-size: 20px;
+    font-weight: 600;
+    color: #05389F;
+}
+.table-art{border:1px solid #ccc; background-color: #fff;}
+.table-art tr {cursor:pointer;}
+.table-art.table>tbody>tr>td, .table-art.table>tbody>tr>th, .table-art.table>tfoot>tr>td, .table-art.table>tfoot>tr>th, .table-art.table>thead>tr>td, .table-art.table>thead>tr>th {
+    vertical-align: middle;
+    border-top: 1px solid #ccc;
+    border-left: 1px dotted #ddd;
+    border-right: 1px dotted #ddd;
+
+}
+.table-art.table>tbody>tr>td,  .table-art.table>tfoot>tr>td,.table-art.table>thead>tr>td{
+    border-bottom: 1px solid  #CCCCCC;
+}
+.table-pod.table-art.table>tbody>tr>td,  .table-pod.table-art.table>tfoot>tr>td,.table-pod.table-art.table>thead>tr>td{
+    border-bottom: 0px solid  #4C648E;
+}
+.table-art th{
+background-color: #4c648e;
+color: #fff;}
+.table-art td{
+    color: #000;}
+.table-pod td{
+    font-weight:400;
+    color: #565656;}
+
+.table-pod th{
+    background-color: #ddd;
+    color: #000;}
+.table.table-pod{margin-bottom: 0px !important;}
+.table-pod tr{cursor:auto;}
+.table-pod.table>tbody>tr>td, .table-pod.table>tbody>tr>th, .table-pod.table>tfoot>tr>td, .table-pod.table>tfoot>tr>th, .table-pod.table>thead>tr>td, .table-pod.table>thead>tr>th {
+    vertical-align: middle;
+    border-top: 0px solid #ccc;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+
+}

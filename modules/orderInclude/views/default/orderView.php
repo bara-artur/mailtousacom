@@ -11,20 +11,30 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 ?>
-
-<p>Total users <?=count($users);?></p>
-<p>Total parcels <?=count($parcels);?></p>
-<p>Total weight <?=floor($total['weight']);?> Lb <?=floor(($total['weight']-floor($total['weight']))*16);?> Oz </p>
-
-<?=Html::a('<i class="icon-metro-location"></i> Set new status to group', ['/orderInclude/choose-status/'.$order_id],
+    <h4 class="modernui-neutral2">Group management of parcels</h4>
+<div class="row">
+<div class="col-md-3 text-center">
+    <b>Total users</b> <div class="trans_count"><?=count($users);?></div>
+</div>
+    <div class="col-md-3 text-center">
+        <b>Total parcels</b> <div class="trans_count"><?=count($parcels);?></div>
+    </div>
+    <div class="col-md-3 text-center">
+        <b>Total weight</b> <div class="trans_count"><?=floor($total['weight']);?> Lb <?=floor(($total['weight']-floor($total['weight']))*16);?> Oz</div>
+    </div>
+    <div class="col-md-3">
+    <?=Html::a('Set new status to group', ['/orderInclude/choose-status/'.$order_id],
   [
     'id'=>'choose_receiving_point',
     'role'=>'modal-remote',
-    'class'=>'btn btn-neutral-border  show_modal',
+    'class'=>'btn btn-default pull-right show_modal',
   ]
 ); ?>
-
-<table class="table">
+</div>
+</div>
+    <hr class="bottom_line">
+<div class="table-responsive">
+<table class="table table-art">
   <tr>
     <th>#</th>
     <th>User</th>
@@ -46,8 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </td>
       </tr>
       <tr id="user_parcels_<?=$user->id;?>" class="collapse">
-        <td colspan="4">
-          <table class="table">
+
+        <td colspan="4" class="padding-off-top">
+
+          <table class="table table-pod">
             <tr>
               <th>#</th>
               <th>Track Number</th>
@@ -98,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
   ?>
 </table>
-
+</div>
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",
   "footer"=>"",// always need it for jquery plugin
