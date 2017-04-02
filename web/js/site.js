@@ -567,7 +567,17 @@ function sendCheckedToCookie(elem_checked){
 
 function main_table_checkbox(current_element){
  // $(current_element).parents('td:first').css("background-color","red");
-  elem_checked = $(".checkBoxParcelMainTable:checked");
+  current_id = null;
+  if (current_element) { // не должно срабатывать по f5
+    current_id = $(current_element).prop('id');
+  }
+
+  arr = getCookie('parcelCheckedId').split(',');        // все чекбоксы со всех страниц
+  for (i = 0; i < arr.length; i++) {                           // выделяем чекбоксы - для обновления по f5
+    if (arr[i] != current_id) $("#" + arr[i]).prop("checked", true);
+  }
+  elem_checked = $(".checkBoxParcelMainTable:checked");// выделенные чекбоксы на этой странице
+
   if ($(current_element).prop("checked")) {
     if (elem_checked.length > 1) { // выделено больше одного элемента - поэтому надо проверять на типы статусов
       if (($(current_element).attr('user') != elem_checked[0].getAttribute('user')) ||   // проверка необходима для работы админа
@@ -588,7 +598,6 @@ function main_table_checkbox(current_element){
   }
 
   sendCheckedToCookie(elem_checked);
-
   if (elem_checked.length>0){
     if (elem_checked[0].name == 'InSystem') {
       elem_type = 'Draft';
@@ -598,7 +607,6 @@ function main_table_checkbox(current_element){
     user_id = elem_checked[0].getAttribute('user');
     // берем элементы с другим статусом ИЛИ другого user_id
     elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
-    console.log(elems_prohibeted.length);
     elems_prohibeted.addClass('select_prohibited').css("background-color","red");
     elems_prohibeted.prop("disabled",true);
   }else{
