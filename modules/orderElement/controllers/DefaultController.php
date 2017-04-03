@@ -279,7 +279,7 @@ class DefaultController extends Controller
 
     }
 
-  public function findOrCreateOrder($parcels_id){
+  public function findOrCreateOrder($parcels_id, $admin = 0){
     $arr = explode('_', $parcels_id);
     asort($arr);
     $user_id = null;
@@ -304,7 +304,11 @@ class DefaultController extends Controller
         $order = new Order();
         $order->el_group = $parcels_id;
         $order->created_at = time();
-        $order->user_id = $user_id;
+        if ($admin==0){
+          $order->user_id = $user_id;
+        }else{
+          $order->user_id = Yii::$app->user->id;
+        }
         $order->save();
         return $order->id;
       }
@@ -368,6 +372,20 @@ class DefaultController extends Controller
           $this->redirect(['/'],200);
           return "Parcels delete complete successfully";
         }
+      return $this->redirect(['/']);
+    }
+
+
+    public function actionGroupView($parcels_id = null){
+      if ($parcels_id) {
+        $order_id = $this->findOrCreateOrder($parcels_id,1);
+        if ($order_id != null) {
+          $this->redirect(['/orderInclude/view-order/' . $order_id]);
+          return $order_id;
+        } else {
+          return $this->redirect(['/']);
+        }
+      }
       return $this->redirect(['/']);
     }
     /**

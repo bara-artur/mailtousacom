@@ -135,6 +135,7 @@ class SiteController extends Controller
         'filterForm' => $filterForm,
         'show_modal_for_point' => $show_modal_for_point,
         'receiving_point' => (isset($receiving_point))?($receiving_point->address):(''),
+        'show_view_button' => Yii::$app->user->can('orderChangeForAdmin'),
       ]);
     }
 

@@ -118,9 +118,7 @@ class DefaultController extends Controller
 
     $order = Order::find()->where(['id'=>$id])->one();
     $numbers = explode(',',$order->el_group);
-
     $parcels = OrderElement::find()->where(['id' => $numbers])->all();
-
     $users=[];
     $users_parcel=[];
     $total=[
