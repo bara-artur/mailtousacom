@@ -361,13 +361,13 @@ $this->title = 'Shipping to USA and Canada';
                 // 'created_at',
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
-                    $button_print_pdf = Html::a('Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem']);
-                    $button_update_parcel = Html::a('Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
-                    $button_view_parcel = Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
-                    $button_delete_parcel = Html::a('Delete',
+                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
+                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
+                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
+                    $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i> Delete',
                       ['/orderElement/group-delete/' . $data->id],
                       [
-                        'class' => 'btn btn-danger btn-sm but_tab_marg',
+                        'class' => 'btn btn-danger btn-sm marg_but',
                         'data' => [
                           'confirm-message' => 'Are you sure to delete this item?',
                           'confirm-title'=>"Delete",
