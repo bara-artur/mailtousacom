@@ -74,7 +74,7 @@ AppAsset::register($this);
               . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
               . '</li>';
             $user_menu[] = '<li>'
-                . Html::a('<i class="icon-metro-user-2"></i>&nbsp;&nbsp;Update profile', ['/profile/'], ['class' => 'profile-link'])
+                . Html::a('<i class="icon-metro-user-2"></i>&nbsp;&nbsp;Profile', ['/profile/'], ['class' => 'profile-link'])
             .'</li>';
 
         }else{

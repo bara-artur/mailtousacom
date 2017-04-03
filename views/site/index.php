@@ -21,16 +21,16 @@ $this->title = 'Shipping to USA and Canada';
     <div class="row">
       <div class="col-md-12">
 
-        <div class="col-md-3 hidden-xs hidden-sm hidden-md padding-off-left margin-bottom-10">
+        <div class="col-md-2 hidden-xs hidden-sm hidden-md padding-off-left margin-bottom-10">
           <?php if ($orderElements) { ?>
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
           <?php } ?>
           <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
           <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-neutral-border clearParcelsIdCookie',])?>
         </div>
-        <div class="col-md-5 hidden-xs hidden-sm hidden-md text-center">
+        <div class="col-md-7 hidden-xs hidden-sm hidden-md text-center">
             <?php if ($show_view_button==true){ ?>
-              <?=Html::a('Admin View', ['/orderElement/group-view/'], [
+              <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group-view/'], [
                 'class' => 'btn btn-md btn-info',
                 'id'=>'group-admin-view',
               ]); ?>
@@ -70,10 +70,10 @@ $this->title = 'Shipping to USA and Canada';
             <div class="col-md-12 group_text"><div class="group_text2">group management</div></div>
         </div>
 
-          <div class="col-md-4 hidden-md hidden-sm hidden-xs padding-off-right text-right">
+          <div class="col-md-3 hidden-md hidden-sm hidden-xs padding-off-right padding-off-left text-right">
 
               <?php if(Yii::$app->user->can("takeParcel")){?>
-                  <?=Html::a('<i class="icon-metro-location"></i> Choose Receiving point', ['/receiving_points/choose/'],
+                  <?=Html::a('<i class="icon-metro-location"></i> Receiving point', ['/receiving_points/choose/'],
                       [
                           'id'=>'choose_receiving_point',
                           'role'=>'modal-remote',
@@ -82,7 +82,7 @@ $this->title = 'Shipping to USA and Canada';
                   ); ?>
               <?php }?>
 
-              <?=Html::a('<i class="fa fa-magic"></i> Create new order', ['/order/create/'],
+              <?=Html::a('<i class="fa fa-magic"></i> Create order', ['/order/create/'],
                   [
                       'role'=>'modal-remote',
                       'class'=>'btn btn-success show_modal',
@@ -93,33 +93,54 @@ $this->title = 'Shipping to USA and Canada';
 
           <!--FOR TABLET BEGIN-->
 
-          <div class="col-md-3 col-sm-3 hidden-xs hidden-lg text-left  padding-off-left margin-bottom-10">
+          <div class="col-md-2 col-sm-3 hidden-xs hidden-lg text-left  padding-off-left margin-bottom-10">
               <?php if ($orderElements) { ?>
                   <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-sm btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?php } ?>
               <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-sm btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-sm btn-neutral-border clearParcelsIdCookie',])?>
           </div>
-          <div class="col-sm-6 col-md-5 hidden-lg hidden-xs text-center">
+          <div class="col-sm-6 col-md-7 hidden-lg hidden-xs text-center padding-off-left padding-off-right">
+              <?php if ($show_view_button==true){ ?>
+                  <?=Html::a('<i class="fa fa-list"></i>', ['/orderElement/group-view/'], [
+                      'class' => 'btn btn-sm btn-info',
+                      'id'=>'group-admin-view',
+                  ]); ?>
+              <?php }?>
               <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
                   'class' => 'btn btn-sm btn-science-blue InSystem_show Draft_show gr_update_text',
                   'id'=>'group-update',
                   'disabled'=>true,
               ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
-              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+              'class' => 'btn btn-sm btn-blue-gem InSystem_show Draft_show',
               'id'=>'group-print',
               'disabled'=>true,
             ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
               [
-                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+                'class' => 'btn btn-sm btn-blue-gem InSystem_show Draft_show',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
               ]); ?>
+              <?=Html::a('<i class="icon-metro-remove"></i> Delete',
+                  ['/orderElement/group-delete/'],
+                  [
+                      'id'=>'group-delete',
+                      'class' => 'btn btn-danger btn-sm Draft_show difUserIdHide',
+                      'data' => [
+                          'confirm-message' => 'Are you sure to delete this item?',
+                          'confirm-title'=>"Delete",
+                          'pjax'=>'false',
+                          'toggle'=>"tooltip",
+                          'request-method'=>"post",
+                      ],
+                      'disabled'=>true,
+                      'role'=>"modal-remote",
+                  ]); ?>
             <div class="col-md-12 group_text"><div class="group_text2">group management</div></div>
         </div>
-          <div class="col-md-4 text-right padding-off-right">
+          <div class="col-sm-3 col-md-3 visible-md visible-sm text-right padding-off-right">
 
               <?php if(Yii::$app->user->can("takeParcel")){?>
                   <?=Html::a('<i class="icon-metro-location"></i> Point', ['/receiving_points/choose/'],
@@ -150,6 +171,12 @@ $this->title = 'Shipping to USA and Canada';
 
 
           <div class="col-xs-12 visible-xs text-center padding-off-left padding-off-right">
+              <?php if ($show_view_button==true){ ?>
+                  <?=Html::a('<i class="fa fa-list"></i>', ['/orderElement/group-view/'], [
+                      'class' => 'btn btn-md btn-info',
+                      'id'=>'group-admin-view',
+                  ]); ?>
+              <?php }?>
               <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
                   'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text',
                   'id'=>'group-update',
@@ -161,7 +188,7 @@ $this->title = 'Shipping to USA and Canada';
                   'id'=>'group-print',
                   'disabled'=>true,
               ]); ?>
-              <?=Html::a('<span class="glyphicon glyphicon-print"></span> <span class="glyphicon glyphicon-list-alt"></span>', ['/orderElement/group-print-advanced/'],
+              <?=Html::a('<span class="glyphicon glyphicon-list-alt"></span>', ['/orderElement/group-print-advanced/'],
                   [
                       'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
                       'id'=>'group-print-advanced',
@@ -227,26 +254,21 @@ $this->title = 'Shipping to USA and Canada';
         </div>
 
       <div class="row pad_row">
-          <div class="col-md-3">
+          <div class="col-md-3 col-xs-12">
         <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
-            <span>
-              <?=Html::a('Clear', [''],['class'=>'btn btn-success btn-sm clearParcelsIdCookie',])?>
-            </span>
           </div>
-        <span class="labelDifUserId">"Different user ID" choosing mode</span>
-<div class="col-md-6 text-center">
+<div class="col-md-6 col-xs-12 ">
  <?php if(Yii::$app->user->can("takeParcel")){?>
      <span><b>Current Receiving point :</b> <?= $receiving_point ?></span>
  <?php }?>
-
+    <span class="labelDifUserId">"Different user ID" choosing mode</span>
     </div>
 
-          <div class="col-md-3 text-right">
+          <div class="col-md-3 col-xs-12 text-right">
               <?= GridView::widget([
                   'dataProvider' => $orderElements,
                   'layout' => '{summary}'
               ]); ?>
-
           </div>
 
       </div>
