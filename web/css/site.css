@@ -323,7 +323,7 @@ a.desc:after {
     width:264px;
     height:35px;
 }
-@media (max-width: 990px){
+@media (max-width: 992px){
     .navbar-brand>img{
         width:180px;
         height:24px;
@@ -983,3 +983,4 @@ color: #fff;}
     height: 24px;
 }
 .marg_but{margin-right:4px;display:inline; }
+button.navbar-toggle{margin-right:30px;}
