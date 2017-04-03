@@ -199,4 +199,10 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionConfidentiality()
+    {
+      return $this->render('confidentiality');
+    }
+
 }

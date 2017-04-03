@@ -396,9 +396,25 @@ function init_address_edit(){
   });
 }
 
+valid_gritter=new Array();
+function show_gritter(current_element){ // проверяем показывать ли для данного элемента гриттер или нет.
+  flag = 0;
+  if (valid_gritter.length>0) valid_gritter.forEach(function(item, i, arr) {
+    if (item==current_element) flag =1;  // Показываем только один раз для текущей страницы
+  });
+  if (flag==0) {   // если для этого элемента ещё не вызывали гриттер
+    valid_gritter.push(current_element);
+    gritterAdd('Warning','Warning: prohibited key pressed','gritter-warning');
+  }
+
+}
+
 function  no_letters_in_input(evt){
     if ( ( evt.keyCode >= 48 && evt.keyCode <= 57 )) return;
-    else  evt.preventDefault();
+    else  {
+      show_gritter(this);
+      evt.preventDefault();
+    }
 }
 
 function  only_letters_in_input(evt){
@@ -406,7 +422,10 @@ function  only_letters_in_input(evt){
             ( evt.keyCode >= 97 && evt.keyCode <= 122 ) ||
             ( evt.keyCode >= 65 && evt.keyCode <= 90 )|| (evt.keyCode==32) )
             return ;
-        else evt.preventDefault();
+        else {
+          show_gritter(this);
+          evt.preventDefault();
+        }
 }
 
 function  only_no_foreign_letters_in_input(evt){
@@ -419,7 +438,10 @@ function  only_no_foreign_letters_in_input(evt){
             (evt.keyCode==64)||    // @
             (evt.keyCode==32) )   // пробел
             return;
-        else evt.preventDefault();
+        else {
+          show_gritter(this);
+          evt.preventDefault();
+        }
 }
 
 function init_js_validation()

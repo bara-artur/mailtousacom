@@ -127,7 +127,7 @@ class DefaultController extends Controller
     ];
 
     foreach($parcels as $parcel){
-      if(!$users_parcel[$parcel->user_id]){
+      if(!isset($users_parcel[$parcel->user_id])){
         $users_parcel[$parcel->user_id]=[];
         $total['weight_by_user'][$parcel->user_id]=0;
         $users[]=$parcel->user_id;
@@ -399,6 +399,9 @@ class DefaultController extends Controller
     }
 
     $arr = explode(',', $order->el_group);
+    if ($order->el_group=='') {
+      return $this->redirect('/');
+    }
 
     $total=array(
       'price'=>0,
@@ -423,7 +426,9 @@ class DefaultController extends Controller
         time()+
         (Yii::$app->params[
           'receive_max_time'
-          .Yii::$app->user->identity->isManager()?'_admin':''
+          .((Yii::$app->user->identity->isManager())?
+            ('_admin'):
+            (''))
         ]-24)*60*60;
       if($pac->transport_data<$max_time){
         $pac->transport_data=strtotime('+1 days');

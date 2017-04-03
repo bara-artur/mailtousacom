@@ -297,7 +297,8 @@ $submitOption = [
    <?php if ($hideNext==0) { ?>
     <?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
       [
-        'class'=>'btn btn-success pull-right go_to_order'
+        'class'=>'btn btn-success pull-right go_to_order',
+        'disabled' => (count($order_elements)==0),
       ])?>
      <?php } ?>
 <?php } ?>
