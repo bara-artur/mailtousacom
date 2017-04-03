@@ -21,13 +21,14 @@ $this->title = 'Shipping to USA and Canada';
     <div class="row">
       <div class="col-md-12">
 
-        <div class="col-md-2 col-xs-12  padding-off-left">
+        <div class="col-md-3 hidden-xs hidden-sm hidden-md padding-off-left margin-bottom-10">
           <?php if ($orderElements) { ?>
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
           <?php } ?>
           <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+          <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-neutral-border clearParcelsIdCookie',])?>
         </div>
-        <div class="col-md-6 text-center">
+        <div class="col-md-5 hidden-xs hidden-sm hidden-md text-center">
             <?php if ($show_view_button==true){ ?>
               <?=Html::a('Admin View', ['/orderElement/group-view/'], [
                 'class' => 'btn btn-md btn-info',
@@ -35,39 +36,41 @@ $this->title = 'Shipping to USA and Canada';
               ]); ?>
             <?php }?>
             <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
-              'class' => 'btn btn-md btn-info InSystem_show Draft_show gr_update_text difUserIdHide',
+              'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text',
               'id'=>'group-update',
               'disabled'=>true,
             ]); ?>
-            <?=Html::a('<i class="icon-metro-remove"></i> Delete',
-              ['/orderElement/group-delete/'],
-              [
-                'id'=>'group-delete',
-                'class' => 'btn btn-danger btn-mb but_tab_marg Draft_show difUserIdHide',
-                'data' => [
-                  'confirm-message' => 'Are you sure to delete this item?',
-                  'confirm-title'=>"Delete",
-                  'pjax'=>'false',
-                  'toggle'=>"tooltip",
-                  'request-method'=>"post",
-                ],
-                'disabled'=>true,
-                'role'=>"modal-remote",
-              ]); ?>
+
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
-              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide',
+              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
               'id'=>'group-print',
               'disabled'=>true,
             ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
               [
-                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide',
+                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
               ]); ?>
+            <?=Html::a('<i class="icon-metro-remove"></i> Delete',
+                ['/orderElement/group-delete/'],
+                [
+                    'id'=>'group-delete',
+                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide',
+                    'data' => [
+                        'confirm-message' => 'Are you sure to delete this item?',
+                        'confirm-title'=>"Delete",
+                        'pjax'=>'false',
+                        'toggle'=>"tooltip",
+                        'request-method'=>"post",
+                    ],
+                    'disabled'=>true,
+                    'role'=>"modal-remote",
+                ]); ?>
             <div class="col-md-12 group_text"><div class="group_text2">group management</div></div>
         </div>
-          <div class="col-md-4 text-right padding-off-right">
+
+          <div class="col-md-4 hidden-md hidden-sm hidden-xs padding-off-right text-right">
 
               <?php if(Yii::$app->user->can("takeParcel")){?>
                   <?=Html::a('<i class="icon-metro-location"></i> Choose Receiving point', ['/receiving_points/choose/'],
@@ -85,29 +88,129 @@ $this->title = 'Shipping to USA and Canada';
                       'class'=>'btn btn-success show_modal',
                   ])?>
           </div>
-        <!--<div class="col-xs-12 visible-xs text-center margin-top-10">
-            <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], ['class' => 'btn btn-sm btn-info', 'id'=>'group-update']); ?>
-            <?=Html::a('<i class="icon-metro-remove"></i> Delete',
-                ['/orderElement/group-delete/'],
-                [
-                  'id'=>'group-delete',
-                  'class' => 'btn btn-danger btn-sm but_tab_marg',
-                  'data' => [
-                    'confirm-message' => 'Are you sure to delete this item?',
-                    'confirm-title'=>"Delete",
-                    'pjax'=>'false',
-                    'toggle'=>"tooltip",
-                    'request-method'=>"post",
-                  ],
-                  'role'=>"modal-remote",
-                ]); ?>
-            <?=Html::a('Print', ['/orderElement/group-print/'], ['class' => 'btn btn-sm btn-blue-gem', 'id'=>'group-print']); ?>
-            <?=Html::a('Create order', ['/order/create/'],
-                [
-                    'role'=>'modal-remote',
-                    'class'=>'btn btn-success btn-sm show_modal',
-                ])?>
-        </div>-->
+
+
+
+          <!--FOR TABLET BEGIN-->
+
+          <div class="col-md-3 col-sm-3 hidden-xs hidden-lg text-left  padding-off-left margin-bottom-10">
+              <?php if ($orderElements) { ?>
+                  <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-sm btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?php } ?>
+              <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-sm btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-sm btn-neutral-border clearParcelsIdCookie',])?>
+          </div>
+          <div class="col-sm-6 col-md-5 hidden-lg hidden-xs text-center">
+              <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
+                  'class' => 'btn btn-sm btn-science-blue InSystem_show Draft_show gr_update_text',
+                  'id'=>'group-update',
+                  'disabled'=>true,
+              ]); ?>
+            <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
+              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+              'id'=>'group-print',
+              'disabled'=>true,
+            ]); ?>
+            <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
+              [
+                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+                'id'=>'group-print-advanced',
+                'disabled'=>true,
+              ]); ?>
+            <div class="col-md-12 group_text"><div class="group_text2">group management</div></div>
+        </div>
+          <div class="col-md-4 text-right padding-off-right">
+
+              <?php if(Yii::$app->user->can("takeParcel")){?>
+                  <?=Html::a('<i class="icon-metro-location"></i> Point', ['/receiving_points/choose/'],
+                      [
+                          'id'=>'choose_receiving_point',
+                          'role'=>'modal-remote',
+                          'class'=>'btn btn-sm btn-neutral-border  show_modal',
+                      ]
+                  ); ?>
+              <?php }?>
+
+              <?=Html::a('<i class="fa fa-magic"></i> Create order', ['/order/create/'],
+                  [
+                      'role'=>'modal-remote',
+                      'class'=>'btn btn-sm btn-success show_modal',
+                  ])?>
+          </div>
+          <!--TABLET END-->
+
+          <!--FOR MOBILE BEGIN-->
+          <div class="col-xs-12 visible-xs text-center  margin-bottom-10 padding-bottom-10">
+              <?php if ($orderElements) { ?>
+                  <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-md btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?php } ?>
+              <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-md btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-md btn-neutral-border clearParcelsIdCookie',])?>
+          </div>
+
+
+          <div class="col-xs-12 visible-xs text-center padding-off-left padding-off-right">
+              <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
+                  'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text',
+                  'id'=>'group-update',
+                  'disabled'=>true,
+              ]); ?>
+
+              <?=Html::a('<span class="glyphicon glyphicon-print"></span>', ['/orderElement/group-print/'], [
+                  'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+                  'id'=>'group-print',
+                  'disabled'=>true,
+              ]); ?>
+              <?=Html::a('<span class="glyphicon glyphicon-print"></span> <span class="glyphicon glyphicon-list-alt"></span>', ['/orderElement/group-print-advanced/'],
+                  [
+                      'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+                      'id'=>'group-print-advanced',
+                      'disabled'=>true,
+                  ]); ?>
+              <?=Html::a('<i class="icon-metro-remove"></i>',
+                  ['/orderElement/group-delete/'],
+                  [
+                      'id'=>'group-delete',
+                      'class' => 'btn btn-danger btn-md but_tab_marg Draft_show',
+                      'data' => [
+                          'confirm-message' => 'Are you sure to delete this item?',
+                          'confirm-title'=>"Delete",
+                          'pjax'=>'false',
+                          'toggle'=>"tooltip",
+                          'request-method'=>"post",
+                      ],
+                      'disabled'=>true,
+                      'role'=>"modal-remote",
+                  ]); ?>
+              <div class="col-md-12 margin-bottom-10 group_text"><div class="group_text3">group management</div></div>
+          </div>
+
+
+
+
+          <div class="col-xs-12 visible-xs text-center padding-off-right padding-top-10">
+
+              <?php if(Yii::$app->user->can("takeParcel")){?>
+                  <?=Html::a('<i class="icon-metro-location"></i> Point', ['/receiving_points/choose/'],
+                      [
+                          'id'=>'choose_receiving_point',
+                          'role'=>'modal-remote',
+                          'class'=>'btn btn-md btn-neutral-border  show_modal',
+                      ]
+                  ); ?>
+              <?php }?>
+
+              <?=Html::a('<i class="fa fa-magic"></i> Create new order', ['/order/create/'],
+                  [
+                      'role'=>'modal-remote',
+                      'class'=>'btn btn-md btn-success show_modal',
+                  ])?>
+          </div>
+
+
+          <!--FOR MOBILE END-->
+
+
       </div>
     </div>
         <hr class="bottom_line2">
@@ -251,13 +354,13 @@ $this->title = 'Shipping to USA and Canada';
                 // 'created_at',
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
-                    $button_print_pdf = Html::a('Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem']);
-                    $button_update_parcel = Html::a('Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-info']);
-                    $button_view_parcel = Html::a('View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-warning']);
-                    $button_delete_parcel = Html::a('Delete',
+                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
+                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
+                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
+                    $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i> Delete',
                       ['/orderElement/group-delete/' . $data->id],
                       [
-                        'class' => 'btn btn-danger btn-sm but_tab_marg',
+                        'class' => 'btn btn-danger btn-sm marg_but',
                         'data' => [
                           'confirm-message' => 'Are you sure to delete this item?',
                           'confirm-title'=>"Delete",
@@ -267,11 +370,11 @@ $this->title = 'Shipping to USA and Canada';
                         ],
                         'role'=>"modal-remote",
                       ]);
-                    $button_payments =  Html::a('Payments view', ['/payment/show-parcel-includes/'.$data->id],
+                    $button_payments =  Html::a('Payments', ['/payment/show-parcel-includes/'.$data->id],
                         [
                           'id'=>'payment-show-includes',
                           'role'=>'modal-remote',
-                          'class'=>'btn btn-default show_modal',
+                          'class'=>'btn btn-sm btn-info show_modal marg_but',
                         ]
                       );
                     return (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок

@@ -16,17 +16,17 @@ use yii\helpers\Html;
         <div class="col-md-12"><h6 class="modernui-neutral4">Please connect you stores with our WMS ( warehouse
                 management software )</h6>
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-4 col-xs-4  text-center">
             <a href="/ebay/get-order/<?= $order_id; ?>">
                 <div class="icon_integ_ebay"></div>
             </a>
         </div>
-        <div class="col-md-4 text-center">
+        <div class="col-md-4 col-xs-4 text-center">
             <a>
                 <div class="icon_integ_amazon"></div>
             </a>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-xs-4">
             <a>
                 <div class="icon_integ_shop"></div>
             </a>
