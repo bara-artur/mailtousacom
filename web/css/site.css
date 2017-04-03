@@ -946,3 +946,17 @@ color: #fff;}
     border-bottom: 1px solid #CCCCCC;
 
 }
+/*03042017*/
+.group_text3 {
+    position: relative;
+    display: block;
+    background: #fff;
+    width: 100px;
+    margin: 0 auto;
+    top: 18px;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #878787;
+    line-height: 1;
+    height: 24px;
+}
