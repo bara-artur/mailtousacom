@@ -80,6 +80,7 @@ $config = [
                 'city/get/<id:\d+>' => 'city/get',
                 //Взаимодействия с пользователем на сайте
                 '<action:(online|registration|logout|confirm|reset|resetpassword)>' => 'user/user/<action>',
+                '<action:(confidentiality)>' => 'site/<action>',
 
                 //закрываем прямой доступ к базовому контроллеру
                 //'site/<action>'=>'404',
