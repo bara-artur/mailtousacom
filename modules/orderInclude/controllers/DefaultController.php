@@ -127,7 +127,7 @@ class DefaultController extends Controller
     ];
 
     foreach($parcels as $parcel){
-      if(!$users_parcel[$parcel->user_id]){
+      if(!isset($users_parcel[$parcel->user_id])){
         $users_parcel[$parcel->user_id]=[];
         $total['weight_by_user'][$parcel->user_id]=0;
         $users[]=$parcel->user_id;
