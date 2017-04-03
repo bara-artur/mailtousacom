@@ -121,7 +121,6 @@ $(document).ready(function() {
     }
   })
 });
-});
 
 function show_err(el,txt){
   if(!el.hasClass('has-error')) {

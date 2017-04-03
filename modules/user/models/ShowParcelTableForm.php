@@ -44,6 +44,12 @@ class ShowParcelTableForm extends User
    if ($this->showGst) $arr[]=$this->parcelTableGst;
    if ($this->showTotal) $arr[]=$this->parcelTableTotal;
    if ($this->showTrackNumber) $arr[]=$this->parcelTableTrackNumber;
+   if (count($arr)==0) {
+     return  $this->parcelTableSerial.','.$this->parcelTableTrackNumber.','.
+             $this->parcelTableTotal.','.$this->parcelTableGst.','.$this->parcelTableQst.','.
+             $this->parcelTablePrice.','.$this->parcelTableID.','.$this->parcelTableStatus.','.
+             $this->parcelTableCreatedAt.','.$this->parcelTablePaymentState.','.$this->parcelTablePaymentType;
+   }
    return implode(',',$arr);
  }
 
