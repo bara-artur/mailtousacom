@@ -28,8 +28,14 @@ $this->title = 'Shipping to USA and Canada';
           <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
         </div>
         <div class="col-md-6 text-center">
+            <?php if ($show_view_button==true){ ?>
+              <?=Html::a('Admin View', ['/orderElement/group-view/'], [
+                'class' => 'btn btn-md btn-info',
+                'id'=>'group-admin-view',
+              ]); ?>
+            <?php }?>
             <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
-              'class' => 'btn btn-md btn-info InSystem_show Draft_show gr_update_text',
+              'class' => 'btn btn-md btn-info InSystem_show Draft_show gr_update_text difUserIdHide',
               'id'=>'group-update',
               'disabled'=>true,
             ]); ?>
@@ -37,7 +43,7 @@ $this->title = 'Shipping to USA and Canada';
               ['/orderElement/group-delete/'],
               [
                 'id'=>'group-delete',
-                'class' => 'btn btn-danger btn-mb but_tab_marg Draft_show',
+                'class' => 'btn btn-danger btn-mb but_tab_marg Draft_show difUserIdHide',
                 'data' => [
                   'confirm-message' => 'Are you sure to delete this item?',
                   'confirm-title'=>"Delete",
@@ -49,13 +55,13 @@ $this->title = 'Shipping to USA and Canada';
                 'role'=>"modal-remote",
               ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
-              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide',
               'id'=>'group-print',
               'disabled'=>true,
             ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
               [
-                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
               ]); ?>
@@ -124,7 +130,7 @@ $this->title = 'Shipping to USA and Canada';
               <?=Html::a('Clear', [''],['class'=>'btn btn-success btn-sm clearParcelsIdCookie',])?>
             </span>
           </div>
-
+        <span class="labelDifUserId">"Different user ID" choosing mode</span>
 <div class="col-md-6 text-center">
  <?php if(Yii::$app->user->can("takeParcel")){?>
      <span><b>Current Receiving point :</b> <?= $receiving_point ?></span>

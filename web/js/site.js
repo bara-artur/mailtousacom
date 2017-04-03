@@ -567,6 +567,7 @@ function getCookie(cname) {
 function init_button_clearParcelsIdCookie(){
   $(".clearParcelsIdCookie").on('click', function (){
     setCookie('parcelCheckedId','',1);
+    setCookie('doNotShowDifUserGritter','',1);
   })
 }
 function init_button_updateParcelsIdCookie(){
@@ -593,7 +594,9 @@ function sendCheckedToCookie(elem_checked, oldCookie){
   }
 }
 
+canChooseDifUser = null;
 function main_table_checkbox(current_element){
+  if ($('#group-admin-view').length!=0) admin = 1; else admin =0;
  // $(current_element).parents('td:first').css("background-color","red");
   current_id = null;
   if (current_element) { // не должно срабатывать по f5
@@ -608,24 +611,27 @@ function main_table_checkbox(current_element){
 
   if ($(current_element).prop("checked")) {
     if (elem_checked.length > 1) { // выделено больше одного элемента - поэтому надо проверять на типы статусов
-      if (($(current_element).attr('user') != elem_checked[0].getAttribute('user')) ||   // проверка необходима для работы админа
-        ($(current_element).attr('user') != elem_checked[1].getAttribute('user'))) {
-        gritterAdd('Error', "You can't combine parcels of 2 different users", 'gritter-danger');
+      if ((($(current_element).attr('user') != elem_checked[0].getAttribute('user')) ||   // проверка необходима для работы админа
+        ($(current_element).attr('user') != elem_checked[1].getAttribute('user')))&&(getCookie('doNotShowDifUserGritter')!='yes')) {
+        gritterAdd('Warning', "You combine different users parcels", 'gritter-warning');
+        setCookie('doNotShowDifUserGritter','yes',1);
+      }
+      if (($(current_element).attr('name') != elem_checked[0].name) ||
+        ($(current_element).attr('name') != elem_checked[1].name)) { // разные статусы у выделения. Надо отменить
+        gritterAdd('Error', "You can't combine parcels with Draft and the other Status", 'gritter-danger');
         $(current_element).prop("checked", false);
         elem_checked = $(".checkBoxParcelMainTable:checked"); // убираем из списка отмененное выше выделение
-      }else {
-        if (($(current_element).attr('name') != elem_checked[0].name) ||
-          ($(current_element).attr('name') != elem_checked[1].name)) { // разные статусы у выделения. Надо отменить
-          gritterAdd('Error', "You can't combine parcels with Draft and the other Status", 'gritter-danger');
-          $(current_element).prop("checked", false);
-          elem_checked = $(".checkBoxParcelMainTable:checked"); // убираем из списка отмененное выше выделение
-        } else {// выделение корректно
-        }
-      }
+      } else {/* выделение корректно*/}
     }
   }
   sendCheckedToCookie(elem_checked, oldCookie);
   if (getCookie('parcelCheckedId')!=''){
+    if (getCookie('doNotShowDifUserGritter')=='yes') {
+      $('.labelDifUserId').show().css('background-color',"orange");
+    }else{
+      $('.labelDifUserId').hide();
+    }
+    $('.clearParcelsIdCookie').show();
     if (getCookie('parcel_elem_type') == 'InSystem') {
       elem_type = 'Draft';
     }else{
@@ -634,12 +640,20 @@ function main_table_checkbox(current_element){
     //user_id = elem_checked[0].getAttribute('user');
     user_id = getCookie('parcel_user_id');
     // берем элементы с другим статусом ИЛИ другого user_id
-    elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
+    if (admin==0) {
+      elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
+    }else{
+      elems_prohibeted = $(" [name='"+elem_type+"']");
+      elems_difUserID = $(" .checkBoxParcelMainTable[user !='"+user_id+"']").addClass("elems_difUserID");
+    }
     elems_prohibeted.addClass('select_prohibited').css("background-color","red");
     elems_prohibeted.prop("disabled",true);
   }else{
+    $('.labelDifUserId').hide();
     setCookie('parcel_elem_type','',1);
     setCookie('parcel_user_id','',1);
+    setCookie('doNotShowDifUserGritter','',1);
+    $('.clearParcelsIdCookie').hide();
     elems_prohibeted = $(".select_prohibited");
     elems_prohibeted.parents('td').fadeTo(500, 1);
     elems_prohibeted.prop("disabled",false);
@@ -650,13 +664,12 @@ function main_table_checkbox(current_element){
   stringCoockies = getCookie('parcelCheckedId');
   if (stringCoockies.length>0){
     if (stringCoockies.substr(-1)==',') stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1);
-    string = stringCoockies;
-    parcel_ids = '/'+stringCoockies.replace(',','_');
+    string = stringCoockies.split(',').length;
+    parcel_ids = '/'+stringCoockies.replace(/,/g,'_');
   }else{
     string = "empty";
     parcel_ids = '/'+this.id;
   }
-
  /* elem_checked.each(function(i,elem) {
     if (parcel_ids == "") {
       parcel_ids = '/'+this.id;
@@ -668,20 +681,26 @@ function main_table_checkbox(current_element){
       string++;
     }
   });*/
-  if (string!="empty"){
-    type = getCookie('parcel_elem_type');
-    string = string + " ( " + type +" type)";
-    $('.'+ type +'_show').attr('disabled',false);
-    if(type=="InSystem"){
-      $('.gr_update_text').html('<span class="fa fa-eye"></span> View')
-    }else{
-      $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
-    }
-  }else{
-    $('.InSystem_show,.Draft_show').attr('disabled',true)
-  }
+ if (getCookie('doNotShowDifUserGritter')=='yes'){
+  $('.difUserIdHide').attr('disabled',true);
+ }else {
+   $('.difUserIdHide').attr('disabled',false);
+   if (string != "empty") {
+     type = getCookie('parcel_elem_type');
+     string = string + " ( " + type + " type)";
+     $('.' + type + '_show').attr('disabled', false);
+     if (type == "InSystem") {
+       $('.gr_update_text').html('<span class="fa fa-eye"></span> View')
+     } else {
+       $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
+     }
+   } else {
+     $('.InSystem_show,.Draft_show').attr('disabled', true)
+   }
+ }
 
   $("#for_group_actions").html('<b>Checked parcels:</b> ' + string);
+  $("#group-admin-view").attr("href","/orderElement/group-view"+parcel_ids);
   $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
   $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
   $("#group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
