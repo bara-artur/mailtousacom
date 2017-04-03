@@ -24,8 +24,11 @@ $submitOption = [
 ];
 ?>
   <div class="row">
-      <div class="col-md-12">
-          <h4 class="modernui-neutral2">Order #<?=$order_id?> for Transportation</br>
+      <div class="col-md-2">
+          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],['class'=>'btn btn-md btn-neutral-border pull-left hidden-xs','id' => 'updateParcelsIdCookie','data-forCookie'=> $ids])?>
+      </div>
+      <div class="col-md-8 text-center">
+          <h4 class="">Order #<?=$order_id?> for Transportation</br>
           <?php if (!$edit_not_prohibited) {?>
               <span class="prohibit_editing text-danger"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></span>
           <?php } ?>
@@ -33,6 +36,7 @@ $submitOption = [
     </div>
 
   </div>
+<hr class="bottom_line2">
 
 <?php if (Yii::$app->user->can('userManager')) { ?>
   <div class="row">
@@ -47,9 +51,7 @@ $submitOption = [
     ?>
   </div>
 <?php } ?>
-  <div class="row">
-    <?=Html::a('Back', ['/'],['class'=>'btn btn-info btn-xs2','id' => 'updateParcelsIdCookie','data-forCookie'=> $ids])?>
-  </div>
+
   <div id=crud-datatable-pjax>
 
     <?php
