@@ -115,9 +115,9 @@ $(document).ready(function() {
 
   $('body').on('click','[role="modal-remote"]',function(){
     if($(this).hasClass('big_model')) {
-      $('#ajaxCrudModal').addClass("<?=Modal::SIZE_LARGE;?>")
+      $('#ajaxCrudModal').addClass("modal-lg")
     }else{
-      $('#ajaxCrudModal').removeClass("<?=Modal::SIZE_LARGE;?>")
+      $('#ajaxCrudModal').removeClass("modal-lg")
     }
   })
 });
