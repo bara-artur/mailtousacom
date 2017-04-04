@@ -88,19 +88,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?=floor($parcel->weight);?> Lb
                     <?=floor(($parcel->weight-floor($parcel->weight))*16);?> Oz
                   </td>
-                  <td><?=Html::a('Remove from order',
-                      ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
-                      [
-                        'class' => 'btn btn-danger btn-sm',
-                        'data' => [
-                          'confirm-message' => 'Are you sure to remove this item from this order?',
-                          'confirm-title'=>"Remove",
-                          'pjax'=>'false',
-                          'toggle'=>"tooltip",
-                          'request-method'=>"post",
-                        ],
-                        'role'=>"modal-remote",
-                      ]); ?></td>
+                  <td>
+                    <?php if (count($users_parcel[$user->id])>1) { ?>
+                      <?=Html::a('Remove from order',
+                        ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
+                        [
+                          'class' => 'btn btn-danger btn-sm',
+                          'data' => [
+                            'confirm-message' => 'Are you sure to remove this item from this order?',
+                            'confirm-title'=>"Remove",
+                            'pjax'=>'false',
+                            'toggle'=>"tooltip",
+                            'request-method'=>"post",
+                          ],
+                          'role'=>"modal-remote",
+                        ]); ?>
+                    <?php } ?>
+                  </td>
                 </tr>
                 <?php
                 $parcel_n++;
