@@ -712,7 +712,8 @@ function main_table_checkbox(current_element){
      string = string + " ( " + type + " type)";
      $('.' + type + '_show').attr('disabled', false);
      if (type == "InSystem") {
-       $('.gr_update_text').html('<span class="fa fa-eye"></span> View')
+       $('.gr_update_text').html('<span class="fa fa-eye"></span> View');
+       $('#group-delete').attr('disabled', true);
      } else {
        $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
      }
