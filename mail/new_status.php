@@ -2,43 +2,24 @@
 use app\modules\payment\models\PaymentsList;
 
 ?>
-Status of parcels updated
-<p>Parcels <?=count($parcels);?></p>
-<p>
-  Total weight
-  <?=floor($total_weight);?> Lb
-  <?=floor(($total_weight-floor($total_weight))*16);?> Oz
-</p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width" initial-scale="1.0" user-scalable="yes"><style id="builder-styles">table,table td{border-collapse:collapse}body{margin:0;padding:0}a,body,li,p,table,td{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}a{word-wrap:break-word}table{border-spacing:0}table,td{mso-table-lspace:0;mso-table-rspace:0};@media only screen and (max-width:640px){td[class=image-full],td[class=divider-full],td[class=buttons-full-width],td[class=buttons-full-width] a,td[class=buttons-full-width] span{padding-left:0!important;padding-right:0!important}table[class=main],td[class=main]{width:100%!important;min-width:200px!important}table[class=logo-img],table[class=image-in-table],table[class=text-column]{width:100%!important;float:none;margin-bottom:15px}table[class=logo-img] td,table[class=links] td,td[class=footer-side],td[class=social-links]{text-align:center!important}table[class=image-caption-column],table[class=logo-title],table[class=button]{width:100%!important;float:none}table[class=logo-title] td{text-align:center;height:auto}table[class=logo-title] h1,td[class=header] h1,td[class=title] h1{font-size:24px!important}table[class=logo-title] h2{font-size:18px!important}table[class=image-in-table] img,td[class=image-caption-content] img,td[class=image] img,td[class=image-full] img,td[class=header-img] img{width:100%!important;height:auto!important}td[class=footer],td[class=image],td[class=image-group],td[class=image-text],td[class=divider-simple],td[class=social],td[class=buttons],td[class=content-buttons],td[class=title],td[class=block-text],td[class=two-columns],td[class=image-caption]{padding-left:15px!important;padding-right:15px!important}td[class=image-caption-content] h2,td[class=text] h2,td[class=block-text] h2{font-size:20px!important;line-height:170%!important}td[class=image-caption-content] p,td[class=text] p,td[class=image-text] p,td[class=block-text] li,td[class=block-text] p{font-size:16px!important;line-height:170%!important}table[class=image-in-table] td,table[class=links],table[class=image-caption-container],td[class=text],td[class=image-text]>table{width:100%!important}td[class=image-caption-top-gap]{height:15px!important}td[class=image-caption-bottom-gap]{height:5px!important}table[class=preheader],td[class=gap],td[class=preheader-gap],td[class=preheader-link],tr[class=header-nav]{display:none}td[class=header]{padding:25px!important}td[class=header] h2{font-size:20px!important}td[class=footer] p{font-size:13px!important}table[class=footer-side],table[class=content]{width:100%!important;float:none!important}table[class=footer-social-icons]{float:none!important;margin:0 auto!important}td[class=social-icon-link]{padding:0 5px!important}td[class=image-group] img{width:100%!important;height:auto!important;margin:15px 0!important}td[class=preheader-text]{width:100%}td[class=buttons-full-width] a{width:100%!important;border-radius:0!important}td[class=buttons-full-width] span{width:100%!important}td[class=gallery-image]{width:100%!important;padding:0!important}table[class=social],td[class=head-logo]{width:100%!important;text-align:center!important}table[class=footer-btn]{text-align:center!important;width:100%!important;margin-bottom:10px}table[class=footer-btn-wrap]{margin-bottom:0;width:100%!important}td[class=head-social]{width:100%!important;text-align:center!important;padding-top:20px}}td.video.fullWidth iframe{width: 100%}</style></head><body style="background: rgb(204, 204, 204); padding: 50px 5px;"><table width="640" cellspacing="0" cellpadding="0" border="0" align="center" data-type="image" class="main" style="display: table; background-color: rgb(255, 255, 255);"><tbody><tr><td align="left" class="image" style="padding: 15px 20px;"><img border="0" src="http://mailtousa.com/img/mailtousa.png" tabindex="0" style="display:block;width:240px;height:32px;"></td></tr></tbody></table><table width="640" cellspacing="0" cellpadding="0" border="0" align="center" data-type="divider" class="main" style="border: 0px; display: table; background-color: rgb(255, 255, 255);"><tbody><tr><td class="divider-simple" style="padding: 4px 20px 0px;"><table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-top: 1px solid rgb(218, 223, 225);"><tbody><tr><td width="100%" height="15px"></td></tr></tbody></table></td></tr></tbody></table>    <table width="640" cellspacing="0" cellpadding="0" border="0" align="center" data-type="text-block" class="main" style="display: table; background-color: rgb(255, 255, 255);"><tbody><tr><td data-block-id="background" align="left" class="block-text mce-content-body" style="font-size: 13px; color: rgb(0, 0, 0); line-height: 22px; padding: 0px 20px; position: relative;"><p><span style="font-size: 14pt;">Hello !</span></p><p><span style="margin: 0px 0px 10px; line-height: 22px; font-size: 13px; text-align: left;" data-block-id="text-area"><span style="font-size: 12pt;">Status of parcels: <span style="color: #006ac1;"><strong>UPDATED</strong></span>.</span>&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<span style="margin: 0px 0px 10px; line-height: 13px; font-size: 13px; text-align: right;" data-block-id="text-area"><span style="font-size: 12pt;">Parcels: <span style="color: #000000;"><strong><?=count($parcels);?> </strong>.</span></span></span> <span style="margin: 10px 0px 2px; line-height: 13px; font-size: 13px; text-align: right;" data-block-id="text-area"><span style="font-size: 12pt;"> Total weight: <span style="color: #000000;"><strong><?=floor($total_weight);?> Lb <?=floor(($total_weight-floor($total_weight))*16);?> Oz</strong></span></span></span></span></p></td>
+    </tr></tbody></table>    <table width="640" cellspacing="0" cellpadding="0" border="0" align="center" data-type="text-block" class="main" style="display: table; background-color: rgb(255, 255, 255);"><tbody>
 
-<table class="table table-pod">
-  <tr>
-    <th>#</th>
-    <th>Track Number</th>
-    <th>Status</th>
-    <th>Price</th>
-    <th>PST</th>
-    <th>GST/HST</th>
-    <th>Payment State</th>
-    <th>Weight</th>
-  </tr>
-  <?php
-  $parcel_n=1;
-  foreach ($parcels as $parcel){
-    ?>
-    <tr>
-      <td><?=$parcel_n;?></td>
-      <td><?=$parcel->track_number;?></td>
-      <td><?=$parcel->getFullTextStatus();?></td>
-      <td><?=$parcel->price;?></td>
-      <td><?=$parcel->qst;?></td>
-      <td><?=$parcel->gst;?></td>
-      <td>
-        <?=floor($parcel->weight);?> Lb
-        <?=floor(($parcel->weight-floor($parcel->weight))*16);?> Oz
-      </td>
-    </tr>
-    <?php
-    $parcel_n++;
-  }
-  ?>
-</table>
+    <tr><td data-block-id="background" align="left" class="block-text mce-content-body" style="font-size: 13px; color: rgb(0, 0, 0); line-height: 22px; padding: 0px 20px; position: relative;"><table class="table table-pod" style="width: 100%; height: auto; background-color: #ffffff; margin-left: auto; margin-right: auto; border-width:1px !important; border-style:solid !important; border-color:#DDDDDD !important;" border="1" cellspacing="0" cellpadding="0"><tbody><tr><th><span style="font-size: 11pt;">#</span></th><th><span style="font-size: 11pt;">Track №</span></th><th><span style="font-size: 11pt;">Status</span></th><th><span style="font-size: 11pt;">Price</span></th><th><span style="font-size: 11pt;">PST</span></th><th><span style="font-size: 11pt;">GST/HST</span></th><th><span style="font-size: 11pt;">Weight</span></th></tr>
+                <?php
+                $parcel_n=1;
+                foreach ($parcels as $parcel){
+                    ?>
+                    <tr><td style="text-align: center;"><span style="font-size: 10pt;"><?=$parcel_n;?></span></td><td style="text-align: center;"><span style="font-size: 9pt;"><?=$parcel->track_number;?></span></td><td style="text-align: center;"><span style="font-size: 9pt;"><?=$parcel->getFullTextStatus();?></span></td><td style="text-align: center;"><span style="font-size: 9pt;"><?=$parcel->price;?></span></td><td style="text-align: center;"><span style="font-size: 9pt;"><?=$parcel->qst;?></span></td><td style="text-align: center;"><span style="font-size: 9pt;"><?=$parcel->gst;?></span></td><td style="text-align: center;"><span style="font-size: 9pt;"><?=floor($parcel->weight);?> Lb <?=floor(($parcel->weight-floor($parcel->weight))*16);?> Oz</span></td>
+                    </tr>
+                    <?php
+                    $parcel_n++;
+                }
+                ?>
+                </tbody></table><p>&nbsp;</p></td>
+    </tr></tbody></table>    <table width="640" cellspacing="0" cellpadding="0" border="0" align="center" data-type="text-block" class="main" style="display: table; background-color: rgb(238, 238, 238);"><tbody><tr><td data-block-id="background" align="left" style="font-family: Arial, serif; font-size: 13px; color: rgb(0, 0, 0); line-height: 22px; padding: 2px 50px;margin-top:10px; position: relative;" class="mce-content-body"><p style="text-align: center;">&nbsp;MailToUsa.com<br></p></td>
+
+    </tr></tbody></table>    </body></html>
+
+
+

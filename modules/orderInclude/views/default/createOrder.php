@@ -170,7 +170,7 @@ $submitOption = [
                   </div>
                 </div>
               </div>
-              <div class="label_valid col-md-4 bor">
+              <div class="label_valid col-md-4 bor padding-off-left">
                 <div class="form-control-addon-fill">
                   <div class="input-group" <?php if($percel->track_number_type==1) { echo 'style="display:none;"';}?>>
                     <span class="input-group-addon fint_input padding-off-left"> Track Number :</span>
@@ -200,7 +200,7 @@ $submitOption = [
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
             <div class="row">
-              <div class="col-md-6 cost_del"><b>Cost of delivery : </b>
+              <div class="col-md-5 cost_del"><b>Cost of delivery : </b>
                 <span id="results" class="resInd<?=$k?>">
                         <?php
                         if($percel->weight>0) {
@@ -219,31 +219,43 @@ $submitOption = [
               </div>
 
             </form>
-                <div class="col-md-6 bord_butt text-right">
+                <div class="col-md-12 col-lg-7 col-sm-12 col-xs-12 bord_butt text-center">
 
             <?php if ($edit_not_prohibited) {?>
 
                 <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
-                  ['role'=>'modal-remote','title'=> 'Add item','class'=>'btn btn btn-md btn-science-blue'])?>
+                  ['role'=>'modal-remote','title'=> 'Add item to Parcel','data' => [
+                      'toggle'=>"tooltip",
+                  ],'class'=>'btn btn btn-md btn-science-blue text-center margin-bottom-10'])?>
                 <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
                   [
                     'role'=>'modal-remote',
-                    'title'=> 'Delete',
+                    'title'=> 'Delete Attachment',
+                      'data' => [
+
+                          'toggle'=>"tooltip",
+                      ],
+
                     'data-pjax'=>0,
-                    'class'=>'btn btn-danger',
+                    'class'=>'btn btn-danger text-center margin-bottom-10',
                     'data-request-method'=>"post",
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this packages",
                   ])?>
+
+
+
             <?php } ?>
             <?php if (count($order_elements)>1){?>
-              <?=Html::a('Remove from this order',
+              <?=Html::a('<i class="icon-metro-new-tab fa-flip-horizontal"></i> Unfasten Attach',
                 ['/orderInclude/group-remove/'.$order_id."/".$percel->id],
                 [
-                  'class' => 'btn btn-danger btn-sm',
+                  'class' => 'btn btn-warning btn-md text-center margin-bottom-10',
+                  'title'=> 'Take out from Order',
                   'data' => [
-                    'confirm-message' => 'Are you sure to remove this item from this order?',
-                    'confirm-title'=>"Remove",
+                    'confirm-message' => 'Are you sure to remove this Parcel from this order?</br>Entered data will be kept!</br>
+Parcel will be moved back to the list of parcels.',
+                    'confirm-title'=>"Take out from Order",
                     'pjax'=>'false',
                     'toggle'=>"tooltip",
                     'request-method'=>"post",
@@ -257,16 +269,17 @@ $submitOption = [
                 [
                 'id' => 'payment-show-includes',
                 'role' => 'modal-remote',
-                'class' => 'btn btn-science-blue show_modal big_model',
+                'class' => 'btn btn-science-blue show_modal big_model text-center margin-bottom-10',
                 ]
                 )?>
                  <?=Html::a('<i class="fa fa-list"></i> History view', ['/logs/' . $percel->id],
                 [
                 'id' => 'payment-show-includes',
                 'role' => 'modal-remote',
-                'class' => 'btn btn-science-blue margin-left-10 show_modal',
+                'class' => 'btn btn-science-blue show_modal text-center margin-bottom-10',
                 ]
                 )?>
+
          <?php } ?>
               </div>
         </div>

@@ -14,23 +14,25 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <h4 class="modernui-neutral2">Group management of parcels</h4>
 <div class="row">
-<div class="col-md-3 text-center">
-    <b>Total users</b> <div class="trans_count"><?=count($users);?></div>
+    <div class="col-md-12">
+<div class="col-md-3 col-xs-4 text-center l_bord">
+    <b>Total users</b><div class="bord_dot"></div><div class="trans_count"><?=count($users);?></div>
 </div>
-    <div class="col-md-3 text-center">
-        <b>Total parcels</b> <div class="trans_count"><?=count($parcels);?></div>
+    <div class="col-md-3 col-xs-4 text-center lr_bord">
+        <b>Total parcels</b><div class="bord_dot"></div><div class="trans_count"><?=count($parcels);?></div>
     </div>
-    <div class="col-md-3 text-center">
-        <b>Total weight</b> <div class="trans_count"><?=floor($total['weight']);?> Lb <?=floor(($total['weight']-floor($total['weight']))*16);?> Oz</div>
+    <div class="col-md-3 col-xs-4 text-center r_bord">
+        <b>Total weight</b><div class="bord_dot"></div> <div class="trans_count"><?=floor($total['weight']);?> Lb <?=floor(($total['weight']-floor($total['weight']))*16);?> Oz</div>
     </div>
-    <div class="col-md-3">
-    <?=Html::a('Set new status to group', ['/orderInclude/choose-status/'.$order_id],
+    <div class="col-md-3 col-xs-12 padding-top-10 text-center">
+    <?=Html::a('Change status to group', ['/orderInclude/choose-status/'.$order_id],
   [
     'id'=>'choose_receiving_point',
     'role'=>'modal-remote',
-    'class'=>'btn btn-default pull-right show_modal',
+    'class'=>'btn btn-info-border show_modal',
   ]
 ); ?>
+    </div>
 </div>
 </div>
     <hr class="bottom_line">
