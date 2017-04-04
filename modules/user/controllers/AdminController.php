@@ -138,7 +138,7 @@ class AdminController extends Controller
             'content'=>$content,
             'footer'=>
               Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"]).
-              Html::a('Billing address', ['billing'], [
+              Html::a('Billewdqeding address', ['billing?id='.$model->id], [
                 'title' => 'Create billing address',
                 'class'=>'btn btn-success',
                 'role'=>'modal-remote',
