@@ -338,5 +338,5 @@ if($createNewAddress){
    });
    $(".show_modal").on("click", function() {
    $("#ajaxCrudModal").attr("tabindex",-1);
-   })
+   })});
 </script>

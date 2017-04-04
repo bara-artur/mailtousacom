@@ -410,7 +410,7 @@ function show_gritter(current_element){ // проверяем показыват
 }
 
 function  no_letters_in_input(evt){
-    if ( ( evt.keyCode >= 48 && evt.keyCode <= 57 )) return;
+    if ( ( evt.keyCode >= 48 && evt.keyCode <= 57 )||(evt.keyCode==013)) return;
     else  {
       show_gritter(this);
       evt.preventDefault();
@@ -419,7 +419,7 @@ function  no_letters_in_input(evt){
 
 function  only_letters_in_input(evt){
         if(
-            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) ||
+            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) || (evt.keyCode==13)||    // enter
             ( evt.keyCode >= 65 && evt.keyCode <= 90 )|| (evt.keyCode==32) )
             return ;
         else {
@@ -436,6 +436,7 @@ function  only_no_foreign_letters_in_input(evt){
             (evt.keyCode==44)||    // запятая
             (evt.keyCode==46)||    // точка
             (evt.keyCode==64)||    // @
+            (evt.keyCode==13)||    // enter
             (evt.keyCode==32) )   // пробел
             return;
         else {
@@ -662,7 +663,6 @@ function main_table_checkbox(current_element){
       elem_type = 'InSystem';
     }
     //user_id = elem_checked[0].getAttribute('user');
-    console.log(user_id);
     // берем элементы с другим статусом ИЛИ другого user_id
     if (admin==0) {
       elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
