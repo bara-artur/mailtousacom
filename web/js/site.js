@@ -761,3 +761,11 @@ function init_collapse_buttons(){
      });
    })
  }
+function init_collapse_buttons(){
+    $("#collapse_filter").on("click", function(){
+        $("#collapseTableOptions").collapse("hide");
+    });
+    $("#collapse_columns").on("click", function(){
+        $("#collapse").collapse("hide");
+    })
+}

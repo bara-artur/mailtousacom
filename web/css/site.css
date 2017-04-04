@@ -737,7 +737,8 @@ div.icon_integ_ebay:hover,div.icon_integ_amazon:hover,div.icon_integ_shop:hover{
 /*21032017*/
 .showParcelTableForm.form-group{margin-bottom:0px !important;}
 .showParcelTableForm input[type=checkbox]{display:none !important;}
-.check_hide input[type=checkbox]{display:none !important;}
+.check_hide input[type=checkbox]{display:none !important;
+ }
 span.input-group-addon.fint_input input[type=checkbox]{display:none !important;}
 span#results.resInd0{color:#05389F !important;}
 h5.max_price{padding: 4px;
@@ -984,3 +985,10 @@ color: #fff;}
 }
 .marg_but{margin-right:4px;display:inline; }
 button.navbar-toggle{margin-right:30px;}
+.lr_bord{
+    border-left: 1px dotted #ccc;
+    border-right: 1px dotted #ccc;
+}
+.l_bord{border-left: 1px dotted #ccc;}
+.r_bord{border-right: 1px dotted #ccc;}
+.bord_dot{border-bottom: 1px dotted #ccc;}
