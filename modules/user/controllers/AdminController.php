@@ -84,7 +84,7 @@ class AdminController extends Controller
               ->orWhere(['like', 'first_name', $tmp])
               ->orWhere(['like', 'last_name', $tmp])
               ->orWhere(['like', 'phone', $tmp])
-              ->select(['id,concat(first_name, \' \',last_name,\', \',phone,\', \',email,\'[server_confirm]\') as value', "concat(first_name, ' ',last_name,', ',phone,', ',email) as label"])
+              ->select(['id,concat(first_name, \' \',last_name,\', \',phone,\', \',email) as value', "concat(first_name, ' ',last_name,', ',phone,', ',email) as label"])
               ->asArray()
               ->all();
 
@@ -129,7 +129,7 @@ class AdminController extends Controller
           $model->save();
           $content='
               <span class="text-success">Update user success</span>
-              Do you wont edit Billing address?
+              Do you want edit Billing address?
               ';
 
           return [
@@ -138,7 +138,7 @@ class AdminController extends Controller
             'content'=>$content,
             'footer'=>
               Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"]).
-              Html::a('Billing address', ['Billing'], [
+              Html::a('Billing address', ['billing'], [
                 'title' => 'Create billing address',
                 'class'=>'btn btn-success',
                 'role'=>'modal-remote',

@@ -235,26 +235,25 @@ $submitOption = [
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this packages",
                   ])?>
-
-
-
             <?php } ?>
-            <?=Html::a('Remove from this order',
-              ['/orderInclude/group-remove/'.$order_id."/".$percel->id],
-              [
-                'class' => 'btn btn-danger btn-sm',
-                'data' => [
-                  'confirm-message' => 'Are you sure to remove this item from this order?',
-                  'confirm-title'=>"Remove",
-                  'pjax'=>'false',
-                  'toggle'=>"tooltip",
-                  'request-method'=>"post",
-                ],
-                'role'=>"modal-remote",
-              ]); ?>
+            <?php if (count($order_elements)>1){?>
+              <?=Html::a('Remove from this order',
+                ['/orderInclude/group-remove/'.$order_id."/".$percel->id],
+                [
+                  'class' => 'btn btn-danger btn-sm',
+                  'data' => [
+                    'confirm-message' => 'Are you sure to remove this item from this order?',
+                    'confirm-title'=>"Remove",
+                    'pjax'=>'false',
+                    'toggle'=>"tooltip",
+                    'request-method'=>"post",
+                  ],
+                  'role'=>"modal-remote",
+                ]); ?>
+            <?php }?>
 
-                <?php if ($edit_not_prohibited==0) {?>
-                    <?=Html::a('<i class="fa fa-credit-card"></i> Payments view', ['/payment/show-parcel-includes/' . $percel->id],
+            <?php if ($edit_not_prohibited==0) {?>
+              <?=Html::a('<i class="fa fa-credit-card"></i> Payments view', ['/payment/show-parcel-includes/' . $percel->id],
                 [
                 'id' => 'payment-show-includes',
                 'role' => 'modal-remote',
@@ -268,7 +267,6 @@ $submitOption = [
                 'class' => 'btn btn-science-blue margin-left-10 show_modal',
                 ]
                 )?>
-
          <?php } ?>
               </div>
         </div>

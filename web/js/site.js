@@ -646,6 +646,8 @@ function main_table_checkbox(current_element){
       } else {/* выделение корректно*/}
     }
   }
+
+  user_id = getCookie('parcel_user_id');
   sendCheckedToCookie(elem_checked, oldCookie);
   if (getCookie('parcelCheckedId')!=''){
     if (getCookie('doNotShowDifUserGritter')=='yes') {
@@ -660,7 +662,7 @@ function main_table_checkbox(current_element){
       elem_type = 'InSystem';
     }
     //user_id = elem_checked[0].getAttribute('user');
-    user_id = getCookie('parcel_user_id');
+    console.log(user_id);
     // берем элементы с другим статусом ИЛИ другого user_id
     if (admin==0) {
       elems_prohibeted = $(" [name='"+elem_type+"'], .checkBoxParcelMainTable[user !='"+user_id+"']");
@@ -708,16 +710,19 @@ function main_table_checkbox(current_element){
  }else {
    $('.difUserIdHide').attr('disabled',false);
    if (string != "empty") {
+     $("#group-admin-view").attr('disabled', false);
      type = getCookie('parcel_elem_type');
      string = string + " ( " + type + " type)";
      $('.' + type + '_show').attr('disabled', false);
      if (type == "InSystem") {
-       $('.gr_update_text').html('<span class="fa fa-eye"></span> View')
+       $('.gr_update_text').html('<span class="fa fa-eye"></span> View');
+       $('#group-delete').attr('disabled', true);
      } else {
        $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
      }
    } else {
-     $('.InSystem_show,.Draft_show').attr('disabled', true)
+     $('.InSystem_show,.Draft_show').attr('disabled', true);
+     $("#group-admin-view").attr('disabled', true);
    }
  }
 
