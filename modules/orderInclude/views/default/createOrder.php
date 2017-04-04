@@ -246,7 +246,7 @@ $submitOption = [
 
 
             <?php } ?>
-            <?=Html::a('<i class="icon-metro-new-tab fa-flip-horizontal"></i> Pull Out Attach',
+            <?=Html::a('<i class="icon-metro-new-tab fa-flip-horizontal"></i> Unfasten Attach',
               ['/orderInclude/group-remove/'.$order_id."/".$percel->id],
               [
                 'class' => 'btn btn-warning btn-md text-center margin-bottom-10',
