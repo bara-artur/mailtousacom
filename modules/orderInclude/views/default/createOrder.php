@@ -24,10 +24,10 @@ $submitOption = [
 ];
 ?>
   <div class="row">
-      <div class="col-md-2">
+      <div class="col-md-2 col-sm-12">
           <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],['class'=>'btn btn-md btn-neutral-border pull-left hidden-xs','id' => 'updateParcelsIdCookie','data-forCookie'=> $ids])?>
       </div>
-      <div class="col-md-8 text-center">
+      <div class="col-md-8 col-sm-12 text-center">
           <h4 class="">Order #<?=$order_id?> for Transportation</br>
           <?php if (!$edit_not_prohibited) {?>
               <span class="prohibit_editing text-danger"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></span>
