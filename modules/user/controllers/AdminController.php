@@ -84,7 +84,7 @@ class AdminController extends Controller
               ->orWhere(['like', 'first_name', $tmp])
               ->orWhere(['like', 'last_name', $tmp])
               ->orWhere(['like', 'phone', $tmp])
-              ->select(['id,concat(first_name, \' \',last_name,\', \',phone,\', \',email,\'[server_confirm]\') as value', "concat(first_name, ' ',last_name,', ',phone,', ',email) as label"])
+              ->select(['id,concat(first_name, \' \',last_name,\', \',phone,\', \',email) as value', "concat(first_name, ' ',last_name,', ',phone,', ',email) as label"])
               ->asArray()
               ->all();
 
