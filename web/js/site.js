@@ -618,7 +618,7 @@ function sendCheckedToCookie(elem_checked, oldCookie){
 
 canChooseDifUser = null;
 function main_table_checkbox(current_element){
-  if ($('#group-admin-view').length!=0) admin = 1; else admin =0;
+  if ($('.group-admin-view').length!=0) admin = 1; else admin =0;
  // $(current_element).parents('td:first').css("background-color","red");
   current_id = null;
   if (current_element) { // не должно срабатывать по f5
@@ -710,28 +710,28 @@ function main_table_checkbox(current_element){
  }else {
    $('.difUserIdHide').attr('disabled',false);
    if (string != "empty") {
-     $("#group-admin-view").attr('disabled', false);
+     $(".group-admin-view").attr('disabled', false);
      type = getCookie('parcel_elem_type');
      string = string + " ( " + type + " type)";
      $('.' + type + '_show').attr('disabled', false);
      if (type == "InSystem") {
        $('.gr_update_text').html('<span class="fa fa-eye"></span> View');
-       $('#group-delete').attr('disabled', true);
+       $('.group-delete').attr('disabled', true);
      } else {
        $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
      }
    } else {
      $('.InSystem_show,.Draft_show').attr('disabled', true);
-     $("#group-admin-view").attr('disabled', true);
+     $(".group-admin-view").attr('disabled', true);
    }
  }
 
   $("#for_group_actions").html('<b>Checked parcels:</b> ' + string);
-  $("#group-admin-view").attr("href","/orderElement/group-view"+parcel_ids);
-  $("#group-update").attr("href","/orderElement/group-update"+parcel_ids);
-  $("#group-print").attr("href","/orderElement/group-print"+parcel_ids);
-  $("#group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
-  $("#group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
+  $(".group-admin-view").attr("href","/orderElement/group-view"+parcel_ids);
+  $(".group-update").attr("href","/orderElement/group-update"+parcel_ids);
+  $(".group-print").attr("href","/orderElement/group-print"+parcel_ids);
+  $(".group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
+  $(".group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
 }
 
 function init_main_table_checkbox(){

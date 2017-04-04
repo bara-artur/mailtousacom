@@ -31,25 +31,25 @@ $this->title = 'Shipping to USA and Canada';
         <div class="col-md-7 hidden-xs hidden-sm hidden-md text-center">
             <?php if ($show_view_button==true){ ?>
               <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group-view/'], [
-                'class' => 'btn btn-md btn-info',
+                'class' => 'btn btn-md btn-info group-admin-view',
                 'id'=>'group-admin-view',
               ]); ?>
             <?php }?>
             <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
-              'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text difUserIdHide',
+              'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text difUserIdHide group-update',
               'id'=>'group-update',
               'disabled'=>true,
             ]); ?>
 
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
-              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide',
+              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide group-print',
               'id'=>'group-print',
               'disabled'=>true,
               'target' => '_blank',
             ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
               [
-                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide',
+                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
                 'target' => '_blank',
@@ -58,7 +58,7 @@ $this->title = 'Shipping to USA and Canada';
                 ['/orderElement/group-delete/'],
                 [
                     'id'=>'group-delete',
-                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide',
+                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide group-delete',
                     'data' => [
                         'confirm-message' => 'Are you sure to delete this item?',
                         'confirm-title'=>"Delete",
@@ -105,23 +105,23 @@ $this->title = 'Shipping to USA and Canada';
           <div class="col-sm-6 col-md-7 hidden-lg hidden-xs text-center padding-off-left padding-off-right">
               <?php if ($show_view_button==true){ ?>
                   <?=Html::a('<i class="fa fa-list"></i>', ['/orderElement/group-view/'], [
-                      'class' => 'btn btn-sm btn-info',
+                      'class' => 'btn btn-sm btn-info group-admin-view',
                       'id'=>'group-admin-view',
                   ]); ?>
               <?php }?>
               <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
-                  'class' => 'btn btn-sm btn-science-blue InSystem_show Draft_show gr_update_text',
+                  'class' => 'btn btn-sm btn-science-blue InSystem_show Draft_show gr_update_text group-update',
                   'id'=>'group-update',
                   'disabled'=>true,
               ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
-              'class' => 'btn btn-sm btn-blue-gem InSystem_show Draft_show',
+              'class' => 'btn btn-sm btn-blue-gem InSystem_show Draft_show group-print',
               'id'=>'group-print',
               'disabled'=>true,
             ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
               [
-                'class' => 'btn btn-sm btn-blue-gem InSystem_show Draft_show',
+                'class' => 'btn btn-sm btn-blue-gem InSystem_show Draft_show group-print-advanced',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
               ]); ?>
@@ -129,7 +129,7 @@ $this->title = 'Shipping to USA and Canada';
                   ['/orderElement/group-delete/'],
                   [
                       'id'=>'group-delete',
-                      'class' => 'btn btn-danger btn-sm Draft_show difUserIdHide',
+                      'class' => 'btn btn-danger btn-sm Draft_show difUserIdHide group-delete',
                       'data' => [
                           'confirm-message' => 'Are you sure to delete this item?',
                           'confirm-title'=>"Delete",
@@ -175,24 +175,24 @@ $this->title = 'Shipping to USA and Canada';
           <div class="col-xs-12 visible-xs text-center padding-off-left padding-off-right">
               <?php if ($show_view_button==true){ ?>
                   <?=Html::a('<i class="fa fa-list"></i>', ['/orderElement/group-view/'], [
-                      'class' => 'btn btn-md btn-info',
+                      'class' => 'btn btn-md btn-info group-admin-view',
                       'id'=>'group-admin-view',
                   ]); ?>
               <?php }?>
               <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
-                  'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text',
+                  'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text group-update',
                   'id'=>'group-update',
                   'disabled'=>true,
               ]); ?>
 
               <?=Html::a('<span class="glyphicon glyphicon-print"></span>', ['/orderElement/group-print/'], [
-                  'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+                  'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show group-print',
                   'id'=>'group-print',
                   'disabled'=>true,
               ]); ?>
               <?=Html::a('<span class="glyphicon glyphicon-list-alt"></span>', ['/orderElement/group-print-advanced/'],
                   [
-                      'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
+                      'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show group-print-advanced',
                       'id'=>'group-print-advanced',
                       'disabled'=>true,
                   ]); ?>
@@ -200,7 +200,7 @@ $this->title = 'Shipping to USA and Canada';
                   ['/orderElement/group-delete/'],
                   [
                       'id'=>'group-delete',
-                      'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide',
+                      'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide group-delete',
                       'data' => [
                           'confirm-message' => 'Are you sure to delete this item?',
                           'confirm-title'=>"Delete",
@@ -271,6 +271,7 @@ $this->title = 'Shipping to USA and Canada';
                   'dataProvider' => $orderElements,
                   'layout' => '{summary}'
               ]); ?>
+
           </div>
 
       </div>
