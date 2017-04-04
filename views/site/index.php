@@ -45,12 +45,14 @@ $this->title = 'Shipping to USA and Canada';
               'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
               'id'=>'group-print',
               'disabled'=>true,
+              'target' => '_blank',
             ]); ?>
             <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
               [
                 'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
+                'target' => '_blank',
               ]); ?>
             <?=Html::a('<i class="icon-metro-remove"></i> Delete',
                 ['/orderElement/group-delete/'],
