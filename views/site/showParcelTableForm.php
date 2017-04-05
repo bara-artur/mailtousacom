@@ -26,7 +26,7 @@ use app\modules\orderElement\models\OrderElement;
             </div>
         <?php if (Yii::$app->params['showAdminPanel']==1) { ?>
             <div class="col-md-2">
-              <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span> ID','class'=>'']) ?>
+              <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span>User','class'=>'']) ?>
             </div>
         <?php } ?>
             <div class="col-md-2">

@@ -16,7 +16,7 @@ $this->title = 'Shipping to USA and Canada';
 
 
     ?>
-    <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
+    <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My parcel</h4> <?php } ?>
 
     <div class="row">
       <div class="col-md-12">
@@ -263,7 +263,7 @@ $this->title = 'Shipping to USA and Canada';
  <?php if(Yii::$app->user->can("takeParcel")){?>
      <span><b>Current Receiving point :</b> <?= $receiving_point ?></span>
  <?php }?>
-    <span class="labelDifUserId">"Different user ID" choosing mode</span>
+    <span class="labelDifUserId">"Different user" choosing mode</span>
     </div>
 
           <div class="col-md-3 col-xs-12 text-right">

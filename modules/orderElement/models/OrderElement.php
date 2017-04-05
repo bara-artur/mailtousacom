@@ -91,6 +91,7 @@ class OrderElement extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'user_id'=>"User",
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
             'company_name' => 'Company Name',
