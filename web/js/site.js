@@ -15,7 +15,8 @@ $(document).ready(function() {
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
-    if(event.keyCode == 13) {
+    code = event.keyCode||event.charCode; // для Chrome || Firefox
+    if(code == 13) {
       event.preventDefault();
       return false;
     }
@@ -410,7 +411,8 @@ function show_gritter(current_element){ // проверяем показыват
 }
 
 function  no_letters_in_input(evt){
-    if ( ( evt.keyCode >= 48 && evt.keyCode <= 57 )||(evt.keyCode==013)) return;
+  code = evt.keyCode||evt.charCode; // для Chrome || Firefox
+    if ( ( code >= 48 && code <= 57 )||(code==013)) return;
     else  {
       show_gritter(this);
       evt.preventDefault();
@@ -418,9 +420,10 @@ function  no_letters_in_input(evt){
 }
 
 function  only_letters_in_input(evt){
+  code = evt.keyCode||evt.charCode;
         if(
-            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) || (evt.keyCode==13)||    // enter
-            ( evt.keyCode >= 65 && evt.keyCode <= 90 )|| (evt.keyCode==32) )
+            ( code >= 97 && code <= 122 ) || (code==13)||    // enter
+            ( code >= 65 && code <= 90 )|| (code==32) )
             return ;
         else {
           show_gritter(this);
@@ -429,15 +432,16 @@ function  only_letters_in_input(evt){
 }
 
 function  only_no_foreign_letters_in_input(evt){
+  code = evt.keyCode||evt.charCode;  // для Chrome || Firefox
         if(
-            ( evt.keyCode >= 48 && evt.keyCode <= 57 ) ||
-            ( evt.keyCode >= 97 && evt.keyCode <= 122 ) ||
-            ( evt.keyCode >= 65 && evt.keyCode <= 90 )||
-            (evt.keyCode==44)||    // запятая
-            (evt.keyCode==46)||    // точка
-            (evt.keyCode==64)||    // @
-            (evt.keyCode==13)||    // enter
-            (evt.keyCode==32) )   // пробел
+            ( code >= 48 && code <= 57 ) ||
+            ( code >= 97 && code <= 122 ) ||
+            ( code >= 65 && code <= 90 )||
+            (code==44)||    // запятая
+            (code==46)||    // точка
+            (code==64)||    // @
+            (code==13)||    // enter
+            (code==32) )   // пробел
             return;
         else {
           show_gritter(this);
@@ -455,7 +459,8 @@ function init_js_validation()
 function init_ajax_send_lb_oz_tn(){
   $( ".lb-oz-tn-onChange" ).on("change",function(){ajax_send_lb_oz_tn(this)});
   $( ".lb-oz-tn-onChange" ).on("keypress", function (e){
-    if (e.keyCode == 13) {
+    code = e.keyCode||e.charCode;  // для Chrome || Firefox
+    if (code == 13) {
       ajax_send_lb_oz_tn(this);
     }
   });
