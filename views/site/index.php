@@ -371,7 +371,7 @@ $this->title = 'Shipping to USA and Canada';
                   'attribute' => 'track_number',
                   'content'=> function($data){
                     if ($data->track_number == 0) return '-';
-                    else return Html::a($data->track_number, ['/orderElement/group-update/' . $data->id], []);
+                    else return $data->getTrackingNumberPostLink($data->GetShippingCarrier($data->track_number),$data->track_number);
                   },
                   'visible' => $showTable->showTrackNumber,
                 ],

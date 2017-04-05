@@ -185,4 +185,155 @@ class OrderElement extends \yii\db\ActiveRecord
     return $string;
   }
 
+  public function getTrackingNumberPostLink($ShippingCarrier, $TrackingNumber) {
+    $usps = 'https://tools.usps.com/go/TrackConfirmAction!execute.action?formattedLabel=';
+    $fedex = 'https://www.fedex.com/fedextrack/?action=track&tracknumbers=';
+    $fedex_english = 'https://www.fedex.com/fedextrack/?action=track&cntry_code=english&tracknumbers=';
+    $ups = 'http://wwwapps.ups.com/WebTracking/processInputRequest?sort_by=status&tracknums_displayed=1&TypeOfInquiryNumber=T&InquiryNumber1=';
+    $ups_Requester = 'http://wwwapps.ups.com/WebTracking/processPOD?Requester=&refNumbers=&loc=en_US&tracknum=';
+    $canadapost = 'http://trackingshipment.net/index.php?co=canada_post&nomer_pos=';
+
+    $ShippingCarrierURL = '';
+    if (strtolower($ShippingCarrier) == "usps") {
+      $ShippingCarrierURL = $usps;
+    }
+    else if (strtolower($ShippingCarrier) == "fedex") {
+      $ShippingCarrierURL = $fedex;
+    }
+    else if (strtolower($ShippingCarrier) == "ups") {
+      $ShippingCarrierURL = $ups;
+    }
+    else if (strtolower($ShippingCarrier) == "canadapost") {
+      $ShippingCarrierURL = $canadapost;
+    }
+    else if (strlen($TrackingNumber) == 13) {
+      $txt=substr($TrackingNumber, 0, 1);
+      if (is_numeric($txt) == false) {
+        $ShippingCarrierURL = $usps;
+      }
+    }
+    $TrackingNumberPostLink = '';
+    if (isset($TrackingNumber)) {
+      if ($TrackingNumber != "") {
+        if ($ShippingCarrierURL != "") {
+          $TrackingNumberPostLink = "<a href='$ShippingCarrierURL$TrackingNumber' target='_blank' style='color:dodgerblue;font-weight:bold;text-decoration:none'>".$TrackingNumber."</a>";
+        } else {
+          $TrackingNumberPostLink = $TrackingNumber;
+        }
+      }
+      else {
+        $TrackingNumberPostLink = "";
+      }
+    }
+
+    return $TrackingNumberPostLink;
+  }
+
+  function GetShippingSummary($TrackingNumber,$ShippingCarrier)
+  {
+    $ShippingSummary='';
+
+    if ($ShippingCarrier=='canadapost') {
+      $Carrier='canada_post';
+    } else {
+      $Carrier=$ShippingCarrier;
+    }
+
+    $url = 'http://trackingshipment.net';
+    $apicall = $url . "/" . $Carrier . "/" . $TrackingNumber;
+//echo $apicall . "<br>";
+    // Load the call and capture the document returned by eBay API
+    ////parse_str(file_get_contents($apicall), $resp);    // populate the $resp array
+
+    // Check to see if the response was loaded, else print an error
+    ////if ($resp) {
+//print_r($resp);
+//echo "<br>";echo "<br>";
+//exit;
+
+    ////$myString = print_r($resp, TRUE);
+
+    $myString=strip_tags(file_get_contents($apicall));
+    //$myString=strip_tags($myString);
+//$myString=substr($myString,0,10);
+//echo $myString;
+//exit;
+
+    $findme1 = 'request N';
+    $pos1 = strpos($myString, $findme1);
+    if ($pos1 !== false) {
+      $findme2 = 'Summary:';
+      $pos2 = strpos($myString, $findme2, $pos1);
+    }
+//echo "pos1=" . $pos1 . " pos2=" . $pos2 . " pos3=" . $pos3;echo "<br>";
+    if ($pos1 !== false && $pos2 !== false) {
+      $TrackingNumber1 = trim(substr($myString,$pos1+strlen($findme1),$pos2-($pos1+strlen($findme1))));
+      //echo "TrackingNumber=" . $TrackingNumber1;echo "<br>";
+      if ($TrackingNumber1 != $TrackingNumber) {
+        goto exit_here;
+      }
+    }
+
+//exit;
+    $findme1 = 'Summary:';
+    $pos1 = strpos($myString, $findme1);
+    if ($pos1 !== false) {
+      $findme2 = 'Details:';
+      $pos2 = strpos($myString, $findme2, $pos1);
+    }
+    if ($pos2 === false) {
+      $myString = str_replace('U.S. ', '', $myString);
+      $findme2 = '.';
+      $pos2 = strpos($myString, $findme2, $pos1);
+    }
+    if ($pos1 !== false && $pos2 !== false) {
+      //echo "pos1=" . $pos1 . " pos2=" . $pos2 . " pos3=" . $pos3;echo "<br>";
+      $Summary = trim(substr($myString,$pos1+strlen($findme1),$pos2-($pos1+strlen($findme1))));
+      $Summary = str_replace('[nbsp;', '', $Summary);
+      //$Summary = str_replace('at] => ', '', $Summary);
+      $Summary = str_replace(',] =>', '', $Summary);
+      $Summary = str_replace('] =>', '', $Summary);
+      //$Summary = str_replace(',] =>', '', $Summary);
+      $Summary = str_replace('_', '', $Summary);
+      $Summary = str_replace('ByEndofDay', '', $Summary);
+      $Summary = trim($Summary);
+    }
+
+    $ShippingSummary=$Summary;
+    ////}
+    exit_here:
+    return $ShippingSummary;
+  }
+
+  function GetShippingCarrier($TrackingNumber) //синхронизировать с finditem.php
+  {
+    $ShippingCarrier='';
+    if (strlen($TrackingNumber)==26) {
+      $ShippingCarrier='ups';
+    } else if (strlen($TrackingNumber)==22 && substr($TrackingNumber,0,2)!='96') { //96 -FedEx
+      $ShippingCarrier='usps';
+    } else if (strlen($TrackingNumber)==22 && substr($TrackingNumber,0,2)=='96') { //96 -FedEx 9612800 087985515428589
+      $ShippingCarrier='fedex';
+    } else if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='61') {
+      $ShippingCarrier='fedex';
+    } else if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='13') {
+      $ShippingCarrier='usps';
+    } else if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='23') {
+      $ShippingCarrier='usps';
+    } else if (strlen($TrackingNumber)==18 && strtoupper(substr($TrackingNumber,0,2))=='1Z') {
+      $ShippingCarrier='ups';
+    } else if (strlen($TrackingNumber)==16 && substr($TrackingNumber,0,1)=='7') {
+      $ShippingCarrier='canadapost';
+    } else if (strlen($TrackingNumber)==15 || strlen($TrackingNumber)==12) {
+      $ShippingCarrier='fedex';
+    } else if (strlen($TrackingNumber)==13) {
+      $txt=substr($TrackingNumber,0,1);
+      if (is_numeric($txt)==false)  {
+        $ShippingCarrier='usps';
+      }
+    }
+
+    return $ShippingCarrier;
+  }
+
 }
