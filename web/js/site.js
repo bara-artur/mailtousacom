@@ -410,6 +410,23 @@ function show_gritter(current_element){ // проверяем показыват
 
 }
 
+function  canadian_zip_key_control(evt){ // формат zip *** ***
+  code = evt.keyCode||evt.charCode; // для Chrome || Firefox
+  if (this.value.length==3) this.value = this.value + ' ';
+  if(( code >= 48 && code <= 57 ) || ( code >= 97 && code <= 122 ) || ( code >= 65 && code <= 90 )) {
+    if (this.value.length == 7) {
+      evt.preventDefault();
+    }
+    else {
+      return;
+    }
+  }
+  else {
+    show_gritter(this);
+    evt.preventDefault();
+  }
+}
+
 function  no_letters_in_input(evt){
   code = evt.keyCode||evt.charCode; // для Chrome || Firefox
     if ( ( code >= 48 && code <= 57 )||(code==013)) return;
@@ -454,6 +471,7 @@ function init_js_validation()
           $('body').on('keypress', '.letters', only_letters_in_input);
           $('body').on('keypress', 'input,textarea', only_no_foreign_letters_in_input);
           $('body').on('keypress', '.num', no_letters_in_input);
+          $('body').on('keypress', '.canadian_zip_key_control', canadian_zip_key_control);
 }
 
 function init_ajax_send_lb_oz_tn(){

@@ -57,7 +57,7 @@ $state_names = ArrayHelper::map($states,'name','name');
     <?= $form->field($model, 'state')->dropDownList($state_names) ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'zip')->textInput(['maxlength' => true, 'class' => 'form-control num']) ?>
+            <?= $form->field($model, 'zip')->textInput(['maxlength' => true, 'class' => 'form-control canadian_zip_key_control']) ?>
     </div>
     </div>
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true, 'class' => 'form-control num']) ?>
