@@ -20,18 +20,17 @@ $this->title = 'Shipping to USA and Canada';
 
     <div class="row">
       <div class="col-md-12">
-
-        <div class="col-md-2 hidden-xs hidden-sm hidden-md padding-off-left margin-bottom-10">
-          <?php if ($orderElements) { ?>
-            <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
-          <?php } ?>
-          <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
-          <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-neutral-border clearParcelsIdCookie',])?>
-        </div>
-        <div class="col-md-7 hidden-xs hidden-sm hidden-md text-center">
+          <div class="col-md-3 col-xs-12 padding-off-left margin-bottom-10 margin-top-10 text-left">
+              <?php if ($orderElements) { ?>
+                  <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?php } ?>
+              <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
+          </div>
+        <div class="col-md-6 col-xs-12 text-center">
             <?php if ($show_view_button==true){ ?>
               <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group-view/'], [
-                'class' => 'btn btn-md btn-info group-admin-view',
+                'class' => 'btn btn-md btn-info group_100 group-admin-view',
                 'id'=>'group-admin-view',
               ]); ?>
             <?php }?>
@@ -40,20 +39,31 @@ $this->title = 'Shipping to USA and Canada';
               'id'=>'group-update',
               'disabled'=>true,
             ]); ?>
-
-            <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/'], [
-              'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide group-print',
+            <div class="btn-group">
+            <button type="button" class="btn btn-md btn-blue-gem dropdown-toggle InSystem_show Draft_show difUserIdHide" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-print"></span> Print
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li>
+            <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group-print/'], [
+              'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
               'id'=>'group-print',
               'disabled'=>true,
               'target' => '_blank',
             ]); ?>
-            <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print advanced', ['/orderElement/group-print-advanced/'],
+                </li>
+                <li>
+            <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group-print-advanced/'],
               [
-                'class' => 'btn btn-md btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
+                'class' => 'btn btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
                 'id'=>'group-print-advanced',
                 'disabled'=>true,
                 'target' => '_blank',
               ]); ?>
+                </li>
+            </ul>
+            </div>
             <?=Html::a('<i class="icon-metro-remove"></i> Delete',
                 ['/orderElement/group-delete/'],
                 [
@@ -69,13 +79,13 @@ $this->title = 'Shipping to USA and Canada';
                     'disabled'=>true,
                     'role'=>"modal-remote",
                 ]); ?>
-            <div class="col-md-12 group_text"><div class="group_text2">group management</div></div>
+            <div class="col-md-12 group_text"><div class="group_text3">group management</div></div>
         </div>
 
-          <div class="col-md-3 hidden-md hidden-sm hidden-xs padding-off-right padding-off-left text-right">
+          <div class="col-md-3 col-xs-12 margin-top-10 padding-off-right padding-off-left text-right">
 
               <?php if(Yii::$app->user->can("takeParcel")){?>
-                  <?=Html::a('<i class="icon-metro-location"></i> Receiving point', ['/receiving_points/choose/'],
+                  <?=Html::a('<i class="icon-metro-location"></i> Point', ['/receiving_points/choose/'],
                       [
                           'id'=>'choose_receiving_point',
                           'role'=>'modal-remote',
@@ -93,9 +103,10 @@ $this->title = 'Shipping to USA and Canada';
 
 
 
+
           <!--FOR TABLET BEGIN-->
 
-          <div class="col-md-2 col-sm-3 hidden-xs hidden-lg text-left  padding-off-left margin-bottom-10">
+          <!--<div class="col-md-2 col-sm-3 hidden-xs hidden-lg text-left  padding-off-left margin-bottom-10">
               <?php if ($orderElements) { ?>
                   <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-sm btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?php } ?>
@@ -159,11 +170,11 @@ $this->title = 'Shipping to USA and Canada';
                       'role'=>'modal-remote',
                       'class'=>'btn btn-sm btn-success show_modal',
                   ])?>
-          </div>
+          </div>-->
           <!--TABLET END-->
 
           <!--FOR MOBILE BEGIN-->
-          <div class="col-xs-12 visible-xs text-center  margin-bottom-10 padding-bottom-10">
+          <!--<div class="col-xs-12 visible-xs text-center  margin-bottom-10 padding-bottom-10">
               <?php if ($orderElements) { ?>
                   <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-md btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?php } ?>
@@ -234,7 +245,7 @@ $this->title = 'Shipping to USA and Canada';
                       'role'=>'modal-remote',
                       'class'=>'btn btn-md btn-success show_modal',
                   ])?>
-          </div>
+          </div>-->
 
 
           <!--FOR MOBILE END-->
