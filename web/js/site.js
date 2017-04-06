@@ -427,6 +427,8 @@ function  canadian_zip_key_control(evt){ // формат zip *** ***
   }
 }
 
+
+
 function  no_letters_in_input(evt){
   code = evt.keyCode||evt.charCode; // для Chrome || Firefox
     if ( ( code >= 48 && code <= 57 )||(code==013)) return;
@@ -450,15 +452,16 @@ function  only_letters_in_input(evt){
 
 function  only_no_foreign_letters_in_input(evt){
   code = evt.keyCode||evt.charCode;  // для Chrome || Firefox
+  console.log(code);
         if(
             ( code >= 48 && code <= 57 ) ||
             ( code >= 97 && code <= 122 ) ||
             ( code >= 65 && code <= 90 )||
-            (code==44)||    // запятая
-            (code==46)||    // точка
-            (code==64)||    // @
-            (code==13)||    // enter
-            (code==32) )   // пробел
+            (code==44)||(code==46)||
+            (code==13)||(code==32)
+            ||(code==33)||(code==64)||(code==35)||(code==36)||(code==37)||(code==94)||(code==38)||(code==42)
+            ||(code==40)||(code==41)||(code==95)||(code==43)||(code==45)||(code==61)  // !@#$%^&*()_+-=
+        )
             return;
         else {
           show_gritter(this);
