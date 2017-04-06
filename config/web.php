@@ -185,6 +185,9 @@ $config = [
       'receiving_points' => [
         'class' => 'app\modules\receiving_points\Module',
       ],
+      'additional_services' => [
+        'class' => 'app\modules\additional_services\Module',
+      ],
     ]
 ];
 
