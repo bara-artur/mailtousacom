@@ -1002,7 +1002,7 @@ button.navbar-toggle{margin-right:30px;}
 }
 .dropdown-menu>li>a.btn-blue-gem:hover,
 .dropdown-menu>li>a.btn-blue-gem:focus
-{color: #fff !important;
+{   color: #fff !important;
     background-color: #381290!important;
     border-color: #381290!important;
     width:100% !important;
