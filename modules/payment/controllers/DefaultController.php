@@ -470,44 +470,44 @@ class DefaultController extends Controller
       }
     }
 
-    public function actionShowIncludes($id){
-      $request = Yii::$app->request;
+  public function actionShowIncludes($id){
+    $request = Yii::$app->request;
 
-      if($request->isAjax) {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        if($request->isGet){
+    if($request->isAjax) {
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if($request->isGet){
 
-          $query = PaymentInclude::find();
+        $query = PaymentInclude::find();
 
-          $dataProvider = new ActiveDataProvider(['query' => $query,'sort'=>new \yii\data\Sort(['attributes'=>['empty']])]);
-          $query->andFilterWhere([
-            'payment_id' => $id,
-           // 'client_id' => Yii::$app->user->id
-           // 'user_id' => Yii::$app->user->id
-          ]);
-          $footer=Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]);
-          if($request->get('back')){
-            $footer.=Html::a('Back', ['/payment/show-parcel-includes/'.(int)$request->get('back')],
-              [
-                'id'=>'payment-show-includes',
-                'role'=>'modal-remote',
-                'class'=>'btn btn-default btn-info big_model',
-              ]
-            );
-          }
-          return [
-            'title'=> "View Payment Includes",
-            'content'=>$this->renderAjax('viewPaymentsInclude', [
-              'dataProvider' => $dataProvider,
-              'routing' => 'paymentTable',
-            ]),
-            'footer'=> $footer
-          ];
+        $dataProvider = new ActiveDataProvider(['query' => $query,'sort'=>new \yii\data\Sort(['attributes'=>['empty']])]);
+        $query->andFilterWhere([
+          'payment_id' => $id,
+         // 'client_id' => Yii::$app->user->id
+         // 'user_id' => Yii::$app->user->id
+        ]);
+        $footer=Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]);
+        if($request->get('back')){
+          $footer.=Html::a('Back', ['/payment/show-parcel-includes/'.(int)$request->get('back')],
+            [
+              'id'=>'payment-show-includes',
+              'role'=>'modal-remote',
+              'class'=>'btn btn-default btn-info big_model',
+            ]
+          );
         }
-
-
+        return [
+          'title'=> "View Payment Includes",
+          'content'=>$this->renderAjax('viewPaymentsInclude', [
+            'dataProvider' => $dataProvider,
+            'routing' => 'paymentTable',
+          ]),
+          'footer'=> $footer
+        ];
       }
+
+
     }
+  }
 
   public function actionShowParcelIncludes($id){
     $request = Yii::$app->request;

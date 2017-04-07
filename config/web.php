@@ -67,55 +67,60 @@ $config = [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
-                //закрываем пямой доступ к /user/user
-                'user/default/<action>'=>'404',
-                'user/user/<action>'=>'404',
-                'user/user/<action>/<action2>'=>'404',
-                'ebay/default/<action>/<action2>'=>'404',
-                'ebay/default/<action>'=>'404',
-                '/site/<action>'=>'404',
-                '/logs/<action>/<action2>'=>'404',
-                '/'=>'/site/index',
-                //получение города по стране
-                'city/get/<id:\d+>' => 'city/get',
-                //Взаимодействия с пользователем на сайте
-                '<action:(online|registration|logout|confirm|reset|resetpassword)>' => 'user/user/<action>',
-                '<action:(confidentiality)>' => 'site/<action>',
+              //закрываем пямой доступ к /user/user
+              'user/default/<action>'=>'404',
+              'user/user/<action>'=>'404',
+              'user/user/<action>/<action2>'=>'404',
+              'ebay/default/<action>/<action2>'=>'404',
+              'ebay/default/<action>'=>'404',
+              '/site/<action>'=>'404',
+              '/logs/<action>/<action2>'=>'404',
+              'additional_services/default/<action>'=>'404',
+              'additional_services/default/<action>/<action2>'=>'404',
 
-                //закрываем прямой доступ к базовому контроллеру
-                //'site/<action>'=>'404',
-                'site/<action>/<action2>'=>'404',
-                //базовые страницы в основном контроллере
-                '<action:(top|shop|about|blog|legends|mans|competitions|onlinehelp)>' => 'site/<action>',
-                //Страница пользователя
-                '<action:(user)>/<id:\d+>' => 'site/user/',
-                '<action:(profile)>' => 'user/default/<action>',
+              '/'=>'/site/index',
+              //получение города по стране
+              'city/get/<id:\d+>' => 'city/get',
+              //Взаимодействия с пользователем на сайте
+              '<action:(online|registration|logout|confirm|reset|resetpassword)>' => 'user/user/<action>',
+              '<action:(confidentiality)>' => 'site/<action>',
 
-                'address/<action>'=>'address/default/<action>',
-                'order/<action>'=>'order/default/<action>',
+              //закрываем прямой доступ к базовому контроллеру
+              //'site/<action>'=>'404',
+              'site/<action>/<action2>'=>'404',
+              //базовые страницы в основном контроллере
+              '<action:(top|shop|about|blog|legends|mans|competitions|onlinehelp)>' => 'site/<action>',
+              //Страница пользователя
+              '<action:(user)>/<id:\d+>' => 'site/user/',
+              '<action:(profile)>' => 'user/default/<action>',
 
-                'orderElement/<action>'=>'orderElement/default/<action>',
-                'orderElement/create/<id:\d+>'=>'orderElement/default/create',
-                'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
+              'address/<action>'=>'address/default/<action>',
+              'order/<action>'=>'order/default/<action>',
 
-                'receiving_points/<action>'=>'receiving_points/default/<action>',
+              'orderElement/<action>'=>'orderElement/default/<action>',
+              'orderElement/create/<id:\d+>'=>'orderElement/default/create',
+              'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
 
-                'orderInclude/<action>'=>'orderInclude/default/<action>',
-                'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
-                'orderInclude/<action:border-form|view-order|choose-status|border-form-pdf|pdf>/<id:\d+>'=>'orderInclude/default/<action>/',
-                'orderInclude/<action:group-remove>/<order_id:\d+>/<id:\d+>'=>'orderInclude/default/<action>/',
+              'receiving_points/<action>'=>'receiving_points/default/<action>',
 
-
-                'payment/<action:order>/<id:\d+>'=>'payment/default/<action>/',
-                'payment/<action>/<id:\d+>'=>'payment/default/<action>/',
-                'payment/<action:finish>'=>'payment/default/<action>/',
-                'payment/<action>'=>'payment/default/<action>/',
+              'orderInclude/<action>'=>'orderInclude/default/<action>',
+              'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
+              'orderInclude/<action:border-form|view-order|choose-status|border-form-pdf|pdf>/<id:\d+>'=>'orderInclude/default/<action>/',
+              'orderInclude/<action:group-remove>/<order_id:\d+>/<id:\d+>'=>'orderInclude/default/<action>/',
 
 
-                'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',
-                'ebay/<action:callback>'=>'ebay/default/<action>/',
+              'payment/<action:order>/<id:\d+>'=>'payment/default/<action>/',
+              'payment/<action>/<id:\d+>'=>'payment/default/<action>/',
+              'payment/<action:finish>'=>'payment/default/<action>/',
+              'payment/<action>'=>'payment/default/<action>/',
 
-                'logs/<id:\d+>'=>'logs/default/index/',
+              'additional_services/<action:transport-invoice>/<id:\d+>'=>'additional_services/default/<action>/',
+              //'additional_services/<action:transport-invoice>/'=>'additional_services/default/<action>/',
+
+              'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',
+              'ebay/<action:callback>'=>'ebay/default/<action>/',
+
+              'logs/<id:\d+>'=>'logs/default/index/',
             ],
         ],
     ],
