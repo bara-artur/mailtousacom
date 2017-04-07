@@ -29,12 +29,12 @@ $this->title = 'Shipping to USA and Canada';
           </div>
         <div class="col-md-6 col-xs-12 text-center">
             <?php if ($show_view_button==true){ ?>
-              <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group-view/'], [
+              <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group/view'], [
                 'class' => 'btn btn-md btn-info group_100 group-admin-view',
                 'id'=>'group-admin-view',
               ]); ?>
             <?php }?>
-            <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/'], [
+            <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group/update'], [
               'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text difUserIdHide group-update',
               'id'=>'group-update',
               'disabled'=>true,
@@ -46,7 +46,7 @@ $this->title = 'Shipping to USA and Canada';
             </button>
             <ul class="dropdown-menu pull-right">
                 <li>
-            <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group-print/'], [
+            <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group/print'], [
               'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
               'id'=>'group-print',
               'disabled'=>true,
@@ -54,7 +54,7 @@ $this->title = 'Shipping to USA and Canada';
             ]); ?>
                 </li>
                 <li>
-            <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group-print-advanced/'],
+            <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group/advanced_print'],
               [
                 'class' => 'btn btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
                 'id'=>'group-print-advanced',
@@ -65,7 +65,7 @@ $this->title = 'Shipping to USA and Canada';
             </ul>
             </div>
             <?=Html::a('<i class="icon-metro-remove"></i> Delete',
-                ['/orderElement/group-delete/'],
+                ['/orderElement/group/delete'],
                 [
                     'id'=>'group-delete',
                     'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide group-delete',
@@ -240,9 +240,9 @@ $this->title = 'Shipping to USA and Canada';
                 // 'created_at',
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
-                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
-                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
-                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group-update/'.$data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
+                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group/print'], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
+                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group/update'], ['class' => 'btn btn-sm btn-science-blue marg_but']);
+                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group/update'], ['class' => 'btn btn-sm btn-science-blue marg_but']);
                     $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i> Delete',
                       ['/orderElement/group-delete/' . $data->id],
                       [

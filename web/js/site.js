@@ -452,7 +452,6 @@ function  only_letters_in_input(evt){
 
 function  only_no_foreign_letters_in_input(evt){
   code = evt.keyCode||evt.charCode;  // для Chrome || Firefox
-  console.log(code);
         if(
             ( code >= 48 && code <= 57 ) ||
             ( code >= 97 && code <= 122 ) ||
@@ -753,11 +752,11 @@ function main_table_checkbox(current_element){
  }
 
   $("#for_group_actions").html('<b>Checked parcels:</b> ' + string);
-  $(".group-admin-view").attr("href","/orderElement/group-view"+parcel_ids);
-  $(".group-update").attr("href","/orderElement/group-update"+parcel_ids);
-  $(".group-print").attr("href","/orderElement/group-print"+parcel_ids);
-  $(".group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
-  $(".group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
+ // $(".group-admin-view").attr("href","/orderElement/group-view"+parcel_ids);
+ // $(".group-update").attr("href","/orderElement/group-update"+parcel_ids);
+ // $(".group-print").attr("href","/orderElement/group-print"+parcel_ids);
+ // $(".group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
+ // $(".group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
 }
 
 function init_main_table_checkbox(){
