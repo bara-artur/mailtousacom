@@ -53,7 +53,6 @@ class DefaultController extends Controller
     //получаем посылки в заказе
     //  var_dump(Yii::$app->request);
     //$totalPriceArray = [0];
-
     $totalPriceArray=[];
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
@@ -103,6 +102,7 @@ class DefaultController extends Controller
       'totalPriceArray' => $totalPriceArray,
       'hideNext' => $hideNext,
       'ids' =>$ids,
+      'user_id' => $order->user_id,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
