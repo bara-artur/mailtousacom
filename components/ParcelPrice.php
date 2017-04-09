@@ -28,7 +28,16 @@ class ParcelPrice extends Widget
 
     $user_tarif=User::find()->where(['id'=>$this->user])->asArray()->one();
     if(!$user_tarif)return false;
+    $user_tarif=json_decode($user_tarif['tariff'],true);
+    if(
+      gettype($user_tarif)=="integer" ||
+      (isset($user_tarif['count']) && $user_tarif=$user_tarif['count'])
+    ){
+      $send_cnt=($user_tarif>$send_cnt)?$user_tarif:$send_cnt;
+      $user_tarif=false;
+    }else{
 
+    };
     $query = new Query;
     $query->select('price')
       ->from('tariffs')
@@ -43,7 +52,19 @@ class ParcelPrice extends Widget
     ;
     $row = $query->one();
     if($row){
-      return number_format($row['price'],2,'.','');
+      $price=$row['price'];
+      $price_t=false;
+      if($user_tarif){
+        foreach ($user_tarif as $w=>$val){
+          if($w>$this->weight && !$price_t){
+            $price_t=$val;
+          }
+        }
+        if($price_t && $price_t<$price){
+          $price=$price_t;
+        }
+      }
+      return number_format($price,2,'.','');
     }else{
       return false;
     }
