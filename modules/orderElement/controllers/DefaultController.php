@@ -90,6 +90,7 @@ class DefaultController extends Controller
             $oldModel = OrderElement::find()->andWhere(['id' => $percel_id])->one();
             $user_id = $oldModel->user_id;
             if ($oldModel) {
+                $weight=0;
                 if ($_POST['lb'] != null) {
                   $weight = (int)$_POST['lb'];
                 }
@@ -108,7 +109,7 @@ class DefaultController extends Controller
                   $oldModel->track_number_type = 0;
                 $oldModel->save();
             }
-            $ParcelPrice=ParcelPrice::widget(['weight'=>$weight]);
+            $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
             if($ParcelPrice!=false){
                 $ParcelPrice.=' $ (without tax)';
             }else{

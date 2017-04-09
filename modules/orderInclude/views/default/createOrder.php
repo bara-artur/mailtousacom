@@ -204,7 +204,7 @@ $submitOption = [
                 <span id="results" class="resInd<?=$k?>">
                         <?php
                         if($percel->weight>0) {
-                          $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
+                          $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight,'user'=>$percel->user_id]);
                           if ($ParcelPrice != false) {
                             $ParcelPrice = '' . $ParcelPrice . ' $ (without tax)';
                           } else {
