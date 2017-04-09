@@ -281,7 +281,7 @@ class DefaultController extends Controller
     }
 
   public function findOrCreateOrder($parcels_id, $admin = 0){
-    $arr = explode('_', $parcels_id);
+    $arr = explode(',', $parcels_id);
     asort($arr);
     $user_id = null;
     $flag = 0;
@@ -317,21 +317,16 @@ class DefaultController extends Controller
     else return null;
   }
 
-    public function actionGroupUpdate($parcels_id = null){
-      if ($parcels_id) {
+    public function groupUpdate($parcels_id = null){
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
-          $this->redirect(['/orderInclude/create-order/' . $order_id]);
-          return "Create pdf for order " .  $order_id;
+          return $this->redirect(['/orderInclude/create-order/' . $order_id]);
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
 
-    public function actionGroupPrint($parcels_id=null){
-      if ($parcels_id) {
+    public function groupPrint($parcels_id=null){
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
@@ -339,13 +334,10 @@ class DefaultController extends Controller
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
 
-    public function actionGroupPrintAdvanced($parcels_id=null)
+    public function groupPrintAdvanced($parcels_id=null)
     {
-      if ($parcels_id) {
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/pdf/' . $order_id]);
@@ -353,13 +345,10 @@ class DefaultController extends Controller
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
 
-    public function actionGroupDelete($parcels_id=null){
-        if ($parcels_id) {
-          $arr = explode('_', $parcels_id);
+    public function groupDelete($parcels_id=null){
+          $arr = explode(',', $parcels_id);
           asort($arr);
           foreach ($arr as $parcel_id) {
             $parcel = OrderElement::findOne(['id' => $parcel_id]);
@@ -372,13 +361,23 @@ class DefaultController extends Controller
           }
           $this->redirect(['/'],200);
           return "Parcels delete complete successfully";
+    }
+
+    public function actionGroup($act){
+      $parcels_id = $_COOKIE['parcelCheckedId'];
+      if ($parcels_id!=null) {
+        switch ($act) {
+          case 'update':  {return $this->groupUpdate($parcels_id); break;}
+          case 'print':   {return $this->groupPrint($parcels_id);break;}
+          case 'advanced_print':  {return $this->groupPrintAdvanced($parcels_id);break;}
+          case 'delete':  {return $this->groupDelete($parcels_id);break;}
+          case 'view':    {return $this->groupView($parcels_id);break;}
         }
+      }
       return $this->redirect(['/']);
     }
 
-
-    public function actionGroupView($parcels_id = null){
-      if ($parcels_id) {
+    public function groupView($parcels_id = null){
         $order_id = $this->findOrCreateOrder($parcels_id,1);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/view-order/' . $order_id]);
@@ -386,8 +385,6 @@ class DefaultController extends Controller
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
     /**
      * Finds the OrderElement model based on its primary key value.
