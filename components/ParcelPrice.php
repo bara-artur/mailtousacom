@@ -5,6 +5,8 @@ namespace app\components;
 use Yii;
 use yii\base\Widget;
 use yii\db\Query;
+use app\modules\orderElement\models\OrderElement;
+use app\modules\logs\models\Log;
 
 class ParcelPrice extends Widget
 {
@@ -14,6 +16,12 @@ class ParcelPrice extends Widget
   public function run()
   {
     parent::init();
+
+    //OrderElement
+    $time=time()-YII::$app->params['preiod_parcel_count']*24*60*60;
+    $send_cnt=Log::find()->where(['user_id'=>$this->user,'status_id'=>2])->asArray()->all();
+    $send_cnt=count($send_cnt);
+
     $query = new Query;
     $query->select('price')
       ->from('tariffs')

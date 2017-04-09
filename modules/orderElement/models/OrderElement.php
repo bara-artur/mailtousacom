@@ -77,8 +77,9 @@ class OrderElement extends \yii\db\ActiveRecord
             [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
             [['company_name'], 'string', 'max' => 128],
             [['track_number'], 'string'],
+            [['price','qst','gst'],'double'],
             [['weight'], 'double'],
-            [['track_number_type','status_dop'], 'integer'],
+            [['track_number_type','status_dop','status'], 'integer'],
             [['address_type','weight','track_number','track_number_type'], 'safe'],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
         ];
@@ -142,6 +143,9 @@ class OrderElement extends \yii\db\ActiveRecord
 
   public function afterSave($insert, $changedAttributes)
   {
+    //if($changedAttributes['agreement'])return true;
+    //d($insert);
+    //ddd($changedAttributes);
     parent::afterSave($insert, $changedAttributes);
     if ($insert) {
       // Да это новая запись (insert)
@@ -152,18 +156,18 @@ class OrderElement extends \yii\db\ActiveRecord
       }
     } else {
       // Нет, старая (update)
-      if($this->status>0 AND isset($changedAttributes->weight)){
-        Log::addLog($this->id,2,[$changedAttributes->weight,$this->weight]);
+      if($this->status>0 AND isset($changedAttributes['weight'])){
+        Log::addLog($this->id,2,[$changedAttributes['weight'],$this->weight]);
       }
 
       if(!isset($changedAttributes)){
         return true;
       }
       if(
-        isset($changedAttributes->status)||
-        isset($changedAttributes->status_dop)
+        isset($changedAttributes['status'])||
+        isset($changedAttributes['status_dop'])
       ){
-        Log::addLog($this->id,['text'=>'Change status to "'.$this->getFullTextStatus().'"']);
+        Log::addLog($this->id,['text'=>'Change status to "'.$this->getFullTextStatus().'"'],false,$this->status);
       }
     }
   }

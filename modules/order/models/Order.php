@@ -80,9 +80,15 @@ class Order extends \yii\db\ActiveRecord
     }
 
     public function setData($data){
-      Yii::$app->db->createCommand()
+      /*Yii::$app->db->createCommand()
       ->update('order_element', $data, ['id' => explode(',',$this->el_group)])
-      ->execute();
+      ->execute();*/
+      $numbers = explode(',',$this->el_group);
+      $parcels = OrderElement::find()->where(['id' => $numbers])->all();
+      foreach($parcels as &$parcel){
+        $parcel->attributes=$data;
+        $parcel->save();
+      }
     }
 
   public function setStatus($status,$send_mail){

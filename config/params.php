@@ -10,6 +10,7 @@ return [
   'parcelMaxPrice' => '800',
   'showAdminPanel' =>'0',
   'adminUserChoosing' =>'0',
+  'preiod_parcel_count'=>30,
   'country' => [
     'Canada',
     'China',
