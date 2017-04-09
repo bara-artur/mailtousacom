@@ -427,7 +427,15 @@ function  canadian_zip_key_control(evt){ // формат zip *** ***
   }
 }
 
+function  float_in_input(evt){
+  code = evt.keyCode||evt.charCode; // для Chrome || Firefox
 
+  if ( ( code >= 48 && code <= 57 )||(code==13)||(code==46)||(code==44)) return;
+  else  {
+    show_gritter(this);
+    evt.preventDefault();
+  }
+}
 
 function  no_letters_in_input(evt){
   code = evt.keyCode||evt.charCode; // для Chrome || Firefox
@@ -474,6 +482,7 @@ function init_js_validation()
           $('body').on('keypress', 'input,textarea', only_no_foreign_letters_in_input);
           $('body').on('keypress', '.num', no_letters_in_input);
           $('body').on('keypress', '.canadian_zip_key_control', canadian_zip_key_control);
+          $('body').on('keypress', '.float_num', float_in_input);
 }
 
 function init_ajax_send_lb_oz_tn(){
