@@ -184,7 +184,6 @@ class AdminController extends Controller
       $model= new Address();
     }
 
-
     if($request->isAjax) {
       Yii::$app->response->format = Response::FORMAT_JSON;
       if ($request->isGet) {
@@ -354,8 +353,16 @@ class AdminController extends Controller
       if(!Yii::$app->user->can('changeTariff')){
         throw new NotFoundHttpException('Access is denied.');
       }
+      $user = User::find()->where(['id' => $id])->one();
       $searchModel = new TariffsSearch();
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      $tariff_array = json_decode($user->tariff,true);
+      if (isset($tariff_array['count'])){
+        $tariff_type = $tariff_array['count'];
+      } else{
+        $tariff_type = 'unic';
+      }
 
       $tarifs=Tariffs::find()->asArray()->all();
 
@@ -372,10 +379,8 @@ class AdminController extends Controller
         }
         $out[$tarif['parcel_count']][$tarif['weight']]=$tarif['price'];
       }
-
       sort($parcel_count);
       sort($weight);
-
       $request = Yii::$app->request;
       if ($request->isAjax) {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -388,17 +393,36 @@ class AdminController extends Controller
             'parcel_count'=>$parcel_count,
             'weights'=>$weight,
             'tarifs'=>$out,
+            'tariff_array' => $tariff_array,
+            'tariff_type' => $tariff_type,
           ]),
           'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
             Html::button('Save',['class'=>'btn btn-primary ','type'=>"submit"])
         ];
 
         if ($request->isPost) {
-//          $formModel->load(Yii::$app->request->post());
-   //       if($formModel->save()){
-     //       $modal_param['forceReload'] = "true";
-       //   };
-          return 0;
+          foreach ($parcel_count as $cnt){
+            if (isset($_POST[$cnt])) {
+              $user->tariff = json_encode(array('count'=>$cnt));
+              $user->save();
+            }
+          }
+          if (isset($_POST['tariff_type_unic'])) {
+            $error = 0;
+            $arr = [];
+            foreach ($weight as $w){
+              if (isset($_POST['unic'.$w])&&($_POST['unic'.$w]!='')) {
+                $arr[$w] = $_POST['unic'.$w];
+            }else{
+               $error = 1;
+              }
+            }
+            if ($error == 0) {
+              $user->tariff = json_encode($arr);
+              $user->save();
+            }
+          }
+          return $this->redirect(['/user/admin/'],200);
         }
         return $modal_param;
       } else {

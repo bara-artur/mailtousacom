@@ -28,10 +28,12 @@ CrudAsset::register($this);
                                   <center><span class="tar_middle">'.$cnt.'+</span></br>
                                   <span class="tar_small">quantity parcels</span>
                                   </center>
-                                  <input type="checkbox" id='.$cnt.' name = "track_number_type">
+                                  <input type="checkbox" id='.$cnt.' name = '.$cnt.' class="tariff_checkbox" '.(($cnt==$tariff_type)?("checked=checked"):("")).'>
                                 </th>';
                 }
-                echo '<th><span class="tar_middle">Unic</span></br></th>';
+                echo '<th>
+                        <span class="tar_middle">Unic</span></br>
+                        <input type="checkbox" id="unic" name = "tariff_type_unic" class="tariff_checkbox" '.(($tariff_type=='unic')?("checked=checked"):("")).'></th>';
               ?>
             </tr>
             </thead>
@@ -43,7 +45,7 @@ CrudAsset::register($this);
               foreach ($parcel_count as $cnt){
                 echo '<td class="td_wr_input">'.number_format((float)$tarifs[$cnt][$w],2,'.','').'</td>';
               }
-              echo '<td class="td_wr_input"><input type="textarea" id='.$w.' name = "type"></td>';
+              echo '<td class="td_wr_input"><input type="textarea" id='.$w.' name = unic'.$w.' '.(($tariff_type=='unic')?('value='.$tariff_array[$w]):("")).'></td>';
               echo '</tr>';
             };
             ?>
@@ -56,4 +58,15 @@ CrudAsset::register($this);
 </div>
 </form>
 <?php ActiveForm::end(); ?>
-
+<?php echo "<script>
+              $(document).ready(function() {
+                $('.tariff_checkbox').on('change', function (){
+                  current_chechbox = this;
+                  if ($(current_chechbox).prop('checked')) {
+                  $('.tariff_checkbox').prop('checked',false);
+                  $(current_chechbox).prop('checked',true);
+                  };
+                });
+              })
+             </script>
+           "; ?>

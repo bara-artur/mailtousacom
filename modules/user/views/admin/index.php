@@ -144,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 //$url="/rbac/assignment/assignment?id=".$model->id;
                 return  Html::a('<i>$</i>', $url, [
                   'title' => 'Tariff',
-                  'class'=>'btn btn-sm btn-warning but_tab_marg',
+                  'class'=>'btn btn-sm btn-warning but_tab_marg big_model',
                   'role'=>'modal-remote',
                   'data-pjax'=>0,
                 ]);

@@ -25,7 +25,7 @@ $submitOption = [
 ?>
   <div class="row">
       <div class="col-md-2 col-sm-12">
-          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],['class'=>'btn btn-md btn-neutral-border pull-left hidden-xs','id' => 'updateParcelsIdCookie','data-forUserCookie' => ,'data-forCookie'=> $ids])?>
+          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],['class'=>'btn btn-md btn-neutral-border pull-left hidden-xs','id' => 'updateParcelsIdCookie','data-forCookie'=> $ids])?>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
           <h4 class="">Order #<?=$order_id?> for Transportation</br>
