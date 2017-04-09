@@ -15,6 +15,8 @@ use johnitvn\rbacplus\models\AssignmentSearch;
 use johnitvn\rbacplus\models\AssignmentForm;
 use app\modules\address\models\Address;
 use app\modules\order\models\Order;
+use app\modules\tariff\models\TariffsSearch;
+use app\modules\tariff\models\Tariffs;
 
 /**
  * AdminController implements the CRUD actions for User model.
@@ -61,7 +63,7 @@ class AdminController extends Controller
       if(Yii::$app->user->can('rbac')){
         $user_btn.='{rbac}';
       }
-      $user_btn.='{update}{delete}{billing}';
+      $user_btn.='{update}{delete}{billing}{tariff}';
       return $this->render('index', [
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
@@ -348,6 +350,64 @@ class AdminController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionTariff($id){
+      if(!Yii::$app->user->can('changeTariff')){
+        throw new NotFoundHttpException('Access is denied.');
+      }
+      $searchModel = new TariffsSearch();
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      $tarifs=Tariffs::find()->asArray()->all();
+
+      $out=array();
+      $parcel_count=array();
+      $weight=array();
+      foreach ($tarifs as $tarif){
+        if(!in_array($tarif['parcel_count'],$parcel_count)){
+          $parcel_count[]=$tarif['parcel_count'];
+          $out[$tarif['parcel_count']]=array();
+        }
+        if(!in_array($tarif['weight'],$weight)){
+          $weight[]=$tarif['weight'];
+        }
+        $out[$tarif['parcel_count']][$tarif['weight']]=$tarif['price'];
+      }
+
+      sort($parcel_count);
+      sort($weight);
+
+      $request = Yii::$app->request;
+      if ($request->isAjax) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $modal_param=[
+          'title' => 'Tariffs',
+          //'forceReload' => "true",
+          'content' => $this->renderPartial('tariffDetalization', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'parcel_count'=>$parcel_count,
+            'weights'=>$weight,
+            'tarifs'=>$out,
+          ]),
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+            Html::button('Save',['class'=>'btn btn-primary ','type'=>"submit"])
+        ];
+
+        if ($request->isPost) {
+//          $formModel->load(Yii::$app->request->post());
+   //       if($formModel->save()){
+     //       $modal_param['forceReload'] = "true";
+       //   };
+          return 0;
+        }
+        return $modal_param;
+      } else {
+        return $this->render('tariffDetalization', [
+     //     'model' => $model,
+       //   'formModel' => $formModel,
+        ]);
+      }
+    }
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

@@ -137,6 +137,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'data-pjax'=>0,
                   ]);
               },
+              'tariff' => function ($url, $model) {
+                if(count($model->getRoleOfUserArray())>0){
+                  return;
+                }
+                //$url="/rbac/assignment/assignment?id=".$model->id;
+                return  Html::a('<i>$</i>', $url, [
+                  'title' => 'Tariff',
+                  'class'=>'btn btn-sm btn-warning but_tab_marg',
+                  'role'=>'modal-remote',
+                  'data-pjax'=>0,
+                ]);
+              },
             ],
               //'updateOptions' => ['label'=>\Yii::t('app', 'Edit')],
           ],
