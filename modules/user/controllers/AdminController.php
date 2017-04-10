@@ -358,8 +358,8 @@ class AdminController extends Controller
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
       $tariff_array = json_decode($user->tariff,true);
-      if (isset($tariff_array['count'])){
-        $tariff_type = $tariff_array['count'];
+      if(gettype($tariff_array)=="integer"){
+        $tariff_type = $tariff_array;
       } else{
         $tariff_type = 'unic';
       }
@@ -402,14 +402,15 @@ class AdminController extends Controller
 
         if ($request->isPost) {
           foreach ($parcel_count as $cnt){
-            if (isset($_POST[$cnt])) {
-              $user->tariff = json_encode(array('count'=>$cnt));
+            if ($_POST['tariff_radio']!='unic') {
+              $user->tariff = $_POST['tariff_radio'];
               $user->save();
             }
           }
-          if (isset($_POST['tariff_type_unic'])) {
+          if ($_POST['tariff_radio']=='unic') {
             $error = 0;
             $arr = [];
+
             foreach ($weight as $w){
               if (isset($_POST['unic'.$w])&&($_POST['unic'.$w]!='')) {
                 $arr[$w] = $_POST['unic'.$w];
@@ -422,7 +423,11 @@ class AdminController extends Controller
               $user->save();
             }
           }
-          return $this->redirect(['/user/admin/'],200);
+          return [
+            'title' => 'Tariffs',
+            'content' => 'Complete',
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+          ];
         }
         return $modal_param;
       } else {
