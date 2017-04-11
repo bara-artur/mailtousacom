@@ -97,20 +97,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'template'=>$user_btn,
             'buttons'=>[
               'update' => function ($url, $model) {
-                  return Html::a('<span class="glyphicon glyphicon-pencil"></span>', '/user/admin/update?id='.$model->id, [
+                  return Html::a('<span class="glyphicon glyphicon-pencil"></span> Edit', '/user/admin/update?id='.$model->id, [
                     'title' => 'Update',
-                    'class'=>'btn btn-sm btn-info but_tab_marg',
+                    'class'=>'btn btn-sm btn-info but_tab_marg_inl',
                     'role'=>'modal-remote',
                     'title'=> 'Update',
                     'data-pjax'=>0,
                   ]);
               },
               'delete' => function ($url, $model) {
-                  return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, [
+                  return Html::a('<span class="glyphicon glyphicon-trash"></span> Delete', $url, [
                     'role'=>'modal-remote',
                     'title'=> 'Delete',
                     'data-pjax'=>0,
-                    'class'=>'btn btn-sm btn-danger but_tab_marg',
+                    'class'=>'btn btn-sm btn-danger but_tab_marg_inl',
                     'data-request-method'=>"post",
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this user",
@@ -118,11 +118,11 @@ $this->params['breadcrumbs'][] = $this->title;
               },
               'rbac' => function ($url, $model) {
                 //$url="/rbac/assignment/assignment?id=".$model->id;
-                  return Html::a('<span class="glyphicon glyphicon-user"></span>', $url, [
+                  return Html::a('<span class="glyphicon glyphicon-user"></span> Role', $url, [
                     'role'=>'modal-remote',
                     'title'=> 'Role user',
                     'data-pjax'=>0,
-                    'class'=>'btn btn-sm btn-science-blue but_tab_marg',
+                    'class'=>'btn btn-sm btn-science-blue but_tab_marg_inl',
                   ]);
               },
               'billing' => function ($url, $model) {
@@ -130,9 +130,9 @@ $this->params['breadcrumbs'][] = $this->title;
                   return;
                 }
                 //$url="/rbac/assignment/assignment?id=".$model->id;
-                  return  Html::a('<i class="icon-metro-location"></i>', $url, [
+                  return  Html::a('<i class="icon-metro-location"></i> Address', $url, [
                     'title' => 'Billing address',
-                    'class'=>'btn btn-sm btn-lima but_tab_marg',
+                    'class'=>'btn btn-sm btn-lima but_tab_marg_inl',
                     'role'=>'modal-remote',
                     'data-pjax'=>0,
                   ]);
@@ -142,9 +142,9 @@ $this->params['breadcrumbs'][] = $this->title;
                   return;
                 }
                 //$url="/rbac/assignment/assignment?id=".$model->id;
-                return  Html::a('<i>$</i>', $url, [
+                return  Html::a('<span class="glyphicon glyphicon-certificate"></span> Tariff', $url, [
                   'title' => 'Tariff',
-                  'class'=>'btn btn-sm btn-warning but_tab_marg big_model',
+                  'class'=>'btn btn-sm btn-warning but_tab_marg_inl big_model',
                   'role'=>'modal-remote',
                   'data-pjax'=>0,
                 ]);
