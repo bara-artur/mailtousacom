@@ -186,6 +186,9 @@ $config = [
       'receiving_points' => [
         'class' => 'app\modules\receiving_points\Module',
       ],
+      'cron' => [
+        'class' => 'app\modules\cron\Module',
+      ],
     ]
 ];
 
