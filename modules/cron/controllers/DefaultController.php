@@ -18,12 +18,10 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-      $searchModel = new OrderElementSearch();
-      $dataProvider = $searchModel->search(Yii::$app->request->queryParams, null);
+      $data=OrderElement::find()->orderBy(['status' => SORT_DESC])->limit(10)->all();
 
       return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
+       'data' => $data,
       ]);
     }
 }
