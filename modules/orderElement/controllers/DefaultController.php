@@ -317,7 +317,7 @@ class DefaultController extends Controller
     else return null;
   }
 
-    public function groupUpdate($parcels_id = null){
+    public function actionGroupUpdate($parcels_id = null){
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
           return $this->redirect(['/orderInclude/create-order/' . $order_id]);
@@ -326,7 +326,7 @@ class DefaultController extends Controller
         }
     }
 
-    public function groupPrint($parcels_id=null){
+    public function actionGroupPrint($parcels_id=null){
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
@@ -336,7 +336,7 @@ class DefaultController extends Controller
         }
     }
 
-    public function groupPrintAdvanced($parcels_id=null)
+    public function actionGroupPrintAdvanced($parcels_id=null)
     {
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
@@ -347,7 +347,7 @@ class DefaultController extends Controller
         }
     }
 
-    public function groupDelete($parcels_id=null){
+    public function actionGroupDelete($parcels_id=null){
           $arr = explode(',', $parcels_id);
           asort($arr);
           foreach ($arr as $parcel_id) {
@@ -367,17 +367,17 @@ class DefaultController extends Controller
       $parcels_id = $_COOKIE['parcelCheckedId'];
       if ($parcels_id!=null) {
         switch ($act) {
-          case 'update':  {return $this->groupUpdate($parcels_id); break;}
-          case 'print':   {return $this->groupPrint($parcels_id);break;}
-          case 'advanced_print':  {return $this->groupPrintAdvanced($parcels_id);break;}
-          case 'delete':  {return $this->groupDelete($parcels_id);break;}
-          case 'view':    {return $this->groupView($parcels_id);break;}
+          case 'update':  {return $this->actionGroupUpdate($parcels_id); break;}
+          case 'print':   {return $this->actionGroupPrint($parcels_id);break;}
+          case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
+          case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
+          case 'view':    {return $this->actionGroupView($parcels_id);break;}
         }
       }
       return $this->redirect(['/']);
     }
 
-    public function groupView($parcels_id = null){
+    public function actionGroupView($parcels_id = null){
         $order_id = $this->findOrCreateOrder($parcels_id,1);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/view-order/' . $order_id]);
