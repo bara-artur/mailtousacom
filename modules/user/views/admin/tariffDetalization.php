@@ -23,7 +23,6 @@ CrudAsset::register($this);
             <tr>
               <th class="tar_big max_width">Shipping volume<div class="tar_small">per month</div></th>
               <?php
-
                 foreach ($parcel_count as $cnt){
                   echo '<th>
                                   <center><span class="tar_middle">'.$cnt.'+</span></br>
@@ -34,7 +33,7 @@ CrudAsset::register($this);
                 }
                 echo '<th>
                         <span class="tar_middle">Unic</span></br>
-                        <input class="unic_radio" type="radio" name="tariff_radio" value="unic" '.(($tariff_type=='unic')?(" checked=checked"):("")).'></th>';
+                        <input class="unic_radio" type="radio" name="tariff_radio" value="unic" '.((strcasecmp($tariff_type, "unic") == 0)?(" checked=checked"):("")).'></th>';
               ?>
             </tr>
             </thead>
@@ -52,7 +51,9 @@ CrudAsset::register($this);
                         class="float_num text_input" 
                         type="textarea" 
                         id='.$w.' 
-                        name = unic'.$w.' '.(($tariff_type=='unic')?('value='.$tariff_array[$w]):("")).'>
+                        name = unic'.$w.' '.((strcasecmp($tariff_type, "unic") == 0)?
+                                            ('value='.$tariff_array[$w]):
+                                            ('value='.number_format((float)$tarifs[$tariff_type][$w],2,'.',''))).'>
                     </td>';
               echo '</tr>';
             };
@@ -68,20 +69,6 @@ CrudAsset::register($this);
 <?php ActiveForm::end(); ?>
 <?php echo "<script>
               $(document).ready(function() {
-                function radio_processing() {
-                  current_radio = $('[name=tariff_radio]:checked');
-                  if ($(current_radio).prop('checked')) {
-                    if ($(current_radio).val()!='unic'){
-                     column = $('.parcel'+$(current_radio).val());
-                     $.each(column, function(key,value){
-                       $('[name=unic'+$(value).data('weight')+']').val($(value).data('price'));
-                     })
-                    }
-                  };
-                }
-                radio_processing();
-                
-                $('[name=tariff_radio]').on('change', radio_processing);
                 $('.text_input').on('keypress',function(){
                  $('.unic_radio').prop('checked',true); 
                 })

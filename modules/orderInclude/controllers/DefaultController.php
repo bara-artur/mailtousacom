@@ -72,6 +72,7 @@ class DefaultController extends Controller
     $hideNext = 0;
     $order_elements = [];
     $ids = '';
+    $user_ids  = $_COOKIE['parcelCheckedUser'];;
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
@@ -102,7 +103,7 @@ class DefaultController extends Controller
       'totalPriceArray' => $totalPriceArray,
       'hideNext' => $hideNext,
       'ids' =>$ids,
-      'user_id' => $order->user_id,
+      'user_ids' => $user_ids,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
