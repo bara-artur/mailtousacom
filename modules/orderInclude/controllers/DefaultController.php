@@ -53,7 +53,6 @@ class DefaultController extends Controller
     //получаем посылки в заказе
     //  var_dump(Yii::$app->request);
     //$totalPriceArray = [0];
-
     $totalPriceArray=[];
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
@@ -73,6 +72,7 @@ class DefaultController extends Controller
     $hideNext = 0;
     $order_elements = [];
     $ids = '';
+    $user_ids  = $_COOKIE['parcelCheckedUser'];;
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
@@ -103,6 +103,7 @@ class DefaultController extends Controller
       'totalPriceArray' => $totalPriceArray,
       'hideNext' => $hideNext,
       'ids' =>$ids,
+      'user_ids' => $user_ids,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/

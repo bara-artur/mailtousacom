@@ -90,6 +90,7 @@ class DefaultController extends Controller
             $oldModel = OrderElement::find()->andWhere(['id' => $percel_id])->one();
             $user_id = $oldModel->user_id;
             if ($oldModel) {
+                $weight=0;
                 if ($_POST['lb'] != null) {
                   $weight = (int)$_POST['lb'];
                 }
@@ -108,7 +109,7 @@ class DefaultController extends Controller
                   $oldModel->track_number_type = 0;
                 $oldModel->save();
             }
-            $ParcelPrice=ParcelPrice::widget(['weight'=>$weight]);
+            $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
             if($ParcelPrice!=false){
                 $ParcelPrice.=' $ (without tax)';
             }else{
@@ -280,7 +281,7 @@ class DefaultController extends Controller
     }
 
   public function findOrCreateOrder($parcels_id, $admin = 0){
-    $arr = explode('_', $parcels_id);
+    $arr = explode(',', $parcels_id);
     asort($arr);
     $user_id = null;
     $flag = 0;
@@ -317,20 +318,15 @@ class DefaultController extends Controller
   }
 
     public function actionGroupUpdate($parcels_id = null){
-      if ($parcels_id) {
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
-          $this->redirect(['/orderInclude/create-order/' . $order_id]);
-          return "Create pdf for order " .  $order_id;
+          return $this->redirect(['/orderInclude/create-order/' . $order_id]);
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
 
     public function actionGroupPrint($parcels_id=null){
-      if ($parcels_id) {
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
@@ -338,13 +334,10 @@ class DefaultController extends Controller
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
 
     public function actionGroupPrintAdvanced($parcels_id=null)
     {
-      if ($parcels_id) {
         $order_id = $this->findOrCreateOrder($parcels_id);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/pdf/' . $order_id]);
@@ -352,13 +345,10 @@ class DefaultController extends Controller
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
 
     public function actionGroupDelete($parcels_id=null){
-        if ($parcels_id) {
-          $arr = explode('_', $parcels_id);
+          $arr = explode(',', $parcels_id);
           asort($arr);
           foreach ($arr as $parcel_id) {
             $parcel = OrderElement::findOne(['id' => $parcel_id]);
@@ -371,13 +361,23 @@ class DefaultController extends Controller
           }
           $this->redirect(['/'],200);
           return "Parcels delete complete successfully";
+    }
+
+    public function actionGroup($act){
+      $parcels_id = $_COOKIE['parcelCheckedId'];
+      if ($parcels_id!=null) {
+        switch ($act) {
+          case 'update':  {return $this->actionGroupUpdate($parcels_id); break;}
+          case 'print':   {return $this->actionGroupPrint($parcels_id);break;}
+          case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
+          case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
+          case 'view':    {return $this->actionGroupView($parcels_id);break;}
         }
+      }
       return $this->redirect(['/']);
     }
 
-
     public function actionGroupView($parcels_id = null){
-      if ($parcels_id) {
         $order_id = $this->findOrCreateOrder($parcels_id,1);
         if ($order_id != null) {
           $this->redirect(['/orderInclude/view-order/' . $order_id]);
@@ -385,8 +385,6 @@ class DefaultController extends Controller
         } else {
           return $this->redirect(['/']);
         }
-      }
-      return $this->redirect(['/']);
     }
     /**
      * Finds the OrderElement model based on its primary key value.

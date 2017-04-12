@@ -99,6 +99,7 @@ $config = [
 
               'orderElement/<action>'=>'orderElement/default/<action>',
               'orderElement/create/<id:\d+>'=>'orderElement/default/create',
+              'orderElement/group/<act:\w+>'=>'orderElement/default/group',
               'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
 
               'receiving_points/<action>'=>'receiving_points/default/<action>',
@@ -192,6 +193,9 @@ $config = [
       ],
       'additional_services' => [
         'class' => 'app\modules\additional_services\Module',
+      ],
+      'cron' => [
+        'class' => 'app\modules\cron\Module',
       ],
     ]
 ];

@@ -15,6 +15,8 @@ use johnitvn\rbacplus\models\AssignmentSearch;
 use johnitvn\rbacplus\models\AssignmentForm;
 use app\modules\address\models\Address;
 use app\modules\order\models\Order;
+use app\modules\tariff\models\TariffsSearch;
+use app\modules\tariff\models\Tariffs;
 
 /**
  * AdminController implements the CRUD actions for User model.
@@ -61,7 +63,7 @@ class AdminController extends Controller
       if(Yii::$app->user->can('rbac')){
         $user_btn.='{rbac}';
       }
-      $user_btn.='{update}{delete}{billing}';
+      $user_btn.='{update}{delete}{billing}{tariff}';
       return $this->render('index', [
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
@@ -181,7 +183,6 @@ class AdminController extends Controller
     if(!$model){
       $model= new Address();
     }
-
 
     if($request->isAjax) {
       Yii::$app->response->format = Response::FORMAT_JSON;
@@ -348,6 +349,94 @@ class AdminController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionTariff($id){
+      if(!Yii::$app->user->can('changeTariff')){
+        throw new NotFoundHttpException('Access is denied.');
+      }
+      $user = User::find()->where(['id' => $id])->one();
+      $searchModel = new TariffsSearch();
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+      $tariff_array = json_decode($user->tariff,true);
+      if(gettype($tariff_array)=="integer"){
+        $tariff_type = $tariff_array;
+      } else{
+        $tariff_type = 'unic';
+      }
+
+      $tarifs=Tariffs::find()->asArray()->all();
+
+      $out=array();
+      $parcel_count=array();
+      $weight=array();
+      foreach ($tarifs as $tarif){
+        if(!in_array($tarif['parcel_count'],$parcel_count)){
+          $parcel_count[]=$tarif['parcel_count'];
+          $out[$tarif['parcel_count']]=array();
+        }
+        if(!in_array($tarif['weight'],$weight)){
+          $weight[]=$tarif['weight'];
+        }
+        $out[$tarif['parcel_count']][$tarif['weight']]=$tarif['price'];
+      }
+      sort($parcel_count);
+      sort($weight);
+      $request = Yii::$app->request;
+      if ($request->isAjax) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $modal_param=[
+          'title' => 'Tariffs',
+          //'forceReload' => "true",
+          'content' => $this->renderPartial('tariffDetalization', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'parcel_count'=>$parcel_count,
+            'weights'=>$weight,
+            'tarifs'=>$out,
+            'tariff_array' => $tariff_array,
+            'tariff_type' => $tariff_type,
+          ]),
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
+            Html::button('Save',['class'=>'btn btn-primary ','type'=>"submit"])
+        ];
+
+        if ($request->isPost) {
+          foreach ($parcel_count as $cnt){
+            if ($_POST['tariff_radio']!='unic') {
+              $user->tariff = $_POST['tariff_radio'];
+              $user->save();
+            }
+          }
+          if ($_POST['tariff_radio']=='unic') {
+            $error = 0;
+            $arr = [];
+
+            foreach ($weight as $w){
+              if (isset($_POST['unic'.$w])&&($_POST['unic'.$w]!='')) {
+                $arr[$w] = $_POST['unic'.$w];
+            }else{
+               $error = 1;
+              }
+            }
+            if ($error == 0) {
+              $user->tariff = json_encode($arr);
+              $user->save();
+            }
+          }
+          return [
+            'title' => 'Tariffs',
+            'content' => 'Complete',
+            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+          ];
+        }
+        return $modal_param;
+      } else {
+        return $this->render('tariffDetalization', [
+     //     'model' => $model,
+       //   'formModel' => $formModel,
+        ]);
+      }
+    }
     /**
      * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

@@ -25,7 +25,13 @@ $submitOption = [
 ?>
   <div class="row">
       <div class="col-md-2 col-sm-12">
-          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],['class'=>'btn btn-md btn-neutral-border pull-left hidden-xs','id' => 'updateParcelsIdCookie','data-forCookie'=> $ids])?>
+          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],
+            [
+              'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
+              'id' => 'updateParcelsIdCookie',
+              'data-forCookie'=> $ids,
+              'data-forusercookie'=> $user_ids,
+            ])?>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
           <h4 class="">Order #<?=$order_id?> for Transportation</br>
@@ -204,7 +210,7 @@ $submitOption = [
                 <span id="results" class="resInd<?=$k?>">
                         <?php
                         if($percel->weight>0) {
-                          $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight]);
+                          $ParcelPrice = ParcelPrice::widget(['weight' => $percel->weight,'user'=>$percel->user_id]);
                           if ($ParcelPrice != false) {
                             $ParcelPrice = '' . $ParcelPrice . ' $ (without tax)';
                           } else {

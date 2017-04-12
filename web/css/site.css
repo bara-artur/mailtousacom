@@ -993,3 +993,23 @@ button.navbar-toggle{margin-right:30px;}
 .r_bord{border-right: 1px dotted #ccc;}
 .bord_dot{border-bottom: 1px dotted #ccc;}
 .confid{color:#1C389F;text-decoration:underline;font-weight:700;padding-left:10px;}
+/*06042017*/
+.dropdown-menu>li>a.btn-blue-gem {
+    color: #fff !important;
+    background-color: #4617b4!important;
+    border-color: #4617b4!important;
+    text-align: left;
+}
+.dropdown-menu>li>a.btn-blue-gem:hover,
+.dropdown-menu>li>a.btn-blue-gem:focus
+{   color: #fff !important;
+    background-color: #381290!important;
+    border-color: #381290!important;
+    width:100% !important;
+    border-bottom:0px solid #381290 !important;
+    border: 1px solid transparent !important;
+}
+@media screen and (max-width: 400px){
+.group_100{width: 100%;
+    margin-bottom: 4px;}
+}

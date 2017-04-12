@@ -39,7 +39,7 @@ class Log extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'order_id', 'description', 'created_at'], 'required'],
-            [['user_id', 'order_id'], 'integer'],
+            [['user_id', 'order_id','status_id'], 'integer'],
            // [['description'], 'string', 'max' => 32],
         ];
     }
@@ -63,7 +63,7 @@ class Log extends \yii\db\ActiveRecord
     return $this->hasOne(User::className(), ['id' => 'user_id']);
   }
 
-  public static function addLog($order_id,$data,$order=false){
+  public static function addLog($order_id,$data,$order=false,$status_id=0){
     if(is_numeric($data)){
       $description=Log::getMsg($data);
       //импорт из...
@@ -90,6 +90,9 @@ class Log extends \yii\db\ActiveRecord
     $model->user_id = Yii::$app->user->identity->getId();
     $model->order_id = $order_id;
     $model->description = $description;
+    if($status_id){
+      $model->status_id=$status_id;
+    }
     $model->created_at = time();
     $model->save();
     return true;
