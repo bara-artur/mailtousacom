@@ -29,6 +29,12 @@ $this->title = 'Shipping to USA and Canada';
           </div>
         <div class="col-md-6 col-xs-12 text-center">
             <?php if ($show_view_button==true){ ?>
+              <?=Html::a('<i class="fa fa-list"></i> Track invoice', ['/orderElement/group/track_invoice'], [
+                'class' => 'btn btn-md btn-info InSystem_show Draft_show difUserIdHide',
+                'id'=>'group-admin-view',
+              ]); ?>
+            <?php }?>
+            <?php if ($show_view_button==true){ ?>
               <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group/view'], [
                 'class' => 'btn btn-md btn-info group_100 group-admin-view',
                 'id'=>'group-admin-view',

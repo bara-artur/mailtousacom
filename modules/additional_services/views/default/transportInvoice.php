@@ -11,12 +11,28 @@ CrudAsset::register($this);
 $this->title = 'Order group';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php Pjax::begin();?>
 <?php $form = ActiveForm::begin(); ?>
 
-<?php
-  foreach ($users_parcel as $parcel){
-    ?>
-      <table class="table table-pod">
+  <p>
+    Invoice number
+    <?=Html::input('text', 'invoice', $data['invoice'], [
+      'class' => ''
+    ]);?>
+  </p>
+  <p>
+    Referring code
+    <?=Html::input('text', 'ref_code', $data['ref_code'], [
+      'class' => ''
+    ]);?>
+  </p>
+  <p>
+    Contract number
+    <?=Html::input('text', 'contact_number', $data['contact_number'], [
+      'class' => ''
+    ]);?>
+  </p>
+      <table class="table table-pod" id="crud-datatable-pjax">
         <tr>
           <th>#</th>
           <th>Status</th>
@@ -28,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
           <th>Track Number</th>
           <th>Price (Our tariff)</th>
           <th>Price (transport company)</th>
-          <?php if (count($users_parcel[$user->id])>1) { ?>
+          <?php if (count($users_parcel)>1) { ?>
           <th></th>
           <?php };?>
         </tr>
@@ -62,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'tr_input'
               ]);?>
             </td>
-            <?php if (count($users_parcel[$user->id])>1) { ?>
+            <?php if (count($users_parcel)>1) { ?>
             <td>
                 <?=Html::a('Remove from order',
                   ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
@@ -81,14 +97,17 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php } ?>
           </tr>
           <?php
-          $parcel_n++;
-        }
+          }
         ?>
       </table>
-    <?php
-  }
-?>
   <div class="form-group">
-    <?= Html::submitButton('Make invoice', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-primary']) ?>
   </div>
 <?php ActiveForm::end(); ?>
+<?php Pjax::end();;?>
+
+<?php Modal::begin([
+  "id"=>"ajaxCrudModal",
+  "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>

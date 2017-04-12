@@ -63,8 +63,32 @@ class DefaultController extends Controller
 
       $model = OrderElement::find()->where(['id'=>$el_group])->all();
 
+      $data=[
+        'invoice'=>'',
+        'ref_code'=>'',
+        'contact_number'=>'',
+      ];
+
+      $request = Yii::$app->request;
+      if($request->isPost) {
+        $data=[
+          'invoice'=>$request->post('invoice'),
+          'ref_code'=>$request->post('ref_code'),
+          'contact_number'=>$request->post('contact_number'),
+        ];
+        foreach ($model as $parcel){
+          if($request->post('tr_number_'.$parcel->id)){
+            $parcel->track_number=$request->post('tr_number_'.$parcel->id);
+            $parcel->save();
+          }
+        };
+        //ddd($request->post());
+      };
+      //ddd($data);
       return $this->render('transportInvoice', [
-        'users_parcel'=>$model
+        'users_parcel'=>$model,
+        'order_id'=>$id,
+        'data'=>$data,
       ]);
     }
 
@@ -80,55 +104,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new AdditionalServices model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new AdditionalServices();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing AdditionalServices model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing AdditionalServices model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
 
     /**
      * Finds the AdditionalServices model based on its primary key value.
