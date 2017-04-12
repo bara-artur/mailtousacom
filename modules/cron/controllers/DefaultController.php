@@ -27,7 +27,9 @@ class DefaultController extends Controller
 
 
       $html = SHD::file_get_html('https://www.fedex.com/apps/fedextrack/?action=track&tracknumbers=786115185080',null,null,1,1);
-      var_dump(count($html->find('div.statusChevron_area')));
+      $str = $html->save();
+      //var_dump($html->find('div[id=content]',0)->innertext);
+      var_dump($str);
       foreach($html->find('.statusChevron_key_status') as $element)
         var_dump('value = '.$element->value);
 
