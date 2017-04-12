@@ -51,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
         $parcel_n=1;
         foreach ($users_parcel as $parcel){
+          ddd($parcel->trackInvoice);
           ?>
           <tr>
             <td><?=$parcel_n;?></td>

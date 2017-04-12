@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use app\modules\user\models\User;
 use app\modules\logs\models\Log;
 use app\modules\receiving_points\models\ReceivingPoints;
-
+use app\modules\additional_services\models\AdditionalServices;
 /**
  * This is the model class for table "order_element".
  *
@@ -107,15 +107,25 @@ class OrderElement extends \yii\db\ActiveRecord
         ];
     }
 
-  public function getUser()
-  {
+  public function getUser(){
     return $this->hasOne(User::className(), ['id' => 'user_id']);
   }
 
-  public function getOrderInclude()
-    {
-        return $this->hasMany(OrderInclude::className(),['order_id' => 'id']);
-    }
+  public function getOrderInclude(){
+      return $this->hasMany(OrderInclude::className(),['order_id' => 'id']);
+  }
+
+  public function getTrackInvoice(){
+    $el=AdditionalServices::find()->where(['parcel_id_lst'=>$this->id,'type'=>1])->one();
+    if(!$el){
+      $el=NEW AdditionalServices;
+      $el->type=1;
+      $el->client_id=$this->user_id;
+      $el->user_id=Yii::$app->user->id;
+      $el->create=time();
+    };
+    return $el;
+  }
 
   public function getWeight_lb(){
     return floor($this->weight);
