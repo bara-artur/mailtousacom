@@ -17,9 +17,9 @@ CrudAsset::register($this);
 
 ?>
 
-<?php if ($data){ ?>
+<?php if ($summary){ ?>
   <h2> In this session CRON will work with this parcels : </h2>
-   <?php foreach ($data as $parcel){?>
-          <p>Parcel <?= $parcel->id ?> with status <?= $parcel->status ?> and track number - <?= $parcel->track_number ?> cron_refresh = <?= $parcel->cron_refresh ?></p>
+   <?php foreach ($summary as $string){?>
+          <p><?=$string?></p>
   <?php } ?>
 <?php } ?>

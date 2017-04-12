@@ -19,31 +19,33 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-      $data=OrderElement::find()->orderBy(['cron_refresh' => SORT_ASC])->limit(10)->all();
+      $data=OrderElement::find()->orderBy(['cron_refresh' => SORT_ASC])->limit(10)->all(); // берем 10 посылок (надо будет исключить доставленные)
+
+      $summary = [];
       foreach ($data as $parcel){
-        $parcel->cron_refresh = time();
+        $parcel->cron_refresh = time();          // записываем последнее время обновления
+        $company = OrderElement::GetShippingCarrier($parcel->track_number);
+        if (($company != '')&&($parcel->status!=5)) {   // если определили транспортную компанию и ещё не доставлена
+          $html = SHD::file_get_html('https://trackingshipment.net/' .$company.'/' . $parcel->track_number, null, null, 1, 1); // дружественный сервис просмотра состояний посылок
+          $str = $html->find('.output-info p', 0)->innertext; // берем содержимое первого абзаца у тэга с классом output_info
+          if ((strripos($str, 'ummary:') != false) && (strripos($str, 'eliver') != false)) {   // Если есть включение S-ummary И D-eliver-ed
+            $summary[] = "Parcel " . $parcel->id . " was delivered";
+            $parcel->status = 5;
+          }
+          else{
+            $summary[] = $parcel->id . " not delivered";
+          }
+        }else{
+          if ($company == '') $summary[] = $parcel->id . " has unknown shipping company";
+          else $summary[] = $parcel->id . " has status = 5";
+        }
         $parcel->save();
       }
-
-
-      $html = SHD::file_get_html('https://www.fedex.com/apps/fedextrack/?action=track&tracknumbers=786115185080',null,null,1,1);
-      $str = $html->save();
-      //var_dump($html->find('div[id=content]',0)->innertext);
-      var_dump($str);
-      foreach($html->find('.statusChevron_key_status') as $element)
-        var_dump('value = '.$element->value);
-
-/*      fore0ach ($data as $i=>$parcel){
-        $html = SHD::file_get_html('https://www.fedex.com/apps/fedextrack/?action=track&tracknumbers='.$parcel->track_number,null,null,1,1);
-        if ($i==0) var_dump();
-
-      //$html = file_get_contents('http://www.google.com/');
-        var_dump(count($html->find('.statusChevron_key_status')));
-      foreach($html->find('.statusChevron_key_status') as $element)
-        var_dump('value = '.$element->value);
-      }*/
+   //   $arr = array ('USPS/9405509699937475900484','USPS/9405509699938333870260','USPS/9407809699939814166833',
+  //                  'UPS/1Z4008YY4291160859','UPS/1ZW258314248802240','UPS/1Z2A37W90324146148',
+    //                'fedex/786083077470','fedex/786061718512','fedex/786043744820');
       return $this->render('index', [
-       'data' => $data,
+       'summary' => $summary,
       ]);
     }
 }
