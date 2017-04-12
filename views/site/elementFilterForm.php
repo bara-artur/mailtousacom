@@ -78,7 +78,7 @@ use app\modules\orderElement\models\OrderElement;
                   <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
               </div>
           <?php } ?>
-        <div class="col-md-2">
+        <div class="col-md-3">
           <label class="control-label">Action</label>
           <div class="row">
 
