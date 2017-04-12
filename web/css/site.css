@@ -820,7 +820,7 @@ div.notpaid_img{background: url("/img/notpaid.png");
     border: 1px solid #ccc;
     border-top: 0px;
     margin-top: -14px;
-    z-index: 0;
+    z-index: -1;
 }
 .group_text2
 {
