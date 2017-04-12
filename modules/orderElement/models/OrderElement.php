@@ -246,23 +246,10 @@ class OrderElement extends \yii\db\ActiveRecord
 
     $url = 'http://trackingshipment.net';
     $apicall = $url . "/" . $Carrier . "/" . $TrackingNumber;
-//echo $apicall . "<br>";
-    // Load the call and capture the document returned by eBay API
-    ////parse_str(file_get_contents($apicall), $resp);    // populate the $resp array
-
-    // Check to see if the response was loaded, else print an error
-    ////if ($resp) {
-//print_r($resp);
-//echo "<br>";echo "<br>";
-//exit;
 
     ////$myString = print_r($resp, TRUE);
 
     $myString=strip_tags(file_get_contents($apicall));
-    //$myString=strip_tags($myString);
-//$myString=substr($myString,0,10);
-//echo $myString;
-//exit;
 
     $findme1 = 'request N';
     $pos1 = strpos($myString, $findme1);

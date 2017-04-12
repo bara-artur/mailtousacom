@@ -372,9 +372,21 @@ class DefaultController extends Controller
           case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
           case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
           case 'view':    {return $this->actionGroupView($parcels_id);break;}
+          case 'track_invoice':    {return $this->actionTrackInvoice($parcels_id);break;}
         }
       }
       return $this->redirect(['/']);
+    }
+
+    public function actionTrackInvoice($parcels_id){
+      //может запустить только админ. Но для 1-го пользоавателя
+      $order_id = $this->findOrCreateOrder($parcels_id,1);
+      if ($order_id != null) {
+        $this->redirect(['/additional_services/transport-invoice/' . $order_id]);
+        return $order_id;
+      } else {
+        return $this->redirect(['/']);
+      }
     }
 
     public function actionGroupView($parcels_id = null){
