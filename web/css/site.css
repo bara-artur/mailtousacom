@@ -1013,3 +1013,10 @@ button.navbar-toggle{margin-right:30px;}
 .group_100{width: 100%;
     margin-bottom: 4px;}
 }
+/*12042017*/
+.but_tab_marg_inl
+{
+    margin: 0px 2px;
+    display: inline;
+}
+/*12042017*/
