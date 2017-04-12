@@ -7,6 +7,7 @@ class m170412_122956_additional_services_add_column extends Migration
     public function up()
     {
       $this->addColumn('additional_services', 'create', $this->integer()->defaultValue(0));
+      $this->alterColumn('additional_services', 'status_pay', $this->integer()->defaultValue(0));
     }
 
     public function down()

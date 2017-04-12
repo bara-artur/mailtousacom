@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
   </p>
   <p>
     Contract number
-    <?=Html::input('text', 'contact_number', $data['contact_number'], [
+    <?=Html::input('text', 'contract_number', $data['contract_number'], [
       'class' => ''
     ]);?>
   </p>
@@ -51,7 +51,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
         $parcel_n=1;
         foreach ($users_parcel as $parcel){
-          ddd($parcel->trackInvoice);
+          //ddd($parcel->trackInvoice);
+          $as=$parcel->trackInvoice;
+          $price_ext=(strlen($as->detail)>0)?json_decode($as->detail,true):['price_tk'=>0]
           ?>
           <tr>
             <td><?=$parcel_n;?></td>
@@ -70,12 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
               ]);?>
             </td>
             <td>
-              <?=Html::input('text', 'tr_gen_price_'.$parcel->id, 0, [
+              <?=Html::input('text', 'tr_gen_price_'.$parcel->id, number_format((float)$as->price,2,'.',''), [
                 'class' => 'tr_input'
               ]);?>
             </td>
             <td>
-              <?=Html::input('text', 'tr_external_price_'.$parcel->id, 0, [
+              <?=Html::input('text', 'tr_external_price_'.$parcel->id, number_format((float)$price_ext['price_tk'],2,'.',''), [
                 'class' => 'tr_input'
               ]);?>
             </td>

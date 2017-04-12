@@ -122,6 +122,8 @@ class OrderElement extends \yii\db\ActiveRecord
       $el->type=1;
       $el->client_id=$this->user_id;
       $el->user_id=Yii::$app->user->id;
+      $el->parcel_id_lst=(string)$this->id;
+      $el->price=0;
       $el->create=time();
     };
     return $el;

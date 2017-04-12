@@ -36,9 +36,9 @@ class AdditionalServices extends \yii\db\ActiveRecord
     {
         return [
             [['type'], 'required'],
-            [['type', 'client_id', 'user_id', 'quantity', 'create'], 'integer'],
+            [['type', 'client_id', 'user_id', 'quantity', 'create','status_pay'], 'integer'],
             [['price', 'gst', 'qst'], 'number'],
-            [['parcel_id_lst', 'detail', 'status_pay'], 'string', 'max' => 255],
+            [['parcel_id_lst', 'detail'], 'string', 'max' => 255],
         ];
     }
 
