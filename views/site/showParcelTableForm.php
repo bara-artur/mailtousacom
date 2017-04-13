@@ -73,9 +73,6 @@ use app\modules\orderElement\models\OrderElement;
             </div>
         </div>
       </div>
-
-
-
   <?php ActiveForm::end(); ?>
 </div>
 
