@@ -64,13 +64,13 @@ $form = ActiveForm::begin([
         <span class="fa fa-check col-md-1 col-md-offset-3 col-xs-1 text-right otst"></span>
        
         <div class="col-md-5 col-xs-11 text-left">
-        I certify the particulars given in this customs declaration are correct. This form does not contain any undecrared
+        I certify the particulars given in this customs declaration are correct. This form does not contain any undeclared
       dangerous articles, or articles prohibited by Legislation or by postal or customs regulations. I have met all
       applicable export filing requirements under federal law and regulations.</div>',
     'id'=>'order-agreement',
     ])->label("") ?>
 
-  <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print Border Form ABC123', ['/orderInclude/border-form-pdf/'.$order_id],
+  <?=Html::a('<span class="glyphicon glyphicon-print"></span> Print Border CBP Form', ['/orderInclude/border-form-pdf/'.$order_id],
       [
           'class'=>'btn btn-info text-center on_agreement',
           'target'=>'_blank',

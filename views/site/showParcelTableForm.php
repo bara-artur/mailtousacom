@@ -36,14 +36,11 @@ use app\modules\orderElement\models\OrderElement;
             <div class="col-md-2">
               <?= $form->field($model, 'showCreatedAt')->checkbox(['label' => '<span class="fa fa-check otst"></span> Created At','class'=>''])?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <?= $form->field($model, 'showPaymentState')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment State','class'=>''])?>
             </div>
-            <div class="col-md-2">
-              <?= $form->field($model, 'showTrackNumber')->checkbox(['label' => '<span class="fa fa-check otst"></span> Track Number','class'=>''])?>
-            </div>
         <?php if (false){?>
-            <div class="col-md-2">
+            <div class="col-md-3">
               <?= $form->field($model, 'showPaymentType')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment Type','class'=>''])?>
             </div>
         <?php }?>
@@ -66,16 +63,16 @@ use app\modules\orderElement\models\OrderElement;
                     <div class="col-md-2">
           <?= $form->field($model, 'showTotal')->checkbox(['label' => '<span class="fa fa-check otst"></span> Total','class'=>''])?>
                     </div>
+            <div class="col-md-3">
+                <?= $form->field($model, 'showTrackNumber')->checkbox(['label' => '<span class="fa fa-check otst"></span> Track Number','class'=>''])?>
+            </div>
         </div>
     </div>
-            <div class="col-md-2">
+            <div class="col-md-2 padding-off-left padding-off-right">
           <?= Html::submitButton('Update columns table', ['class' => 'btn btn-success but_top text-right']) ?>
             </div>
         </div>
       </div>
-
-
-
   <?php ActiveForm::end(); ?>
 </div>
 

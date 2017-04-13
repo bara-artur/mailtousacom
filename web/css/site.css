@@ -1009,8 +1009,8 @@ button.navbar-toggle{margin-right:30px;}
     border-bottom:0px solid #381290 !important;
     border: 1px solid transparent !important;
 }
-@media screen and (max-width: 400px){
-.group_100{width: 100%;
+@media screen and (max-width: 1200px){
+.group_100{width: 46%;
     margin-bottom: 4px;}
 }
 /*12042017*/

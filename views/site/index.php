@@ -20,26 +20,28 @@ $this->title = 'Shipping to USA and Canada';
 
     <div class="row">
       <div class="col-md-12">
-          <div class="col-md-3 col-xs-12 padding-off-left margin-bottom-10 margin-top-10 text-left">
+          <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 margin-top-10 text-left">
               <?php if ($orderElements) { ?>
                   <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?php } ?>
               <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
           </div>
-        <div class="col-md-6 col-xs-12 text-center">
-            <?php if ($show_view_button==true){ ?>
-              <?=Html::a('<i class="fa fa-list"></i> Track invoice', ['/orderElement/group/track_invoice'], [
-                'class' => 'btn btn-md btn-info InSystem_show Draft_show difUserIdHide',
-                'id'=>'group-admin-view',
-              ]); ?>
-            <?php }?>
+        <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
+
             <?php if ($show_view_button==true){ ?>
               <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group/view'], [
                 'class' => 'btn btn-md btn-info group_100 group-admin-view',
                 'id'=>'group-admin-view',
               ]); ?>
             <?php }?>
+            <?php if ($show_view_button==true){ ?>
+                <?=Html::a('<i class="icon-metro-location-2"></i> Tracking', ['/orderElement/group/track_invoice'], [
+                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide',
+                    'id'=>'group-admin-view',
+                ]); ?>
+            <?php }?>
+
             <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group/update'], [
               'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text difUserIdHide group-update',
               'id'=>'group-update',
@@ -246,7 +248,7 @@ $this->title = 'Shipping to USA and Canada';
                 // 'created_at',
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
-                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
+                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but', 'target' => '_blank',]);
                     $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
                     $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
                     $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i> Delete',
