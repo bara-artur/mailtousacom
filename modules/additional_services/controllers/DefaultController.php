@@ -51,20 +51,23 @@ class DefaultController extends Controller
 
 
     public function actionTransportInvoice($id){
-      $request = Yii::$app->request;
+      if (!Yii::$app->user->can('trackInvoice')){
+        throw new NotFoundHttpException('Access is denied.');
+      }
+        $request = Yii::$app->request;
 
-      $order = Order::findOne($id);
+        $order = Order::findOne($id);
 
-      $session = Yii::$app->session;
-      $session->set('last_order',$id);
+        $session = Yii::$app->session;
+        $session->set('last_order', $id);
 
-      if(strlen($order->el_group)<1){
-        throw new NotFoundHttpException('There is no data for payment.');
-      };
+        if (strlen($order->el_group) < 1) {
+          throw new NotFoundHttpException('There is no data.');
+        };
 
-      $el_group=explode(',',$order->el_group);
+        $el_group = explode(',', $order->el_group);
 
-      $model = OrderElement::find()->where(['id'=>$el_group])->all();
+        $model = OrderElement::find()->where(['id' => $el_group])->all();
 
       $data=[
         'invoice'=>'',
