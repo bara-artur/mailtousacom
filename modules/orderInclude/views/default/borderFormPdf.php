@@ -35,3 +35,6 @@
   <div class="user_inp p8"><b>
           <?=count($order_elements);?> packages, total amount <?=$total['price'];?>$
       </b></div>
+<div class="user_inp p9"><b>
+different consignees
+</b></div>
