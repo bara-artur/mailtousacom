@@ -42,8 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
           <th>Payment State</th>
           <th>Weight</th>
           <th>Track Number</th>
-          <th>Price (Our tariff)</th>
-          <th>Price (transport company)</th>
+          <th>Price (Our tariff), CAN</th>
+          <th>Price (transport company), USD</th>
           <?php if (count($users_parcel)>1) { ?>
           <th></th>
           <?php };?>
