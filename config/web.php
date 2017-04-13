@@ -1,6 +1,7 @@
 <?php
 use kartik\mpdf\Pdf;
 use yii\helpers\Url;
+use app\modules\config\components\DConfig;
 
 $params = require(__DIR__ . '/params.php');
 $personal = require(__DIR__ . '/personal.php');
@@ -125,8 +126,7 @@ $config = [
         ],
     ],
     'config'=>array(
-      'class' => 'DConfig',
-      'cache'=>3600,
+      'class' => DConfig::class,
     ),
   ],
   'params' => $params,
@@ -203,6 +203,7 @@ $config = [
     ],
     'config' => [
       'class' => 'app\modules\config\Module',
+      'cache'=>3600,
     ],
   ],
 ];

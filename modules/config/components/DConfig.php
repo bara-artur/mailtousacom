@@ -1,10 +1,11 @@
 <?php
-/**
- * @author ElisDN <mail@elisdn.ru>
- * @link http://www.elisdn.ru
- */
+namespace app\modules\config\components;
 
-class DConfig extends CApplicationComponent
+use Yii;
+use yii\base\Component;
+use yii\base\InvalidConfigException;
+
+class DConfig extends Component
 {
   public $cache = 0;
   public $dependency = null;
@@ -44,6 +45,7 @@ class DConfig extends CApplicationComponent
 
     if ($model->save())
       $this->data[$key] = $value;
+    Yii::$app->cache->flush();
 
   }
 
@@ -56,6 +58,7 @@ class DConfig extends CApplicationComponent
     }
     elseif ($params)
       $this->createParameter($params);
+    Yii::$app->cache->flush();
   }
 
   public function delete($key)
@@ -67,14 +70,15 @@ class DConfig extends CApplicationComponent
     }
     elseif ($key)
       $this->removeParameter($key);
+    Yii::$app->cache->flush();
   }
 
   protected function getDbConnection()
   {
     if ($this->cache)
-      $db = Yii::app()->db->cache($this->cache, $this->dependency);
+      $db = Yii::$app->db->cache($this->cache, $this->dependency);
     else
-      $db = Yii::app()->db;
+      $db = Yii::$app->db;
 
     return $db;
   }
@@ -94,6 +98,7 @@ class DConfig extends CApplicationComponent
       $model->type = isset($param['type']) ? $param['type'] : 'string';
 
       $model->save();
+      Yii::$app->cache->flush();
     }
   }
 
@@ -104,6 +109,7 @@ class DConfig extends CApplicationComponent
       $model = Config::model()->findByAttributes(array('param'=>$key));
       if ($model)
         $model->delete();
+      Yii::$app->cache->flush();
     }
   }
 }
