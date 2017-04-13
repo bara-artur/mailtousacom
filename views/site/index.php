@@ -28,7 +28,7 @@ $this->title = 'Shipping to USA and Canada';
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
           </div>
         <div class="col-md-6 col-xs-12 text-center">
-            <?php if ($show_view_button==true){ ?>
+            <?php if ($show_trackInvoice_button==true){ ?>
               <?=Html::a('<i class="fa fa-list"></i> Track invoice', ['/orderElement/group/track_invoice'], [
                 'class' => 'btn btn-md btn-info InSystem_show Draft_show difUserIdHide',
                 'id'=>'group-admin-view',

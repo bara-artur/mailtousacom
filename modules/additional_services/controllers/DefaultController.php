@@ -48,48 +48,54 @@ class DefaultController extends Controller
 
 
     public function actionTransportInvoice($id){
-      $request = Yii::$app->request;
+      if (Yii::$app->user->can('trackInvoice')) {
+        $request = Yii::$app->request;
 
-      $order = Order::findOne($id);
+        $order = Order::findOne($id);
 
-      $session = Yii::$app->session;
-      $session->set('last_order',$id);
+        $session = Yii::$app->session;
+        $session->set('last_order', $id);
 
-      if(strlen($order->el_group)<1){
-        throw new NotFoundHttpException('There is no data for payment.');
-      };
-
-      $el_group=explode(',',$order->el_group);
-
-      $model = OrderElement::find()->where(['id'=>$el_group])->all();
-
-      $data=[
-        'invoice'=>'',
-        'ref_code'=>'',
-        'contact_number'=>'',
-      ];
-
-      $request = Yii::$app->request;
-      if($request->isPost) {
-        $data=[
-          'invoice'=>$request->post('invoice'),
-          'ref_code'=>$request->post('ref_code'),
-          'contact_number'=>$request->post('contact_number'),
-        ];
-        foreach ($model as $parcel){
-          if($request->post('tr_number_'.$parcel->id)){
-            $parcel->track_number=$request->post('tr_number_'.$parcel->id);
-            $parcel->save();
-          }
+        if (strlen($order->el_group) < 1) {
+          throw new NotFoundHttpException('There is no data for payment.');
         };
-        //ddd($request->post());
-      };
-      //ddd($data);
-      return $this->render('transportInvoice', [
-        'users_parcel'=>$model,
-        'order_id'=>$id,
-        'data'=>$data,
-      ]);
+
+        $el_group = explode(',', $order->el_group);
+
+        $model = OrderElement::find()->where(['id' => $el_group])->all();
+
+        $data = [
+          'invoice' => '',
+          'ref_code' => '',
+          'contact_number' => '',
+        ];
+
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+          $data = [
+            'invoice' => $request->post('invoice'),
+            'ref_code' => $request->post('ref_code'),
+            'contact_number' => $request->post('contact_number'),
+          ];
+          foreach ($model as $parcel) {
+            if ($request->post('tr_number_' . $parcel->id)) {
+              $parcel->track_number = $request->post('tr_number_' . $parcel->id);
+              $parcel->save();
+            }
+          };
+          //ddd($request->post());
+        };
+        //ddd($data);
+        return $this->render('transportInvoice', [
+          'users_parcel' => $model,
+          'order_id' => $id,
+          'data' => $data,
+        ]);
+      }else{
+        return $this->redirect(['/']);
+      }
+
+
     }
 
     /**
