@@ -376,7 +376,6 @@ class User extends ActiveRecord  implements IdentityInterface
         if ($class!='User') {
           $post = $post[$class];
 
-
           //print_r($docs);
           //print_r($this);
 
