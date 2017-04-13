@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php Pjax::begin();?>
 <?php $form = ActiveForm::begin(); ?>
-
+<?=Yii::$app->config->get('USD_CAD');?>
   <p>
     Invoice number
     <?=Html::input('text', 'invoice', $data['invoice'], [
