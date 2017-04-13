@@ -127,6 +127,7 @@ $config = [
     ],
     'config'=>array(
       'class' => DConfig::class,
+      'cache'=>3600,
     ),
   ],
   'params' => $params,
@@ -202,8 +203,7 @@ $config = [
       'class' => 'app\modules\cron\Module',
     ],
     'config' => [
-      'class' => 'app\modules\config\Module',
-      'cache'=>3600,
+      'class' => 'app\modules\config\Module'
     ],
   ],
 ];

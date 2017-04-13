@@ -75,9 +75,9 @@ class DConfig extends Component
 
   protected function getDbConnection()
   {
-    if ($this->cache)
-      $db = Yii::$app->db->cache($this->cache, $this->dependency);
-    else
+    //if ($this->cache)
+    //  $db = Yii::$app->db->cache($this->cache);
+    //else
       $db = Yii::$app->db;
 
     return $db;

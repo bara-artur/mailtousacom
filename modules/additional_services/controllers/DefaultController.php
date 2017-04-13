@@ -122,6 +122,10 @@ class DefaultController extends Controller
             $ti->qst=round($ti->price*$tax['qst']/100,2);
             $ti->gst=round($ti->price*$tax['gst']/100,2);
 
+            $ti->dop_price=round($ti->kurs*$data['price_tk'],2);
+            $ti->dop_qst=round($ti->dop_price*$tax['qst']/100,2);
+            $ti->dop_gst=round($ti->dop_price*$tax['gst']/100,2);
+
             $ti->detail=json_encode($data);
             $ti->status_pay=0;
             $ti->save();
@@ -133,8 +137,8 @@ class DefaultController extends Controller
             };
 
             $total['sub_total']+=$ti->price+$data['price_tk'];
-            $total['qst']=round($data['price_tk']*$tax['qst']/100,2)+$ti->qst;
-            $total['gst']=round($data['price_tk']*$tax['qst']/100,2)+$ti->gst;
+            $total['qst']+=$ti->dop_qst+$ti->qst;
+            $total['gst']+=$ti->dop_gst+$ti->gst;
           }
         }
 

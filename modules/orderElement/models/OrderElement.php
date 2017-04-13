@@ -124,6 +124,7 @@ class OrderElement extends \yii\db\ActiveRecord
       $el->user_id=Yii::$app->user->id;
       $el->parcel_id_lst=(string)$this->id;
       $el->price=0;
+      $el->kurs=Yii::$app->config->get('USD_CAD');
       $el->create=time();
     };
     return $el;
