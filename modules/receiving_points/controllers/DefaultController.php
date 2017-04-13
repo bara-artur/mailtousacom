@@ -154,7 +154,12 @@ class DefaultController extends Controller
          }
         //$model->order_id = $request->post('order_id');
 
-        return $this->redirect(['/'],200);
+         $this->redirect(['/'],200);
+         return [
+           'title'=> "Recieving point has been saved",
+           'content'=> '',
+           'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+         ];
       }else{
         $this->redirect(['/']);
         return $this->redirect(['/'],200);
