@@ -51,7 +51,7 @@ Email: sendmailtousa@gmail.com<br>
 
        <table border="1" width="100%">
         <tr>
-          <th>Description</th>
+          <th colspan="2">Description</th>
           <th>Qty</th>
           <th>Unit price</th>
           <th>Price</th>
@@ -60,27 +60,33 @@ Email: sendmailtousa@gmail.com<br>
         foreach ($flat_rate as $k=>$item){
           ?>
             <tr>
-              <td>Flat rate service fee - <?=date('F d');?></td>
+              <td colspan="2">Flat rate service fee - <?=date('F d');?></td>
               <td><?=$item;?></td>
               <td><?=number_format($k,2,'.','');?></td>
               <td>$<?=number_format($k*$item,2,'.','');?></td>
             </tr>
           <?php
         }
+        $kurs=0;
         foreach ($users_parcel as $parcel){
           //ddd($parcel->trackInvoice);
           $as=$parcel->trackInvoice;
-          $price_ext=(strlen($as->detail)>0)?json_decode($as->detail,true):['price_tk'=>0]
+          $price_ext=(strlen($as->detail)>0)?json_decode($as->detail,true):['price_tk'=>0];
+          $kurs=$as['kurs'];
           ?>
           <tr>
-            <td>Fedex shipping label <?=$parcel->track_number;?></td>
+            <td colspan="2">Fedex shipping label <?=$parcel->track_number;?> - $<?=number_format($price_ext['price_tk'],2,'.','');?> USD</td>
             <td>1</td>
-            <td><?=number_format($price_ext['price_tk'],2,'.','');?></td>
-            <td>$<?=number_format($price_ext['price_tk'],2,'.','');?></td>
+            <td><?=$price_ext['price_tk']*$as['kurs'];?></td>
+            <td>$<?=number_format($as['dop_price'],2,'.','');?></td>
           </tr>
           <?php
           }
         ?>
+         <tr>
+           <td>USD/CAD Rate</td>
+           <td><?=$kurs;?></td>
+         </tr>
       </table>
 <br>
 <br>
