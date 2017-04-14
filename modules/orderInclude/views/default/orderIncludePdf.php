@@ -2,15 +2,15 @@
     <TABLE  cellspacing=0 width="100%" class="t0" border="0" style="font-family: 'Helvetica', sans-serif !important;
     font-size:8px;width:100% !important;">
       <tr>
-        <th style="background: #FDE3A7;padding:4px 6px;border-right:1px solid #ffffff;border-left:1px solid #FDE3A7;border-top:1px solid #FDE3A7;border-bottom:1px solid #FDE3A7;">Title</td>
-          <th style="background: #FDE3A7;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #FDE3A7;border-bottom:1px solid #FDE3A7;">Country</th>
-        <th style="background: #FDE3A7;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #FDE3A7;border-bottom:1px solid #FDE3A7">Quantity</th>
-        <th style="background: #FDE3A7;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #FDE3A7;border-bottom:1px solid #FDE3A7;">Price</th>
-          <th style="background: #FDE3A7;padding:4px 6px;border-right:1px solid #9C9C9C;border-top:1px solid #FDE3A7;border-bottom:1px solid #FDE3A7;">Tracking#</th>
-          <th style="background: #FCD57A;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #FCD57A;border-bottom:1px solid #FCD57A;">City</th>
-          <th style="background: #FCD57A;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #FCD57A;border-bottom:1px solid #FCD57A">State</th>
-          <th style="background: #FCD57A;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #FCD57A;border-bottom:1px solid #FCD57A;">ZIP</th>
-        <th style="background: #FCD57A;padding:4px 6px;border-right:1px solid #FCD57A;border-top:1px solid #FCD57A;border-bottom:1px solid #FCD57A;">Name</th>
+        <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-left:1px solid #EEEEEE;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE;">Title</td>
+          <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE;">Country</th>
+        <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE">Quantity</th>
+        <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE;">Price</th>
+          <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #9C9C9C;border-top:1px solid #EEEEEE;border-bottom:1px solid #dddddd;">Tracking#</th>
+          <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;">City</th>
+          <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC">State</th>
+          <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;">ZIP</th>
+        <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #CCCCCC;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;">Name</th>
       </tr>
 
       <?php
