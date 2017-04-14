@@ -20,7 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            //'type',
           ['attribute'=> 'type',
             'content'=> function($data){
                 return $data->textType;
@@ -29,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'parcel_id_lst',
           ['attribute'=> 'client_id',
             'content'=> function($data){ if ($data->client!=null)
-                return $data->user->lineInfo; else return '-empty-';
+                return $data->client->lineInfo; else return '-empty-';
             }
           ],
           ['attribute'=> 'user_id',
@@ -39,12 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
           ],
             // 'detail',
           //  'status_pay',
+          'parcel_id_lst',
           ['attribute'=> 'status_pay',
             'content'=> function($data){
                 return ($data->textStatus);
             }
           ],
-            // 'quantity',
           ['attribute'=> 'price',
             'content'=> function($data){
                 return
@@ -70,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
           ],
           'quantity',
-            ['class' => 'yii\grid\ActionColumn'],
+           // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

@@ -77,7 +77,7 @@ $submitOption = [
         <?php
       }
     }
-    if($pay['err']){
+    if(isset($pay['err'])){
       echo "<h5 style='color:red' class='error_control'>".$item['err']."</h5>";
     }else{
       if(Yii::$app->user->identity->isManager() && $pay["total_price"]>0){?>
