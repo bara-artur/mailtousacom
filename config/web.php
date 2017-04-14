@@ -126,7 +126,7 @@ $config = [
         ],
     ],
     'config'=>array(
-      'class' => DConfig::class,
+        'class' => DConfig,
       'cache'=>3600,
     ),
   ],
