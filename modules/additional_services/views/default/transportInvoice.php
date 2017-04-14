@@ -52,14 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
           <tr>
             <td><?=$parcel_n;?></td>
             <td><?=$parcel->getFullTextStatus();?></td>
-            <td><?=$parcel->price;?></td>
-            <td><?=$parcel->qst;?></td>
-            <td><?=$parcel->gst;?></td>
-            <td><?=PaymentsList::statusTextParcel($parcel->payment_state);?></td>
-            <td>
-              <?=floor($parcel->weight);?> Lb
-              <?=floor(($parcel->weight-floor($parcel->weight))*16);?> Oz
-            </td>
             <td>
               <?=Html::input('text', 'tr_number_'.$parcel->id, $parcel->track_number, [
                 'class' => 'tr_input'
