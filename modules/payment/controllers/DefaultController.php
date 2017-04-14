@@ -186,7 +186,7 @@ class DefaultController extends Controller
           'track_number_type'=>$pac->track_number_type,
           'weight'=>$pac->weight,
           'source'=>$pac->source,
-          'source_text'=>\Yii::$app->params[package_source_list][$pac->source]
+          'source_text'=>\Yii::$app->params['package_source_list'][$pac->source]
         ];
         $item['price']=(float)ParcelPrice::widget(['weight'=>$item['weight'],'user'=>$user_id]);
         $item['qst']=round($item['price']*$tax['qst']/100,2);
@@ -238,6 +238,11 @@ class DefaultController extends Controller
         $item['sum']=$item['price']+$item['qst']+$item['gst'];
         $tot_pays+=$item['price'];
 
+        if(!isset($item['already_price'])){
+          $item['already_price']=0;
+          $item['already_qst']=0;
+          $item['already_gst']=0;
+        }
         $item['total_price']=$item['price']-$item['already_price'];
         $item['total_qst']=$item['qst']-$item['already_qst'];
         $item['total_gst']=$item['gst']-$item['already_gst'];
@@ -255,7 +260,7 @@ class DefaultController extends Controller
           $total['price'] += $item['total_price'];
           $total['gst'] += $item['total_qst'];
           $total['qst'] += $item['total_gst'];
-          $total['sum'] +=$total['price']+$total['qst']+$total['gst'];
+          $total['sum'] +=$item['price']+$item['qst']+$item['gst'];
         }
       }
       $tot_pays=round($tot_pays,2);

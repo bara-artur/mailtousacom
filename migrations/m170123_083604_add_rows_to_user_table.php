@@ -16,8 +16,11 @@ class m170123_083604_add_rows_to_user_table extends Migration
 
     public function up()
     {
-        //$this->addColumn('user', 'created_at', $this->integer()->defaultValue(0));
-        //$this->addColumn('user', 'updated_at', $this->integer()->defaultValue(0));
+        $this->alterColumn('user', 'created_at', $this->integer()->defaultValue(0));
+        $this->alterColumn('user', 'updated_at', $this->integer()->defaultValue(0));
+        $this->alterColumn('user', 'city', $this->string()->defaultValue(""));
+        $this->alterColumn('user', 'country', $this->string()->defaultValue(""));
+        $this->alterColumn('user', 'sex', $this->integer()->defaultValue(0));
         //Предустановленные значения таблицы пользователей user
         $this->batchInsert('user', [
             'id',

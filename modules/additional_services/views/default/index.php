@@ -15,28 +15,61 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Additional Services', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'type',
-            'parcel_id_lst',
-            'client_id',
-            'user_id',
+          ['attribute'=> 'type',
+            'content'=> function($data){
+                return $data->textType;
+            }
+          ],
+            //'parcel_id_lst',
+          ['attribute'=> 'client_id',
+            'content'=> function($data){ if ($data->client!=null)
+                return $data->client->lineInfo; else return '-empty-';
+            }
+          ],
+          ['attribute'=> 'user_id',
+            'content'=> function($data){ if ($data->user!=null)
+                return $data->user->lineInfo; else return '-empty-';
+            }
+          ],
             // 'detail',
-            // 'status_pay',
-            // 'quantity',
-            // 'price',
-            // 'gst',
-            // 'qst',
-
-            ['class' => 'yii\grid\ActionColumn'],
+          //  'status_pay',
+          'parcel_id_lst',
+          ['attribute'=> 'status_pay',
+            'content'=> function($data){
+                return ($data->textStatus);
+            }
+          ],
+          ['attribute'=> 'price',
+            'content'=> function($data){
+                return
+                  ($data->price)?
+                    number_format($data->price,2,'.',''):
+                    '-';
+            }
+          ],
+          ['attribute'=> 'Tax',
+            'content'=> function($data){
+                return
+                  ($data->gst+$data->qst)?
+                    number_format($data->gst+$data->qst,2,'.',''):
+                    '-';
+            }
+          ],
+          ['attribute'=> 'dop_price',
+            'content'=> function($data){
+                return
+                  ($data->dop_price)?
+                    number_format($data->dop_price,2,'.',''):
+                    '-';
+            }
+          ],
+          'quantity',
+           // ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

@@ -130,7 +130,7 @@ class DefaultController extends Controller
             $ti->status_pay=0;
             $ti->save();
 
-            if($flat_rate[$ti->price]){
+            if(isset($flat_rate[$ti->price])){
               $flat_rate[$ti->price]++;
             }else{
               $flat_rate[$ti->price]=1;
