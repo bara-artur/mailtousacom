@@ -59,4 +59,13 @@ class CronController extends Controller
     //                  'UPS/1Z4008YY4291160859','UPS/1ZW258314248802240','UPS/1Z2A37W90324146148',
     //                'fedex/786083077470','fedex/786061718512','fedex/786043744820');
   }
+
+  public function actionExchange($message = 'hello world')
+  {
+    $html = SHD::file_get_html('https://openexchangerates.org/api/latest.json?app_id=a405ef00381748dd895923fb7008ea34', null, null, 1, 1);
+    $rate = ((array)((array)json_decode('{'.$html))['rates'])['CAD'];
+    echo 'Exange rate      : 1[USD]= '.$rate.PHP_EOL;
+    $rate = $rate + (($rate*5)/100);
+    echo 'Exange rate + 5% : 1[USD]= '.$rate.PHP_EOL;
+  }
 }

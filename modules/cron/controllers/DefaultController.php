@@ -42,8 +42,6 @@ class DefaultController extends Controller
         $parcel->save();
       }
       $html = SHD::file_get_html('https://openexchangerates.org/api/latest.json?app_id=a405ef00381748dd895923fb7008ea34', null, null, 1, 1);
-  //    var_dump(((array)((array)json_decode('{'.$html))['rates']));
-
     //  Yii::$app->config->add(((array)((array)json_decode('{'.$html))['rates']));
      // var_dump(Yii::$app->config->get('rates'));
       //$arr = json_decode('{'.$html);
