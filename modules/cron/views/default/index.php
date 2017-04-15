@@ -22,4 +22,9 @@ CrudAsset::register($this);
    <?php foreach ($summary as $string){?>
           <p><?=$string?></p>
   <?php } ?>
+  <h2> Exchange </h2>
+  <?php foreach ($cash as $i=>$money){?>
+    <p><?=$i ?> - <?=$money?></p>
+  <?php } ?>
+
 <?php } ?>
