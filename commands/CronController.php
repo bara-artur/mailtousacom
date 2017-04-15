@@ -7,11 +7,11 @@
 
 namespace app\commands;
 
-use yii\console\Controller;
 use Yii;
+use yii\console\Controller;
 use app\modules\orderElement\models\OrderElement;
-use app\modules\orderElement\models\OrderElementSearch;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
+use app\modules\config\components\DConfig;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -67,5 +67,8 @@ class CronController extends Controller
     echo 'Exange rate      : 1[USD]= '.$rate.PHP_EOL;
     $rate = $rate + (($rate*5)/100);
     echo 'Exange rate + 5% : 1[USD]= '.$rate.PHP_EOL;
+    $a = new DConfig();
+    $a->set('USD_CAD',$rate);
+    //Yii::$app->config->set('USD_CAD',$rate);
   }
 }
