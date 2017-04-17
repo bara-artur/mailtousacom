@@ -31,12 +31,12 @@ class CronController extends Controller
   public function actionIndex()
   {
 
-    echo '- '.$this->ansiFormat('crone', Console::FG_YELLOW)."\n";
+    echo '- '.$this->ansiFormat('cron', Console::FG_YELLOW)."\n";
 
-    echo "    ".$this->ansiFormat('crone/refresh', Console::FG_GREEN);
+    echo "    ".$this->ansiFormat('cron/refresh', Console::FG_GREEN);
     echo "     Обновить статус посылок (10 штук)\n";
 
-    echo "    ".$this->ansiFormat('crone/exchange', Console::FG_GREEN);
+    echo "    ".$this->ansiFormat('cron/exchange', Console::FG_GREEN);
     echo "    Обновить курс can/usd\n";
   }
 
