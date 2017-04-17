@@ -7,11 +7,12 @@
 
 namespace app\commands;
 
-use yii\console\Controller;
 use Yii;
+use yii\console\Controller;
 use app\modules\orderElement\models\OrderElement;
-use app\modules\orderElement\models\OrderElementSearch;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
+use app\modules\config\components\DConfig;
+use yii\helpers\Console;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -27,12 +28,19 @@ class CronController extends Controller
    * This command echoes what you have entered as the message.
    * @param string $message the message to be echoed.
    */
-  public function actionIndex($message = 'hello world')
+  public function actionIndex()
   {
-    echo $message . "\n";
+
+    echo '- '.$this->ansiFormat('cron', Console::FG_YELLOW)."\n";
+
+    echo "    ".$this->ansiFormat('cron/refresh', Console::FG_GREEN);
+    echo "     Обновить статус посылок (10 штук)\n";
+
+    echo "    ".$this->ansiFormat('cron/exchange', Console::FG_GREEN);
+    echo "    Обновить курс can/usd\n";
   }
 
-  public function actionRefresh($message = 'hello world')
+  public function actionRefresh()
   {
     $data=OrderElement::find()->orderBy(['cron_refresh' => SORT_ASC])->limit(10)->all(); // берем 10 посылок (надо будет исключить доставленные)
 
@@ -58,5 +66,17 @@ class CronController extends Controller
     //   $arr = array ('USPS/9405509699937475900484','USPS/9405509699938333870260','USPS/9407809699939814166833',
     //                  'UPS/1Z4008YY4291160859','UPS/1ZW258314248802240','UPS/1Z2A37W90324146148',
     //                'fedex/786083077470','fedex/786061718512','fedex/786043744820');
+  }
+
+  public function actionExchange()
+  {
+    $html = SHD::file_get_html('https://openexchangerates.org/api/latest.json?app_id=a405ef00381748dd895923fb7008ea34', null, null, 1, 1);
+    $rate = ((array)((array)json_decode('{'.$html))['rates'])['CAD'];
+    echo 'Exange rate      : 1[USD]= '.$rate.PHP_EOL;
+    $rate = $rate + (($rate*5)/100);
+    echo 'Exange rate + 5% : 1[USD]= '.$rate.PHP_EOL;
+    $a = new DConfig();
+    $a->set('USD_CAD',$rate);
+    //Yii::$app->config->set('USD_CAD',$rate);
   }
 }

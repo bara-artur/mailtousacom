@@ -7,6 +7,7 @@ use yii\web\Controller;
 use app\modules\orderElement\models\OrderElement;
 use app\modules\orderElement\models\OrderElementSearch;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
+use app\modules\config\components\DConfig;
 
 /**
  * Default controller for the `cron` module
@@ -41,11 +42,20 @@ class DefaultController extends Controller
         }
         $parcel->save();
       }
+      $html = SHD::file_get_html('https://openexchangerates.org/api/latest.json?app_id=a405ef00381748dd895923fb7008ea34', null, null, 1, 1);
+
+     // Yii::$app->config->set('USD_CAD', '3333');
+    //  Yii::$app->config->add(((array)((array)json_decode('{'.$html))['rates']));
+     // var_dump(Yii::$app->config->get('rates'));
+      //$arr = json_decode('{'.$html);
+     // var_dump(array_key_exists ('rates',$arr));
    //   $arr = array ('USPS/9405509699937475900484','USPS/9405509699938333870260','USPS/9407809699939814166833',
   //                  'UPS/1Z4008YY4291160859','UPS/1ZW258314248802240','UPS/1Z2A37W90324146148',
     //                'fedex/786083077470','fedex/786061718512','fedex/786043744820');
       return $this->render('index', [
        'summary' => $summary,
+        'cash' => ((array)((array)json_decode('{'.$html))['rates']),
+        'currentInBD' => Yii::$app->config->get('USD_CAD'),
       ]);
     }
 }

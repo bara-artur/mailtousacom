@@ -3,6 +3,7 @@
 namespace app\modules\additional_services\models;
 
 use Yii;
+use app\modules\user\models\User;
 
 /**
  * This is the model class for table "additional_services".
@@ -29,6 +30,20 @@ class AdditionalServices extends \yii\db\ActiveRecord
         return 'additional_services';
     }
 
+    public static function getStatusList(){
+      return [
+        0=>"Created",
+        1=>"Sent to customer",
+        2=>"Paid",
+        3=>"Refunded",
+        4=>"Cancelled"
+      ];
+    }
+    public static function getTypeList(){
+      return [
+        1=>"Track number invoice",
+      ];
+    }
     /**
      * @inheritdoc
      */
@@ -42,6 +57,23 @@ class AdditionalServices extends \yii\db\ActiveRecord
         ];
     }
 
+  public function getUser(){
+    return $this->hasOne(User::className(), ['id' => 'user_id']);
+  }
+
+  public function getClient(){
+    return $this->hasOne(User::className(), ['id' => 'client_id']);
+  }
+
+  public function getTextStatus(){
+    $st=AdditionalServices::getStatusList();
+    return isset($st[$this->status_pay])?$st[$this->status_pay]:'-';
+  }
+  public function getTextType(){
+    $st=AdditionalServices::getTypeList();
+    return isset($st[$this->type])?$st[$this->type]:'-';
+  }
+
     /**
      * @inheritdoc
      */
@@ -51,12 +83,13 @@ class AdditionalServices extends \yii\db\ActiveRecord
             'id' => 'ID',
             'type' => 'Type',
             'parcel_id_lst' => 'Parcel Id Lst',
-            'client_id' => 'Client ID',
-            'user_id' => 'User ID',
+            'client_id' => 'Client',
+            'user_id' => 'Admin',
             'detail' => 'Detail',
             'status_pay' => 'Status Pay',
             'quantity' => 'Quantity',
             'price' => 'Price',
+            'dop_price' => 'External price',
             'gst' => 'Gst',
             'qst' => 'Qst',
         ];

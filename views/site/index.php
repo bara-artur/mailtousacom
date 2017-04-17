@@ -29,6 +29,9 @@ $this->title = 'Shipping to USA and Canada';
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
 
+          <?php
+          if(Yii::$app->user->identity->isManager()){
+          ?>
             <?php if ($show_view_button==true){ ?>
               <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group/view'], [
                 'class' => 'btn btn-md btn-info group_100 group-admin-view',
@@ -88,6 +91,7 @@ $this->title = 'Shipping to USA and Canada';
                     'role'=>"modal-remote",
                 ]); ?>
             <div class="col-md-12 group_text"><div class="group_text3">group management</div></div>
+            <?php }?>
         </div>
 
           <div class="col-md-3 col-xs-12 margin-top-10 padding-off-right padding-off-left text-right">

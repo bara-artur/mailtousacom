@@ -4,6 +4,7 @@ namespace app\modules\config\components;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
+use app\modules\config\models\Config;
 
 class DConfig extends Component
 {
@@ -37,13 +38,13 @@ class DConfig extends Component
 
   public function set($key, $value)
   {
-    $model = Config::model()->findByAttributes(array('param'=>$key));
+    $model = Config::find()->where(['param'=>$key])->one();
     if (!$model)
       throw new CException('Undefined parameter ' . $key);
 
     $model->value = $value;
 
-    if ($model->save())
+    if ($model->save(false)) // для работы из консоли
       $this->data[$key] = $value;
     Yii::$app->cache->flush();
 
@@ -87,7 +88,7 @@ class DConfig extends Component
   {
     if (!empty($param['param']))
     {
-      $model = Config::model()->findByAttributes(array('param' => $param['param']));
+      $model = Config::find()->where(['param'=>$param['param']])->one();
       if ($model === null)
         $model = new Config();
 
@@ -106,7 +107,7 @@ class DConfig extends Component
   {
     if (!empty($key))
     {
-      $model = Config::model()->findByAttributes(array('param'=>$key));
+      $model = Config::find()->where(['param'=>$key])->one();
       if ($model)
         $model->delete();
       Yii::$app->cache->flush();

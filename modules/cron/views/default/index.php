@@ -22,4 +22,11 @@ CrudAsset::register($this);
    <?php foreach ($summary as $string){?>
           <p><?=$string?></p>
   <?php } ?>
+  <h2> Exchange </h2>
+  <h3>Current rate in DB is <?=$currentInBD?></h3>
+  <h3>Current rate for Internet</h3>
+  <?php if ($cash)foreach ($cash as $i=>$money){?>
+    <p><?=$i ?> - <?=$money?></p>
+  <?php } ?>
+
 <?php } ?>
