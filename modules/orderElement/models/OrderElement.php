@@ -9,6 +9,8 @@ use app\modules\user\models\User;
 use app\modules\logs\models\Log;
 use app\modules\receiving_points\models\ReceivingPoints;
 use app\modules\additional_services\models\AdditionalServices;
+use app\modules\payment\models\PaymentInclude;
+
 /**
  * This is the model class for table "order_element".
  *
@@ -26,6 +28,7 @@ use app\modules\additional_services\models\AdditionalServices;
 class OrderElement extends \yii\db\ActiveRecord
 {
     public $includes_packs;
+    public $sub_total;
     /**
      * @inheritdoc
      */
@@ -113,6 +116,26 @@ class OrderElement extends \yii\db\ActiveRecord
 
   public function getOrderInclude(){
       return $this->hasMany(OrderInclude::className(),['order_id' => 'id']);
+  }
+
+  public function getPaySuccessful(){
+    $payments=PaymentInclude::find()
+      ->select([
+        'element_id',
+        'sum(price) as already_price',
+        'sum(qst) as already_qst',
+        'sum(gst) as already_gst'
+      ])
+      ->where([
+        'element_type'=>0,
+        'element_id'=>$this->id,
+        'status'=>1
+      ])
+      ->groupBy(['element_id'])
+      ->asArray()
+      ->all();
+
+    return $payments;
   }
 
   public function getTrackInvoice(){
@@ -247,8 +270,7 @@ class OrderElement extends \yii\db\ActiveRecord
     return $TrackingNumberPostLink;
   }
 
-  function GetShippingSummary($TrackingNumber,$ShippingCarrier)
-  {
+  function GetShippingSummary($TrackingNumber,$ShippingCarrier){
     $ShippingSummary='';
 
     if ($ShippingCarrier=='canadapost') {

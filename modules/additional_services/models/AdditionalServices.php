@@ -4,6 +4,7 @@ namespace app\modules\additional_services\models;
 
 use Yii;
 use app\modules\user\models\User;
+use app\modules\payment\models\PaymentInclude;
 
 /**
  * This is the model class for table "additional_services".
@@ -63,6 +64,26 @@ class AdditionalServices extends \yii\db\ActiveRecord
 
   public function getClient(){
     return $this->hasOne(User::className(), ['id' => 'client_id']);
+  }
+
+  public function getPaySuccessful(){
+    $payments=PaymentInclude::find()
+      ->select([
+        'element_id',
+        'sum(price) as already_price',
+        'sum(qst) as already_qst',
+        'sum(gst) as already_gst'
+      ])
+      ->where([
+        'element_type'=>1,
+        'element_id'=>$this->id,
+        'status'=>1
+      ])
+      ->groupBy(['element_id'])
+      ->asArray()
+      ->all();
+
+    return $payments;
   }
 
   public function getTextStatus(){
