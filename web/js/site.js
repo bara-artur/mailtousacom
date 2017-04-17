@@ -467,7 +467,7 @@ function  only_no_foreign_letters_in_input(evt){
             (code==44)||(code==46)||
             (code==13)||(code==32)
             ||(code==33)||(code==64)||(code==35)||(code==36)||(code==37)||(code==94)||(code==38)||(code==42)
-            ||(code==40)||(code==41)||(code==95)||(code==43)||(code==45)||(code==61)  // !@#$%^&*()_+-=
+            ||(code==40)||(code==41)||(code==95)||(code==43)||(code==45)||(code==61)||(code==8)||(code==9)||(code==39)  // !@#$%^&*()_+-=
         )
             return;
         else {
