@@ -12,6 +12,7 @@ use yii\console\Controller;
 use app\modules\orderElement\models\OrderElement;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
 use app\modules\config\components\DConfig;
+use yii\helpers\Console;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -27,12 +28,19 @@ class CronController extends Controller
    * This command echoes what you have entered as the message.
    * @param string $message the message to be echoed.
    */
-  public function actionIndex($message = 'hello world')
+  public function actionIndex()
   {
-    echo $message . "\n";
+
+    echo '- '.$this->ansiFormat('crone', Console::FG_YELLOW)."\n";
+
+    echo "    ".$this->ansiFormat('crone/refresh', Console::FG_GREEN);
+    echo "     Обновить статус посылок (10 штук)\n";
+
+    echo "    ".$this->ansiFormat('crone/exchange', Console::FG_GREEN);
+    echo "    Обновить курс can/usd\n";
   }
 
-  public function actionRefresh($message = 'hello world')
+  public function actionRefresh()
   {
     $data=OrderElement::find()->orderBy(['cron_refresh' => SORT_ASC])->limit(10)->all(); // берем 10 посылок (надо будет исключить доставленные)
 
@@ -60,7 +68,7 @@ class CronController extends Controller
     //                'fedex/786083077470','fedex/786061718512','fedex/786043744820');
   }
 
-  public function actionExchange($message = 'hello world')
+  public function actionExchange()
   {
     $html = SHD::file_get_html('https://openexchangerates.org/api/latest.json?app_id=a405ef00381748dd895923fb7008ea34', null, null, 1, 1);
     $rate = ((array)((array)json_decode('{'.$html))['rates'])['CAD'];
