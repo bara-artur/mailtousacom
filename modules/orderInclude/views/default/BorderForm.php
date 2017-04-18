@@ -39,14 +39,15 @@ $form = ActiveForm::begin([
 
     <div class="row">
     <div class="col-md-12">
+     <?php  var_dump(date('m-d-h-i-s')); ?>
    <div class="trans_text">When you need us to transport your orders to The US :</div>
   <?= $form->field($model, 'transport_data')->widget(DatePicker::className(),[
     'name' => 'check_issue_date',
     'removeButton' => false,
-    //'value' => date('d-M-Y', strtotime('+1 days')),
+    //'value' => date('d-M-Y', strtotime('-1 days')),
     'options' => ['placeholder' => 'Choose date'],
     'pluginOptions' => [
-      'startDate' => date(\Yii::$app->params['data_format_php'], strtotime('+5 hours')),
+      'startDate' => date(\Yii::$app->params['data_format_php'],strtotime('+1 days +5 hours')),  // пока непонятки с датами - пусть будет +0, а не +5
       'format' => \Yii::$app->params['data_format_js'],
       'todayHighlight' => true,
       'autoclose'=>true,
@@ -95,7 +96,16 @@ $form = ActiveForm::begin([
 
 <script>
   $(document).ready(function() {
-    init_order_border()
+
+    $('#orderelement-transport_data-kvdate').on('click',function(event){
+      var date = new Date();
+      if ((date.getHours()<11)||(<?= $admin ?>==1)) {                   // делаем возможным выделять текущую дату админу и юзеру (юзеру до 11 ам)
+        $('.today').removeClass('disabled ');
+      }
+    });
+
+    init_order_border();
+
   });
   var odrer_id=<?=$order_id;?>;
 </script>

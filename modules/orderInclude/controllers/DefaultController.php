@@ -432,7 +432,7 @@ class DefaultController extends Controller
             (''))
         ]-24)*60*60;
       if($pac->transport_data<$max_time){
-        $pac->transport_data=strtotime('+1 days');
+        $pac->transport_data=strtotime('+1 days +5 hours');
       }
 
       $pac->transport_data=date(\Yii::$app->params['data_format_php'], $pac->transport_data);
@@ -488,6 +488,7 @@ class DefaultController extends Controller
       'order_id'=>$id,
       'total'=>$total,
       'model'=>$pac,
+      'admin'=>(Yii::$app->user->identity->isManager())?(1):(0),
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
