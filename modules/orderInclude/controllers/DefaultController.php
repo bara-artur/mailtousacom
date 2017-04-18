@@ -72,7 +72,10 @@ class DefaultController extends Controller
     $hideNext = 0;
     $order_elements = [];
     $ids = '';
-    $user_ids  = $_COOKIE['parcelCheckedUser'];;
+    $user_ids = '';
+    if (isset($_COOKIE['parcelCheckedUser'])) {
+      $user_ids  = $_COOKIE['parcelCheckedUser'];
+    }
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
