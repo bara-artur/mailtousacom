@@ -43,7 +43,8 @@ class PaymentInclude extends \yii\db\ActiveRecord
 
     public static function getElementTypeList(){
       return [
-        "parcel"
+        "parcel",
+        "tracking number invoice"
       ];
     }
     /**
