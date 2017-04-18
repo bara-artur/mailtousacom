@@ -126,7 +126,7 @@ $config = [
         ],
     ],
     'config'=>array(
-        'class' => DConfig,
+        'class' => 'app\modules\config\components\DConfig',
       'cache'=>3600,
     ),
   ],
