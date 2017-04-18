@@ -66,8 +66,7 @@ class DefaultController extends Controller
         };
 
         $el_group = explode(',', $order->el_group);
-
-        $model = OrderElement::find()->where(['id' => $el_group])->all();
+        $model = $order->getOrderElement();
 
       $data=[
         'invoice'=>'',

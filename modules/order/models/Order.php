@@ -50,8 +50,10 @@ class Order extends \yii\db\ActiveRecord
 
     public function getOrderElement()
     {
-        return $this->hasMany(OrderElement::className(),['id' =>explode(',',$this->el_group)]);
+        return OrderElement::find()->where(['id' =>explode(',',$this->el_group)])->all();
     }
+
+
     /**
      * @inheritdoc
      */
@@ -83,8 +85,7 @@ class Order extends \yii\db\ActiveRecord
       /*Yii::$app->db->createCommand()
       ->update('order_element', $data, ['id' => explode(',',$this->el_group)])
       ->execute();*/
-      $numbers = explode(',',$this->el_group);
-      $parcels = OrderElement::find()->where(['id' => $numbers])->all();
+      $parcels = $this->getOrderElement();
       foreach($parcels as &$parcel){
         $parcel->attributes=$data;
         $parcel->save();
@@ -92,8 +93,7 @@ class Order extends \yii\db\ActiveRecord
     }
 
   public function setStatus($status,$send_mail){
-    $numbers = explode(',',$this->el_group);
-    $parcels = OrderElement::find()->where(['id' => $numbers])->all();
+    $parcels = $this->getOrderElement();
 
     $users=[];
     $users_parcel=[];
