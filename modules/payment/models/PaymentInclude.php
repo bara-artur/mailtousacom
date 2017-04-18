@@ -3,6 +3,7 @@
 namespace app\modules\payment\models;
 
 use Yii;
+use app\modules\additional_services\models\AdditionalServices;
 
 /**
  * This is the model class for table "payment_include".
@@ -13,7 +14,6 @@ use Yii;
  * @property integer $element_type
  * @property string $comment
  * @property integer $status
- * @property integer $create_at
  * @property double $price
  * @property double $qst
  * @property double $gst
@@ -35,7 +35,7 @@ class PaymentInclude extends \yii\db\ActiveRecord
     {
         return [
             [['element_id', 'element_type', 'payment_id'], 'required'],
-            [['element_id', 'element_type', 'status', 'payment_id','create_at'], 'integer'],
+            [['element_id', 'element_type', 'status', 'payment_id'], 'integer'],
             [['price', 'qst', 'gst'], 'number'],
             [['comment'], 'string', 'max' => 255],
         ];
@@ -79,4 +79,20 @@ class PaymentInclude extends \yii\db\ActiveRecord
       }
       return $txt;
     }
+
+  public function beforeSave($insert)
+  {
+    //если статус установили равным 1(оплачен)
+    if($this->status==1) {
+      //для ивойсов меняем статус оплаты на 2(оплачен)
+      if ($this->element_type == 1) {
+        $additional_services = AdditionalServices::find()
+          ->where(['type' => 1, 'parcel_id_lst' => $this->element_id])
+          ->one();
+        $additional_services->status_pay = 2;
+        $additional_services->save();
+      }
+    }
+    return true;
+  }
 }

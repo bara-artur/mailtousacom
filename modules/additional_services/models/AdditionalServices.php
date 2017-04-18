@@ -70,13 +70,14 @@ class AdditionalServices extends \yii\db\ActiveRecord
     $payments=PaymentInclude::find()
       ->select([
         'element_id',
-        'sum(price) as already_price',
-        'sum(qst) as already_qst',
-        'sum(gst) as already_gst'
+        'sum(price) as price',
+        'sum(qst) as qst',
+        'sum(gst) as gst',
+        'sum(gst+qst+price) as sum'
       ])
       ->where([
         'element_type'=>1,
-        'element_id'=>$this->id,
+        'element_id'=>$this->parcel_id_lst,
         'status'=>1
       ])
       ->groupBy(['element_id'])

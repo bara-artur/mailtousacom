@@ -82,7 +82,7 @@ class OrderElement extends \yii\db\ActiveRecord
             [['track_number'], 'string'],
             [['price','qst','gst'],'double'],
             [['weight'], 'double'],
-            [['track_number_type','status_dop','status'], 'integer'],
+            [['track_number_type','status_dop','status','payment_state'], 'integer'],
             [['address_type','weight','track_number','track_number_type'], 'safe'],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
         ];
@@ -122,9 +122,10 @@ class OrderElement extends \yii\db\ActiveRecord
     $payments=PaymentInclude::find()
       ->select([
         'element_id',
-        'sum(price) as already_price',
-        'sum(qst) as already_qst',
-        'sum(gst) as already_gst'
+        'sum(price) as price',
+        'sum(qst) as qst',
+        'sum(gst) as gst',
+        'sum(price+qst+gst) as sum'
       ])
       ->where([
         'element_type'=>0,
@@ -172,6 +173,7 @@ class OrderElement extends \yii\db\ActiveRecord
     return $dataProvider;
 
   }
+
   public function getIncludes(){
     $query = OrderInclude::find()->where(['order_id'=>$this->id])->asArray()->all();
     return $query;

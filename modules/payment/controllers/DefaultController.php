@@ -21,6 +21,7 @@ use app\modules\payment\models\PaymentFilterForm;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use \yii\web\Response;
+use app\modules\additional_services\models\AdditionalServices;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -62,11 +63,15 @@ class DefaultController extends Controller
                 ],
             ],
         ];*/
-        return [];
+        return array();
     }
 
   public function beforeAction($action)
   {
+    if (Yii::$app->user->isGuest) {
+      return $this->redirect(['/']);
+    }
+
     // ...set `$this->enableCsrfValidation` here based on some conditions...
     // call parent method that will check CSRF if such property is true.
     if ($action->id === 'order') {
@@ -134,8 +139,10 @@ class DefaultController extends Controller
      */
     public function actionOrder($id){
 
-      $order = Order::findOne($id);
+      $pay_array=array(); //для сохранения данных об оплате
+      $request = Yii::$app->request;
 
+      $order = Order::findOne($id);
       $session = Yii::$app->session;
       $session->set('last_order',$id);
 
@@ -143,7 +150,7 @@ class DefaultController extends Controller
         throw new NotFoundHttpException('There is no data for payment.');
       };
 
-      $el_group=$order->getOrderElement();
+      $el_group=$order->orderElement;
       $user_id=$el_group[0]->user_id;
 
       //Проверяем что б пользователю хватало прав на просмотр
@@ -176,8 +183,15 @@ class DefaultController extends Controller
         'qst'=>0
       );
 
+      $pays_total=array(
+        'price'=>0,
+        'gst'=>0,
+        'qst'=>0
+      );
+
       //проверяем посылки на принадлежность пользователю и при необходимости делаем пересчет цены
       foreach ($el_group as &$pac) {
+        $save_to_pay=!$request->post('agree_'.$pac->id);
         $sub_total=array(
           'price'=>0,
           'gst'=>0,
@@ -191,55 +205,216 @@ class DefaultController extends Controller
 
         //проверка необходимости пересчета
         if($pac->status<2 || $pac->price==0){
-          $item['price']=(float)ParcelPrice::widget(['weight'=>$pac->weight,'user'=>$user_id]);
-          $item['qst']=round($item['price']*$tax['qst']/100,2);
-          $item['gst']=round($item['price']*$tax['gst']/100,2);
+          $pac->price=(float)ParcelPrice::widget(['weight'=>$pac->weight,'user'=>$user_id]);
+          $pac->qst=round($pac->price*$tax['qst']/100,2);
+          $pac->gst=round($pac->price*$tax['gst']/100,2);
           $pac->save();
         };
 
-        $sub_total['price']+=$item['price'];
-        $sub_total['qst']+=$item['qst'];
-        $sub_total['gst']+=$item['gst'];
+        $sub_total['price']+=round($pac->price,2);
+        $sub_total['qst']+=round($pac->qst,2);
+        $sub_total['gst']+=round($pac->gst,2);
 
         //получаем данные о уже осуществленных платежах
-        $paySuccessful=$pac->getPaySuccessful();
+        $paySuccessful=$pac->paySuccessful;
         if($paySuccessful AND count($paySuccessful)>0){
-          $sub_total['price']-=$paySuccessful[0]->price;
-          $sub_total['qst']-=$paySuccessful[0]->qst;
-          $sub_total['gst']-=$paySuccessful[0]->gst;
+          $sub_total['price']-=round($paySuccessful[0]['price'],2);
+          $sub_total['qst']-=round($paySuccessful[0]['qst'],2);
+          $sub_total['gst']-=round($paySuccessful[0]['gst'],2);
         };
 
-        //получаем данные о инвойсах
-        $invoice=$pac->getTrackInvoice();
-        if(!$invoice->getIsNewRecord()){
-          $sub_total['price']+=$invoice->price;
-          $sub_total['qst']+=$invoice->qst;
-          $sub_total['gst']+=$invoice->gst;
-
-          $sub_total['price']+=$invoice->dop_price;
-          $sub_total['qst']+=$invoice->dop_qst;
-          $sub_total['gst']+=$invoice->dop_gst;
-
-          //получаем данные о уже осуществленных платежах
-          $paySuccessful=$invoice->getPaySuccessful();
-          if($paySuccessful AND count($paySuccessful)>0){
-            $sub_total['price']-=$paySuccessful[0]->price;
-            $sub_total['qst']-=$paySuccessful[0]->qst;
-            $sub_total['gst']-=$paySuccessful[0]->gst;
-          };
+        //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
+        if($sub_total['price']>0){
+          $pay_array[]=[
+            'element_id'=>$pac->id,
+            'element_type'=>0,
+            'status'=>$save_to_pay?0:-1,
+            'comment'=>$save_to_pay?'':$request->post('text_not_agree_'.$pac->id),
+            'price'=>round($sub_total['price'],2),
+            'qst'=>round($sub_total['qst'],2),
+            'gst'=>round($sub_total['gst'],2),
+          ];
+          if($save_to_pay){
+            $pays_total['price']+=$sub_total['price'];
+            $pays_total['qst']+=$sub_total['qst'];
+            $pays_total['gst']+=$sub_total['gst'];
+          }
         }
 
-        $sub_total['vat']=$sub_total['qst']+$sub_total['qst'];
+        //получаем данные о инвойсах
+        $invoice=$pac->trackInvoice;
+        if(!$invoice->isNewRecord){
+          //для инвойса  храним все в промежуточном массиве
+          $invoice_total=array();
+          $invoice_total['price']=$invoice->price;
+          $invoice_total['qst']=$invoice->qst;
+          $invoice_total['gst']=$invoice->gst;
+
+          $invoice_total['price']+=$invoice->dop_price;
+          $invoice_total['qst']+=$invoice->dop_qst;
+          $invoice_total['gst']+=$invoice->dop_gst;
+
+          //получаем данные о уже осуществленных платежах
+          $paySuccessful=$invoice->paySuccessful;
+          if($paySuccessful AND count($paySuccessful)>0){
+            $invoice_total['price']-=$paySuccessful[0]['price'];
+            $invoice_total['qst']-=$paySuccessful[0]['qst'];
+            $invoice_total['gst']-=$paySuccessful[0]['gst'];
+          };
+
+          //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
+          if($invoice_total['price']>0){
+            $pay_array[]=[
+              'element_id'=>$pac->id,
+              'element_type'=>1,
+              'status'=>$save_to_pay?0:-1,
+              'comment'=>$save_to_pay?'':$request->post('text_not_agree_'.$pac->id),
+              'price'=>$invoice_total['price'],
+              'qst'=>$invoice_total['qst'],
+              'gst'=>$invoice_total['gst'],
+            ];
+
+            if($save_to_pay){
+              $pays_total['price']+=$invoice_total['price'];
+              $pays_total['qst']+=$invoice_total['qst'];
+              $pays_total['gst']+=$invoice_total['gst'];
+            }
+          }
+
+          $sub_total['price']+=$invoice_total['price'];
+          $sub_total['qst']+=$invoice_total['qst'];
+          $sub_total['gst']+=$invoice_total['gst'];
+        }
+        $sub_total=[
+          'price'=>round($sub_total['price'],2),
+          'qst'=>round($sub_total['qst'],2),
+          'gst'=>round($sub_total['gst'],2),
+        ];
+        $sub_total['vat']=$sub_total['gst']+$sub_total['qst'];
         $sub_total['sum']=$sub_total['price']+$sub_total['vat'];
 
         $pac->sub_total=$sub_total;
 
         $total['price']+=$sub_total['price'];
-        $total['price']+=$sub_total['qst'];
-        $total['price']+=$sub_total['gst'];
+        $total['qst']+=$sub_total['qst'];
+        $total['gst']+=$sub_total['gst'];
       }
-      $total['vat']=$total['qst']+$total['qst'];
+      $total['vat']=$total['qst']+$total['gst'];
       $total['sum']=$total['price']+$total['vat'];
+
+      //если пост запрос
+      if($request->isPost) {
+        if(Yii::$app->user->identity->isManager()){
+          //Для админа
+
+          //помечаем посылки как принятые на точку выдачи
+          if(Yii::$app->user->can("takeParcel")) {
+            $order->setData([
+              'status'=>2,
+              'payment_state'=>2,
+              'status_dop'=>Yii::$app->user->identity->last_receiving_points,
+            ]);
+            \Yii::$app->getSession()->setFlash('success', 'The order is waiting for dispatch.');
+          }
+
+          //Проверяем оплачено ли все. Если принимать деньги не надо то редиректим на стротовую и выдаем сообщение
+          if($total['price']==0) {
+            \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
+            return $this->redirect(['/']);
+          }
+
+          //проверяем возможность приема платежа при приеме. Если нет то перебрасываем на стртовую.
+          if(!Yii::$app->user->can("takePay") && $total['sum']>0) {
+            return $this->redirect(['/']);
+          };
+
+          //Генерируем новый платеж оплаты налом
+          $pays = PaymentsList::create([
+            'client_id' => $user_id,
+            'type' => 3,
+            'status' => 1,
+            'pay_time' => time(),
+            'price' => $pays_total['price'],
+            'qst' => $pays_total['qst'],
+            'gst' => $pays_total['gst'],
+          ]);
+          $pays->save();
+
+          //Сохраняем детали платежа
+          foreach ($pay_array as $item) {
+            $pay_include = new PaymentInclude();
+            $pay_include->attributes=$item;
+
+            //если нет отказа от элемента то принимаем оплату
+            if($pay_include->status==0){
+              $pay_include->status=1;
+            }
+            $pay_include->payment_id = $pays->id;
+            $pay_include->save();
+
+          };
+
+          $order->setData([
+            'payment_state'=>2,
+          ]);
+
+          \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse and is waiting for dispatch.');
+          return $this->redirect(['/']);
+
+        }else{
+          //для пользователя
+
+          //Когда выбрали оплату на точке
+          if($request->post('payment_type')==2){
+            //помечаем посылки как ожидаемые к принятию
+            $order->setData(['status'=>1,'payment_state'=>1]);
+            \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
+            return $this->redirect(['/']);
+          };
+
+          //Когда выбрали оплату paypal
+          if($request->post('payment_type')==1){
+            //Создоем экземпляр для оплаты через PayPal
+            $pay = new DoPayment();
+
+            //Генерируем новый платеж оплаты налом
+            $pays = PaymentsList::create([
+              'client_id' => $user_id,
+              'type' => 3,
+              'status' => 0,
+              'pay_time' => time(),
+              'price' => $pays_total['price'],
+              'qst' => $pays_total['qst'],
+              'gst' => $pays_total['gst'],
+            ]);
+            $pays->save();
+
+            //Сохраняем детали платежа
+            foreach ($pay_array as $item) {
+              $pay_include = new PaymentInclude();
+              $pay_include->attributes=$item;
+              $pay_include->payment_id = $pays->id;
+              $pay_include->save();
+              $item_ = [
+                'name' => 'Type '.$item['element_type'].' id#' . $item['element_id'],
+                'vat' => $item['gst']+ $item['qst'],
+                'price'=>$item['price']
+              ];
+              $pay->addItem($item_);
+            };
+
+            $payment = $pay->make_payment();
+            $pays->code=$payment->getId();
+            $pays->save();
+
+            $session->set('last_pays',$pays->id);
+            $approvalUrl = $payment->getApprovalLink();
+            return $this->redirect($approvalUrl);
+
+          }
+        }
+
+      }
 
       return $this->render('to_pay', [
         'order_id'=>$id,
@@ -264,11 +439,18 @@ class DefaultController extends Controller
       if(!$pay){
         return $this->return_last_order('Error payment. Try later or contact your administrator.');
       }
+
       if($payment->getState()=='approved') {
         $pay->status = 1;
         $pay->pay_time = time();
         $pay->save();
         $pay->setData(['status'=>1]);
+
+        $pays_in=PaymentInclude::find()->where(['payment_id'=>$pay->id])->all();
+        foreach ($pays_in as $include){
+          $include->status=1;
+          $include->save();
+        };
 
         \Yii::$app->getSession()->setFlash('success', 'Payment for your order was successful.');
         return $this->redirect(['/']);

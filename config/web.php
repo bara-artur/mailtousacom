@@ -1,7 +1,6 @@
 <?php
 use kartik\mpdf\Pdf;
 use yii\helpers\Url;
-use app\modules\config\components\DConfig;
 
 $params = require(__DIR__ . '/params.php');
 $personal = require(__DIR__ . '/personal.php');
@@ -126,7 +125,7 @@ $config = [
         ],
     ],
     'config'=>array(
-      'class' => DConfig::class,
+      'class' => 'app\modules\config\components\DConfig',
       'cache'=>3600,
     ),
   ],
@@ -158,7 +157,7 @@ $config = [
       //'isProduction' => false,
       // This is config file for the PayPal system
       'config'       => [
-        'currency'=>"USD",
+        'currency'=>"CAD",
         'http.ConnectionTimeOut' => 30,
         'http.Retry'             => 1,
         'mode'                   => 'sandbox', // development (sandbox) or production (live) mode

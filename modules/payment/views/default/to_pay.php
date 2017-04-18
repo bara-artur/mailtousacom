@@ -69,23 +69,23 @@ $submitOption = [
         </div>
 
         <?php
-          $paySuccessful=$pac->getPaySuccessful();
+          $paySuccessful=$pac->paySuccessful;
           if($paySuccessful AND count($paySuccessful)>0){
             $tot_col++;
             ?>
             <div class="col-md-2">
               <div class="pay_title"><b>Оплаченно</b></div>
-              <div class="pay_list2"><?=number_format($paySuccessful[0]->price,2);?></div>
-              <div class="pay_list2"><?=number_format($paySuccessful[0]->qst,2);?></div>
-              <div class="pay_list2"><?=number_format($paySuccessful[0]->gst,2);?></div>
-              <div class="pay_list4"><?=number_format($paySuccessful[0]->price+$paySuccessful[0]->gst+$paySuccessful[0]->qst,2);?></div>
+              <div class="pay_list2"><?=number_format($paySuccessful[0]['price'],2);?></div>
+              <div class="pay_list2"><?=number_format($paySuccessful[0]['qst'],2);?></div>
+              <div class="pay_list2"><?=number_format($paySuccessful[0]['gst'],2);?></div>
+              <div class="pay_list4"><?=number_format($paySuccessful[0]['sum'],2);?></div>
             </div>
             <?php
           };
 
           //получаем данные о инвойсах
-          $invoice=$pac->getTrackInvoice();
-          if(!$invoice->getIsNewRecord()){
+          $invoice=$pac->trackInvoice;
+          if(!$invoice->isNewRecord){
             $tot_col++;
             ?>
             <div class="col-md-2">
@@ -105,15 +105,15 @@ $submitOption = [
             </div>
             <?php
             //получаем данные о уже осуществленных платежах
-            $paySuccessful=$invoice->getPaySuccessful();
+            $paySuccessful=$invoice->paySuccessful;
             if($paySuccessful AND count($paySuccessful)>0){
               ?>
               <div class="col-md-2">
                 <div class="pay_title"><b>Оплаченно</b></div>
-                <div class="pay_list2"><?=number_format($paySuccessful[0]->price,2);?></div>
-                <div class="pay_list2"><?=number_format($paySuccessful[0]->qst,2);?></div>
-                <div class="pay_list2"><?=number_format($paySuccessful[0]->gst,2);?></div>
-                <div class="pay_list4"><?=number_format($paySuccessful[0]->price+$paySuccessful[0]->gst+$paySuccessful[0]->qst,2);?></div>
+                <div class="pay_list2"><?=number_format($paySuccessful[0]['price'],2);?></div>
+                <div class="pay_list2"><?=number_format($paySuccessful[0]['qst'],2);?></div>
+                <div class="pay_list2"><?=number_format($paySuccessful[0]['gst'],2);?></div>
+                <div class="pay_list4"><?=number_format($paySuccessful[0]['sum'],2);?></div>
               </div>
               <?php
             };
@@ -175,6 +175,19 @@ $submitOption = [
   <hr class="podes">
 
   <?php
+    if(count($paces)>1){
+       ?>
+      <div class="col-md-3">
+        <div class="pay_title"><b>Total to pay</b></div>
+        <div class="pay_list2"><b>Price : </b><?=number_format($total['price'],2,"."," ");?></div>
+        <div class="pay_list2"><b>PST : </b><?=number_format($total['qst'],2,"."," ");?></div>
+        <div class="pay_list2"><b>GST/HST : </b><?=number_format($total['gst'],2,"."," ");?></div>
+        <div class="pay_list4"><b>Total :</b><?=number_format($total['sum'],2,"."," ");?></div>
+      </div>
+      <?php
+    }
+  ?>
+  <?php
   if(!Yii::$app->user->identity->isManager()){?>
     <div class="col-md-offset-2 trans_text custom-radio">
       <?= Html::radioList('payment_type',null,
@@ -204,7 +217,7 @@ $submitOption = [
         <?php
         if(Yii::$app->user->identity->isManager()){
           echo Html::a('Return to orders list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);
-          if($paces[0]->status<2){
+          if($total['price']>0){
             //админ может принимать платеж и это необходимо сделать
             if(Yii::$app->user->can("takePay") && $total['price']>0){
               //админ может принимать посылки
