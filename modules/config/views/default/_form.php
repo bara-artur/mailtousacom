@@ -13,13 +13,13 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?=$model->label;?>
-    (Def.value <?=$model->default;?>)
+    (Default value: <?=$model->default;?>)
 
     <?= $form->field($model, 'value')->textInput(['maxlength' => true])->label(false) ?>
 
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success pull-right' : 'btn btn-success pull-right']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

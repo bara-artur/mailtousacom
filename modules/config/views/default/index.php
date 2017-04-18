@@ -7,14 +7,14 @@ use yii\grid\GridView;
 /* @var $searchModel app\modules\config\models\SearchConfig */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Configs';
+$this->title = 'System configuration';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="config-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+<div class="table-responsive">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -43,4 +43,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ],
     ]); ?>
+</div>
 </div>
