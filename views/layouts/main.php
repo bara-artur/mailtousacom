@@ -68,20 +68,20 @@ AppAsset::register($this);
                             . Html::a('Receiving points', ['/receiving_points/'], ['class' => 'profile-link'])
                         .'</li>'
                         .'<li>'
-                            . Html::a('System params', ['/config//'], ['class' => 'profile-link'])
+                            . Html::a('System configuration', ['/config//'], ['class' => 'profile-link'])
                         .'</li>'
+                    .'<li>'
+                    . Html::a('My Profile', ['/profile/'], ['class' => 'profile-link'])
+                    .'</li>'
                     .'</ul>'
                 .'</li>';
             }
             $user_menu[] = '<li>'
-              . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Additional services', ['/additional_services//'], ['class' => 'profile-link'])
+              . Html::a('<i class="fa fa-info"></i>&nbsp;&nbsp;Services', ['/additional_services//'], ['class' => 'profile-link'])
               . '</li>';
             $user_menu[] = '<li>'
               . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
               . '</li>';
-            $user_menu[] = '<li>'
-                . Html::a('<i class="icon-metro-user-2"></i>&nbsp;&nbsp;Profile', ['/profile/'], ['class' => 'profile-link'])
-            .'</li>';
 
         }else{
             $user_menu[] = '<li>'
