@@ -15,6 +15,8 @@ class OrderElementSearch extends OrderElement
     /**
      * @inheritdoc
      */
+    public $price_end;
+
     public function rules()
     {
         return [
@@ -22,7 +24,7 @@ class OrderElementSearch extends OrderElement
               'payment_state'], 'integer'],
             [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2',
                'city', 'zip', 'phone', 'state','created_at', 'transport_data',
-               'transport_data_to','created_at_to','user_id','payment_state'], 'safe'],
+               'transport_data_to','created_at_to','user_id','payment_state','price','price_end','track_number'], 'safe'],
         ];
     }
 
@@ -60,14 +62,18 @@ class OrderElementSearch extends OrderElement
           // $query->where('0=1');
           return $dataProvider;
         }
+      //  var_dump($params);
         // grid filtering conditions
         if ($date_from!=null) $query->andFilterWhere(['>=', 'created_at', $date_from]);
         if ($date_to!=null) $query->andFilterWhere(['<=', 'created_at', $date_to+24*3600]);
+        if (isset($this['price'])) $query->andFilterWhere(['>=', 'price', $this['price']]);
+        if (isset($time_to['price_end'])) $query->andFilterWhere(['<=', 'price', $time_to['price_end']]);
         $query->andFilterWhere([
           'id' => $this->id,
           'user_id' => $this->user_id,
           'status' => $this->status,
           'payment_state' => $this->payment_state,
+          'track_number' => $this->track_number,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
