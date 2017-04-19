@@ -71,7 +71,10 @@ class CronController extends Controller
   public function actionExchange()
   {
     $html = SHD::file_get_html('https://openexchangerates.org/api/latest.json?app_id=a405ef00381748dd895923fb7008ea34', null, null, 1, 1);
-    $rate = ((array)((array)json_decode('{'.$html))['rates'])['CAD'];
+    $arr = json_decode('{'.$html,true);
+    $arr2 = $arr['rates'];
+    $rate = $arr2['CAD'];
+
     echo 'Exange rate      : 1[USD]= '.$rate.PHP_EOL;
     $rate = $rate + (($rate*5)/100);
     echo 'Exange rate + 5% : 1[USD]= '.$rate.PHP_EOL;

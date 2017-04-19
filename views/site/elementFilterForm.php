@@ -46,16 +46,9 @@ use app\modules\orderElement\models\OrderElement;
             ]);?>
           </div>
         <?php } ?>
-          <?php if (Yii::$app->params['showAdminPanel'] == 0) {?>
-        <div class="col-md-3">
-          <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
+        <div class="col-md-2">
+            <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
         </div>
-          <?php } ?>
-          <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
-              <div class="col-md-2">
-                  <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
-              </div>
-          <?php } ?>
         <div class="col-md-3">
           <?= $form->field($model,'created_at')->widget(DatePicker::className(),[
             'name' => 'created_at',
@@ -68,16 +61,19 @@ use app\modules\orderElement\models\OrderElement;
             ]
           ]);?>
         </div>
-          <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
         <div class="col-md-2">
-          <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
+            <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
         </div>
-          <?php } ?>
-          <?php if (Yii::$app->params['showAdminPanel'] == 0) {?>
-              <div class="col-md-3">
-                  <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
-              </div>
-          <?php } ?>
+        <div class="col-md-2">
+          <?= $form->field($model, 'price')->textInput(['options' =>['class'=>'float_num']]) ?>
+        </div>
+        <div class="col-md-2">
+          <?= $form->field($model, 'price_end')->textInput(['options' =>['class'=>'float_num']]) ?>
+        </div>
+        <div class="col-md-2">
+          <?= $form->field($model, 'track_number')->textInput() ?>
+        </div>
+
         <div class="col-md-3">
           <label class="control-label">Action</label>
           <div class="row">

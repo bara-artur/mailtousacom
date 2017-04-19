@@ -108,9 +108,11 @@ class SiteController extends Controller
           if ($user)$user->save();
         }
         $filterForm->load(Yii::$app->request->post());
+
         $query['OrderElementSearch'] = $filterForm->toArray();
         $time_to = ['created_at_to' => $filterForm->created_at_to];
         $time_to += ['transport_date_to' => $filterForm->transport_data_to];
+        $time_to += ['price_end' => $filterForm->price_end];
       }
 
       Yii::$app->params['showAdminPanel'] = 0;
