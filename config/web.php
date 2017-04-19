@@ -110,7 +110,7 @@ $config = [
           'orderInclude/<action:group-remove>/<order_id:\d+>/<id:\d+>'=>'orderInclude/default/<action>/',
 
 
-          'payment/<action:order>/<id:\d+>'=>'payment/default/<action>/',
+          'payment/<action:order|track-invoice>/<id:\d+>'=>'payment/default/<action>/',
           'payment/<action>/<id:\d+>'=>'payment/default/<action>/',
           'payment/<action:finish>'=>'payment/default/<action>/',
           'payment/<action>'=>'payment/default/<action>/',
