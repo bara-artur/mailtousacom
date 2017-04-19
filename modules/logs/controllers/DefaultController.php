@@ -21,7 +21,8 @@ class DefaultController extends Controller
   public function beforeAction($action)
   {
     if (Yii::$app->user->isGuest) {
-      return $this->redirect(['/']);
+      $this->redirect(['/']);
+      return false;
     }
     return parent::beforeAction($action);
   }

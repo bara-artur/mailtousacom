@@ -69,7 +69,8 @@ class DefaultController extends Controller
   public function beforeAction($action)
   {
     if (Yii::$app->user->isGuest) {
-      return $this->redirect(['/']);
+      $this->redirect(['/']);
+      return false;
     }
 
     // ...set `$this->enableCsrfValidation` here based on some conditions...
