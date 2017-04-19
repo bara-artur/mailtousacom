@@ -39,7 +39,6 @@ $form = ActiveForm::begin([
 
     <div class="row">
     <div class="col-md-12">
-     <?php  var_dump(date('m-d-h-i-s')); ?>
    <div class="trans_text">When you need us to transport your orders to The US :</div>
   <?= $form->field($model, 'transport_data')->widget(DatePicker::className(),[
     'name' => 'check_issue_date',

@@ -7,7 +7,6 @@ $(document).ready(function() {
   init_collapse_buttons();
   init_button_clearParcelsIdCookie();
   init_button_updateParcelsIdCookie();
-
   init_ajax_send_lb_oz_tn();
   ajax_send_admin_status_onchange();
  // ajax_send_admin_user_status_onchange();
