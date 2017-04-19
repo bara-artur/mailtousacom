@@ -13,7 +13,7 @@ class m170413_182047_add_column_to_additional_services extends Migration
     {
         echo "m170413_182047_add_column_to_additional_services cannot be reverted.\n";
       $this->dropColumn('additional_services','kurs');
-        return false;
+        return true;
     }
 
     /*

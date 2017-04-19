@@ -31,6 +31,10 @@ use yii\bootstrap\Modal;
       'autocomplete'=>"off"
     ]) ?>
 
+  <?= $form->field($model, 'reference_number')->textInput([
+      'autocomplete'=>"off"
+    ]) ?>
+
     <?php if (!Yii::$app->request->isAjax){ ?>
         <div class="form-group">
             <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
