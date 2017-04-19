@@ -119,7 +119,7 @@ $submitOption = [
                         <td><?=$i+1?></td>
                         <td><?=$item['name'];?></td>
                         <td><?=$item['price'];?></td>
-                        <?php if (Yii::$app->params['country'][$item['country']] == '') { ?>
+                        <?php if (!isset(Yii::$app->params['country'][$item['country']])) { ?>
                           <td><div class="has-error"><div class="help-block">Enter a country</div></div></td>
                         <?php  } else {?>
                           <td><?=Yii::$app->params['country'][$item['country']]?></td>

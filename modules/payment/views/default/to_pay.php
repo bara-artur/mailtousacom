@@ -33,14 +33,19 @@ $submitOption = [
     ?>
     <div class="col-md-offset-2 col-md-8 mac">
         <div class="row padding-bottom-10 ">
-            <div class="col-md-4 pay_list5"><b>Package type : </b><span class="trans_count font_nor pull-right"><?=\Yii::$app->params['package_source_list'][$pac->source];?></span></div>
+            <div class="col-md-4 pay_list5">
+                <b>Package type : </b>
+                <span class="trans_count font_nor pull-right">
+                    <?=\Yii::$app->params['package_source_list'][$pac->source];?>
+                </span>
+            </div>
             <?php
             if($pac->track_number_type==0){
                 ?>
                 <div class="col-md-4 pay_list5"><b>Track number </b><b>:</b>
                     <span class="trans_count font_nor pull-right">
-              <?=strlen($pac->track_number)>3?$pac->track_number:'____';?>
-            </span>
+                      <?=strlen($pac->track_number)>3?$pac->track_number:'____';?>
+                    </span>
                 </div>
                 <?php
             }else {
@@ -49,7 +54,10 @@ $submitOption = [
                 <?php
             }
             ?>
-            <div class=" col-md-4 pay_list6"><b>Weight : </b><span class="trans_count font_nor pull-right"><?=number_format($pac->weight,2);?> lb</span></div>
+            <div class=" col-md-4 pay_list6">
+                <b>Weight :</b>
+                <span class="trans_count font_nor pull-right"><?=number_format($pac->weight,2);?> lb</span>
+            </div>
         </div>
 
 
@@ -135,60 +143,61 @@ $submitOption = [
                 }
                 ?>
             </table>
-
         </div>
 
         <?php
-        if($pac->sub_total['price']==0){
-            ?>
-            <div class="col-md-12 padding-off-left padding-off-right" >
-                <h6 class="bg-success text-center fg-white padding-6 margin-off-bottom">
-                    <span class="glyphicon glyphicon-ok-sign"></span> Parcel paid
-                </h6>
-                <!--<div class="paid_img"></div>-->
-            </div>
-
-            <?php
-            echo Html::hiddenInput('payment_type', -1, []);
-        }else{
-            ?>
-
-            <div class="col-md-12 padding-off-left padding-off-right" >
-                <h6 class="bg-warning text-center fg-white padding-6 margin-off-bottom">
-                    <i class="icon-metro-warning"></i> Parcel isn't paid yet
-                </h6>
-            </div>
-
-            <?php
-            if(Yii::$app->user->identity->isManager()){
+            if($pac->sub_total['price']==0){
                 ?>
-                <div class="row">
-                <div class="col-md-12 block_adm">
-                    <?= Html::checkbox('agree_'.$pac->id, false, [
-                        'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
-                        'class'=>"hidden_block_communication",
-                        'sum'=>$pac->sub_total['sum'],
-                        'vat'=>$pac->sub_total['vat']
-                    ]);?>
-                    <div class="agree_<?=$pac->id;?> vertic" style="display: none;">
-                        <label>Please, enter the non-payment reason</label>
-                        <div class="row">
-                            <div class="col-md-12 full_width">
-                                <?= Html::textarea('text_not_agree_'.$pac->id, "",['class'=>'']); ?>
+                <div class="col-md-12 padding-off-left padding-off-right" >
+                    <h6 class="bg-success text-center fg-white padding-6 margin-off-bottom">
+                        <span class="glyphicon glyphicon-ok-sign"></span> Parcel paid
+                    </h6>
+                    <!--<div class="paid_img"></div>-->
+                </div>
+
+                <?php
+                echo Html::hiddenInput('payment_type', -1, []);
+            }else{
+                ?>
+
+                <div class="col-md-12 padding-off-left padding-off-right" >
+                    <h6 class="bg-warning text-center fg-white padding-6 margin-off-bottom">
+                        <i class="icon-metro-warning"></i> Parcel isn't paid yet
+                    </h6>
+                </div>
+
+                <?php
+                if(Yii::$app->user->identity->isManager()){
+                    ?>
+                    <div class="row">
+                        <div class="col-md-12 block_adm">
+                            <?= Html::checkbox('agree_'.$pac->id, false, [
+                                'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
+                                'class'=>"hidden_block_communication",
+                                'sum'=>$pac->sub_total['sum'],
+                                'vat'=>$pac->sub_total['vat']
+                            ]);?>
+                            <div class="agree_<?=$pac->id;?> vertic" style="display: none;">
+                                <label>Please, enter the non-payment reason</label>
+                                <div class="row">
+                                    <div class="col-md-12 full_width">
+                                        <?= Html::textarea('text_not_agree_'.$pac->id, "",['class'=>'']); ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                </div>
+                    <!--<div class="notpaid_img"></div>-->
 
-                </div>
-                <!--<div class="notpaid_img"></div>-->
-
-                <?php
+                    <?php
+                }
             }
-        }
-        }
         ?>
+    </div>
+    <?php
+    }
+    ?>
+
 
         <?php
         if(count($paces)>1){
@@ -213,7 +222,7 @@ $submitOption = [
                     <hr class="margin-off-top margin-bottom-10">
                 <?= Html::radioList('payment_type',null,
                     [
-                        1 => "PayPal",
+                        1 => "PayPal (+".Yii::$app->config->get('paypal_commision_dolia')."%+$".Yii::$app->config->get('paypal_commision_fixed').")",
                         2 => "I will pay at warehouse"
                     ],[
                         'item' => function($index, $label, $name, $checked, $value) {
@@ -233,7 +242,6 @@ $submitOption = [
 
 
     <div class="row">
-
         <div class="col-md-12">
             <hr>
             <div class="form-group">
@@ -259,7 +267,6 @@ $submitOption = [
                                 echo Html::submitButton('Accept the order for the receiving point.', ['class' => 'btn btn-success pull-right']);
                             }
                         }
-                    }else{
                     }
                 }else{
                     echo Html::submitButton('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['class' =>'btn btn-success pull-right']);

@@ -36,7 +36,9 @@ Email: sendmailtousa@gmail.com
 
 <b>
   Invoice <?=$data['invoice'];?>
-</b><br><br>
+</b>
+
+<br><br>
 <table border="0" width="100%" cellspacing="0"  style="font-family: 'Arial', sans-serif !important;border:1px solid #393939;">
   <tr>
     <th colspan="2" style="border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;">Refer a friend</th>
