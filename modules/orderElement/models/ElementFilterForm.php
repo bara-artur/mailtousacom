@@ -27,6 +27,7 @@ class ElementFilterForm extends OrderElement
   public $created_at_to;
   public $transport_data_to;
   public $user_input;
+  public $price_end;
   /**
    * @inheritdoc
    */
@@ -36,7 +37,7 @@ class ElementFilterForm extends OrderElement
   public function rules()
   {
     return [
-      [['id','user_id',
+      [['id','user_id','track_number','price','price_end',
         'transport_data','transport_data_to','created_at','created_at_to',
         'status','group_index','payment_state','user_input'], 'safe']
     ];
