@@ -1,14 +1,16 @@
-    <TABLE cellpadding=0 cellspacing=0 class="t0" border="1">
+
+    <TABLE  cellspacing=0 width="100%" class="t0" border="0" style="font-family: 'Helvetica', sans-serif !important;
+    font-size:8px;width:100% !important;">
       <tr>
-        <td>Name</td>
-        <td>City</td>
-        <td>State</td>
-        <td>ZIP</td>
-        <td>TrackingNumber</td>
-        <td>Quantity</td>
-        <td>Title</td>
-        <td>Price</td>
-        <td>Country of origin</td>
+        <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-left:1px solid #EEEEEE;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE;">Title</td>
+          <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE;">Country</th>
+        <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE">Quantity</th>
+        <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #EEEEEE;border-bottom:1px solid #EEEEEE;">Price</th>
+          <th style="background: #EEEEEE;padding:4px 6px;border-right:1px solid #9C9C9C;border-top:1px solid #EEEEEE;border-bottom:1px solid #dddddd;">Tracking#</th>
+          <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;">City</th>
+          <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC">State</th>
+          <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #ffffff;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;">ZIP</th>
+        <th style="background: #CCCCCC;padding:4px 6px;border-right:1px solid #CCCCCC;border-top:1px solid #CCCCCC;border-bottom:1px solid #CCCCCC;">Name</th>
       </tr>
 
       <?php
@@ -16,15 +18,15 @@
           foreach($pac->includes_packs as $item){
             ?>
             <tr>
-              <td><?=$pac->first_name;?> <?=$pac->last_name;?></td>
-              <td><?=$pac->city;?></td>
-              <td><?=$pac->state;?></td>
-              <td><?=$pac->zip;?></td>
-              <td><?=$pac->track_number;?></td>
-              <td><?=$item['quantity'];?></td>
-              <td><?=$item['name'];?></td>
-              <td><?=$item['price'];?></td>
-              <td><?=Yii::$app->params['country'][$item['country']];?></td>
+                <td style="padding:4px 6px;border-right:1px solid #dddddd;border-left:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$item['name'];?></td>
+               <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=Yii::$app->params['country'][$item['country']];?></td>
+              <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$item['quantity'];?></td>
+              <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;">$<?=$item['price'];?></td>
+                <td style="padding:4px 6px;border-right:1px solid #9C9C9C;border-bottom:1px solid #dddddd;"><?=$pac->track_number;?></td>
+                <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->city;?></td>
+                <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->state;?></td>
+                <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->zip;?></td>
+                <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->first_name;?> <?=$pac->last_name;?></td>
             </tr>
 
             <?php
