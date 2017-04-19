@@ -127,7 +127,7 @@ class Order extends \yii\db\ActiveRecord
           'parcels' => $users_parcel[$user->id],
           'total_weight'=>$total['weight_by_user'][$user->id]
         ])
-          ->setFrom(\Yii::$app->params['adminEmail'])
+          ->setFrom(\Yii::$app->config->get('adminEmail'))
           ->setTo($user->email)
           ->setSubject('Status of parcels updated')
           ->send();

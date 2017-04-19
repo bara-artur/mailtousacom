@@ -154,7 +154,10 @@ $submitOption = [
 <div class="row">
           <div class="col-md-12">
             <h5 class="total_package padding-top-10">Total</h5>
-            <?php if ($totalPriceArray[$k] > Yii::$app->params['parcelMaxPrice']) {?> <h5 class="btn-warning max_price">Мaximum total price of parcel is <?= Yii::$app->params['parcelMaxPrice'] ?>$ (USD)</h5> <?php } ?>
+            <?php if ($totalPriceArray[$k] > Yii::$app->config->get('parcelMaxPrice')) {?>
+              <h5 class="btn-warning max_price">
+                Мaximum total price of parcel is <?= Yii::$app->config->get('parcelMaxPrice') ?>$ (USD)
+              </h5> <?php } ?>
             <form id="lb-oz-tn-form" title="" method="post">
               <div class="label_valid col-md-5 padding-off-left padding-off-right">
                 <div class="form-control-addon-fill">

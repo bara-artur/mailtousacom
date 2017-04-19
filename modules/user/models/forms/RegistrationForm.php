@@ -32,7 +32,7 @@ class RegistrationForm extends CreateForm
         }
 
         Yii::$app->mailer->compose($view, ['model' => $this])
-            ->setFrom([Yii::$app->params['adminEmail']])
+            ->setFrom([Yii::$app->config->get('adminEmail')])
             ->setTo($this->email)
             ->setSubject('Confirmation of registration at the website')
             ->send();

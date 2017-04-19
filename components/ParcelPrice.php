@@ -22,7 +22,7 @@ class ParcelPrice extends Widget
       $this->user=YII::$app->user->id;
     }
     //OrderElement
-    $time=time()-YII::$app->params['preiod_parcel_count']*24*60*60;
+    $time=time()-YII::$app->config->get('preiod_parcel_count')*24*60*60;
     $send_cnt=Log::find()->where(['user_id'=>$this->user,'status_id'=>2])->asArray()->all();
     $send_cnt=count($send_cnt);
 

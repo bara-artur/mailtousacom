@@ -25,6 +25,21 @@ use app\modules\user\models\User;
  */
 class DefaultController extends Controller
 {
+
+  public function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest) {
+      return $this->redirect(['/']);
+    }
+
+    // ...set `$this->enableCsrfValidation` here based on some conditions...
+    // call parent method that will check CSRF if such property is true.
+    if ($action->id === 'create') {
+      # code...
+      $this->enableCsrfValidation = false;
+    }
+    return parent::beforeAction($action);
+  }
   /**
    * @inheritdoc
    */
@@ -89,7 +104,7 @@ class DefaultController extends Controller
           foreach ($parcel->orderInclude as $ordInclude) {
             $totalPrice += ($ordInclude->price * $ordInclude->quantity);
           }
-          if ($totalPrice > Yii::$app->params['parcelMaxPrice']) $hideNext = 1;
+          if ($totalPrice > Yii::$app->config->get('parcelMaxPrice')) $hideNext = 1;
           $totalPriceArray[] = $totalPrice;
         }
       }
@@ -428,17 +443,17 @@ class DefaultController extends Controller
       $order_elements[] = $pac;
       $max_time=
         time()+
-        (Yii::$app->params[
+        (Yii::$app->config->get(
           'receive_max_time'
           .((Yii::$app->user->identity->isManager())?
             ('_admin'):
             (''))
-        ]-24)*60*60;
+          )-24)*60*60;
       if($pac->transport_data<$max_time){
         $pac->transport_data=strtotime('+1 days +5 hours');
       }
 
-      $pac->transport_data=date(\Yii::$app->params['data_format_php'], $pac->transport_data);
+      $pac->transport_data=date(\Yii::$app->config->get('data_format_php'), $pac->transport_data);
 
       $pac->includes_packs = $pac->getIncludes();
       if (count($pac->includes_packs) == 0) {
@@ -544,10 +559,10 @@ class DefaultController extends Controller
       $order_elements[] = $pac;
       $max_time=
         time()+
-        (Yii::$app->params[
+        (Yii::$app->config->get(
           'receive_max_time'
           .Yii::$app->user->identity->isManager()?'_admin':''
-          ]-24)*60*60;
+          )-24)*60*60;
       if($pac->transport_data<$max_time){
         $pac->transport_data=strtotime('+1 days');
       }
@@ -707,16 +722,6 @@ class DefaultController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-    public function beforeAction($action)
-    {
-        // ...set `$this->enableCsrfValidation` here based on some conditions...
-        // call parent method that will check CSRF if such property is true.
-        if (($action->id === 'index')||($action->id === 'create-order')) {
-            # code...
-            $this->enableCsrfValidation = false;
-        }
-        return parent::beforeAction($action);
     }
 
     /*public function createLog($user_id,$order_id,$description){

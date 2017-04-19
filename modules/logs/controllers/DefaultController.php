@@ -17,6 +17,14 @@ use app\modules\orderElement\models\OrderElement;
  */
 class DefaultController extends Controller
 {
+
+  public function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest) {
+      return $this->redirect(['/']);
+    }
+    return parent::beforeAction($action);
+  }
     /**
      * Lists all Log models.
      * @return mixed

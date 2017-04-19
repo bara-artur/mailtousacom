@@ -17,7 +17,7 @@ $data=$dataProvider->getModels();
     if($routing != 'parcel') {
       $payment=$data[0]->getTotpayment();
       ?>
-        <p> Payment time: <?=date(\Yii::$app->params['data_time_format_php'],$payment->pay_time);?></p>
+        <p> Payment time: <?=date(\Yii::$app->config->get('data_time_format_php'),$payment->pay_time);?></p>
   <?php
   if(Yii::$app->user->identity->isManager()) {
     ?>
@@ -86,7 +86,7 @@ $data=$dataProvider->getModels();
         <?php
         if($routing == 'parcel') {
           ?>
-          <td><?=date(\Yii::$app->params['data_time_format_php'],$payment->pay_time);?></td>
+          <td><?=date(\Yii::$app->config->get('data_time_format_php'),$payment->pay_time);?></td>
           <?php
           if(Yii::$app->user->identity->isManager()) {
             ?>

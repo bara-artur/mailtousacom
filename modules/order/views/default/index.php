@@ -55,7 +55,7 @@ if (!Yii::$app->user->isGuest) {
         ['attribute'=> 'created_at',
           'content'=> function($data){
             if ($data->created_at == 0) return '-';
-            else return date(\Yii::$app->params['data_time_format_php'],$data->created_at);
+            else return date(\Yii::$app->config->get('data_time_format_php'),$data->created_at);
           },
           'format' => 'raw',
         ],

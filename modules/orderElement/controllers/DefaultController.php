@@ -19,6 +19,21 @@ use app\components\ParcelPrice;
  */
 class DefaultController extends Controller
 {
+
+  public function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest) {
+      return $this->redirect(['/']);
+    }
+
+    // ...set `$this->enableCsrfValidation` here based on some conditions...
+    // call parent method that will check CSRF if such property is true.
+    if ($action->id === 'create') {
+      # code...
+      $this->enableCsrfValidation = false;
+    }
+    return parent::beforeAction($action);
+  }
     /**
      * @inheritdoc
      */
@@ -414,14 +429,4 @@ class DefaultController extends Controller
         }
     }
 
-    public function beforeAction($action)
-    {
-        // ...set `$this->enableCsrfValidation` here based on some conditions...
-        // call parent method that will check CSRF if such property is true.
-        if ($action->id === 'create') {
-            # code...
-            $this->enableCsrfValidation = false;
-        }
-        return parent::beforeAction($action);
-    }
 }

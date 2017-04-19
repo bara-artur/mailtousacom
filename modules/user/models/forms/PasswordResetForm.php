@@ -66,7 +66,7 @@ class PasswordResetForm extends Model
                     'model' => $user,
                     'password' => $this->password
                 ])
-                    ->setFrom(\Yii::$app->params['adminEmail'])
+                    ->setFrom(\Yii::$app->config->get('adminEmail'))
                     ->setTo($this->email)
                     ->setSubject('Password Reset Online')
                     ->send();

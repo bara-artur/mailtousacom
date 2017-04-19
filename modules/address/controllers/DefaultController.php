@@ -34,6 +34,21 @@ class DefaultController extends Controller
         ];
     }
 
+  public function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest) {
+      return $this->redirect(['/']);
+    }
+
+    // ...set `$this->enableCsrfValidation` here based on some conditions...
+    // call parent method that will check CSRF if such property is true.
+    if ($action->id === 'addressusa') {
+      # code...
+      $this->enableCsrfValidation = false;
+    }
+    return parent::beforeAction($action);
+  }
+
     /**
      * Lists all Address models.
      * @return mixed
@@ -106,14 +121,5 @@ class DefaultController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    public function beforeAction($action)
-    {
-        // ...set `$this->enableCsrfValidation` here based on some conditions...
-        // call parent method that will check CSRF if such property is true.
-        if ($action->id === 'addressusa') {
-            # code...
-            $this->enableCsrfValidation = false;
-        }
-        return parent::beforeAction($action);
-    }
+
 }

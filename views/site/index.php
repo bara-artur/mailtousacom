@@ -182,22 +182,11 @@ $this->title = 'Shipping to USA and Canada';
                 ['attribute'=> 'created_at',
                     'content'=> function($data){
                         if ($data->created_at == 0) return '-';
-                        else return date(Yii::$app->params['data_time_format_php'],$data->created_at);
+                        else return date(Yii::$app->config->get('data_time_format_php'),$data->created_at);
                     },
                     'format' => 'raw',
                     'visible' => $showTable->showCreatedAt,
                 ],
- //               ['attribute'=> 'transport_data',
-   //                 'content'=> function($data){
-     //                   if ($data->transport_data == 0) return '-';
-       //                 else return date(\Yii::$app->params['data_format_php'],$data->transport_data);
-         //           }],
-              //  ['attribute'=> 'payment_type',
-                //  'content' => function($data){
-                  //  return PaymentsList::statusText($data->payment_state);
-           //       },
-             //     'visible' => $showTable->showPaymentType,
-               // ],
                 ['attribute'=> 'payment_state',
                   'content' => function($data){
                     return PaymentsList::statusTextParcel($data->payment_state);

@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <tr>
               <td><?=$i;?></td>
               <td>
-                <?=date(Yii::$app->params['data_time_format_php'],$item->created_at);?>
+                <?=date(Yii::$app->config->get('data_time_format_php'),$item->created_at);?>
               </td>
               <td>
                 <?=$item->description;?>

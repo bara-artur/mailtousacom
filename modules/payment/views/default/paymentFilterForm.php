@@ -71,7 +71,7 @@ use kartik\widgets\DatePicker;
               'attribute2' => 'pay_time_to',
               'pluginOptions' => [
                 'autoclose'=>true,
-                'format' => \Yii::$app->params['data_format_js']
+                'format' => \Yii::$app->config->get('data_format_js')
               ]
             ]);?>
         </div>

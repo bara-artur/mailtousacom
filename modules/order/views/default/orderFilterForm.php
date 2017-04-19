@@ -56,7 +56,7 @@ use yii\helpers\Url;
           'attribute2' => 'created_at_to',
           'pluginOptions' => [
             'autoclose'=>true,
-            'format' => \Yii::$app->params['data_format_js']
+            'format' => \Yii::$app->config->get('data_format_js')
           ]
         ]);?>
           </div>
