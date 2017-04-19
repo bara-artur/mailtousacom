@@ -119,12 +119,13 @@ Email: sendmailtousa@gmail.com
     <td align="right">$<?=number_format($total['gst'],2,'.','');?></td>
   </tr>
   <tr>
-    <td>You can pay with PayPal (+2,9%+$0.3) </td>
+    <td>
+      You can pay with PayPal (+<?=Yii::$app->config->get('paypal_commision_dolia');?>%+$<?=Yii::$app->config->get('paypal_commision_fixed');?>) </td>
     <td>QST</td>
     <td align="right">$<?=number_format($total['qst'],2,'.','');?></td>
   </tr>
   <tr>
-    <td><a href="http://paypal.me/mailtousa/<?=number_format($total['paypal'],2,'.','');?>">paypal.me/mailtousa/<?=number_format($total['paypal'],2,'.','');?></a> </td>
+    <td><a href="<?=Url::to(['payment/track-invoice/'.$order_id],true);?>"><?=Url::to(['payment/track-invoice/'.$order_id],true);?></a> </td>
     <td>Total</td>
     <td align="right">$<?=number_format($total['total'],2,'.','');?></td>
   </tr>

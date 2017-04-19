@@ -157,7 +157,7 @@ $config = [
       //'isProduction' => false,
       // This is config file for the PayPal system
       'config'       => [
-        'currency'=>"USD",
+        'currency'=>"CAD",
         'http.ConnectionTimeOut' => 30,
         'http.Retry'             => 1,
         'mode'                   => 'sandbox', // development (sandbox) or production (live) mode

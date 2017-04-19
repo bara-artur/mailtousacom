@@ -123,6 +123,19 @@ class DoPayment extends Model
       $itemList->addItem($item1);
     }
 
+
+    //добавляем комиссию payPal
+    $paypal_tax=($subTotal+$vat)*Yii::$app->config->get('paypal_commision_dolia')/100+Yii::$app->config->get('paypal_commision_fixed');
+    $paypal_tax=round($paypal_tax,2);
+    //ddd($paypal_tax);
+    $item1 = new Item();
+    $item1->setName('Tax for PayPal')
+      ->setCurrency($item['currency'])
+      ->setQuantity(1)
+      ->setPrice($paypal_tax);
+    $itemList->addItem($item1);
+    $subTotal+=$paypal_tax;
+
     $details = new Details();
     $details->setShipping($this->shipping)
       ->setTax($vat)

@@ -142,7 +142,9 @@ class DefaultController extends Controller
         }
 
         $total['total']=$total['sub_total']+$total['qst']+$total['gst'];
-        $total['paypal']=($total['total']*1.029+0.3);
+
+        $paypal_tax=$total['total']*Yii::$app->config->get('paypal_commision_dolia')/100+Yii::$app->config->get('paypal_commision_fixed');
+        $total['paypal']=$total['total']+$paypal_tax;
 
         $content = $this->renderPartial('transportInvoicePdf',[
           'users_parcel'=>$model,

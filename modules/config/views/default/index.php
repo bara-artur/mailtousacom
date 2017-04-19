@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
           [
             'attribute' => 'Updated',
             'content' => function($data){
-                return date(Yii::$app->config->get('data_time_format_php'));
+                return date(Yii::$app->config->get('data_time_format_php'),$data->updated);
             }
           ],
             [
