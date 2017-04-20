@@ -158,7 +158,8 @@ $submitOption = [
                 <?php
                 echo Html::hiddenInput('payment_type', -1, []);
             }else{
-                ?>
+                if(Yii::$app->user->identity->isManager()){
+                    ?>
 
                 <div class="col-md-12 padding-off-left padding-off-right" >
                     <h6 class="bg-warning text-center fg-white padding-6 margin-off-bottom">
@@ -166,28 +167,25 @@ $submitOption = [
                     </h6>
                 </div>
 
-                <?php
-                if(Yii::$app->user->identity->isManager()){
-                    ?>
-                    <div class="row">
-                        <div class="col-md-12 block_adm">
-                            <?= Html::checkbox('agree_'.$pac->id, false, [
-                                'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
-                                'class'=>"hidden_block_communication",
-                                'sum'=>$pac->sub_total['sum'],
-                                'vat'=>$pac->sub_total['vat']
-                            ]);?>
-                            <div class="agree_<?=$pac->id;?> vertic" style="display: none;">
-                                <label>Please, enter the non-payment reason</label>
-                                <div class="row">
-                                    <div class="col-md-12 full_width">
-                                        <?= Html::textarea('text_not_agree_'.$pac->id, "",['class'=>'']); ?>
-                                    </div>
+                <div class="row">
+                    <div class="col-md-12 block_adm">
+                        <?= Html::checkbox('agree_'.$pac->id, false, [
+                            'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
+                            'class'=>"hidden_block_communication",
+                            'sum'=>$pac->sub_total['sum'],
+                            'vat'=>$pac->sub_total['vat']
+                        ]);?>
+                        <div class="agree_<?=$pac->id;?> vertic" style="display: none;">
+                            <label>Please, enter the non-payment reason</label>
+                            <div class="row">
+                                <div class="col-md-12 full_width">
+                                    <?= Html::textarea('text_not_agree_'.$pac->id, "",['class'=>'']); ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--<div class="notpaid_img"></div>-->
+                </div>
+                <!--<div class="notpaid_img"></div>-->
 
                     <?php
                 }
