@@ -35,7 +35,7 @@
         <?=count($order_elements);?> package, total amount <?=$total['price'];?>$
     </b></div>
 <div class="user_inp p9"><b>
-        <?
+        <?php
         $include=$order_elements[0];
         if($include->address_type==1){
             echo $include->company_name.', ';

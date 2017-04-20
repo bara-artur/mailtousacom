@@ -5,6 +5,8 @@ namespace app\modules\order\models;
 use Yii;
 use app\modules\orderElement\models\OrderElement;
 use app\modules\user\models\User;
+use yii\db\Query;
+use app\modules\address\models\Address;
 
 /**
  * This is the model class for table "order".
@@ -80,6 +82,89 @@ class Order extends \yii\db\ActiveRecord
 
         ];
     }
+
+  public function getSumData($id,$test_data=false){
+    $arr = $this->getOrderElement();
+
+    $total=array(
+      'price'=>0,
+      'weight'=>0,
+      'quantity'=>0,
+    );
+
+    $query = new Query;
+    $query->select('weight')
+      ->from('tariffs')
+      ->orderBy([
+        'weight' => SORT_DESC
+      ]);
+    $row = $query->one();
+    $max_weight=$row['weight'];
+
+    $order_elements = [];
+    foreach ($arr as &$parcel_id) {
+      $pac = OrderElement::find()->where(['id' => $parcel_id])->one();
+      $order_elements[] = $pac;
+
+      //подумать как оптимизировать перебитие даты.
+      if($test_data){
+        $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
+        $max_time =
+          time() +
+          (Yii::$app->config->get($param_name) - 24) * 60 * 60;
+        if ($pac->transport_data < $max_time) {
+          $pac->transport_data = strtotime('+1 days');
+        }
+      }
+
+      $pac->includes_packs = $pac->getIncludes();
+      if (count($pac->includes_packs) == 0) {
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'The package must have at least one attachment.'
+          );
+        Yii::$app->response->redirect('/orderInclude/create-order/' . $id);
+        return false;
+      }
+      foreach ($pac->includes_packs as $pack) {
+        $total['price'] += $pack['price'] * $pack['quantity'];
+        $total['quantity'] += $pack['quantity'];
+      }
+      $this_weight=$pac->weight;
+      $total['weight']+=$this_weight;
+      if($this_weight>$max_weight){
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'Allowable weight of the parcel is '.$max_weight.'lb.'
+          );
+        Yii::$app->response->redirect('/orderInclude/create-order/' . $id);
+        return false;
+      }
+
+      $total['weight_lb']=floor($total['weight']);
+      $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
+      $user = User::find()->where(['id'=>$pac->user_id])->one();
+      $address=Address::findOne(['user_id' => $user->id]);
+
+      return [
+        'order_elements' => $order_elements,
+        'transport_data'=>$pac->transport_data,
+        'total'=>$total,
+        'address'=>$address,
+        'order_id'=>$id,
+      ];
+    }
+
+    $total['weight_lb']=floor($total['weight']);
+    $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
+    $user = User::find()->where(['id'=>$pac->user_id])->one();
+
+    $address=Address::findOne(['user_id' => $user->id]);
+  }
 
     public function setData($data){
       /*Yii::$app->db->createCommand()

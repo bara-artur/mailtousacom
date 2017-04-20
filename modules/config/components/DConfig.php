@@ -33,14 +33,14 @@ class DConfig extends Component
     if (array_key_exists($key, $this->data))
       return $this->data[$key];
     else
-      throw new CException('Undefined parameter ' . $key);
+      throw new \yii\web\ForbiddenHttpException('Undefined parameter ' . $key);
   }
 
   public function set($key, $value)
   {
     $model = Config::find()->where(['param'=>$key])->one();
     if (!$model)
-      throw new CException('Undefined parameter ' . $key);
+      throw new \yii\web\ForbiddenHttpException('Undefined parameter ' . $key);
 
     $model->value = $value;
 

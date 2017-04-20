@@ -530,86 +530,19 @@ class DefaultController extends Controller
   }
 
   public function actionBorderFormPdf($id){
+
+    $order = Order::findOne($id);
+    $order_data=$order->getSumData($id,true);
+    if(!$order_data)return false;
+
     $this->layout = 'pdf';
     Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
     $headers = Yii::$app->response->headers;
     $headers->add('Content-Type', 'application/pdf');
 
-    $order = Order::findOne($id);
+    $tpl=count($order_data['order_elements'])==1?'borderFormPdf_one_pac':'borderFormPdf';
 
-    $el_group = $order->el_group;
-    $arr = explode(',', $order->el_group);
-
-    $total=array(
-      'price'=>0,
-      'weight'=>0,
-      'quantity'=>0,
-    );
-
-    $query = new Query;
-    $query->select('weight')
-      ->from('tariffs')
-      ->orderBy([
-        'weight' => SORT_DESC
-      ]);
-    $row = $query->one();
-    $max_weight=$row['weight'];
-
-    $order_elements = [];
-    foreach ($arr as &$parcel_id) {
-      $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
-      $order_elements[] = $pac;
-      $max_time=
-        time()+
-        (Yii::$app->config->get(
-          'receive_max_time'
-          .Yii::$app->user->identity->isManager()?'_admin':''
-          )-24)*60*60;
-      if($pac->transport_data<$max_time){
-        $pac->transport_data=strtotime('+1 days');
-      }
-      $pac->includes_packs = $pac->getIncludes();
-      if (count($pac->includes_packs) == 0) {
-        Yii::$app
-          ->getSession()
-          ->setFlash(
-            'error',
-            'The package must have at least one attachment.'
-          );
-        return $this->redirect('/orderInclude/create-order/' . $id);
-      }
-      foreach ($pac->includes_packs as $pack) {
-        $total['price'] += $pack['price'] * $pack['quantity'];
-        $total['quantity'] += $pack['quantity'];
-      }
-      $this_weight=$pac->weight;
-      $total['weight']+=$this_weight;
-      if($this_weight>$max_weight){
-        Yii::$app
-          ->getSession()
-          ->setFlash(
-            'error',
-            'Allowable weight of the parcel is '.$max_weight.'lb.'
-          );
-        return $this->redirect('/orderInclude/create-order/' . $id);
-      }
-    }
-
-    $total['weight_lb']=floor($total['weight']);
-    $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
-    $user = User::find()->where(['id'=>$pac->user_id])->one();
-
-    $address=Address::findOne(['user_id' => $user->id]);
-
-    $tpl=count($order_elements)==1?'borderFormPdf_one_pac':'borderFormPdf';
-
-    $content = $this->renderPartial($tpl,[
-      'order_elements' => $order_elements,
-      'transport_data'=>$pac->transport_data,
-      'order_id'=>$id,
-      'total'=>$total,
-      'address'=>$address
-    ]);
+    $content = $this->renderPartial($tpl,$order_data);
 
     //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
     //return $content;
@@ -636,62 +569,12 @@ class DefaultController extends Controller
     $headers->add('Content-Type', 'application/pdf');
 
     $order = Order::findOne($id);
-
-    $arr = explode(',', $order->el_group);
-
-    $total=array(
-      'price'=>0,
-      'weight'=>0,
-      'quantity'=>0,
-    );
-
-    $query = new Query;
-    $query->select('weight')
-      ->from('tariffs')
-      ->orderBy([
-        'weight' => SORT_DESC
-      ]);
-    $row = $query->one();
-    $max_weight=$row['weight'];
-
-    $order_elements = [];
-    foreach ($arr as &$parcel_id) {
-      $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
-
-      $pac->includes_packs = $pac->getIncludes();
-      $order_elements[] = $pac;
-      if (count($pac->includes_packs) == 0) {
-        Yii::$app
-          ->getSession()
-          ->setFlash(
-            'error',
-            'The package must have at least one attachment.'
-          );
-        return $this->redirect('/orderInclude/create-order/' . $id);
-      }
-      foreach ($pac->includes_packs as $pack) {
-        $total['price'] += $pack['price'] * $pack['quantity'];
-        $total['quantity'] += $pack['quantity'];
-      }
-      $this_weight=$pac->weight;
-      $total['weight']+=$this_weight;
-      if($this_weight>$max_weight){
-        Yii::$app
-          ->getSession()
-          ->setFlash(
-            'error',
-            'Allowable weight of the parcel is '.$max_weight.'lb.'
-          );
-        return $this->redirect('/orderInclude/create-order/' . $id);
-      }
-    }
-
+    $order_data=$order->getSumData($id,true);
+    if(!$order_data)return false;
 
     $tpl='orderIncludePdf';
 
-    $content = $this->renderPartial($tpl,[
-      'order_elements' => $order_elements,
-    ]);
+    $content = $this->renderPartial($tpl,$order_data);
 
     //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
     //return $content;
@@ -710,21 +593,25 @@ class DefaultController extends Controller
     // return the pdf output as per the destination setting
     return $pdf->render();
   }
-    /**
-     * Finds the OrderInclude model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return OrderInclude the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = OrderInclude::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
+
+  public function actionCommercialInvoice($id){
+    return 1;
+  }
+  /**
+   * Finds the OrderInclude model based on its primary key value.
+   * If the model is not found, a 404 HTTP exception will be thrown.
+   * @param integer $id
+   * @return OrderInclude the loaded model
+   * @throws NotFoundHttpException if the model cannot be found
+   */
+  protected function findModel($id)
+  {
+      if (($model = OrderInclude::findOne($id)) !== null) {
+          return $model;
+      } else {
+          throw new NotFoundHttpException('The requested page does not exist.');
+      }
+  }
 
     /*public function createLog($user_id,$order_id,$description){
         \app\modules\logs\controllers\DefaultController::createLog($user_id,$order_id,$description);

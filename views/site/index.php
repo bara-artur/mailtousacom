@@ -57,23 +57,32 @@ $this->title = 'Shipping to USA and Canada';
             </button>
             <ul class="dropdown-menu pull-right">
                 <li>
-            <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group/print'], [
-              'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
-              'id'=>'group-print',
-              'disabled'=>true,
-              'target' => '_blank',
-            ]); ?>
+                  <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group/print'], [
+                    'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
+                    'id'=>'group-print',
+                    'disabled'=>true,
+                    'target' => '_blank',
+                  ]); ?>
                 </li>
                 <li>
-            <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group/advanced_print'],
-              [
-                'class' => 'btn btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
-                'id'=>'group-print-advanced',
-                'disabled'=>true,
-                'target' => '_blank',
-              ]); ?>
+                  <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group/advanced_print'],
+                    [
+                      'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print-advanced',
+                      'id'=>'group-print-advanced',
+                      'disabled'=>true,
+                      'target' => '_blank',
+                    ]); ?>
                 </li>
-            </ul>
+                <li>
+                  <?=Html::a('<i class="fa fa-list"></i> Commercial Invoice', ['/orderElement/group/commercial_inv_print'],
+                    [
+                      'class' => 'btn btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
+                      'id'=>'group-print-advanced',
+                      'disabled'=>true,
+                      'target' => '_blank',
+                    ]); ?>
+                </li>
+              </ul>
             </div>
             <?=Html::a('<i class="icon-metro-remove"></i> Delete',
                 ['/orderElement/group/delete'],

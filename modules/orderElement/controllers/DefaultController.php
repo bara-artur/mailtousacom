@@ -333,66 +333,78 @@ class DefaultController extends Controller
     else return null;
   }
 
-    public function actionGroupUpdate($parcels_id = null){
-        $order_id = $this->findOrCreateOrder($parcels_id);
-        if ($order_id != null) {
-          return $this->redirect(['/orderInclude/create-order/' . $order_id]);
-        } else {
-          return $this->redirect(['/']);
-        }
-    }
+  public function actionGroupUpdate($parcels_id = null){
+      $order_id = $this->findOrCreateOrder($parcels_id);
+      if ($order_id != null) {
+        return $this->redirect(['/orderInclude/create-order/' . $order_id]);
+      } else {
+        return $this->redirect(['/']);
+      }
+  }
 
-    public function actionGroupPrint($parcels_id=null){
-        $order_id = $this->findOrCreateOrder($parcels_id);
-        if ($order_id != null) {
-          $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
-          return "Create pdf for order " .  $order_id;
-        } else {
-          return $this->redirect(['/']);
-        }
-    }
+  public function actionGroupPrint($parcels_id=null){
+      $order_id = $this->findOrCreateOrder($parcels_id);
+      if ($order_id != null) {
+        $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
+        return "Create pdf for order " .  $order_id;
+      } else {
+        return $this->redirect(['/']);
+      }
+  }
 
-    public function actionGroupPrintAdvanced($parcels_id=null)
-    {
-        $order_id = $this->findOrCreateOrder($parcels_id);
-        if ($order_id != null) {
-          $this->redirect(['/orderInclude/pdf/' . $order_id]);
-          return "Create pdf for order " .  $order_id;
-        } else {
-          return $this->redirect(['/']);
-        }
-    }
+  public function actionCommercial_inv_print($parcels_id=null){
+      $order_id = $this->findOrCreateOrder($parcels_id);
+      if ($order_id != null) {
+        $this->redirect(['/orderInclude/commercial-invoice/' . $order_id]);
+        return "Create pdf for order " .  $order_id;
+      } else {
+        return $this->redirect(['/']);
+      }
+  }
 
-    public function actionGroupDelete($parcels_id=null){
-          $arr = explode(',', $parcels_id);
-          asort($arr);
-          foreach ($arr as $parcel_id) {
-            $parcel = OrderElement::findOne(['id' => $parcel_id]);
-            if ($parcel){
-              if ($parcel->payment_state==0) {
-                OrderInclude::deleteAll(['order_id' => $parcel_id]);
-                OrderElement::deleteAll(['id' => $parcel_id]);
-              }
-            }
-          }
-          $this->redirect(['/'],200);
-          return "Parcels delete complete successfully";
-    }
+  public function actionGroupPrintAdvanced($parcels_id=null)
+  {
+      $order_id = $this->findOrCreateOrder($parcels_id);
+      if ($order_id != null) {
+        $this->redirect(['/orderInclude/pdf/' . $order_id]);
+        return "Create pdf for order " .  $order_id;
+      } else {
+        return $this->redirect(['/']);
+      }
+  }
 
-    public function actionGroup($act){
-      $parcels_id = $_COOKIE['parcelCheckedId'];
-      if ($parcels_id!=null) {
-        switch ($act) {
-          case 'update':  {return $this->actionGroupUpdate($parcels_id); break;}
-          case 'print':   {return $this->actionGroupPrint($parcels_id);break;}
-          case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
-          case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
-          case 'view':    {return $this->actionGroupView($parcels_id);break;}
-          case 'track_invoice':    {return $this->actionTrackInvoice($parcels_id);break;}
+  public function actionGroupDelete($parcels_id=null){
+    $arr = explode(',', $parcels_id);
+    asort($arr);
+    foreach ($arr as $parcel_id) {
+      $parcel = OrderElement::findOne(['id' => $parcel_id]);
+      if ($parcel){
+        if ($parcel->payment_state==0) {
+          OrderInclude::deleteAll(['order_id' => $parcel_id]);
+          OrderElement::deleteAll(['id' => $parcel_id]);
         }
       }
-      return $this->redirect(['/']);
     }
+    $this->redirect(['/'],200);
+    return "Parcels delete complete successfully";
+  }
+
+  public function actionGroup($act){
+    $parcels_id = $_COOKIE['parcelCheckedId'];
+    if ($parcels_id!=null) {
+      switch ($act) {
+        case 'update':  {return $this->actionGroupUpdate($parcels_id); break;}
+        case 'print':   {return $this->actionGroupPrint($parcels_id);break;}
+        case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
+        case 'commercial_inv_print':    {return $this->actionCommercial_inv_print($parcels_id);break;}
+        case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
+        case 'view':    {return $this->actionGroupView($parcels_id);break;}
+        case 'track_invoice':    {return $this->actionTrackInvoice($parcels_id);break;}
+      }
+    }
+    Yii::$app->getSession()->setFlash('error', 'Action not found.');
+    return $this->redirect(['/']);
+  }
 
     public function actionTrackInvoice($parcels_id){
       //может запустить только админ. Но для 1-го пользоавателя
