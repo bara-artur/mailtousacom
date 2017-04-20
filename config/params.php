@@ -1,16 +1,9 @@
 <?php
 
 return [
-  'adminEmail' => 'admin@anticafesys.com',
-  'supportEmail' => 'admin@anticafesys.com',
-  'data_time_format_js'=>'dd-M-yyyy',
-  'data_time_format_php'=>'j-M-Y H:i:s',
-  'data_format_js'=>'dd-M-yyyy',
-  'data_format_php'=>'j-M-Y',
-  'parcelMaxPrice' => '800',
   'showAdminPanel' =>'0',
   'adminUserChoosing' =>'0',
-  'preiod_parcel_count'=>30,
+  'choose_receiving_point' => '1',
   'country' => [
     'Canada',
     'China',
@@ -143,7 +136,4 @@ return [
     0=>"manual",
     1=>"eBay"
   ],
-  'choose_receiving_point' => '1',
-  'receive_max_time'=>13,//Количество часов до полуночи когда посылку можно отправить сегодня
-  'receive_max_time_admin'=>5,
 ];
