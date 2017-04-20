@@ -14,9 +14,17 @@
     ?><div style="font-family: 'Helvetica',sans-serif !important;font-size:14px;">
       <div style="float:right;text-align: left;width:160px;display:block;">
     From:<br>
-    <b><?=$user->first_name;?> <?=$user->last_name;?> </b><br>
-    100 Walnut St,Door 18,<br> Champlain, NY, 12919<br>
-    United States<br>
+    <b>
+      <?=$address->first_name;?> <?=$address->last_name;?><br>
+        <?=$address->address_type==1?$address->company_name.'<br>':''?>
+    </b>
+
+    <?=$address->adress_1;?>,
+    <?=strlen($address->adress_2)>2?$address->adress_2.',':'';?><br>
+    <?=$address->city;?>,
+    <?=$address->state;?>,
+    <?=$address->zip;?><br>
+    Canada<br>
     <br>
       </div>
 <div style="text-align: left;width:100%;display:block;">
