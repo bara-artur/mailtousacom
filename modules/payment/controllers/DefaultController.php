@@ -91,47 +91,55 @@ class DefaultController extends Controller
 
       $admin = 0;
       $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-      if (($user!=null)&&($user->isManager())){
+      if (($user!=null)&&(Yii::$app->user->identity->isManager())){
         $admin = 1;
       }
 
 
-      if (Yii::$app->user->isGuest) {
-        return $this->redirect(['/']);
-      }else {
-          $query = null;
-          $time_to = null;
-          if(Yii::$app->request->post()) {
-            $filterForm->load(Yii::$app->request->post());
-            $query['PaymentSearch'] = $filterForm->toArray();
-            $time_to = ['pay_time_to' => $filterForm->pay_time_to];
-          }
 
-          $searchModel = new PaymentSearch();
-          $dataProvider = $searchModel->search($query,$time_to);
-          $user_array = [];
-          foreach ($dataProvider->models as $p){
-            $user_array[] = $p->client_id;            // создаем массив id пользователей
-          }
-          $user_array = array_unique($user_array);  // оставляем только уникальные id
-          $users = User::find()->andWhere(['in', 'id', $user_array])->all();
-          $info = [];
-          foreach ($users as $user) {           // создаем ассоциативный массив id -> lineinfo
-            $info[$user->id] = $user->lineinfo;
-          }
-          foreach ($dataProvider->models as $p){   // заменяем id на развернутое описание
-            if (array_key_exists($p->client_id,$info)) {
-              $p->client_id = $info[$p->client_id];
-            }else{
-              $p->client_id = '-empty-';
-            }
-          }
-          return $this->render('index', [
-              'dataProvider' => $dataProvider,
-              'filterForm' => $filterForm,
-              'admin' => $admin,
-          ]);
+      $query = null;
+      $time_to = null;
+      if(Yii::$app->request->post()) {
+        $filterForm->load(Yii::$app->request->post());
+        $query['PaymentSearch'] = $filterForm->toArray();
+        $time_to = ['pay_time_to' => $filterForm->pay_time_to];
       }
+
+      if(!$admin){
+        if(!isset($query['PaymentSearch'])){
+          $query['PaymentSearch']=array();
+        }
+        $query['PaymentSearch']['client_id']=Yii::$app->user->id;
+      }
+
+      $searchModel = new PaymentSearch();
+      $dataProvider = $searchModel->search($query,$time_to);
+      $user_array = [];
+      foreach ($dataProvider->models as $p){
+        $user_array[] = $p->client_id;            // создаем массив id пользователей
+      }
+
+      $user_array = array_unique($user_array);  // оставляем только уникальные id
+      $users = User::find()->andWhere(['in', 'id', $user_array])->all();
+      $info = [];
+
+      foreach ($users as $user) {           // создаем ассоциативный массив id -> lineinfo
+        $info[$user->id] = $user->lineinfo;
+      }
+
+      foreach ($dataProvider->models as $p){   // заменяем id на развернутое описание
+        if (array_key_exists($p->client_id,$info)) {
+          $p->client_id = $info[$p->client_id];
+        }else{
+          $p->client_id = '-empty-';
+        }
+      }
+      return $this->render('index', [
+          'dataProvider' => $dataProvider,
+          'filterForm' => $filterForm,
+          'admin' => $admin,
+      ]);
+
   }
 
   /**
