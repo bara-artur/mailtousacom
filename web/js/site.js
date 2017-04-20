@@ -571,6 +571,13 @@ function init_order_border(){
     $('.order_agreement').find('[type=submit],.on_agreement').attr('disabled',!this.checked)
   });
 
+  $('input[name="OrderElement[transport_data]"]').on('change',function(){
+    post={
+      order:odrer_id,
+      value:this.value
+    };
+    $.post('orderInclude/border-save',post);
+  })
 }
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()

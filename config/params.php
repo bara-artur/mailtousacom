@@ -128,7 +128,7 @@ return [
   ],
   'ShippingCarrier'=>[
     'ups'=>"UPS",
-    'usps'=>'usps',
+    'usps'=>'USPS',
     'fedex'=>'FedEx Ground or FedEx Home Delivery',
     'canadapost'=>'canadapost'
   ],

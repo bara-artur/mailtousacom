@@ -127,7 +127,7 @@ Email: sendmailtousa@gmail.com
     <td align="right">$<?=number_format($total['qst'],2,'.','');?></td>
   </tr>
   <tr>
-    <td><a href="<?=Url::to(['payment/track-invoice/'.$order_id],true);?>"><?=Url::to(['payment/track-invoice/'.$order_id],true);?></a> </td>
+    <td><a href="<?=Url::to(['/payment/track-invoice/'.$order_id],true);?>"><?=Url::to(['/payment/track-invoice/'.$order_id],true);?></a> </td>
     <td>Total</td>
     <td align="right">$<?=number_format($total['total'],2,'.','');?></td>
   </tr>

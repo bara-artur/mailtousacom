@@ -516,12 +516,26 @@ class DefaultController extends Controller
     if(!Yii::$app->user->isGuest && !$request->isAjax && !$request->post()){
       throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
     $order = Order::findOne($request->post('order'));
-    if($order->user_id!=Yii::$app->user->id){
+    if(!$order){
       throw new NotFoundHttpException('The requested page does not exist.');
     }
-    $order->transport_data=strtotime($request->post('value'));
-    $order->save();
+
+    $connection = Yii::$app->getDb();
+    $sql="
+      UPDATE 
+        `order_element`
+      SET `transport_data` = '".strtotime($request->post('value'))."'
+      WHERE `id` in (".$order->el_group.")";
+
+    if(!Yii::$app->user->identity->isManager()){
+      $sql.=" AND user_id=".Yii::$app->user->id;
+    }
+    $command = $connection->createCommand($sql);
+    $command->queryAll();
+
     return ;
   }
 
