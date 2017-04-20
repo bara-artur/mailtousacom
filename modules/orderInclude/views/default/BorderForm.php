@@ -30,6 +30,7 @@ $form = ActiveForm::begin([
 
 $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
 $day_delta=24-Yii::$app->config->get($param_name);
+
 ?>
 <h4 class="modernui-neutral2">Print Border Form</h4>
 <div class="row">
@@ -46,7 +47,7 @@ $day_delta=24-Yii::$app->config->get($param_name);
   <?= $form->field($model, 'transport_data')->widget(DatePicker::className(),[
     'name' => 'check_issue_date',
     'removeButton' => false,
-    //'value' => date('d-M-Y', strtotime('-1 days')),
+    //'value' => date('d-M-Y', $model->transport_data),
     'options' => ['placeholder' => 'Choose date'],
     'pluginOptions' => [
       'startDate' => date(\Yii::$app->config->get('data_format_php'),strtotime('+'.$day_delta.' hours')),

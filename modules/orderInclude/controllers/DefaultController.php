@@ -447,11 +447,11 @@ class DefaultController extends Controller
       $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
       $order_elements[] = $pac;
 
-      if($pac->transport_data>$max_time){
+      if($pac->transport_data<$max_time){
         $pac->transport_data=$max_time;
       }
 
-      $pac->transport_data=date(\Yii::$app->config->get('data_format_php'), $pac->transport_data);
+      $pac->transport_data=date("d-M-Y", $pac->transport_data);
 
       $pac->includes_packs = $pac->getIncludes();
       if (count($pac->includes_packs) == 0) {
