@@ -228,6 +228,16 @@ class OrderElement extends \yii\db\ActiveRecord
     return $string;
   }
 
+  public function GetShippingCarrierName(){
+    $index=$this->GetShippingCarrier($this->track_number);
+    $ShippingCarrier=Yii::$app->params['ShippingCarrier'];
+    if(isset($ShippingCarrier[$index])){
+      return $ShippingCarrier[$index];
+    }else{
+      return "N/A";
+    }
+  }
+
   public function getTrackingNumberPostLink($ShippingCarrier, $TrackingNumber) {
     $usps = 'https://tools.usps.com/go/TrackConfirmAction!execute.action?formattedLabel=';
     $fedex = 'https://www.fedex.com/fedextrack/?action=track&tracknumbers=';

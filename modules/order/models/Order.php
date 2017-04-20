@@ -84,7 +84,7 @@ class Order extends \yii\db\ActiveRecord
     }
 
   public function getSumData($id,$test_data=false){
-    $arr = $this->getOrderElement();
+    $order_elements = $this->getOrderElement();
 
     $total=array(
       'price'=>0,
@@ -101,11 +101,7 @@ class Order extends \yii\db\ActiveRecord
     $row = $query->one();
     $max_weight=$row['weight'];
 
-    $order_elements = [];
-    foreach ($arr as &$parcel_id) {
-      $pac = OrderElement::find()->where(['id' => $parcel_id])->one();
-      $order_elements[] = $pac;
-
+    foreach ($order_elements as &$pac) {
       //подумать как оптимизировать перебитие даты.
       if($test_data){
         $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
@@ -116,7 +112,7 @@ class Order extends \yii\db\ActiveRecord
           $pac->transport_data = strtotime('+1 days');
         }
       }
-
+      $sub_total=0;
       $pac->includes_packs = $pac->getIncludes();
       if (count($pac->includes_packs) == 0) {
         Yii::$app
@@ -129,9 +125,11 @@ class Order extends \yii\db\ActiveRecord
         return false;
       }
       foreach ($pac->includes_packs as $pack) {
+        $sub_total+=$pack['price'] * $pack['quantity'];
         $total['price'] += $pack['price'] * $pack['quantity'];
         $total['quantity'] += $pack['quantity'];
       }
+      $pac->sub_total=$sub_total;
       $this_weight=$pac->weight;
       $total['weight']+=$this_weight;
       if($this_weight>$max_weight){
@@ -145,25 +143,21 @@ class Order extends \yii\db\ActiveRecord
         return false;
       }
 
-      $total['weight_lb']=floor($total['weight']);
-      $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
-      $user = User::find()->where(['id'=>$pac->user_id])->one();
-      $address=Address::findOne(['user_id' => $user->id]);
-
-      return [
-        'order_elements' => $order_elements,
-        'transport_data'=>$pac->transport_data,
-        'total'=>$total,
-        'address'=>$address,
-        'order_id'=>$id,
-      ];
     }
 
     $total['weight_lb']=floor($total['weight']);
     $total['weight_oz']=floor(($total['weight']-$total['weight_lb'])*16);
     $user = User::find()->where(['id'=>$pac->user_id])->one();
-
     $address=Address::findOne(['user_id' => $user->id]);
+
+    return [
+      'order_elements' => $order_elements,
+      'transport_data'=>$pac->transport_data,
+      'total'=>$total,
+      'address'=>$address,
+      'order_id'=>$id,
+      'user'=>$user,
+    ];
   }
 
     public function setData($data){

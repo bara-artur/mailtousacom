@@ -133,6 +133,12 @@ return [
     'Venezuela',
     'Vietnam',
   ],
+  'ShippingCarrier'=>[
+    'ups'=>"UPS",
+    'usps'=>'usps',
+    'fedex'=>'FedEx Ground or FedEx Home Delivery',
+    'canadapost'=>'canadapost'
+  ],
   'package_source_list'=>[
     0=>"manual",
     1=>"eBay"

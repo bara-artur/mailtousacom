@@ -530,12 +530,12 @@ class DefaultController extends Controller
   }
 
   public function actionBorderFormPdf($id){
+    $this->layout = 'pdf';
 
     $order = Order::findOne($id);
     $order_data=$order->getSumData($id,true);
     if(!$order_data)return false;
 
-    $this->layout = 'pdf';
     Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
     $headers = Yii::$app->response->headers;
     $headers->add('Content-Type', 'application/pdf');
@@ -564,10 +564,6 @@ class DefaultController extends Controller
 
   public function actionPdf($id){
     $this->layout = 'pdf';
-    Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
-    $headers = Yii::$app->response->headers;
-    $headers->add('Content-Type', 'application/pdf');
-
     $order = Order::findOne($id);
     $order_data=$order->getSumData($id,true);
     if(!$order_data)return false;
@@ -576,6 +572,10 @@ class DefaultController extends Controller
 
     $content = $this->renderPartial($tpl,$order_data);
 
+
+    Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+    $headers = Yii::$app->response->headers;
+    $headers->add('Content-Type', 'application/pdf');
     //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
     //return $content;
     // setup kartik\mpdf\Pdf component
@@ -595,7 +595,36 @@ class DefaultController extends Controller
   }
 
   public function actionCommercialInvoice($id){
-    return 1;
+    $this->layout = 'pdf';
+
+    $order = Order::findOne($id);
+    $order_data=$order->getSumData($id,true);
+    if(!$order_data)return false;
+    //ddd($order_data);
+    $tpl='commercialInvoicePdf';
+
+    $content = $this->renderPartial($tpl,$order_data);
+
+    echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
+    return $content;
+
+    Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+    $headers = Yii::$app->response->headers;
+    $headers->add('Content-Type', 'application/pdf');
+    // setup kartik\mpdf\Pdf component
+    $pdf = new Pdf([
+      'content' => $content,
+      //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+      'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
+      'cssInline' => '.kv-heading-1{font-size:180px}',
+      'options' => ['title' => 'CBP Form 7533 for order №'.$id],
+      'methods' => [
+        //'SetHeader'=>['Krajee Report Header'],
+        //'SetFooter'=>['{PAGENO}'],
+      ]
+    ]);
+    // return the pdf output as per the destination setting
+    return $pdf->render();
   }
   /**
    * Finds the OrderInclude model based on its primary key value.
