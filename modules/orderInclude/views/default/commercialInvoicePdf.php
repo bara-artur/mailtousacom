@@ -11,84 +11,83 @@
       $total_sum+=$shipping_price;
       $shipping_price='$'.number_format($shipping_price,2,".","");
     }
-    ?>
-
+    ?><div style="font-family: 'Helvetica',sans-serif !important;font-size:14px;">
+      <div style="float:right;text-align: left;width:160px;display:block;">
     From:<br>
-    <b><?=$user->first_name;?> <?=$user->last_name;?> </b>
-    100 Walnut St, Door 18, Champlain, NY, 12919<br>
+    <b><?=$user->first_name;?> <?=$user->last_name;?> </b><br>
+    100 Walnut St,Door 18,<br> Champlain, NY, 12919<br>
     United States<br>
     <br>
-    <br>
-
-
+      </div>
+<div style="text-align: left;width:100%;display:block;">
     Ship to:<br>
-    <b><?=$pac->first_name;?> <?=$pac->last_name;?> </b>
+    <b><?=$pac->first_name;?> <?=$pac->last_name;?> </b><br>
     <?=$pac->adress_1;?>,
-    <?=strlen($pac->adress_2)>2?$pac->adress_2.',':'';?>
+    <?=strlen($pac->adress_2)>2?$pac->adress_2.',':'';?><br>
     <?=$pac->city;?>,
     <?=$pac->state;?>,
     <?=$pac->zip;?><br>
     United States<br>
-    <br>
-    <br>
 
-    <h1>Invoice/packing Slip</h1>
+</div>
+      <div style="text-align:right;font-size:16px;font-weight:bold;margin-bottom:10px;">Invoice / Packing Slip</div>
 
-    <TABLE  cellspacing=0 width="100%" class="t0" border="0" style="font-family: 'Helvetica', sans-serif !important;
-    font-size:8px;width:100% !important;">
+    <TABLE  cellspacing=0 width="100%" class="t0" border="0" cellpadding="1" style="font-family: 'Helvetica', sans-serif !important;
+    font-size:14px;width:100% !important;" >
       <tr>
         <td colspan="3"></td>
-        <td>Date</td>
-        <td>Record #</td>
+        <td style="color:#7B756F;font-size:13px;border:1px solid #333;padding:0 4px;background:#F5F5F5;"><b>Date</b></td>
+          <td style="color:#7B756F;font-size:13px;border:1px solid #333;border-left:0;padding:0 4px;background:#F5F5F5;"><b>Record #</b></td>
       </tr>
       <tr>
         <td colspan="3"></td>
-        <td><?=date('M-j-Y',$pac->transport_data);?></td>
-        <td><?=$pac->id;?></td>
+        <td align="right" style="border-right:1px solid #333;border-left:1px solid #333;padding:0 4px;"><?=date('M-j-Y',$pac->transport_data);?></td>
+        <td align="right" style="border-right:1px solid #333;padding:0 4px;"><?=$pac->id;?></td>
       </tr>
       <tr>
-        <th>Quantity</th>
-        <th>Item #</th>
-        <th>Item name</th>
-        <th>Price</th>
-        <th>Subtotal</th>
+        <td style="color:#7B756F;font-size:13px;border:1px solid #333;padding:0 4px;background:#F5F5F5;"><b>Quantity</b></td>
+        <td style="color:#7B756F;font-size:13px;border:1px solid #333;border-left:0;padding:0 4px;background:#F5F5F5;"><b>Item#</b></td>
+        <td style="color:#7B756F;font-size:13px;border:1px solid #333;border-left:0;border-right:0;padding:0 4px;background:#F5F5F5;"><b>Item name</b></td>
+        <td style="color:#7B756F;font-size:13px;border:1px solid #333;padding:0 4px;background:#F5F5F5;"><b>Price</b></td>
+        <td style="color:#7B756F;font-size:13px;border:1px solid #333;border-left:0;padding:0 4px;background:#F5F5F5;"><b>Subtotal</b></td>
       </tr>
 
       <?php
           foreach($pac->includes_packs as $item){
             ?>
             <tr>
-              <th><?=$item['quantity'];?></th>
-              <th><?=$item['reference_number'];?></th>
-              <th><?=$item['name'];?></th>
-              <th>$<?=number_format($item['price'],2,".","");?></th>
-              <th>$<?=number_format($item['price']*$item['quantity'],2,".","");?></th>
+              <td align="center" style="border:1px solid #333;border-top:0;padding:0 4px;"><?=$item['quantity'];?></td>
+              <td align="right" style="border:1px solid #333;border-top:0;border-left:0;padding:0 4px;"><?=$item['reference_number'];?></td>
+              <td style="border:1px solid #333;border-top:0;border-left:0;border-right:0 ;padding:0 4px;"><?=$item['name'];?></td>
+              <td align="right" style="border:1px solid #333;border-top:0;padding:0 4px;">$<?=number_format($item['price'],2,".","");?></td>
+              <td align="right" style="border:1px solid #333;border-top:0;border-left:0;padding:0 4px;">$<?=number_format($item['price']*$item['quantity'],2,".","");?></td>
             </tr>
             <?php
           }
       ?>
       <tr>
-        <td colspan="4">Subtotal</td>
-        <td>$<?=number_format($pac->sub_total,2,".","");?></td>
+        <td colspan="4" style="padding:4px 4px 2px 4px;" align="right">Subtotal:</td>
+        <td align="right"  style="padding:4px 4px 2px 4px;">$<?=number_format($pac->sub_total,2,".","");?></td>
       </tr>
       <tr>
-        <td colspan="4">Shipping & Handing (<?=$pac->GetShippingCarrierName();?>)</td>
-        <td><?=$shipping_price;?></td>
+        <td colspan="4" align="right" style="padding:0 4px;">Shipping & Handing (<?=$pac->GetShippingCarrierName();?>):</td>
+        <td align="right" style="padding:2px 4px;"><?=$shipping_price;?></td>
       </tr>
       <tr>
-        <td colspan="4">Sales Tax</td>
-        <td>N/A</td>
+        <td colspan="4" align="right" style="padding:0 4px;">Sales Tax:</td>
+        <td align="right" style="padding:2px 4px;">N/A</td>
       </tr>
       <tr>
-        <td colspan="4">Seller discounts(-) or charges (+)</td>
-        <td>$0.00</td>
+        <td colspan="4" align="right" style="padding:0 4px;">Seller discounts(-) or charges (+):</td>
+        <td align="right" style="padding:2px 4px;">$0.00</td>
       </tr>
       <tr>
-        <td colspan="4">Total</td>
-        <td>$<?=number_format($total_sum,2,".","");?></td>
+        <td colspan="4" align="right" style="padding:0 4px;"><b>Total:</b></td>
+        <td align="right" style="padding:2px 4px;"><b>$<?=number_format($total_sum,2,".","");?></b></td>
       </tr>
 
     </TABLE>
+      </div>
     <?php
   }
 ?>
