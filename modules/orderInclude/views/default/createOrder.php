@@ -108,6 +108,7 @@ $submitOption = [
                       <th>Item Price</th>
                       <th>Country</th>
                       <th>Quantity</th>
+                      <th>Reference number</th>
                       <th>Action</th>
                     </tr>
                     <?php $includes=$percel->getIncludes();?>
@@ -125,6 +126,7 @@ $submitOption = [
                           <td><?=Yii::$app->params['country'][$item['country']]?></td>
                         <?php } ?>
                         <td><?=$item['quantity'];?></td>
+                        <td><?=$item['reference_number'];?></td>
                         <td>
                           <div class="but_tab_style">
                             <?php if ($edit_not_prohibited) {?>
