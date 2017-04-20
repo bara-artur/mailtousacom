@@ -2,14 +2,14 @@
   foreach ($order_elements as $order_k=>$pac){
     if($order_k>0){
       echo "<pagebreak>";
-      $total_sum=$pac->sub_total;
-      $shipping_data=$pac->getTrackInvoice();
-      $shipping_price="N/A";
-      if(!$shipping_data->isNew){
-        $shipping_price=$shipping_data->dop_price;
-        $total_sum+=$shipping_price;
-        $shipping_price='$'.number_format($shipping_price,2,".","");
-      }
+    }
+    $total_sum=$pac->sub_total;
+    $shipping_data=$pac->getTrackInvoice();
+    $shipping_price="N/A";
+    if(!$shipping_data->isNewRecord){
+      $shipping_price=$shipping_data->dop_price;
+      $total_sum+=$shipping_price;
+      $shipping_price='$'.number_format($shipping_price,2,".","");
     }
     ?>
 

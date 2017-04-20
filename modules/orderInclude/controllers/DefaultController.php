@@ -605,8 +605,8 @@ class DefaultController extends Controller
 
     $content = $this->renderPartial($tpl,$order_data);
 
-    echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
-    return $content;
+    //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
+    //return $content;
 
     Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
     $headers = Yii::$app->response->headers;
