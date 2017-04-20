@@ -11,14 +11,15 @@
       $total_sum+=$shipping_price;
       $shipping_price='$'.number_format($shipping_price,2,".","");
     }
-    ?><div style="font-family: 'Helvetica',sans-serif !important;font-size:14px;">
+    ?>
+
+    <div style="font-family: 'Helvetica',sans-serif !important;font-size:14px;">
       <div style="float:right;text-align: left;width:160px;display:block;">
     From:<br>
     <b>
       <?=$address->first_name;?> <?=$address->last_name;?><br>
-        <?=$address->address_type==1?$address->company_name.'<br>':''?>
+      <?=$address->address_type==1?$address->company_name.'<br>':''?>
     </b>
-
     <?=$address->adress_1;?>,
     <?=strlen($address->adress_2)>2?$address->adress_2.',':'';?><br>
     <?=$address->city;?>,
@@ -29,7 +30,10 @@
       </div>
 <div style="text-align: left;width:100%;display:block;">
     Ship to:<br>
-    <b><?=$pac->first_name;?> <?=$pac->last_name;?> </b><br>
+    <b>
+      <?=$pac->first_name;?> <?=$pac->last_name;?><br>
+      <?=$pac->address_type==1?$pac->company_name.'<br>':''?>
+    </b>
     <?=$pac->adress_1;?>,
     <?=strlen($pac->adress_2)>2?$pac->adress_2.',':'';?><br>
     <?=$pac->city;?>,
