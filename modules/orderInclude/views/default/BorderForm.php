@@ -27,6 +27,9 @@ $form = ActiveForm::begin([
   'options' => ['class'=>'order_agreement'],
   'validateOnChange' => true,
 ]);
+
+$param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
+$day_delta=24-Yii::$app->config->get($param_name);
 ?>
 <h4 class="modernui-neutral2">Print Border Form</h4>
 <div class="row">
@@ -46,7 +49,7 @@ $form = ActiveForm::begin([
     //'value' => date('d-M-Y', strtotime('-1 days')),
     'options' => ['placeholder' => 'Choose date'],
     'pluginOptions' => [
-      'startDate' => date(\Yii::$app->config->get('data_format_php'),strtotime('+1 days +5 hours')),  // пока непонятки с датами - пусть будет +0, а не +5
+      'startDate' => date(\Yii::$app->config->get('data_format_php'),strtotime('+'.$day_delta.' hours')),
       'format' => \Yii::$app->config->get('data_format_js'),
       'todayHighlight' => true,
       'autoclose'=>true,
@@ -95,16 +98,7 @@ $form = ActiveForm::begin([
 
 <script>
   $(document).ready(function() {
-
-    $('#orderelement-transport_data-kvdate').on('click',function(event){
-      var date = new Date();
-      if ((date.getHours()<11)||(<?= $admin ?>==1)) {                   // делаем возможным выделять текущую дату админу и юзеру (юзеру до 11 ам)
-        $('.today').removeClass('disabled ');
-      }
-    });
-
     init_order_border();
-
   });
   var odrer_id=<?=$order_id;?>;
 </script>

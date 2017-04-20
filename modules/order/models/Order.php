@@ -107,7 +107,7 @@ class Order extends \yii\db\ActiveRecord
         $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
         $max_time =
           time() +
-          (Yii::$app->config->get($param_name) - 24) * 60 * 60;
+          (24-Yii::$app->config->get($param_name)) * 60 * 60;
         if ($pac->transport_data < $max_time) {
           $pac->transport_data = strtotime('+1 days');
         }

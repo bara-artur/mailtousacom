@@ -440,19 +440,15 @@ class DefaultController extends Controller
     $max_weight=$row['weight'];
 
     $order_elements = [];
+    $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
+    $max_time=time()+(24-Yii::$app->config->get($param_name))*60*60;
+
     foreach ($arr as $parcel_id) {
       $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
       $order_elements[] = $pac;
-      $max_time=
-        time()+
-        (Yii::$app->config->get(
-          'receive_max_time'
-          .((Yii::$app->user->identity->isManager())?
-            ('_admin'):
-            (''))
-          )-24)*60*60;
-      if($pac->transport_data<$max_time){
-        $pac->transport_data=strtotime('+1 days +5 hours');
+
+      if($pac->transport_data>$max_time){
+        $pac->transport_data=$max_time;
       }
 
       $pac->transport_data=date(\Yii::$app->config->get('data_format_php'), $pac->transport_data);
