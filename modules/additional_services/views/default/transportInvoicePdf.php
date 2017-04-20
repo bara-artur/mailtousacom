@@ -93,9 +93,9 @@ Email: sendmailtousa@gmail.com
           $kurs=$as['kurs'];
           ?>
           <tr>
-            <td colspan="2" style="border-bottom:1px solid #878787;border-top:1px solid #878787;border-left:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">Fedex shipping label <?=$parcel->track_number;?> - $<?=number_format($price_ext['price_tk'],2,'.','');?> USD</td>
+            <td colspan="2" style="border-bottom:1px solid #878787;border-top:1px solid #878787;border-left:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;"><?=$parcel->GetShippingCarrierName(true);?> shipping label <?=$parcel->track_number;?> - $<?=number_format($price_ext['price_tk'],2,'.','');?> USD</td>
             <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">1</td>
-            <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">$<?=$price_ext['price_tk']*$as['kurs'];?></td>
+            <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">$<?=number_format($price_ext['price_tk']*$as['kurs'],2,'.','');?></td>
             <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">$<?=number_format($as['dop_price'],2,'.','');?></td>
           </tr>
           <?php

@@ -228,9 +228,13 @@ class OrderElement extends \yii\db\ActiveRecord
     return $string;
   }
 
-  public function GetShippingCarrierName(){
+  public function GetShippingCarrierName($short=false){
     $index=$this->GetShippingCarrier($this->track_number);
-    $ShippingCarrier=Yii::$app->params['ShippingCarrier'];
+    if($short){
+      $ShippingCarrier=Yii::$app->params['ShippingCarrierShort'];
+    }else{
+      $ShippingCarrier=Yii::$app->params['ShippingCarrier'];
+    }
     if(isset($ShippingCarrier[$index])){
       return $ShippingCarrier[$index];
     }else{

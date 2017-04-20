@@ -132,6 +132,12 @@ return [
     'fedex'=>'FedEx Ground or FedEx Home Delivery',
     'canadapost'=>'canadapost'
   ],
+  'ShippingCarrierShort'=>[
+    'ups'=>"UPS",
+    'usps'=>'USPS',
+    'fedex'=>'FedEx',
+    'canadapost'=>'canadapost'
+  ],
   'package_source_list'=>[
     0=>"manual",
     1=>"eBay"
