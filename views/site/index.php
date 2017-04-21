@@ -138,23 +138,17 @@ $this->title = 'Shipping to USA and Canada';
         </div>
 
       <div class="row pad_row">
-          <div class="col-md-3 col-xs-12">
-        <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
-          </div>
+        <div class="col-md-3 col-xs-12">
+          <?php if(Yii::$app->params['showAdminPanel']==1){?>
+            <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
+          <?php }?>
+        </div>
 <div class="col-md-6 col-xs-12 ">
  <?php if(Yii::$app->user->can("takeParcel")){?>
      <span><b>Current Receiving point :</b> <?= $receiving_point ?></span>
  <?php }?>
     <span class="labelDifUserId">"Different user" choosing mode</span>
     </div>
-
-          <div class="col-md-3 col-xs-12 text-right">
-              <?= GridView::widget([
-                  'dataProvider' => $orderElements,
-                  'layout' => '{summary}'
-              ]); ?>
-
-          </div>
 
       </div>
 
@@ -170,10 +164,11 @@ $this->title = 'Shipping to USA and Canada';
                       'user'=> $data->user_id,
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
-                  }
+                  },
+                  'visible' => (Yii::$app->params['showAdminPanel']==1),
                 ],
-                ['class' => 'yii\grid\SerialColumn',
-                  'visible' => $showTable->showSerial,],
+        //        ['class' => 'yii\grid\SerialColumn',
+        //          'visible' => $showTable->showSerial,],
            //   'userOrder_id',
                 ['attribute'=> 'user_id',
                   'visible' => (($showTable->showID)&&(Yii::$app->params['showAdminPanel']==1)),

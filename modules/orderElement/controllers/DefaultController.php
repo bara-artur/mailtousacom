@@ -116,13 +116,24 @@ class DefaultController extends Controller
 
                 $oldModel->weight = $weight;
                 // $weight = $_POST['lb'] + $oz;
-                if ($_POST['track_number'] != null) {
-                  $oldModel->track_number = $_POST['track_number'];
-                }
                 if (isset($_POST['track_number_type']))
                   $oldModel->track_number_type = 1;
                 else
                   $oldModel->track_number_type = 0;
+
+                if (($_POST['track_number'] != null)&&($oldModel->track_number_type==0)) {
+                  if ((OrderElement::find()->andWhere(['not in','id',$percel_id])->andWhere(['track_number'=> $_POST['track_number']])->one() ==null)&&
+                      (OrderElement::GetShippingCarrier($_POST['track_number'])!=null)){
+                    $oldModel->track_number = $_POST['track_number'];
+                  }else{
+                    if (OrderElement::GetShippingCarrier($_POST['track_number'])==null) {
+                      return "Undefined track number. We can't recognize shipping company.";
+                    }else{
+                      return "Bad number. ".$_POST['track_number']." already exist in our system";
+                    }
+                  }
+                }
+
                 $oldModel->save();
             }
             $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
@@ -133,9 +144,7 @@ class DefaultController extends Controller
             }
         }
        // $model = OrderElement::find()->where(['order_id'=>$id])->all();
-
         return $ParcelPrice;
-
     }
 
     public function actionCreate($id)
