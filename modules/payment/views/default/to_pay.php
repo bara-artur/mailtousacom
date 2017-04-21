@@ -31,7 +31,7 @@ $submitOption = [
     foreach ($paces as $pac) {
     $tot_col=0;
     ?>
-    <div class="col-md-offset-2 col-md-8 mac">
+    <div class="col-md-offset-1 col-md-10 mac">
         <div class="row padding-bottom-10 ">
             <div class="col-md-4 pay_list5">
                 <b>Package type : </b>
