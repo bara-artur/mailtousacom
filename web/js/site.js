@@ -11,6 +11,7 @@ $(document).ready(function() {
   ajax_send_admin_status_onchange();
  // ajax_send_admin_user_status_onchange();
   init_show_include_payments();
+  init_cookie_clean_on_signup_button();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -834,4 +835,16 @@ function init_collapse_buttons(){
     $("#collapse_columns").on("click", function(){
         $("#collapse").collapse("hide");
     })
+}
+function init_cookie_clean_on_signup_button(){
+  $("button[name='signup-button']" ).on("click",function(){
+    if ((getCookie('parcelCheckedId')!='')||
+        (getCookie('parcelCheckedUser')!='')||
+        (getCookie('doNotShowDifUserGritter')!='')) {
+      setCookie('parcelCheckedId', '', 1);
+      setCookie('parcelCheckedUser', '', 1);
+      setCookie('doNotShowDifUserGritter', '', 1);
+      gritterAdd('Clear old checkboxes', '', 'gritter-success');
+    }
+  });
 }
