@@ -40,8 +40,10 @@ class OrderElement extends \yii\db\ActiveRecord
       '2'=>'Received at MailtoUSA facility ZZZ',
       '3'=>'On route to USA border',
       '4'=>'Transferred to XXX faclitity',
-      '5'=>'YYY status',
-      '6'=>'Returned at MailtoUSA facility',
+      ///'5'=>'YYY status',
+      '5'=>'In transit',
+      '6'=>'Delivered',
+      '7'=>'Returned at MailtoUSA facility',
     );
   }
 
