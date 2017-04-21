@@ -17,7 +17,8 @@
       <div style="float:right;text-align: left;width:160px;display:block;">
     From:<br>
     <b>
-      <?=$address->first_name;?> <?=$address->last_name;?><br>
+      <?=$address->first_name=="-"?"":$address->first_name;?>
+      <?=$address->last_name=="-"?"":$address->last_name;?><br>
       <?=$address->address_type==1?$address->company_name.'<br>':''?>
     </b>
     <?=$address->adress_1;?>,
@@ -31,7 +32,8 @@
 <div style="text-align: left;width:100%;display:block;">
     Ship to:<br>
     <b>
-      <?=$pac->first_name;?> <?=$pac->last_name;?><br>
+      <?=$pac->first_name=="-"?"":$pac->first_name;?>
+      <?=$pac->last_name=="-"?"":$pac->last_name;?><br>
       <?=$pac->address_type==1?$pac->company_name.'<br>':''?>
     </b>
     <?=$pac->adress_1;?>,
