@@ -850,14 +850,19 @@ function init_collapse_buttons(){
         $("#collapse").collapse("hide");
     })
 }
+
+function clear_cookie_checkboxes() {
+  setCookie('parcelCheckedId', '', 1);
+  setCookie('parcelCheckedUser', '', 1);
+  setCookie('doNotShowDifUserGritter', '', 1);
+}
+
 function init_cookie_clean_on_signup_button(){
   $("button[name='signup-button']" ).on("click",function(){
     if ((getCookie('parcelCheckedId')!='')||
         (getCookie('parcelCheckedUser')!='')||
         (getCookie('doNotShowDifUserGritter')!='')) {
-      setCookie('parcelCheckedId', '', 1);
-      setCookie('parcelCheckedUser', '', 1);
-      setCookie('doNotShowDifUserGritter', '', 1);
+      clear_cookie_checkboxes();
       gritterAdd('Clear old checkboxes', '', 'gritter-success');
     }
   });

@@ -168,20 +168,22 @@ class AdminController extends Controller
     if($request->isGet) {
       $user_id = $request->get('id');
     }else{
-      if($request->post('Address[user_id]')) {
-        $user_id = $request->post('Address[user_id]');
+      if($_POST['Address']['user_id']) {
+        $user_id = $_POST['Address']['user_id'];
       }else{
         $user_id = $request->post('id');
       }
     }
 
-    $order = Order::find()->where(['user_id'=>$user_id])->one();
-    $update_button =0;
-    if ($order) $update_button = 1;
+  //  $order = Order::find()->where(['user_id'=>$user_id])->one();
+  //  $update_button =0;
+  //  if ($order) $update_button = 1;
 
-    $model = Address::find()->where('user_id = :id', [':id' => $user_id])->one();
+    $model = Address::find()->where(['user_id' => $user_id])->one();
+    $update_button = 1;
     if(!$model){
       $model= new Address();
+      $update_button = 0;
     }
 
     if($request->isAjax) {
@@ -189,7 +191,7 @@ class AdminController extends Controller
       if ($request->isGet) {
         $model->user_id=$user_id;
         return [
-          'title' => $update_button==0?'Create billing address':'Update billing address' ,
+          'title' => (($update_button==0)?('Create billing address'):('Update billing address')) ,
           'content' => $this->renderAjax("@app/modules/address/views/default/createorderbilling.php", [
             'model' => $model,
             'update_button'=>2
@@ -208,7 +210,7 @@ class AdminController extends Controller
         ]);
         return [
           //'forceReload'=>'#crud-datatable-pjax',
-          'title'=> "Billing address saved 1",
+          'title'=> "Billing address saved",
           'content'=>$content,
           'footer'=>
             Html::button('Close',['class'=>'btn btn-default pull-left reload_on_click','data-dismiss'=>"modal"]).
