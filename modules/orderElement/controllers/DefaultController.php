@@ -116,7 +116,12 @@ class DefaultController extends Controller
 
                 $oldModel->weight = $weight;
                 // $weight = $_POST['lb'] + $oz;
-                if ($_POST['track_number'] != null) {
+                if (isset($_POST['track_number_type']))
+                  $oldModel->track_number_type = 1;
+                else
+                  $oldModel->track_number_type = 0;
+
+                if (($_POST['track_number'] != null)&&($oldModel->track_number_type==0)) {
                   if ((OrderElement::find()->andWhere(['not in','id',$percel_id])->andWhere(['track_number'=> $_POST['track_number']])->one() ==null)&&
                       (OrderElement::GetShippingCarrier($_POST['track_number'])!=null)){
                     $oldModel->track_number = $_POST['track_number'];
@@ -128,10 +133,7 @@ class DefaultController extends Controller
                     }
                   }
                 }
-                if (isset($_POST['track_number_type']))
-                  $oldModel->track_number_type = 1;
-                else
-                  $oldModel->track_number_type = 0;
+
                 $oldModel->save();
             }
             $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
