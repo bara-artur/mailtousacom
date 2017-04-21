@@ -122,7 +122,7 @@ Email: sendmailtousa@gmail.com
   </tr>
   <tr>
     <td>
-      You can pay with PayPal (+<?=Yii::$app->config->get('paypal_commision_dolia');?>%+$<?=Yii::$app->config->get('paypal_commision_fixed');?>) </td>
+      You can pay with PayPal (+<?=Yii::$app->config->get('paypal_commision_dolia');?>%+$<?=Yii::$app->config->get('paypal_commision_fixed');?>=$<?=number_format($total['paypal'],2,'.','');?>) </td>
     <td>QST</td>
     <td align="right">$<?=number_format($total['qst'],2,'.','');?></td>
   </tr>

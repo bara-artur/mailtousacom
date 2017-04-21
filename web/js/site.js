@@ -104,13 +104,20 @@ $(document).ready(function() {
     }
     els=$('.hidden_block_communication:not(:checked)');
     sum=0;
-    vat=0;
+    price=0;
+    qst=0;
+    gst=0;
     for (i=0;i<els.length;i++){
       sum+=parseFloat(els.eq(i).attr('sum'));
-      vat+=parseFloat(els.eq(i).attr('vat'));
+      price+=parseFloat(els.eq(i).attr('price'));
+      qst+=parseFloat(els.eq(i).attr('qst'));
+      gst+=parseFloat(els.eq(i).attr('gst'));
     }
-    $('.total_sum').text(sum.toFixed(2));
-    $('.total_vat').text(vat.toFixed(2));
+    $('.tot_sum').text(sum.toFixed(2));
+    $('.tot_price').text(price.toFixed(2));
+    $('.tot_qst').text(qst.toFixed(2));
+    $('.tot_gst').text(gst.toFixed(2));
+
   })
 
   $('body').on('click','[role="modal-remote"]',function(){

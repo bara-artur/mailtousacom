@@ -424,7 +424,8 @@ class DefaultController extends Controller
       }
 
     }
-
+    $total['pay_pal']=$total['sum']*(1+Yii::$app->config->get('paypal_commision_dolia')/100)+
+      Yii::$app->config->get('paypal_commision_fixed');
     return $this->render('to_pay', [
       'order_id'=>$id,
       'paces'=>$el_group,

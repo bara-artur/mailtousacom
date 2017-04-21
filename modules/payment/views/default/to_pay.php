@@ -31,7 +31,7 @@ $submitOption = [
     foreach ($paces as $pac) {
     $tot_col=0;
     ?>
-    <div class="col-md-offset-2 col-md-8 mac">
+    <div class="col-md-offset-1 col-md-10 mac">
         <div class="row padding-bottom-10 ">
             <div class="col-md-4 pay_list5">
                 <b>Package type : </b>
@@ -172,8 +172,10 @@ $submitOption = [
                         <?= Html::checkbox('agree_'.$pac->id, false, [
                             'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
                             'class'=>"hidden_block_communication",
+                            'price'=>$pac->sub_total['price'],
                             'sum'=>$pac->sub_total['sum'],
-                            'vat'=>$pac->sub_total['vat']
+                            'qst'=>$pac->sub_total['qst'],
+                            'gst'=>$pac->sub_total['gst'],
                         ]);?>
                         <div class="agree_<?=$pac->id;?> vertic" style="display: none;">
                             <label>Please, enter the non-payment reason</label>
@@ -203,12 +205,26 @@ $submitOption = [
             <div class="col-md-12 padding-off-left padding-off-right">
                 <hr class="podes">
             </div>
-            <div class="col-md-offset-7 col-md-3 margin-bottom-10 padding-bottom-10 padding-off-right">
-                <div class="pay_title"><b>TOTAL TO PAY</b></div>
-                <div class="pay_list2"><b>Price : </b><span class="pull-right"><?=number_format($total['price'],2,"."," ");?></span></div>
-                <div class="pay_list2"><b>PST : </b><span class="pull-right"><?=number_format($total['qst'],2,"."," ");?></span></div>
-                <div class="pay_list2"><b>GST/HST : </b><span class="pull-right"><?=number_format($total['gst'],2,"."," ");?></span></div>
-                <div class="pay_list4"><b><span class="trans_count">TOTAL :</span></b><span class="pull-right trans_count"><?=number_format($total['sum'],2,"."," ");?></span></div>
+            <div class="col-md-offset-7 col-md-3 margin-bottom-10 padding-bottom-10 padding-off-right" id="total_to_pay">
+                <div class="pay_title">
+                    <b>TOTAL TO PAY</b>
+                </div>
+                <div class="pay_list2">
+                    <b>Price : </b>
+                    <span class="pull-right tot_price"><?=number_format($total['price'],2,"."," ");?></span>
+                </div>
+                <div class="pay_list2">
+                    <b>PST : </b>
+                    <span class="pull-right tot_qst"><?=number_format($total['qst'],2,"."," ");?></span>
+                </div>
+                <div class="pay_list2">
+                    <b>GST/HST : </b>
+                    <span class="pull-right tot_gst"><?=number_format($total['gst'],2,"."," ");?></span>
+                </div>
+                <div class="pay_list4">
+                    <b><span class="trans_count">TOTAL :</span></b>
+                    <span class="pull-right trans_count tot_sum" ><?=number_format($total['sum'],2,"."," ");?></span>
+                </div>
             </div>
             <?php
         }
@@ -220,7 +236,13 @@ $submitOption = [
                     <hr class="margin-off-top margin-bottom-10">
                 <?= Html::radioList('payment_type',null,
                     [
-                        1 => "PayPal (+".Yii::$app->config->get('paypal_commision_dolia')."%+$".Yii::$app->config->get('paypal_commision_fixed').")",
+                        1 => "PayPal (+".
+                          Yii::$app->config->get('paypal_commision_dolia').
+                          "%+$".
+                          Yii::$app->config->get('paypal_commision_fixed').
+                          "= $".
+                          number_format($total['pay_pal'],2,"."," ").
+                          ")",
                         2 => "I will pay at warehouse"
                     ],[
                         'item' => function($index, $label, $name, $checked, $value) {
