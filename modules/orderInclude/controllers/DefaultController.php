@@ -443,7 +443,7 @@ class DefaultController extends Controller
     $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
     $max_time=time()+(24-Yii::$app->config->get($param_name))*60*60;
 
-    foreach ($arr as $parcel_id) {
+    foreach ($arr as $i=>$parcel_id) {
       $pac = OrderElement::find()->where(['id'=>$parcel_id])->one();
       $order_elements[] = $pac;
 
@@ -453,13 +453,23 @@ class DefaultController extends Controller
 
       $pac->transport_data=date("d-M-Y", $pac->transport_data);
 
+      if ($pac->track_number == '') {
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'Track number validation failed in Parcel №'.($i+1)
+          );
+        return $this->redirect('/orderInclude/create-order/' . $id);
+      }
+
       $pac->includes_packs = $pac->getIncludes();
       if (count($pac->includes_packs) == 0) {
         Yii::$app
           ->getSession()
           ->setFlash(
             'error',
-            'The package must have at least one attachment.'
+            'The package №'.($i+1).' must have at least one attachment.'
           );
         return $this->redirect('/orderInclude/create-order/' . $id);
       }
