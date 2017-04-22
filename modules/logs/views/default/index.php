@@ -9,6 +9,7 @@ use yii\grid\GridView;
 
 $this->title = 'Logs';
 $this->params['breadcrumbs'][] = $this->title;
+$show_user=Yii::$app->user->identity->isManager();
 ?>
 <div class="log-index">
 
@@ -20,7 +21,15 @@ $this->params['breadcrumbs'][] = $this->title;
         <td>#</td>
         <td>Date</td>
         <td>Description</td>
-        <td>User</td>
+        <?php
+        if($show_user) {
+          ?>
+          <td>
+            User
+          </td>
+          <?php
+        }
+        ?>
       </tr>
       <?php
         $i=1;
@@ -34,9 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
               <td>
                 <?=$item->description;?>
               </td>
-              <td>
-                <?=$item->user->fullName;?>
-              </td>
+              <?php
+                if($show_user) {
+                  ?>
+                  <td>
+                    <?= $item->user_id > 0 ? $item->user->fullName : "-auto-"; ?>
+                  </td>
+                  <?php
+                }
+              ?>
             </tr>
           <?php
           $i++;
