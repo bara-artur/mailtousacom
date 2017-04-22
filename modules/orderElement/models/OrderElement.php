@@ -64,6 +64,10 @@ class OrderElement extends \yii\db\ActiveRecord
       $point=ReceivingPoints::findOne($this->status_dop);
       if ($point) $txt=str_replace('ZZZ',$point->name,$txt);
     }
+    if($this->status==4){
+      $point=$this->GetShippingCarrierName(true);
+      if ($point) $txt=str_replace('YYY',$point,$txt);
+    }
     return $txt;
   }
 
