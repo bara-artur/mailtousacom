@@ -121,6 +121,19 @@ class DefaultController extends Controller
       }
     //  return $this->redirect(['/']);
     }
+
+    public function actionSelect($order_id)
+    {
+      $cookies = Yii::$app->response->cookies;
+      $order = Order::find()->where(['id' => $order_id])->one();
+      if ($order) {
+
+        return var_dump($cookies);
+      }
+      $cookies->remove('parcelCheckedId');
+      $cookies->remove('parcelCheckedUser');
+      return $this->redirect(['/']);
+    }
     /**
      * Lists all Order models.
      * @return mixed

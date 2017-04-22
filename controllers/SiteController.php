@@ -72,7 +72,6 @@ class SiteController extends Controller
       if (Yii::$app->user->isGuest) {
         return $this->render('index_login');
       }
-
       $user = User::find()->where(['id' => Yii::$app->user->id])->one();
 
       if (Yii::$app->user->can("takeParcel")){

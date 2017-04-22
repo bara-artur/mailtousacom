@@ -97,6 +97,7 @@ $config = [
 
           'address/<action>'=>'address/default/<action>',
           'order/<action>'=>'order/default/<action>',
+          'order/select/<order_id:\d+>'=>'order/default/select',
 
           'orderElement/<action>'=>'orderElement/default/<action>',
           'orderElement/create/<id:\d+>'=>'orderElement/default/create',

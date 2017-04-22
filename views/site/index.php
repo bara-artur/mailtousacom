@@ -183,6 +183,20 @@ $this->title = 'Shipping to USA and Canada';
                     },
                   'visible' => $showTable->showStatus,
                 ],
+                [
+                 'header'=> 'Parcel items',
+                 'content' => function($data){
+                     $itemString = '';
+                     if ($data->includes) {
+                       foreach ($data->includes as $item) {
+                         if ($itemString) $itemString=$itemString.',  ';
+                         $itemString = $itemString . $item['name'];
+                       }
+                     }
+                   return $itemString;
+                 },
+                 'visible' => $showTable->showItems,
+                ],
                 ['attribute'=> 'created_at',
                     'content'=> function($data){
                         if ($data->created_at == 0) return '-';
