@@ -5,7 +5,7 @@
     }
     $total_sum=$pac->sub_total;
     $shipping_data=$pac->getTrackInvoice();
-    $shipping_price="N/A";
+    $shipping_price=false;
     if(!$shipping_data->isNewRecord){
       $shipping_price=$shipping_data->dop_price;
       $total_sum+=$shipping_price;
@@ -17,7 +17,8 @@
       <div style="float:right;text-align: left;width:160px;display:block;">
     From:<br>
     <b>
-      <?=$address->first_name;?> <?=$address->last_name;?><br>
+      <?=$address->first_name=="-"?"":$address->first_name;?>
+      <?=$address->last_name=="-"?"":$address->last_name;?><br>
       <?=$address->address_type==1?$address->company_name.'<br>':''?>
     </b>
     <?=$address->adress_1;?>,
@@ -31,7 +32,8 @@
 <div style="text-align: left;width:100%;display:block;">
     Ship to:<br>
     <b>
-      <?=$pac->first_name;?> <?=$pac->last_name;?><br>
+      <?=$pac->first_name=="-"?"":$pac->first_name;?>
+      <?=$pac->last_name=="-"?"":$pac->last_name;?><br>
       <?=$pac->address_type==1?$pac->company_name.'<br>':''?>
     </b>
     <?=$pac->adress_1;?>,
@@ -81,18 +83,18 @@
         <td colspan="4" style="padding:4px 4px 2px 4px;" align="right">Subtotal:</td>
         <td align="right"  style="padding:4px 4px 2px 4px;">$<?=number_format($pac->sub_total,2,".","");?></td>
       </tr>
-      <tr>
-        <td colspan="4" align="right" style="padding:0 4px;">Shipping & Handing (<?=$pac->GetShippingCarrierName();?>):</td>
-        <td align="right" style="padding:2px 4px;"><?=$shipping_price;?></td>
-      </tr>
-      <tr>
-        <td colspan="4" align="right" style="padding:0 4px;">Sales Tax:</td>
-        <td align="right" style="padding:2px 4px;">N/A</td>
-      </tr>
-      <tr>
-        <td colspan="4" align="right" style="padding:0 4px;">Seller discounts(-) or charges (+):</td>
-        <td align="right" style="padding:2px 4px;">$0.00</td>
-      </tr>
+      <?php
+      if($shipping_price) {
+        ?>
+        <tr>
+          <td colspan="4" align="right" style="padding:0 4px;">Shipping & Handing
+            (<?= $pac->GetShippingCarrierName(); ?>):
+          </td>
+          <td align="right" style="padding:2px 4px;"><?= $shipping_price; ?></td>
+        </tr>
+        <?php
+      }
+      ?>
       <tr>
         <td colspan="4" align="right" style="padding:0 4px;"><b>Total:</b></td>
         <td align="right" style="padding:2px 4px;"><b>$<?=number_format($total_sum,2,".","");?></b></td>

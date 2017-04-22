@@ -634,9 +634,13 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
 }
 .scrit{margin-bottom: -20px;}
 .but_top.fix{
-    padding: 4px 4px;
+    /*padding: 4px 4px;
     border: 0px;
     background-color: transparent;
+    font-size: 20px;*/
+    padding: 3px 0px;
+    /* border: 0px; */
+    /* background-color: transparent; */
     font-size: 20px;
 }
 /*03032017*/
@@ -1045,3 +1049,6 @@ border-right: 0px;
     margin-bottom: 20px;
     background-color: #F9F9F9;
 }
+/*21042017*/
+.otst_to{padding:6px;border-left:0;border-right:0;}
+.input-group.input-daterange .input-group-addon{border-left:0;}

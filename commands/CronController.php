@@ -42,19 +42,24 @@ class CronController extends Controller
 
   public function actionRefresh()
   {
-    $data=OrderElement::find()->orderBy(['cron_refresh' => SORT_ASC])->limit(10)->all(); // берем 10 посылок (надо будет исключить доставленные)
+    $data=OrderElement::find()
+      ->where(['status'=>[4,5]])
+      ->orderBy(['cron_refresh' => SORT_ASC])
+      ->limit(10)// берем 10 посылок (надо будет исключить доставленные)
+      ->all();
 
     foreach ($data as $parcel){
       $parcel->cron_refresh = time();          // записываем последнее время обновления
       $company = OrderElement::GetShippingCarrier($parcel->track_number);
-      if (($company != '')&&($parcel->status!=5)) {   // если определили транспортную компанию и ещё не доставлена
+      if ($company != '') {   // если определили транспортную компанию
         $html = SHD::file_get_html('https://trackingshipment.net/' .$company.'/' . $parcel->track_number, null, null, 1, 1); // дружественный сервис просмотра состояний посылок
         $str = $html->find('.output-info p', 0)->innertext; // берем содержимое первого абзаца у тэга с классом output_info
         if ((strripos($str, 'ummary:') != false) && (strripos($str, 'eliver') != false)) {   // Если есть включение S-ummary И D-eliver-ed
           echo "Parcel " . $parcel->id . " was delivered".PHP_EOL;
-          $parcel->status = 5;
+          $parcel->status = 6;
         }
         else{
+          $parcel->status = 5;
           echo $parcel->id . " not delivered";
         }
       }else{
