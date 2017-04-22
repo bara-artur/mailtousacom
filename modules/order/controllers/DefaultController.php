@@ -127,11 +127,24 @@ class DefaultController extends Controller
       $cookies = Yii::$app->response->cookies;
       $order = Order::find()->where(['id' => $order_id])->one();
       if ($order) {
-
-        return var_dump($cookies);
+        $cookies->remove('parcelCheckedId');
+        $cookies->remove('parcelCheckedUser');
+          Yii::$app->response->cookies->add(new \yii\web\Cookie([
+            'name' => 'parcelCheckedId',
+              'value' => $order->el_group
+          ]));
+          $count = count(explode(',',$order->el_group));  // количество посылок в заказе
+          $str = '';
+          for ($i=0;$i<$count;$i++){            // создаем строку с таким же количеством id юзера как и количество посылок в заказе
+            $str = $str.$order->user_id;       // дублируем id юзера
+            if ($i!=($count-1)) $str = $str.',';  // последнюю запятую не ставим
+          }
+          Yii::$app->response->cookies->add(new \yii\web\Cookie([
+            'name' => 'parcelCheckedUser',
+            'value' => $str
+          ]));
+        return $this->redirect('/');
       }
-      $cookies->remove('parcelCheckedId');
-      $cookies->remove('parcelCheckedUser');
       return $this->redirect(['/']);
     }
     /**

@@ -69,6 +69,11 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
+      if ((Yii::$app->request->cookies['parcelCheckedId'])&&
+          (Yii::$app->request->cookies['parcelCheckedUser'])){  // если мы получили куки от order/select/$id
+        setcookie('parcelCheckedId',Yii::$app->request->cookies['parcelCheckedId']->value);
+        setcookie('parcelCheckedUser',Yii::$app->request->cookies['parcelCheckedUser']->value);
+      }
       if (Yii::$app->user->isGuest) {
         return $this->render('index_login');
       }
