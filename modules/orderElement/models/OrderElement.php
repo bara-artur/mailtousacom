@@ -68,6 +68,10 @@ class OrderElement extends \yii\db\ActiveRecord
       $point=$this->GetShippingCarrierName(true);
       if ($point) $txt=str_replace('YYY',$point,$txt);
     }
+    if($this->status==5){
+      $point=$this->GetShippingCarrierName(true);
+      if ($point) $txt=$point.": ".$this->status_dop;
+    }
     return $txt;
   }
 
@@ -85,10 +89,10 @@ class OrderElement extends \yii\db\ActiveRecord
             [['first_name', 'last_name','company_name', 'adress_1','city', 'zip', 'state'], 'required'],
             [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
             [['company_name'], 'string', 'max' => 128],
-            [['track_number'], 'string'],
+            [['track_number','status_dop'], 'string'],
             [['price','qst','gst'],'double'],
             [['weight'], 'double'],
-            [['track_number_type','status_dop','status','payment_state'], 'integer'],
+            [['track_number_type','status','payment_state'], 'integer'],
             [['address_type','weight','track_number','track_number_type'], 'safe'],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
         ];
@@ -214,6 +218,7 @@ class OrderElement extends \yii\db\ActiveRecord
         Log::addLog($this->id,['text'=>'Change status to "'.$this->getFullTextStatus().'"'],false,$this->status);
       }
     }
+    return true;
   }
 
   public function clearParcels($userID,$stringGroup){
