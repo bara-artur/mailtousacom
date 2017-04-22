@@ -341,7 +341,6 @@ if($createNewAddress){
 <script>
   //исправить!!!!!!!
   $(document).ready(function() {
-   clear_cookie_checkboxes();
    $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
    $("#ajaxCrudModal").removeAttr("tabindex");
    });
