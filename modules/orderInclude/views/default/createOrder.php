@@ -83,7 +83,7 @@ $submitOption = [
             <p><b>City:</b>  <?=$percel->city;?></p>
             <p><b>ZIP:</b>  <?=$percel->zip;?></p>
             <p><b>Phone:</b>  <?=$percel->phone;?></p>
-            <p><b>State:</b>  <?=$percel->state;?></p>
+            <p><b>State:</b>  <?php if ($percel->state) echo Yii::$app->params['states'][$percel->state] ?></p>
             <?php if ($edit_not_prohibited) {?>
               <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$percel->id],
                 [
