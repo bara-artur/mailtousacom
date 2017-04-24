@@ -40,7 +40,7 @@ $this->title = 'Shipping to USA and Canada';
             <?php }?>
             <?php if ($show_view_button==true){ ?>
                 <?=Html::a('<i class="icon-metro-location-2"></i> Tracking', ['/orderElement/group/track_invoice'], [
-                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide',
+                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide',
                     'id'=>'group-admin-view',
                 ]); ?>
             <?php }?>
@@ -157,11 +157,17 @@ $this->title = 'Shipping to USA and Canada';
             'dataProvider' => $orderElements,
             'summary'=>'',
             'columns' => [
-                ['content'=> function($data){
+                [ 'header' => Html::checkbox('123',false,[
+                  'id'=>'superCheckbox',
+                  'class'=>'',
+                  'label' => '<span class="fa fa-check"></span>',
+                ]),
+                  'content'=> function($data){
                     return Html::checkbox(($data->status>1)?'InSystem':'Draft',false,[
                       'class'=>'checkBoxParcelMainTable',
                       'id'=>$data->id,
                       'user'=> $data->user_id,
+                      'invoice'=> $data->track_number_type,
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },
@@ -182,6 +188,20 @@ $this->title = 'Shipping to USA and Canada';
                         return $data->getFullTextStatus();
                     },
                   'visible' => $showTable->showStatus,
+                ],
+                [
+                 'header'=> 'Parcel items',
+                 'content' => function($data){
+                     $itemString = '';
+                     if ($data->includes) {
+                       foreach ($data->includes as $item) {
+                         if ($itemString) $itemString=$itemString.',  ';
+                         $itemString = $itemString . $item['name'];
+                       }
+                     }
+                   return $itemString;
+                 },
+                 'visible' => $showTable->showItems,
                 ],
                 ['attribute'=> 'created_at',
                     'content'=> function($data){

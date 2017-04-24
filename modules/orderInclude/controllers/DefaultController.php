@@ -90,14 +90,14 @@ class DefaultController extends Controller
     $order_elements = [];
     $ids = '';
     $user_ids = '';
-    if (isset($_COOKIE['parcelCheckedUser'])) {
-      $user_ids  = $_COOKIE['parcelCheckedUser'];
-    }
+    $track_number_types = '';
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
         if ($parcel!=null) {
           $ids = $ids.$parcel->id.',';
+          $user_ids = $user_ids.$parcel->user_id.',';
+          $track_number_types = $track_number_types.$parcel->track_number_type.',';
           $order_elements[] = $parcel;
           if ($parcel->status > 1){
             $edit_not_prohibited = 0;
@@ -124,6 +124,7 @@ class DefaultController extends Controller
       'hideNext' => $hideNext,
       'ids' =>$ids,
       'user_ids' => $user_ids,
+      'track_number_types' => $track_number_types,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/

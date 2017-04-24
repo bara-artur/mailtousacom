@@ -129,9 +129,3 @@ $this->params['breadcrumbs'][] = $this->title;
   "footer"=>"",// always need it for jquery plugin
 ])?>
 <?php Modal::end(); ?>
-
-<script>
-  $(document).ready(function() {
-    clear_cookie_checkboxes();
-    });
-</script>

@@ -344,6 +344,9 @@ class DefaultController extends Controller
 
   public function actionGroupUpdate($parcels_id = null){
       $order_id = $this->findOrCreateOrder($parcels_id);
+      $cookies = Yii::$app->response->cookies;
+      $cookies->remove('parcelCheckedId');
+      $cookies->remove('parcelCheckedUser');
       if ($order_id != null) {
         return $this->redirect(['/orderInclude/create-order/' . $order_id]);
       } else {
@@ -394,6 +397,9 @@ class DefaultController extends Controller
         }
       }
     }
+    $cookies = Yii::$app->response->cookies;
+    $cookies->remove('parcelCheckedId');
+    $cookies->remove('parcelCheckedUser');
     $this->redirect(['/'],200);
     return "Parcels delete complete successfully";
   }
@@ -428,6 +434,9 @@ class DefaultController extends Controller
 
     public function actionGroupView($parcels_id = null){
         $order_id = $this->findOrCreateOrder($parcels_id,1);
+        $cookies = Yii::$app->response->cookies;
+        $cookies->remove('parcelCheckedId');
+        $cookies->remove('parcelCheckedUser');
         if ($order_id != null) {
           $this->redirect(['/orderInclude/view-order/' . $order_id]);
           return $order_id;
