@@ -40,7 +40,7 @@ $this->title = 'Shipping to USA and Canada';
             <?php }?>
             <?php if ($show_view_button==true){ ?>
                 <?=Html::a('<i class="icon-metro-location-2"></i> Tracking', ['/orderElement/group/track_invoice'], [
-                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide',
+                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide',
                     'id'=>'group-admin-view',
                 ]); ?>
             <?php }?>
@@ -162,6 +162,7 @@ $this->title = 'Shipping to USA and Canada';
                       'class'=>'checkBoxParcelMainTable',
                       'id'=>$data->id,
                       'user'=> $data->user_id,
+                      'invoice'=> $data->track_number_type,
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },

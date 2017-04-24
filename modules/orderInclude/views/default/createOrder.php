@@ -31,6 +31,7 @@ $submitOption = [
               'id' => 'updateParcelsIdCookie',
               'data-forCookie'=> $ids,
               'data-forusercookie'=> $user_ids,
+              'data-forinvoicecookie'=> $track_number_types,
             ])?>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
