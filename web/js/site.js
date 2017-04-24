@@ -908,10 +908,20 @@ function superCheckboxProcessing(){
   oldCookie = getCookie('parcelCheckedId').split(',');        // все чекбоксы со всех страниц
   oldCookieUser = getCookie('parcelCheckedUser').split(',');        // все юзеры со всех страниц
   oldCookieInvoice = getCookie('parcelCheckedInvoice').split(',');        // все юзеры со всех страниц
+  els=$(".checkBoxParcelMainTable:checked");
   if ($("#superCheckbox").prop("checked")) {
-
+    if (els.length==0) els=$(".checkBoxParcelMainTable"); // если нет выбранного то берем первый попавшийся
+    if (els.length>0)
+    {
+      elem_type = els[0].getAttribute('name');
+      new_elems = $("[name='"+elem_type+"']").not(":checked");
+      for (i=0;i<new_elems.length;i++) {
+        oldCookie.push(new_elems[i].getAttribute('id'));
+        oldCookieUser.push(new_elems[i].getAttribute('user'));
+        oldCookieInvoice.push(new_elems[i].getAttribute('invoice'));
+      }
+    }
   }else{                                       // удаляем выделения на текущей странице пагинации
-    els=$(".checkBoxParcelMainTable:checked");
     for (i=0;i<els.length;i++) {
       delIndex = null;
       delIndex = oldCookie.indexOf(els[i].getAttribute('id'));
@@ -921,20 +931,19 @@ function superCheckboxProcessing(){
         oldCookieInvoice.splice(delIndex, 1);
       }
     }
-    console.log(oldCookie);
-    for (i = 0; i < oldCookie.length; i++) {
-      stringCoockies = stringCoockies + oldCookie[i] + ',';
-      stringUsers = stringUsers + oldCookieUser[i] + ',';
-      stringInvoices = stringInvoices + oldCookieInvoice[i] + ',';
-    }
-    stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1); // удаляем запятую
-    stringUsers = stringUsers.substring(0, stringUsers.length - 1); // удаляем запятую
-    stringInvoices = stringInvoices.substring(0, stringInvoices.length - 1); // удаляем запятую
-    setCookie('parcelCheckedId',stringCoockies,1);
-    setCookie('parcelCheckedUser',stringUsers,1);
-    setCookie('parcelCheckedInvoice',stringInvoices,1);
     $(".checkBoxParcelMainTable:checked").prop('checked',false);
   }
+  for (i = 0; i < oldCookie.length; i++) {
+    stringCoockies = stringCoockies + oldCookie[i] + ',';
+    stringUsers = stringUsers + oldCookieUser[i] + ',';
+    stringInvoices = stringInvoices + oldCookieInvoice[i] + ',';
+  }
+  stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1); // удаляем запятую
+  stringUsers = stringUsers.substring(0, stringUsers.length - 1); // удаляем запятую
+  stringInvoices = stringInvoices.substring(0, stringInvoices.length - 1); // удаляем запятую
+  setCookie('parcelCheckedId',stringCoockies,1);
+  setCookie('parcelCheckedUser',stringUsers,1);
+  setCookie('parcelCheckedInvoice',stringInvoices,1);
   main_table_checkbox();
 }
 
