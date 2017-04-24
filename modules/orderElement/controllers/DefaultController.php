@@ -364,6 +364,10 @@ class DefaultController extends Controller
       }
   }
 
+  public function actionFileUpload($parcels_id){
+    return $parcels_id;
+  }
+
   public function actionCommercial_inv_print($parcels_id=null){
       $order_id = $this->findOrCreateOrder($parcels_id);
       if ($order_id != null) {

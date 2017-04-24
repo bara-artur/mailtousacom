@@ -13,6 +13,8 @@ use app\components\ParcelPrice;
 use kartik\select2\Select2;
 use yii\jui\AutoComplete;
 use app\modules\user\models\User;
+use kartik\file\FileInput;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -294,6 +296,45 @@ Parcel will be moved back to the list of parcels.',
 
          <?php } ?>
               </div>
+            <?php
+            echo '<label class="control-label">Add Attachments</label>';
+            echo FileInput::widget([
+              'model' => $percel,
+              'attribute' => 'files',
+              'options' => [
+                'multiple' => true,
+                'accept' => 'application/pdf,image/jpeg,image/pjpeg,application/msword,application/rtf,application/x-rtf,text/richtext'
+              ],
+              'pluginOptions' => [
+                'uploadUrl' => Url::to(['/orderElement/file-upload/'.$percel->id]),
+                'maxFileCount' => 5,
+                "uploadAsync"=>true,
+                "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
+                'filebatchuploadcomplete' => "function(event, files, extra) {
+                  console.log(files);
+                  console.log('File batch upload complete');
+                 }",
+                'previewFileType' => 'image',
+                'initialPreviewAsData'=>true,
+                'maxFileSize'=>2800,
+                'overwriteInitial'=>false,
+                //'showPreview' => true,
+                'showCaption' => false,
+                'showRemove' => false,
+                'showUpload' => false,
+                'showCancel' => false,
+                'showUploadedThumbs' => false,
+                'previewFileIconSettings'=>[
+                  'doc'=> '<i class="fa fa-file-word-o text-primary"></i>',
+                  'xls'=> '<i class="fa fa-file-excel-o text-success"></i>',
+                  'ppt'=> '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+                  'jpg'=> '<i class="fa fa-file-photo-o text-warning"></i>',
+                  'pdf'=> '<i class="fa fa-file-pdf-o text-danger"></i>',
+                  'zip'=> '<i class="fa fa-file-archive-o text-muted"></i>',
+                ]
+              ]
+            ]);
+            ?>
         </div>
 
         <?php Pjax::end(); ?>

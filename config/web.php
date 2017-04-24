@@ -102,7 +102,9 @@ $config = [
           'orderElement/<action>'=>'orderElement/default/<action>',
           'orderElement/create/<id:\d+>'=>'orderElement/default/create',
           'orderElement/group/<act:\w+>'=>'orderElement/default/group',
-          'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
+          'orderElement/<action:(file-upload)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
+          //Дополнить всеми ф-ями
+          'orderElement/<action>/<parcels_id:\d+>'=>'orderElement/default/<action>',
 
           'receiving_points/<action>'=>'receiving_points/default/<action>',
 
