@@ -47,6 +47,16 @@ class OrderElement extends \yii\db\ActiveRecord
     );
   }
 
+  public function getStateText(){
+    if(!$this->state){
+      return '';
+    }
+    if(isset(Yii::$app->params['states'][$this->state])){
+      return Yii::$app->params['states'][$this->state];
+    }
+    return $this->state;
+  }
+
   public static function elementStatusText($param)
   {
     $textForStatus =  OrderElement::getTextStatus();

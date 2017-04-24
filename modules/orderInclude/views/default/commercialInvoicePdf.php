@@ -39,7 +39,7 @@
     <?=$pac->adress_1;?>,
     <?=strlen($pac->adress_2)>2?$pac->adress_2.',':'';?><br>
     <?=$pac->city;?>,
-    <?=$pac->state;?>,
+    <?=$pac->getStateText();?>,
     <?=$pac->zip;?><br>
     United States<br>
 
