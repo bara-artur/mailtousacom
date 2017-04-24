@@ -910,10 +910,14 @@ function superCheckboxProcessing(){
   oldCookieInvoice = getCookie('parcelCheckedInvoice').split(',');        // все юзеры со всех страниц
   els=$(".checkBoxParcelMainTable:checked");
   if ($("#superCheckbox").prop("checked")) {
-    if (els.length==0) els=$(".checkBoxParcelMainTable"); // если нет выбранного то берем первый попавшийся
-    if (els.length>0)
-    {
+    if (getCookie('parcel_elem_type')=='') { // если нет выбранного то берем первый попавшийся
+      els=$(".checkBoxParcelMainTable");
       elem_type = els[0].getAttribute('name');
+    } else{
+      elem_type = getCookie('parcel_elem_type');
+    }
+    if (elem_type!='')
+    {
       new_elems = $("[name='"+elem_type+"']").not(":checked");
       for (i=0;i<new_elems.length;i++) {
         oldCookie.push(new_elems[i].getAttribute('id'));
