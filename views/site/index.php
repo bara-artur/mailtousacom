@@ -157,7 +157,12 @@ $this->title = 'Shipping to USA and Canada';
             'dataProvider' => $orderElements,
             'summary'=>'',
             'columns' => [
-                ['content'=> function($data){
+                [ 'header' => Html::checkbox('123',false,[
+                  'id'=>'superCheckbox',
+                  'class'=>'',
+                  'label' => '<span class="fa fa-check"></span>',
+                ]),
+                  'content'=> function($data){
                     return Html::checkbox(($data->status>1)?'InSystem':'Draft',false,[
                       'class'=>'checkBoxParcelMainTable',
                       'id'=>$data->id,
