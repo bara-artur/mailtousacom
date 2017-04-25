@@ -702,14 +702,14 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
   setCookie('parcelCheckedId',stringCoockies,1);
   setCookie('parcelCheckedUser',stringUsers,1);
   setCookie('parcelCheckedInvoice',stringInvoices,1);
-  if ((getCookie('multiUserMode')=='1')&&(difUser==0)){    // выдаем гриттер при переключении многопользовательского режима
+  if ((getCookie('multiUserMode')=='1')&&(difUser==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении многопользовательского режима
     gritterAdd('One user mode', '', 'gritter-success');
   }else {
     if ((getCookie('multiUserMode') == '0') && (difUser == 1)) {  // выдаем гриттер при переключении многопользовательского режима
       gritterAdd('MultiUser mode', '', 'gritter-warning');
     }
   }
-  if ((getCookie('multiTrackNumberMode')=='1')&&(difInvoice==0)){    // выдаем гриттер при переключении многопользовательского режима
+  if ((getCookie('multiTrackNumberMode')=='1')&&(difInvoice==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении многопользовательского режима
     gritterAdd('Now you can use Tracking button', '', 'gritter-success');
   }else {
     if ((getCookie('multiTrackNumberMode') == '0') && (difInvoice == 1)) {  // выдаем гриттер при переключении многопользовательского режима
