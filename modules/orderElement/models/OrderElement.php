@@ -10,6 +10,7 @@ use app\modules\logs\models\Log;
 use app\modules\receiving_points\models\ReceivingPoints;
 use app\modules\additional_services\models\AdditionalServices;
 use app\modules\payment\models\PaymentInclude;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "order_element".
@@ -205,6 +206,65 @@ class OrderElement extends \yii\db\ActiveRecord
     return $query;
   }
 
+  public function getPath(){
+    $path='order_docs/'.floor($this->id/100).'/'.($this->id % 100).'/';
+    if(!is_readable($path)){
+      mkdir($path,0777,true);
+    }
+    return $path;
+  }
+
+  public function fileOutArray($url_arr){
+    $p1=array();
+    $p2=array();
+
+    for ($i = 0; $i < count($url_arr); $i++) {
+      $file_name=explode('/',$url_arr[$i]);
+      $file_name=$file_name[count($file_name)-1];
+      $key = $file_name;
+      $url = str_replace('//','/','/'.$url_arr[$i]);
+      $p1[] = $url; // sends the data
+      $p2[] = [
+        'caption' => $key,
+        'size' => filesize($url_arr[$i]),
+        'url' => $url,
+        'key' => $key
+      ];
+    };
+
+    return [
+      'initialPreview' => $p1,
+      'initialPreviewConfig' => $p2,
+      'append' => true // whether to append these configurations to initialPreview.
+      // if set to false it will overwrite initial preview
+      // if set to true it will append to initial preview
+      // if this propery not set or passed, it will default to true.
+    ];
+  }
+
+  public function fileList(){
+    $url_arr=array();
+    $path=$this->getPath();
+
+    $dh  = opendir(realpath($path));
+    while (false !== ($filename = readdir($dh))) {
+      if(strlen($filename)<5)continue;
+      $url_arr[] = $path.$filename;
+    }
+    return $this->fileOutArray($url_arr);
+  }
+
+  public function loadDoc($files){
+    $path=$this->getPath();
+    $url_arr=array();
+    foreach ($files as $file) {
+      $file_name=($path . date('Ymd_His_') . 'id'.$this->user_id.'_order'.$this->id.'.' . $file->extension);
+      $file->saveAs($file_name);
+      $url_arr[]=$file_name;
+    }
+    return json_encode($this->fileList());
+  }
+
   public function afterSave($insert, $changedAttributes)
   {
     //if($changedAttributes['agreement'])return true;
@@ -377,32 +437,40 @@ class OrderElement extends \yii\db\ActiveRecord
 
   function GetShippingCarrier($TrackingNumber) //синхронизировать с finditem.php
   {
-    $ShippingCarrier='';
     if (strlen($TrackingNumber)==26) {
-      $ShippingCarrier='ups';
-    } else if (strlen($TrackingNumber)==22 && substr($TrackingNumber,0,2)!='96') { //96 -FedEx
-      $ShippingCarrier='usps';
-    } else if (strlen($TrackingNumber)==22 && substr($TrackingNumber,0,2)=='96') { //96 -FedEx 9612800 087985515428589
-      $ShippingCarrier='fedex';
-    } else if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='61') {
-      $ShippingCarrier='fedex';
-    } else if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='13') {
-      $ShippingCarrier='usps';
-    } else if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='23') {
-      $ShippingCarrier='usps';
-    } else if (strlen($TrackingNumber)==18 && strtoupper(substr($TrackingNumber,0,2))=='1Z') {
-      $ShippingCarrier='ups';
-    } else if (strlen($TrackingNumber)==16 && substr($TrackingNumber,0,1)=='7') {
-      $ShippingCarrier='canadapost';
-    } else if (strlen($TrackingNumber)==15 || strlen($TrackingNumber)==12) {
-      $ShippingCarrier='fedex';
-    } else if (strlen($TrackingNumber)==13) {
+      return 'ups';
+    }
+    if (strlen($TrackingNumber)==22 && substr($TrackingNumber,0,2)!='96') { //96 -FedEx
+      return 'usps';
+    }
+    if (strlen($TrackingNumber)==22 && substr($TrackingNumber,0,2)=='96') { //96 -FedEx 9612800 087985515428589
+      return 'fedex';
+    }
+    if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='61') {
+      return 'fedex';
+    }
+    if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='13') {
+      return 'usps';
+    }
+    if (strlen($TrackingNumber)==20 && substr($TrackingNumber,0,2)=='23') {
+      return 'usps';
+    }
+    if (strlen($TrackingNumber)==18 && strtoupper(substr($TrackingNumber,0,2))=='1Z') {
+      return 'ups';
+    }
+    if (strlen($TrackingNumber)==16 && substr($TrackingNumber,0,1)=='7') {
+      return 'canadapost';
+    }
+    if (strlen($TrackingNumber)==15 || strlen($TrackingNumber)==12) {
+      return 'fedex';
+    }
+    if (strlen($TrackingNumber)==13) {
       $txt=substr($TrackingNumber,0,1);
       if (is_numeric($txt)==false)  {
-        $ShippingCarrier='usps';
+        return 'usps';
       }
     }
 
-    return $ShippingCarrier;
+    return "";
   }
 }

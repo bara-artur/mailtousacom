@@ -298,32 +298,68 @@ Parcel will be moved back to the list of parcels.',
               </div>
             <?php
             echo '<label class="control-label">Add Attachments</label>';
+            $percel_files=$percel->fileList();
             echo FileInput::widget([
               'model' => $percel,
-              'attribute' => 'files',
+              'attribute' => 'files['.$percel->id.']',
               'options' => [
-                'multiple' => true,
+                'multiple' => false,
                 'accept' => 'application/pdf,image/jpeg,image/pjpeg,application/msword,application/rtf,application/x-rtf,text/richtext'
               ],
               'pluginOptions' => [
                 'uploadUrl' => Url::to(['/orderElement/file-upload/'.$percel->id]),
+                'deleteUrl' => Url::to(['/orderElement/file-delete/'.$percel->id]),
+                'browseClass'=> "btn btn-success",
+                'browseLabel'=> "Add documents",
+                "layoutTemplates"=> [
+                  "main1"=>
+                    "{preview}\n".
+                    "<div class='input-group {class}'>\n".
+                    "   <div class='input-group-btn'>\n".
+                    "       {browse}\n".
+                    "       {upload}\n".
+                    "       {remove}\n".
+                    "   </div>\n".
+                    "   {caption}\n".
+                    "</div>",
+                  "preview"=>
+                    '<div class="file-preview {class}">'.
+                    '    <div class="{dropClass}">'.
+                    '    <div class="file-preview-thumbnails">'.
+                    '    </div>'.
+                    '    <div class="clearfix"></div>'.
+                    '    <div class="file-preview-status text-center text-success"></div>'.
+                    '    <div class="kv-fileinput-error"></div>'.
+                    '    </div>'.
+                    '</div>',
+                  "modal"=>'<div class="modal-dialog modal-lg" role="document">'.
+                    '  <div class="modal-content">'.
+                    '    <div class="modal-header">' .
+                    '      <div class="kv-zoom-actions pull-right">{close}</div>' .
+                    '      <h3 class="modal-title">{heading} <small><span class="kv-zoom-title"></span></small></h3>' .
+                    '    </div>' .
+                    '    <div class="modal-body">' .
+                    '      <div class="floating-buttons"></div>'.
+                    '      <div class="kv-zoom-body file-zoom-content"></div>\n'.
+                    '{prev} {next}\n'.
+                    '    </div>\n'.
+                    '  </div>\n'.
+                    '</div>\n',
+
+                ],
+                'removeFromPreviewOnError'=>true,
                 'maxFileCount' => 5,
-                "uploadAsync"=>true,
-                "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
-                'filebatchuploadcomplete' => "function(event, files, extra) {
-                  console.log(files);
-                  console.log('File batch upload complete');
-                 }",
-                'previewFileType' => 'image',
-                'initialPreviewAsData'=>true,
-                'maxFileSize'=>2800,
-                'overwriteInitial'=>false,
-                //'showPreview' => true,
-                'showCaption' => false,
+                'minFileCount' => 1,
+                "uploadAsync"=>false,
                 'showRemove' => false,
                 'showUpload' => false,
-                'showCancel' => false,
+                'showBrowse'=> true,
+                'showCaption' => false,
                 'showUploadedThumbs' => false,
+                'showCancel' => false,
+                'browseOnZoneClick'=> true,
+                'maxFileSize'=>2800,
+                "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
                 'previewFileIconSettings'=>[
                   'doc'=> '<i class="fa fa-file-word-o text-primary"></i>',
                   'xls'=> '<i class="fa fa-file-excel-o text-success"></i>',
@@ -331,7 +367,30 @@ Parcel will be moved back to the list of parcels.',
                   'jpg'=> '<i class="fa fa-file-photo-o text-warning"></i>',
                   'pdf'=> '<i class="fa fa-file-pdf-o text-danger"></i>',
                   'zip'=> '<i class="fa fa-file-archive-o text-muted"></i>',
-                ]
+                ],
+                'initialPreview'=>$percel_files['initialPreview'],
+                'initialPreviewConfig'=>$percel_files['initialPreviewConfig'],
+                'append'=>$percel_files['append'],
+                'initialPreviewAsData'=> true,
+              ],
+              "pluginEvents"=>[
+                'filebatchuploadcomplete' => "function(event, files, extra) {
+                  console.log(files);
+                  console.log('File batch upload complete');
+                 }",
+                "filepredelete"=>"
+                    function(jqXHR) {
+                        var abort = true;
+                        if (confirm(\"Are you sure you want to delete this image?\")) {
+                            abort = false;
+                        }
+                        return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+                    }
+                ",
+                "filebatchselected"=>'function(event, files) {
+                  $this=$(this).fileinput("upload");
+                  
+                }',
               ]
             ]);
             ?>

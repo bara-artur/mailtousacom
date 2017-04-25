@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use app\components\ParcelPrice;
+use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for OrderElement model.
@@ -365,7 +366,28 @@ class DefaultController extends Controller
   }
 
   public function actionFileUpload($parcels_id){
-    return $parcels_id;
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return $this->redirect(['/']);
+    }
+    $pac=OrderElement::findOne([$parcels_id]);
+    if($pac->user_id!=Yii::$app->user->getId() && !Yii::$app->user->identity->isManager()){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Not enough access rights'
+        );
+      return $this->redirect(['/']);
+    };
+    $files=UploadedFile::getInstances($pac, 'files');
+    return $pac->loadDoc($files);
   }
 
   public function actionCommercial_inv_print($parcels_id=null){
