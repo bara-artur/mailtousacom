@@ -21,7 +21,7 @@ use app\modules\orderElement\models\OrderElement;
       <?php $form = ActiveForm::begin(['options' => ['class'=>'show-parcel-table-form'],]); ?>
       <div class="col-md-10">
           <div class="row">
-        <?php if (Yii::$app->params['showAdminPanel']==1) { ?>
+        <?php if ($admin==1) { ?>
             <div class="col-md-2">
               <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span>User','class'=>'']) ?>
             </div>

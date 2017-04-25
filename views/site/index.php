@@ -16,7 +16,7 @@ $this->title = 'Shipping to USA and Canada';
 
 
     ?>
-    <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My parcel</h4> <?php } ?>
+    <?php if ($admin!=1) { ?> <h4 class="modernui-neutral2">My parcel</h4> <?php } ?>
 
     <div class="row">
       <div class="col-md-12">
@@ -127,19 +127,19 @@ $this->title = 'Shipping to USA and Canada';
         <hr class="bottom_line2">
         <div class="row">
           <div class="col-md-12 scrit">
-            <?= $this->render('elementFilterForm', ['model' => $filterForm]);?>
+            <?= $this->render('elementFilterForm', ['model' => $filterForm, 'admin' => $admin]);?>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-12 scrit">
-            <?= $this->render('showParcelTableForm', ['model' => $showTable]);?>
+            <?= $this->render('showParcelTableForm', ['model' => $showTable, 'admin' => $admin]);?>
           </div>
         </div>
 
       <div class="row pad_row">
         <div class="col-md-3 col-xs-12">
-          <?php if(Yii::$app->params['showAdminPanel']==1){?>
+          <?php if($admin==1){?>
             <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
           <?php }?>
         </div>
@@ -171,13 +171,13 @@ $this->title = 'Shipping to USA and Canada';
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },
-                  'visible' => (Yii::$app->params['showAdminPanel']==1),
+                  'visible' => ($admin==1),
                 ],
         //        ['class' => 'yii\grid\SerialColumn',
         //          'visible' => $showTable->showSerial,],
            //   'userOrder_id',
                 ['attribute'=> 'user_id',
-                  'visible' => (($showTable->showID)&&(Yii::$app->params['showAdminPanel']==1)),
+                  'visible' => (($showTable->showID)&&($admin==1)),
                   'content'=> function($data){ if ($data->user!=null)
                     return $data->user->lineInfo; else return '-empty-';
                   }

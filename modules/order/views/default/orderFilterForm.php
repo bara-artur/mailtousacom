@@ -23,7 +23,7 @@ use yii\helpers\Url;
             <?= $form->field($model, 'id')->textInput () ?>
           </div>
 
-        <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
+        <?php if ($admin == 1) {?>
           <div class="col-md-1">
             <?=$form->field($model, 'user_input')->widget(AutoComplete::classname(),[
               'name' => 'user',

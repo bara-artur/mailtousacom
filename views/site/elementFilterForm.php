@@ -21,7 +21,7 @@ use app\modules\orderElement\models\OrderElement;
     <div class="panel-body">
       <?php $form = ActiveForm::begin(['options' => ['class'=>'element-filter-form'],]); ?>
       <div class="row">
-        <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
+        <?php if ($admin == 1) {?>
           <div class="col-md-2 col-sm-4">
               <label class="control-label">Fast search</label>
             <?=$form->field($model, 'user_input')->widget(AutoComplete::classname(),[
@@ -63,12 +63,12 @@ use app\modules\orderElement\models\OrderElement;
             ]
           ])->label(false);?>
         </div>
-          <?php if (Yii::$app->params['showAdminPanel'] == 0) {?>
+          <?php if ($admin == 0) {?>
         <div class="col-md-2 col-sm-4">
             <?= $form->field($model, 'payment_state')->dropDownList(PaymentsList::getTextStatus()) ?>
         </div>
           <?php } ?>
-          <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
+          <?php if ($admin == 1) {?>
 
               <div class="col-md-1 col-sm-4">
                   <label class="control-label">Payment</label>
@@ -86,12 +86,12 @@ use app\modules\orderElement\models\OrderElement;
 
             </div>
         </div>
-          <?php if (Yii::$app->params['showAdminPanel'] == 1) {?>
+          <?php if ($admin == 1) {?>
         <div class="col-md-2 col-sm-4">
           <?= $form->field($model, 'track_number')->textInput() ?>
         </div>
           <?php } ?>
-          <?php if (Yii::$app->params['showAdminPanel'] == 0) {?>
+          <?php if ($admin == 0) {?>
               <div class="col-md-3 col-sm-8">
                   <?= $form->field($model, 'track_number')->textInput() ?>
               </div>
