@@ -1,7 +1,6 @@
 <?php
 
 return [
-  'adminUserChoosing' =>'0',
   'choose_receiving_point' => '1',
   'country' => [
     'Canada',
