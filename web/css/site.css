@@ -1053,4 +1053,4 @@ button.navbar-toggle{margin-right:30px;}
 .otst_to{padding:6px;border-left:0;border-right:0;}
 .input-group.input-daterange .input-group-addon{border-left:0;}
 .file-preview  .file-drag-handle{display:none;}
-.file-preview{max-height:320px; overflow:auto;}
+.file-preview{max-height: 330px;overflow:auto;}
