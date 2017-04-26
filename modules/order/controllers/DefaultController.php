@@ -140,13 +140,13 @@ class DefaultController extends Controller
                   $parcel->company_name = '[default]';
                   $parcel->adress_1 = '[default]';
                   $parcel->city = '[default]';
-                  $parcel->zip = '11111';
-                  $parcel->phone = '434342342';
-                  $parcel->state = '33';
+                  $parcel->zip = '00000';
+                  $parcel->phone = '0000000000';
+                  $parcel->state = '51';
                   $parcel->created_at = time();
                   $parcel->track_number = $_POST['track_number'];
                   $parcel->track_number_type = 0;
-                  $parcel->weight = 1;
+                  $parcel->weight = 0;
                   $parcel->address_type = 0;
                   if ($parcel->save()) {
                     if ($oldModel->el_group == '') {
@@ -155,12 +155,12 @@ class DefaultController extends Controller
                       $oldModel->el_group = $oldModel->el_group . ',' . $parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
                     }
                     if ($oldModel->save()) {
-                      $success = 3;
+                      $success = 3;  // все хорошо
                     } else {
-                      $success = 4;
+                      $success = 4;   // заказ не сохранился в базе
                     }
                   }else{
-                    $success = 6;
+                    $success = 6;   // посылка не сохранилась в базе
                   }
                 }else{
                   $success = 5; // не прошла валидация трэк номера по компаниям
