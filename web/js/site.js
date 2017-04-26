@@ -1,4 +1,14 @@
 $(document).ready(function() {
+  fix_autocomplite()
+  $('[role=dialog]').on('show.bs.modal', function(e) {
+    fix_autocomplite()
+  });
+});
+function fix_autocomplite() {
+  $('[autocomplete=off]').attr('readonly',true).on('focus',function(){$(this).removeAttr('readonly')})
+}
+
+$(document).ready(function() {
   $('.secundar_address').hide();
   $('.show_after_all_button').hide();
   init_address_edit();
