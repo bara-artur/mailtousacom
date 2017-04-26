@@ -40,7 +40,7 @@ $submitOption = [
         </p>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
-          <h4 class="">Order #<?=$order_id?> for Transportation</br>
+          <h4 class="order_id" order-id=<?=$order_id?> >Order #<?=$order_id?> for Transportation</br>
           <?php if (!$edit_not_prohibited) {?>
               <span class="prohibit_editing text-danger"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></span>
           <?php } ?>
@@ -363,6 +363,29 @@ if($createNewAddress){
      }else{
        if ((event.keyCode || event.charCode) == 13) {
          $('.hide_scaner').hide(500);
+         elem = $('.order_id');
+         order_id = elem.attr('order-id');
+         track_number = $('.scaner_data').val();
+         $.ajax({
+           type: 'POST',
+           url: 'order/update',
+           data: { order_id: order_id, track_number: track_number},
+           success: function(data) {
+             if (data==0) { }
+             if (data==1) { gritterAdd('Success', 'We find your parcel in DB. Saving successful', 'gritter-success');}
+             if (data==2) { gritterAdd('Error','We find your parcel in DB, but order saving failed','gritter-danger'); }
+             if (data==3) { gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');}
+             if (data==4) { gritterAdd('Error','We create new parcel, but order saving failed ','gritter-danger'); }
+             if (data==5) { gritterAdd('Error','Track number validation failed','gritter-danger'); }
+             if (data==6) { gritterAdd('Error','We create new parcel, but parcel saving was failed','gritter-danger'); }
+             location.href=location.href;
+           },
+           error:  function(xhr, str){
+             $('.order_id').css( "color", "red" );
+             $('.order_id').val('222');
+             console.log(222);
+           }
+         });
        }
       }
     })

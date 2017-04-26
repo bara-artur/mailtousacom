@@ -2,6 +2,7 @@
 
 namespace app\modules\order\controllers;
 
+use app\modules\orderElement\models\OrderElement;
 use app\modules\orderInclude\models\OrderInclude;
 use Yii;
 use app\modules\order\models\Order;
@@ -111,10 +112,51 @@ class DefaultController extends Controller
         if (($order_id) && ($request->isAjax)) {
           $oldModel = Order::find()->where(['id' => $order_id])->one();
           if ($oldModel) {
-            if (($_POST['order_status'] != null)&&($_POST['order_status'] != 'none')) $oldModel->order_status = $_POST['order_status'];
-            if (($_POST['payment_state'] != null)&&($_POST['payment_state'] != 'none')) $oldModel->payment_state = $_POST['payment_state'];
+           // if (($_POST['order_status'] != null)&&($_POST['order_status'] != 'none')) $oldModel->order_status = $_POST['order_status'];
+           // if (($_POST['payment_state'] != null)&&($_POST['payment_state'] != 'none')) $oldModel->payment_state = $_POST['payment_state'];
+            if (isset($_POST['track_number'])){
+              $parcel = OrderElement::find()->where(['track_number' => $_POST['track_number']])->one();
+              if ($parcel){
+                if ($oldModel->el_group == '') {
+                  $oldModel->el_group = $parcel->id;
+                }
+                else {
+                  $oldModel->el_group = $oldModel->el_group.','.$parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
+                }
+                if ($oldModel->save()){$success = 1;}
+                else {$success=2;}
+              }else{
+                if (OrderElement::GetShippingCarrier($_POST['track_number'])){
+                  $parcel = new OrderElement();
+                  $parcel->first_name = '[default]';
+                  $parcel->last_name = '[default]';
+                  $parcel->company_name = '[default]';
+                  $parcel->adress_1 = '[default]';
+                  $parcel->city = '[default]';
+                  $parcel->zip = '00000';
+                  $parcel->state = 0;
+                  $parcel->created_at = time();
+                  $parcel->track_number = $_POST['track_number'];
+                  if ($parcel->save()) {
+                    if ($oldModel->el_group == '') {
+                      $oldModel->el_group = $parcel->id;
+                    } else {
+                      $oldModel->el_group = $oldModel->el_group . ',' . $parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
+                    }
+                    if ($oldModel->save()) {
+                      $success = 3;
+                    } else {
+                      $success = 4;
+                    }
+                  }else{
+                    $success = 6;
+                  }
+                }else{
+                  $success = 5; // не прошла валидация трэк номера по компаниям
+                }
+              }
+            }
 
-            $success = $oldModel->save();
           }
         }
         return $success;
