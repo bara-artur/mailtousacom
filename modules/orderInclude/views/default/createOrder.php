@@ -302,7 +302,7 @@ Parcel will be moved back to the list of parcels.',
          <?php } ?>
               </div>
         </div>
-
+          <a <?= (($last==$percel->id)?('id=last_anchor'):('')) ?>></a>
         <?php Pjax::end(); ?>
         </div>
         <hr>
@@ -382,8 +382,9 @@ if($createNewAddress){
              if (data==5) { gritterAdd('Error','Track number validation failed','gritter-danger'); }
              if (data==6) { gritterAdd('Error','We create new parcel, but parcel saving was failed','gritter-danger'); }
              if (data==7) { gritterAdd('Error','You have this parcel in current order','gritter-warning'); }
-             window.location.hash="last_parcel_anchor";
-             location.href=location.href;
+            // window.location.hash="last_parcel_anchor";
+             location.href=data;
+             location.reload();
            },
            error:  function(xhr, str){
              $('.order_id').css( "color", "red" );

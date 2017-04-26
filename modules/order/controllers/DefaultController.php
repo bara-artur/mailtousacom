@@ -116,23 +116,25 @@ class DefaultController extends Controller
            // if (($_POST['payment_state'] != null)&&($_POST['payment_state'] != 'none')) $oldModel->payment_state = $_POST['payment_state'];
             if (isset($_POST['track_number'])){
               $parcel = OrderElement::find()->where(['track_number' => $_POST['track_number']])->one();
-              if ($parcel){
+              if ($parcel){    // посылка уже в БД
                 if ($oldModel->el_group == '') {
                   $oldModel->el_group = $parcel->id;
                 }
-                else {
+                else {  //  проверяем наличие посылки в заказе
                   $arr = explode(',', $oldModel->el_group);
                   if (array_search($parcel->id, $arr) !== false){
-                     return 7; //  посылка есть в этом заказе
+                    $success = 7; //  посылка есть в этом заказе
                   }else {
                     array_push($arr, $parcel->id);
                     asort($arr);
                     $oldModel->el_group = implode(',',$arr);
                   }
                 }
-                if ($oldModel->save()){$success = 1;}
+                if ($oldModel->save()){
+                  return '/orderInclude/create-order/'.$oldModel->id.'#last_anchor';
+                }
                 else {$success=2;}
-              }else{
+              }else{   //  посылки с трэк номером нет в базе - надо создать
                 if (OrderElement::GetShippingCarrier($_POST['track_number'])){
                   $parcel = new OrderElement();
                   $parcel->first_name = '[default]';
@@ -155,7 +157,7 @@ class DefaultController extends Controller
                       $oldModel->el_group = $oldModel->el_group . ',' . $parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
                     }
                     if ($oldModel->save()) {
-                      $success = 3;  // все хорошо
+                      return '/orderInclude/create-order/'.$oldModel->id.'#last_anchor';
                     } else {
                       $success = 4;   // заказ не сохранился в базе
                     }

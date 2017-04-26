@@ -86,6 +86,8 @@ class DefaultController extends Controller
     $numbers = explode(',',$order->el_group);
 
     $edit_not_prohibited = 1;
+    $max_createdAt = 0;
+    $max_createdAtId = 0;
     $hideNext = 0;
     $order_elements = [];
     $ids = '';
@@ -101,6 +103,10 @@ class DefaultController extends Controller
           $order_elements[] = $parcel;
           if ($parcel->status > 1){
             $edit_not_prohibited = 0;
+          }
+          if ($parcel->created_at > $max_createdAt){
+            $max_createdAt = $parcel->created_at;
+            $max_createdAtId = $parcel->id;
           }
           $totalPrice = 0;
           foreach ($parcel->orderInclude as $ordInclude) {
@@ -125,6 +131,7 @@ class DefaultController extends Controller
       'ids' =>$ids,
       'user_ids' => $user_ids,
       'track_number_types' => $track_number_types,
+      'last' => $max_createdAtId,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
