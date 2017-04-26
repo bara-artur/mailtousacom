@@ -411,7 +411,23 @@ class DefaultController extends Controller
         );
       return $this->redirect(['/']);
     };
-    return json_encode($pac->delFile($request->post('key')));
+
+    //$pac->delFile($request->post('key'));
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return [
+      'title'=> "",
+      'content'=>'<script>
+          modal.hide();
+          a=$(\'[data-key="'.$request->post('key').'"]\').parentsUntil(\'.file-preview-thumbnails\').last();
+          b=a.closest(\'.file-drop-zone\')
+          a.remove();
+          if(b.find(\'.file-preview-thumbnails>div:not(.kv-zoom-cache) .file-remove\').length==0){
+            b.append(\'<div class="file-drop-zone-title">Drag &amp; drop files here …<br>(or click to select file)</div>\')
+          }
+        </script>',
+      'footer'=> ""
+    ];
+
   }
 
   public function actionCommercial_inv_print($parcels_id=null){

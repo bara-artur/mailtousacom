@@ -264,12 +264,23 @@ class OrderElement extends \yii\db\ActiveRecord
   public function loadDoc($files){
     $path=$this->getPath();
     $url_arr=array();
-    foreach ($files as $file) {
-      $file_name=($path . date('Ymd_His_') . 'id'.$this->user_id.'_order'.$this->id.'.' . $file->extension);
-      $file->saveAs($file_name);
-      $url_arr[]=$file_name;
+
+    $count_now=count(scandir($path));
+    $err=false;
+    if($count_now-2>=5){
+      $err='Maximum number of files is 5.';
+    }else {
+      foreach ($files as $file) {
+        $file_name = ($path . date('Ymd_His_') . 'id' . $this->user_id . '_order' . $this->id . '.' . $file->extension);
+        $file->saveAs($file_name);
+        $url_arr[] = $file_name;
+      }
     }
-    return json_encode($this->fileList());
+    $files=$this->fileList();
+    if($err){
+      $files["error"]=$err;
+    }
+    return json_encode($files);
   }
 
   public function afterSave($insert, $changedAttributes)

@@ -14,6 +14,11 @@ use kartik\select2\Select2;
 use yii\jui\AutoComplete;
 use app\modules\user\models\User;
 use kartik\file\FileInput;
+//http://demos.krajee.com/widget-details/fileinput
+//http://plugins.krajee.com/file-input-ajax-demo/10
+//http://plugins.krajee.com/file-input#options
+//http://plugins.krajee.com/file-advanced-usage-demo
+//http://plugins.krajee.com/file-input/demo#advanced-usage
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
@@ -308,19 +313,18 @@ Parcel will be moved back to the list of parcels.',
               ],
               'pluginOptions' => [
                 'uploadUrl' => Url::to(['/orderElement/file-upload/'.$percel->id]),
-                'deleteUrl' => Url::to(['/orderElement/file-delete/'.$percel->id]),
                 'browseClass'=> "btn btn-success",
                 'browseLabel'=> "Add documents",
                 "layoutTemplates"=> [
                   "main1"=>
-                    "{preview}\n".
-                    "<div class='input-group {class}'>\n".
-                    "   <div class='input-group-btn'>\n".
-                    "       {browse}\n".
-                    "       {upload}\n".
-                    "       {remove}\n".
-                    "   </div>\n".
-                    "   {caption}\n".
+                    "{preview}".
+                    "<div class='input-group {class}'>".
+                    "   <div class='input-group-btn'>".
+                    "       {browse}".
+                    "       {upload}".
+                    "       {remove}".
+                    "   </div>".
+                    "   {caption}".
                     "</div>",
                   "preview"=>
                     '<div class="file-preview {class}">'.
@@ -332,7 +336,7 @@ Parcel will be moved back to the list of parcels.',
                     '    <div class="kv-fileinput-error"></div>'.
                     '    </div>'.
                     '</div>',
-                  "modal"=>'<div class="modal-dialog modal-lg" role="document">'.
+                  "modal"=>'<div class="modal-dialog" role="document">'.
                     '  <div class="modal-content">'.
                     '    <div class="modal-header">' .
                     '      <div class="kv-zoom-actions pull-right">{close}</div>' .
@@ -340,12 +344,34 @@ Parcel will be moved back to the list of parcels.',
                     '    </div>' .
                     '    <div class="modal-body">' .
                     '      <div class="floating-buttons"></div>'.
-                    '      <div class="kv-zoom-body file-zoom-content"></div>\n'.
-                    '{prev} {next}\n'.
-                    '    </div>\n'.
-                    '  </div>\n'.
-                    '</div>\n',
-
+                    '      <div class="kv-zoom-body file-zoom-content"></div>'.
+                    '{prev} {next}'.
+                    '    </div>'.
+                    '  </div>'.
+                    '</div>'.
+                    '<script>
+                      $(\'#kvFileinputModal\').addClass("modal-lg");
+                      $(\'#kvFileinputModal\').css(\'padding\',0);
+                    </script>',
+                  //"footer"=>"123",
+                  "actions"=>"{delete}".
+                    Html::a('<i class="glyphicon glyphicon-download-alt"></i>', "{data}",[
+                      "target"=>"_blank",
+                      "data-pjax"=>false,
+                      "class"=>"file-download"
+                    ]).
+                    '{zoom}'
+                  ,
+                  "actionDelete"=>
+                    '<a
+                      href="'.'/orderElement/file-delete/'.$percel->id.'"
+                      class="file-remove btn btn-sm" 
+                      confirm-message="Are you sure to delete this document?"
+                      confirm-title="Delete"
+                      {dataKey}
+                      >
+                      {removeIcon}
+                      </a>'
                 ],
                 'removeFromPreviewOnError'=>true,
                 'maxFileCount' => 5,
@@ -375,8 +401,7 @@ Parcel will be moved back to the list of parcels.',
               ],
               "pluginEvents"=>[
                 'filebatchuploadcomplete' => "function(event, files, extra) {
-                  console.log(files);
-                  console.log('File batch upload complete');
+                  $('.kv-upload-progress .progress').hide()
                  }",
                 "filepredelete_"=>"
                     function(jqXHR) {
@@ -391,6 +416,17 @@ Parcel will be moved back to the list of parcels.',
                   $this=$(this).fileinput("upload");
                   
                 }',
+                "filebatchuploaderror"=>"
+                  function(event, data, msg) {
+                      var form = data.form, files = data.files, extra = data.extra,
+                          response = data.response, reader = data.reader;
+                      gritterAdd('Upload error', msg, 'gritter-danger');
+                      $('.file-error-message').remove();
+                      
+                      event.preventDefault();
+                      return false;
+                  }
+                "
               ]
             ]);
             ?>
