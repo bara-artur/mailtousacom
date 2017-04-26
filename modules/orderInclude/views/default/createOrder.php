@@ -378,7 +378,7 @@ Parcel will be moved back to the list of parcels.',
                   console.log(files);
                   console.log('File batch upload complete');
                  }",
-                "filepredelete"=>"
+                "filepredelete_"=>"
                     function(jqXHR) {
                         var abort = true;
                         if (confirm(\"Are you sure you want to delete this image?\")) {

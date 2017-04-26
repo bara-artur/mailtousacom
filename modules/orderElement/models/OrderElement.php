@@ -214,6 +214,13 @@ class OrderElement extends \yii\db\ActiveRecord
     return $path;
   }
 
+  public function delFile($key){
+    $path=$this->getPath();
+    if(is_readable($path.$key)){
+      return unlink($path.$key);
+    }
+  }
+
   public function fileOutArray($url_arr){
     $p1=array();
     $p2=array();
@@ -227,7 +234,7 @@ class OrderElement extends \yii\db\ActiveRecord
       $p2[] = [
         'caption' => $key,
         'size' => filesize($url_arr[$i]),
-        'url' => $url,
+        //'url' => $url,
         'key' => $key
       ];
     };
