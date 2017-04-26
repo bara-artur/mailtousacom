@@ -35,13 +35,17 @@ $submitOption = [
             ])?>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
+        <p class="hide_scaner"><b>Scaner data:</b><br>
+          <input type="text" class="scaner_data hide_scaner" size="32">
+        </p>
+      </div>
+      <div class="col-md-8 col-sm-12 text-center">
           <h4 class="">Order #<?=$order_id?> for Transportation</br>
           <?php if (!$edit_not_prohibited) {?>
               <span class="prohibit_editing text-danger"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></span>
           <?php } ?>
           </h4>
-    </div>
-
+      </div>
   </div>
 <hr class="bottom_line2">
 
@@ -342,12 +346,26 @@ if($createNewAddress){
 <script>
   //исправить!!!!!!!
   $(document).ready(function() {
+   $('.hide_scaner').hide();
    $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
    $("#ajaxCrudModal").removeAttr("tabindex");
    });
    $( "#crud-datatable-pjax" ).on( "click", ".btn-science-blue", function( event ) { // делегируем событие для динамической кнопки добавить
    $("#ajaxCrudModal").attr("tabindex",-1);
    });
+
+   $("body").on('keydown', function(){
+     if ($('.scaner_data').is(':hidden')) {
+       if ((event.keyCode || event.charCode) == 118) {
+         $('.hide_scaner').show(500);
+         $('.scaner_data').focus();
+       }
+     }else{
+       if ((event.keyCode || event.charCode) == 13) {
+         $('.hide_scaner').hide(500);
+       }
+      }
+    })
    $(".show_modal").on("click", function() {
    $("#ajaxCrudModal").attr("tabindex",-1);
    })});

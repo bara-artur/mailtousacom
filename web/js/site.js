@@ -13,6 +13,7 @@ $(document).ready(function() {
   init_show_include_payments();
   init_cookie_clean_on_signup_button();
   init_superCheckbox_processing();
+  init_scaner();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -951,4 +952,8 @@ function init_superCheckbox_processing() {
   $("#superCheckbox").on('click', function(){
     superCheckboxProcessing();
   })
+}
+
+function init_scaner(){
+
 }
