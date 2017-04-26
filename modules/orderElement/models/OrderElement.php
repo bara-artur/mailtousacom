@@ -227,16 +227,24 @@ class OrderElement extends \yii\db\ActiveRecord
 
     for ($i = 0; $i < count($url_arr); $i++) {
       $file_name=explode('/',$url_arr[$i]);
-      $file_name=$file_name[count($file_name)-1];
+      $file_name=strtolower($file_name[count($file_name)-1]);
       $key = $file_name;
       $url = str_replace('//','/','/'.$url_arr[$i]);
+      $type=false;
       $p1[] = $url; // sends the data
-      $p2[] = [
+      $data = [
         'caption' => $key,
         'size' => filesize($url_arr[$i]),
         //'url' => $url,
         'key' => $key
       ];
+      if(strpos($file_name,'.pdf'))$type='pdf';
+      if(strpos($file_name,'.doc'))$type='object';
+      if(strpos($file_name,'.rtf'))$type='object';
+      if($type){
+        $data['type']=$type;
+      }
+      $p2[]=$data;
     };
 
     return [

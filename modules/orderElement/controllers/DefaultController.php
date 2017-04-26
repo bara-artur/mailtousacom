@@ -412,7 +412,7 @@ class DefaultController extends Controller
       return $this->redirect(['/']);
     };
 
-    //$pac->delFile($request->post('key'));
+    $pac->delFile($request->post('key'));
     Yii::$app->response->format = Response::FORMAT_JSON;
     return [
       'title'=> "",
@@ -424,6 +424,7 @@ class DefaultController extends Controller
           if(b.find(\'.file-preview-thumbnails>div:not(.kv-zoom-cache) .file-remove\').length==0){
             b.append(\'<div class="file-drop-zone-title">Drag &amp; drop files here …<br>(or click to select file)</div>\')
           }
+          gritterAdd(\'File deleting\', \'Delete successful\', \'gritter-success\');
         </script>',
       'footer'=> ""
     ];

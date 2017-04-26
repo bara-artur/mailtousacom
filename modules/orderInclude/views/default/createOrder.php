@@ -386,14 +386,14 @@ Parcel will be moved back to the list of parcels.',
                 'browseOnZoneClick'=> true,
                 'maxFileSize'=>2800,
                 "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
-                'previewFileIconSettings'=>[
+                /*'previewFileIconSettings'=>[
                   'doc'=> '<i class="fa fa-file-word-o text-primary"></i>',
                   'xls'=> '<i class="fa fa-file-excel-o text-success"></i>',
                   'ppt'=> '<i class="fa fa-file-powerpoint-o text-danger"></i>',
                   'jpg'=> '<i class="fa fa-file-photo-o text-warning"></i>',
                   'pdf'=> '<i class="fa fa-file-pdf-o text-danger"></i>',
                   'zip'=> '<i class="fa fa-file-archive-o text-muted"></i>',
-                ],
+                ],*/
                 'initialPreview'=>$percel_files['initialPreview'],
                 'initialPreviewConfig'=>$percel_files['initialPreviewConfig'],
                 'append'=>$percel_files['append'],
