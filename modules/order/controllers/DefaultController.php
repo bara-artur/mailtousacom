@@ -121,7 +121,14 @@ class DefaultController extends Controller
                   $oldModel->el_group = $parcel->id;
                 }
                 else {
-                  $oldModel->el_group = $oldModel->el_group.','.$parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
+                  $arr = explode(',', $oldModel->el_group);
+                  if (array_search($parcel->id, $arr) !== false){
+                     return 7; //  посылка есть в этом заказе
+                  }else {
+                    array_push($arr, $parcel->id);
+                    asort($arr);
+                    $oldModel->el_group = implode(',',$arr);
+                  }
                 }
                 if ($oldModel->save()){$success = 1;}
                 else {$success=2;}

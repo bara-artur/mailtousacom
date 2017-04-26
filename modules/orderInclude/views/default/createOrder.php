@@ -378,6 +378,7 @@ if($createNewAddress){
              if (data==4) { gritterAdd('Error','We create new parcel, but order saving failed ','gritter-danger'); }
              if (data==5) { gritterAdd('Error','Track number validation failed','gritter-danger'); }
              if (data==6) { gritterAdd('Error','We create new parcel, but parcel saving was failed','gritter-danger'); }
+             if (data==7) { gritterAdd('Error','You have this parcel in current order','gritter-warning'); }
              location.href=location.href;
            },
            error:  function(xhr, str){
