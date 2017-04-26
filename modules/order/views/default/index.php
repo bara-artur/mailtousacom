@@ -11,7 +11,7 @@ $this->title = 'Shipping to USA and Canada';
 <?php
 if (!Yii::$app->user->isGuest) {
   ?>
-  <?php if (Yii::$app->params['showAdminPanel']!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
+  <?php if ($admin!=1) { ?> <h4 class="modernui-neutral2">My Orders</h4> <?php } ?>
 
   <div class="row">
 
@@ -45,7 +45,7 @@ if (!Yii::$app->user->isGuest) {
         ['class' => 'yii\grid\SerialColumn'],
         'id',
         ['attribute'=> 'user_id',
-          'visible' => (Yii::$app->params['showAdminPanel']==1),
+          'visible' => ($admin==1),
           'format' => 'raw',
           'label'=>'User',
           'content'=> function($data){ if ($data->user!=null)

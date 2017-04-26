@@ -177,12 +177,12 @@ class DefaultController extends Controller
         $time_to = ['created_at_to' => $filterForm->created_at_to];
       }
 
-      Yii::$app->params['showAdminPanel'] = 0;
-      if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
+      $admin = 0;
+      if (($user!=null)&&($user->isManager())) $admin = 1;
 
       $orderSearchModel = new OrderSearch();
       //$query = Yii::$app->request->queryParams;
-      if (Yii::$app->params['showAdminPanel']==0) {
+      if ($admin==0) {
         if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
         else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
       }
@@ -194,6 +194,7 @@ class DefaultController extends Controller
         'orders' => $orders,
         'searchModel' => $orderSearchModel,
         'filterForm' => $filterForm,
+        'admin' => $admin
         //'emptyOrder' => $emptyOrder
       ]);
     }
