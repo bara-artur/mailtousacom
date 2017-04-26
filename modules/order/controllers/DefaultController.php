@@ -133,10 +133,14 @@ class DefaultController extends Controller
                   $parcel->company_name = '[default]';
                   $parcel->adress_1 = '[default]';
                   $parcel->city = '[default]';
-                  $parcel->zip = '00000';
-                  $parcel->state = 0;
+                  $parcel->zip = '11111';
+                  $parcel->phone = '434342342';
+                  $parcel->state = '33';
                   $parcel->created_at = time();
                   $parcel->track_number = $_POST['track_number'];
+                  $parcel->track_number_type = 0;
+                  $parcel->weight = 1;
+                  $parcel->address_type = 0;
                   if ($parcel->save()) {
                     if ($oldModel->el_group == '') {
                       $oldModel->el_group = $parcel->id;
