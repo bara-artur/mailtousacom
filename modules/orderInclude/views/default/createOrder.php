@@ -171,6 +171,9 @@ $submitOption = [
                   <div class="input-group">
                     <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
                     <?php if ($edit_not_prohibited) {?>
+                      <?php if ($k == (count($order_elements)-1)){?>
+                              <span id="last_parcel_anchor"></span>
+                      <?php } ?>
                       <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
                     <?php }else{ ?>
                       <span class="input-group-addon fint_input"><?=$percel->weight_lb;?></span>
@@ -379,6 +382,7 @@ if($createNewAddress){
              if (data==5) { gritterAdd('Error','Track number validation failed','gritter-danger'); }
              if (data==6) { gritterAdd('Error','We create new parcel, but parcel saving was failed','gritter-danger'); }
              if (data==7) { gritterAdd('Error','You have this parcel in current order','gritter-warning'); }
+             window.location.hash="last_parcel_anchor";
              location.href=location.href;
            },
            error:  function(xhr, str){

@@ -465,7 +465,7 @@ class DefaultController extends Controller
       }
 
       $pac->includes_packs = $pac->getIncludes();
-      if (count($pac->includes_packs) == 0) {
+      if ((count($pac->includes_packs) == 0)&&(strcasecmp($pac->first_name,'[default]')!=0)) {
         Yii::$app
           ->getSession()
           ->setFlash(
