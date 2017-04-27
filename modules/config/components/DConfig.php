@@ -1,4 +1,7 @@
 <?php
+/*
+ * Ознакомится с https://github.com/johnitvn/yii2-settings/blob/master/src/components/Settings.php
+ */
 namespace app\modules\config\components;
 
 use Yii;

@@ -13,6 +13,7 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use app\components\ParcelPrice;
+use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for OrderElement model.
@@ -362,6 +363,72 @@ class DefaultController extends Controller
       } else {
         return $this->redirect(['/']);
       }
+  }
+
+  public function actionFileUpload($parcels_id){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return $this->redirect(['/']);
+    }
+    $pac=OrderElement::findOne([$parcels_id]);
+    if($pac->user_id!=Yii::$app->user->getId() && !Yii::$app->user->identity->isManager()){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Not enough access rights'
+        );
+      return $this->redirect(['/']);
+    };
+    $files=UploadedFile::getInstances($pac, 'files');
+    return $pac->loadDoc($files);
+  }
+
+  public function actionFileDelete($parcels_id){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return $this->redirect(['/']);
+    }
+    $pac=OrderElement::findOne([$parcels_id]);
+    if($pac->user_id!=Yii::$app->user->getId() && !Yii::$app->user->identity->isManager()){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Not enough access rights'
+        );
+      return $this->redirect(['/']);
+    };
+
+    $pac->delFile($request->post('key'));
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return [
+      'title'=> "",
+      'content'=>'<script>
+          modal.hide();
+          a=$(\'[data-key="'.$request->post('key').'"]\').parentsUntil(\'.file-preview-thumbnails\').last();
+          b=a.closest(\'.file-drop-zone\')
+          a.remove();
+          if(b.find(\'.file-preview-thumbnails>div:not(.kv-zoom-cache) .file-remove\').length==0){
+            b.append(\'<div class="file-drop-zone-title">Drag &amp; drop files here …<br>(or click to select file)</div>\')
+          }
+          gritterAdd(\'File deleting\', \'Delete successful\', \'gritter-success\');
+        </script>',
+      'footer'=> ""
+    ];
+
   }
 
   public function actionCommercial_inv_print($parcels_id=null){
