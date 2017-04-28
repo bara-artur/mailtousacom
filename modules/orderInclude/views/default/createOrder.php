@@ -511,16 +511,19 @@ if($createNewAddress){
            data: { order_id: order_id, track_number: track_number},
            success: function(data) {
              if (data==0) { }
-             if (data==1) { gritterAdd('Success', 'We find your parcel in DB. Saving successful', 'gritter-success');}
-             if (data==2) { gritterAdd('Error','We find your parcel in DB, but order saving failed','gritter-danger'); }
-             if (data==3) { gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');}
-             if (data==4) { gritterAdd('Error','We create new parcel, but order saving failed ','gritter-danger'); }
-             if (data==5) { gritterAdd('Error','Track number validation failed','gritter-danger'); }
-             if (data==6) { gritterAdd('Error','We create new parcel, but parcel saving was failed','gritter-danger'); }
-             if (data==7) { gritterAdd('Error','You have this parcel in current order','gritter-warning'); }
-            // window.location.hash="last_parcel_anchor";
-             location.href=data;
-             location.reload();
+             else if (data==1) { gritterAdd('Success', 'We find your parcel in DB. Saving successful', 'gritter-success');}
+             else if (data==2) { gritterAdd('Error','We find your parcel in DB, but order saving failed','gritter-danger'); }
+             else if (data==3) { gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');}
+             else if (data==4) { gritterAdd('Error','We create new parcel, but order saving failed ','gritter-danger'); }
+             else if (data==5) { gritterAdd('Error','Track number validation failed','gritter-danger'); }
+             else if (data==6) { gritterAdd('Error','We create new parcel, but parcel saving was failed','gritter-danger'); }
+             else if (data==7) { gritterAdd('Error','You have this parcel in current order','gritter-warning'); }
+             else {
+               gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');
+               location.href=data;
+               location.reload();
+             }
+             // window.location.hash="last_parcel_anchor";
            },
            error:  function(xhr, str){
              $('.order_id').css( "color", "red" );
