@@ -64,6 +64,14 @@ $this->title = 'Shipping to USA and Canada';
                     'target' => '_blank',
                   ]); ?>
                 </li>
+              <li>
+                <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest(for each)', ['/orderElement/group/print'], [
+                  'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
+                  'id'=>'group-print',
+                  'disabled'=>true,
+                  'target' => '_blank',
+                ]); ?>
+              </li>
                 <li>
                   <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group/advanced_print'],
                     [
