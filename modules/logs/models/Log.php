@@ -87,7 +87,7 @@ class Log extends \yii\db\ActiveRecord
       $description=$data['text'];
     }
     $model = new Log();
-    $model->user_id = Yii::$app->user->identity->getId();
+    $model->user_id = !isset(Yii::$app->user)?0:Yii::$app->user->identity->getId();
     $model->order_id = $order_id;
     $model->description = $description;
     if($status_id){

@@ -23,7 +23,11 @@ $config = [
     'db' => $db,
     'authManager' => [
       'class' => '\yii\rbac\DbManager',
-    ]
+    ],
+    'config'=>array(
+      'class' => 'app\modules\config\components\DConfig',
+      'cache'=>3600,
+    ),
   ],
   'params' => $params,
   /*

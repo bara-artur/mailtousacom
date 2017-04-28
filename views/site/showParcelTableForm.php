@@ -22,7 +22,7 @@ use kartik\widgets\SwitchInput;
       <?php $form = ActiveForm::begin(['options' => ['class'=>'show-parcel-table-form'],]); ?>
       <div class="col-md-10">
           <div class="row">
-        <?php if (Yii::$app->params['showAdminPanel']==1) { ?>
+        <?php if ($admin==1) { ?>
             <div class="col-md-2">
               <?= $form->field($model, 'showID')->widget(SwitchInput::className(),[
                   'options'=> ['label' => 'User'],
@@ -34,6 +34,10 @@ use kartik\widgets\SwitchInput;
         <?php } ?>
             <div class="col-md-2">
               <?= $form->field($model, 'showStatus')->checkbox(['label' => '<span class="fa fa-check otst"></span> Status','class'=>''])?>
+            </div>
+
+            <div class="col-md-2">
+              <?= $form->field($model, 'showItems')->checkbox(['label' => '<span class="fa fa-check otst"></span> Items','class'=>''])?>
             </div>
 
             <div class="col-md-2">

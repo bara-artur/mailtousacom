@@ -10,6 +10,7 @@ class ShowParcelTableForm extends User
   public $parcelTableSerial= 'serial';
   public $parcelTableID= 'user_id';
   public $parcelTableStatus= 'status';
+  public $parcelTableItems= 'items';
   public $parcelTableCreatedAt= 'created_at';
   public $parcelTablePaymentState= 'payment_state';
   public $parcelTablePaymentType= 'payment_type';
@@ -22,6 +23,7 @@ class ShowParcelTableForm extends User
   public $showSerial;
   public $showID;
   public $showStatus;
+  public $showItems;
   public $showCreatedAt;
   public $showPaymentState;
   public $showPaymentType;
@@ -36,6 +38,7 @@ class ShowParcelTableForm extends User
    if ($this->showSerial) $arr[]=$this->parcelTableSerial;
    if ($this->showID) $arr[]=$this->parcelTableID;
    if ($this->showStatus) $arr[]=$this->parcelTableStatus;
+   if ($this->showItems) $arr[]=$this->parcelTableItems;
    if ($this->showCreatedAt) $arr[]=$this->parcelTableCreatedAt;
    if ($this->showPaymentState) $arr[]=$this->parcelTablePaymentState;
    if ($this->showPaymentType) $arr[]=$this->parcelTablePaymentType;
@@ -47,7 +50,7 @@ class ShowParcelTableForm extends User
    if (count($arr)==0) {
      return  $this->parcelTableSerial.','.$this->parcelTableTrackNumber.','.
              $this->parcelTableTotal.','.$this->parcelTableGst.','.$this->parcelTableQst.','.
-             $this->parcelTablePrice.','.$this->parcelTableID.','.$this->parcelTableStatus.','.
+             $this->parcelTablePrice.','.$this->parcelTableID.','.$this->parcelTableStatus.','.$this->parcelTableItems.','.
              $this->parcelTableCreatedAt.','.$this->parcelTablePaymentState.','.$this->parcelTablePaymentType;
    }
    return implode(',',$arr);
@@ -62,6 +65,7 @@ class ShowParcelTableForm extends User
       $this->showSerial = in_array($this->parcelTableSerial,$arr_showColumns);
       $this->showID = in_array($this->parcelTableID,$arr_showColumns);
       $this->showStatus = in_array($this->parcelTableStatus,$arr_showColumns);
+      $this->showItems = in_array($this->parcelTableItems,$arr_showColumns);
       $this->showCreatedAt = in_array($this->parcelTableCreatedAt,$arr_showColumns);
       $this->showPaymentState = in_array($this->parcelTablePaymentState,$arr_showColumns);
       $this->showPaymentType = in_array($this->parcelTablePaymentType,$arr_showColumns);
@@ -78,7 +82,7 @@ class ShowParcelTableForm extends User
   public function rules()
   {
     return [
-      [['showSerial','showID','showStatus','showCreatedAt','showPaymentState','showPaymentType',
+      [['showSerial','showID','showStatus','showItems','showCreatedAt','showPaymentState','showPaymentType',
         'showPrice','showQst','showGst','showTotal','showTrackNumber'], 'safe']
     ];
   }
@@ -92,6 +96,7 @@ class ShowParcelTableForm extends User
       'showSerial' => 'Serial',
       'showID' => 'ID',
       'showStatus' => 'Status',
+      'showItems' => 'Items',
       'showCreatedAt' => 'Created At',
       'showPaymentState' => 'Payment State',
       'showPaymentType' => 'Payment Type',

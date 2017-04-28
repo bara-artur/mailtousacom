@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model app\modules\orderElement\models\OrderElement */
 /* @var $form yii\widgets\ActiveForm */
@@ -38,7 +38,14 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'city')->textInput(['maxlength' => true, 'class'=>'letters form-control']) ?>
     </div>
     <div class="col-md-4">
-    <?= $form->field($model, 'state')->textInput(['maxlength' => true, 'class'=>'letters form-control']) ?>
+    <?= $form->field($model, 'state')->widget(Select2::classname(), [
+      'data' => Yii::$app->params['states'],
+      'language' => 'en',
+      'options' => ['placeholder' => 'Select the state','tabindex'=>'10'],
+      'pluginOptions' => [
+        'allowClear' => false
+      ],
+    ]);?>
     </div>
     <div class="col-md-4">
     <?= $form->field($model, 'zip')->textInput(['maxlength' => true, 'class'=>'num form-control']) ?>

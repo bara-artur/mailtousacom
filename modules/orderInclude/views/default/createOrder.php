@@ -13,6 +13,13 @@ use app\components\ParcelPrice;
 use kartik\select2\Select2;
 use yii\jui\AutoComplete;
 use app\modules\user\models\User;
+use kartik\file\FileInput;
+//http://demos.krajee.com/widget-details/fileinput
+//http://plugins.krajee.com/file-input-ajax-demo/10
+//http://plugins.krajee.com/file-input#options
+//http://plugins.krajee.com/file-advanced-usage-demo
+//http://plugins.krajee.com/file-input/demo#advanced-usage
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -31,6 +38,7 @@ $submitOption = [
               'id' => 'updateParcelsIdCookie',
               'data-forCookie'=> $ids,
               'data-forusercookie'=> $user_ids,
+              'data-forinvoicecookie'=> $track_number_types,
             ])?>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
@@ -83,7 +91,7 @@ $submitOption = [
             <p><b>City:</b>  <?=$percel->city;?></p>
             <p><b>ZIP:</b>  <?=$percel->zip;?></p>
             <p><b>Phone:</b>  <?=$percel->phone;?></p>
-            <p><b>State:</b>  <?=$percel->state;?></p>
+            <p><b>State:</b>  <?=$percel->getStateText();?></p>
             <?php if ($edit_not_prohibited) {?>
               <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit address', ['/orderElement/update?id='.$percel->id],
                 [
@@ -293,6 +301,135 @@ Parcel will be moved back to the list of parcels.',
 
          <?php } ?>
               </div>
+            <?php
+            echo '<label class="control-label">Add Attachments</label>';
+            $percel_files=$percel->fileList();
+            echo FileInput::widget([
+              'model' => $percel,
+              'attribute' => 'files['.$percel->id.']',
+              'options' => [
+                'multiple' => false,
+                'accept' => 'application/pdf,image/jpeg,image/pjpeg,application/msword,application/rtf,application/x-rtf,text/richtext'
+              ],
+              'pluginOptions' => [
+                'uploadUrl' => Url::to(['/orderElement/file-upload/'.$percel->id]),
+                'browseClass'=> "btn btn-success",
+                'browseLabel'=> "Add documents",
+                "layoutTemplates"=> [
+                  "main1"=>
+                    "{preview}".
+                    "<div class='input-group {class}'>".
+                    "   <div class='input-group-btn'>".
+                    "       {browse}".
+                    "       {upload}".
+                    "       {remove}".
+                    "   </div>".
+                    "   {caption}".
+                    "</div>",
+                  "preview"=>
+                    '<div class="file-preview {class}">'.
+                    '    <div class="{dropClass}">'.
+                    '    <div class="file-preview-thumbnails">'.
+                    '    </div>'.
+                    '    <div class="clearfix"></div>'.
+                    '    <div class="file-preview-status text-center text-success"></div>'.
+                    '    <div class="kv-fileinput-error"></div>'.
+                    '    </div>'.
+                    '</div>',
+                  "modal"=>'<div class="modal-dialog" role="document">'.
+                    '  <div class="modal-content">'.
+                    '    <div class="modal-header">' .
+                    '      <div class="kv-zoom-actions pull-right">{close}</div>' .
+                    '      <h3 class="modal-title">{heading} <small><span class="kv-zoom-title"></span></small></h3>' .
+                    '    </div>' .
+                    '    <div class="modal-body">' .
+                    '      <div class="floating-buttons"></div>'.
+                    '      <div class="kv-zoom-body file-zoom-content"></div>'.
+                    '{prev} {next}'.
+                    '    </div>'.
+                    '  </div>'.
+                    '</div>'.
+                    '<script>
+                      $(\'#kvFileinputModal\').addClass("modal-lg");
+                      $(\'#kvFileinputModal\').css(\'padding\',0);
+                    </script>',
+                  //"footer"=>"123",
+                  "actions"=>"{delete}".
+                    Html::a('<i class="glyphicon glyphicon-download-alt"></i>', "{data}",[
+                      "target"=>"_blank",
+                      "data-pjax"=>false,
+                      "class"=>"file-download"
+                    ]).
+                    '{zoom}'
+                  ,
+                  "actionDelete"=>
+                    '<a
+                      href="'.'/orderElement/file-delete/'.$percel->id.'"
+                      class="file-remove btn btn-sm" 
+                      confirm-message="Are you sure to delete this document?"
+                      confirm-title="Delete"
+                      {dataKey}
+                      >
+                      {removeIcon}
+                      </a>'
+                ],
+                'removeFromPreviewOnError'=>true,
+                'maxFileCount' => 5,
+                'minFileCount' => 1,
+                "uploadAsync"=>false,
+                'showRemove' => false,
+                'showUpload' => false,
+                'showBrowse'=> true,
+                'showCaption' => false,
+                'showUploadedThumbs' => false,
+                'showCancel' => false,
+                'browseOnZoneClick'=> true,
+                'maxFileSize'=>2800,
+                "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
+                /*'previewFileIconSettings'=>[
+                  'doc'=> '<i class="fa fa-file-word-o text-primary"></i>',
+                  'xls'=> '<i class="fa fa-file-excel-o text-success"></i>',
+                  'ppt'=> '<i class="fa fa-file-powerpoint-o text-danger"></i>',
+                  'jpg'=> '<i class="fa fa-file-photo-o text-warning"></i>',
+                  'pdf'=> '<i class="fa fa-file-pdf-o text-danger"></i>',
+                  'zip'=> '<i class="fa fa-file-archive-o text-muted"></i>',
+                ],*/
+                'initialPreview'=>$percel_files['initialPreview'],
+                'initialPreviewConfig'=>$percel_files['initialPreviewConfig'],
+                'append'=>$percel_files['append'],
+                'initialPreviewAsData'=> true,
+              ],
+              "pluginEvents"=>[
+                'filebatchuploadcomplete' => "function(event, files, extra) {
+                  $('.kv-upload-progress .progress').hide()
+                 }",
+                "filepredelete_"=>"
+                    function(jqXHR) {
+                        var abort = true;
+                        if (confirm(\"Are you sure you want to delete this image?\")) {
+                            abort = false;
+                        }
+                        return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+                    }
+                ",
+                "filebatchselected"=>'function(event, files) {
+                  $this=$(this).fileinput("upload");
+                  
+                }',
+                "filebatchuploaderror"=>"
+                  function(event, data, msg) {
+                      var form = data.form, files = data.files, extra = data.extra,
+                          response = data.response, reader = data.reader;
+                      gritterAdd('Upload error', msg, 'gritter-danger');
+                      $('.file-error-message').remove();
+                      
+                      event.preventDefault();
+                      return false;
+                  }
+                "
+              ]
+            ]);
+            ?>
         </div>
 
         <?php Pjax::end(); ?>
@@ -341,7 +478,6 @@ if($createNewAddress){
 <script>
   //исправить!!!!!!!
   $(document).ready(function() {
-   clear_cookie_checkboxes();
    $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
    $("#ajaxCrudModal").removeAttr("tabindex");
    });

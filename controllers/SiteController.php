@@ -69,10 +69,14 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
+      if ((Yii::$app->request->cookies['parcelCheckedId'])&&
+          (Yii::$app->request->cookies['parcelCheckedUser'])){  // если мы получили куки от order/select/$id
+        setcookie('parcelCheckedId',Yii::$app->request->cookies['parcelCheckedId']->value);
+        setcookie('parcelCheckedUser',Yii::$app->request->cookies['parcelCheckedUser']->value);
+      }
       if (Yii::$app->user->isGuest) {
         return $this->render('index_login');
       }
-
       $user = User::find()->where(['id' => Yii::$app->user->id])->one();
 
       if (Yii::$app->user->can("takeParcel")){
@@ -114,12 +118,12 @@ class SiteController extends Controller
         $time_to += ['price_end' => $filterForm->price_end];
       }
 
-      Yii::$app->params['showAdminPanel'] = 0;
+      $admin = 0;
       $user = User::find()->where(['id' => Yii::$app->user->id])->one();
-      if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
+      if (($user!=null)&&($user->isManager())) $admin = 1;
 
       //$query = Yii::$app->request->queryParams;
-      if (Yii::$app->params['showAdminPanel']==0) {
+      if ($admin==0) {
         if (array_key_exists('OrderElementSearch', $query)) $query['OrderElementSearch'] += ['user_id' => Yii::$app->user->id];
         else $query['OrderElementSearch'] = ['user_id' => Yii::$app->user->id];
       }
@@ -138,6 +142,7 @@ class SiteController extends Controller
         'receiving_point' => (isset($receiving_point))?($receiving_point->address):(''),
         'show_view_button' => Yii::$app->user->can('orderChangeForAdmin'),
         'show_trackInvoice_button' => Yii::$app->user->can('trackInvoice'),
+        'admin' => $admin
       ]);
     }
 

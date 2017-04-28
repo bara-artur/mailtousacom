@@ -121,6 +121,32 @@ class DefaultController extends Controller
       }
     //  return $this->redirect(['/']);
     }
+
+    public function actionSelect($order_id)
+    {
+      $cookies = Yii::$app->response->cookies;
+      $order = Order::find()->where(['id' => $order_id])->one();
+      if ($order) {
+        $cookies->remove('parcelCheckedId');
+        $cookies->remove('parcelCheckedUser');
+          Yii::$app->response->cookies->add(new \yii\web\Cookie([
+            'name' => 'parcelCheckedId',
+              'value' => $order->el_group
+          ]));
+          $count = count(explode(',',$order->el_group));  // количество посылок в заказе
+          $str = '';
+          for ($i=0;$i<$count;$i++){            // создаем строку с таким же количеством id юзера как и количество посылок в заказе
+            $str = $str.$order->user_id;       // дублируем id юзера
+            if ($i!=($count-1)) $str = $str.',';  // последнюю запятую не ставим
+          }
+          Yii::$app->response->cookies->add(new \yii\web\Cookie([
+            'name' => 'parcelCheckedUser',
+            'value' => $str
+          ]));
+        return $this->redirect('/');
+      }
+      return $this->redirect(['/']);
+    }
     /**
      * Lists all Order models.
      * @return mixed
@@ -151,12 +177,12 @@ class DefaultController extends Controller
         $time_to = ['created_at_to' => $filterForm->created_at_to];
       }
 
-      Yii::$app->params['showAdminPanel'] = 0;
-      if (($user!=null)&&($user->isManager())) Yii::$app->params['showAdminPanel'] = 1;
+      $admin = 0;
+      if (($user!=null)&&($user->isManager())) $admin = 1;
 
       $orderSearchModel = new OrderSearch();
       //$query = Yii::$app->request->queryParams;
-      if (Yii::$app->params['showAdminPanel']==0) {
+      if ($admin==0) {
         if (array_key_exists('OrderSearch', $query)) $query['OrderSearch'] += ['user_id' => Yii::$app->user->id];
         else $query['OrderSearch'] = ['user_id' => Yii::$app->user->id];
       }
@@ -168,6 +194,7 @@ class DefaultController extends Controller
         'orders' => $orders,
         'searchModel' => $orderSearchModel,
         'filterForm' => $filterForm,
+        'admin' => $admin
         //'emptyOrder' => $emptyOrder
       ]);
     }

@@ -51,7 +51,7 @@ Email: sendmailtousa@gmail.com
       Get discounts by referring a friend using this code:
         </td>
         <td style="padding:2px 6px;border-right:1px solid #878787;">
-        <?=$data['ref_code'];?>44334
+        <?=$data['ref_code'];?>
         </td>
 
     <td align="right" style="padding:2px 6px;border-right:1px solid #878787;">

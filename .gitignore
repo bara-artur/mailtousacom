@@ -49,3 +49,4 @@ personal.php
 
 config/personal.php
 composer.lock
+/web/order_docs/

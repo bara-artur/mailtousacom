@@ -97,11 +97,14 @@ $config = [
 
           'address/<action>'=>'address/default/<action>',
           'order/<action>'=>'order/default/<action>',
+          'order/select/<order_id:\d+>'=>'order/default/select',
 
           'orderElement/<action>'=>'orderElement/default/<action>',
           'orderElement/create/<id:\d+>'=>'orderElement/default/create',
           'orderElement/group/<act:\w+>'=>'orderElement/default/group',
-          'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
+          'orderElement/<action:(file-upload|file-delete)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
+          //Дополнить всеми ф-ями
+          'orderElement/<action>/<parcels_id:\d+>'=>'orderElement/default/<action>',
 
           'receiving_points/<action>'=>'receiving_points/default/<action>',
 

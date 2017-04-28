@@ -24,7 +24,7 @@
               <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;">$<?=$item['price'];?></td>
                 <td style="padding:4px 6px;border-right:1px solid #9C9C9C;border-bottom:1px solid #dddddd;"><?=$pac->track_number;?></td>
                 <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->city;?></td>
-                <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->state;?></td>
+                <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->getStateText();?></td>
                 <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->zip;?></td>
                 <td style="padding:4px 6px;border-right:1px solid #dddddd;border-bottom:1px solid #dddddd;"><?=$pac->first_name;?> <?=$pac->last_name;?></td>
             </tr>

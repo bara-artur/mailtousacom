@@ -15,18 +15,13 @@ use app\modules\config\components\DConfig;
 use yii\helpers\Console;
 
 /**
- * This command echoes the first argument that you have entered.
+ * Команды для оработки кроном.
  *
- * This command is provided as an example for you to learn how to create console commands.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
  */
 class CronController extends Controller
 {
   /**
    * This command echoes what you have entered as the message.
-   * @param string $message the message to be echoed.
    */
   public function actionIndex()
   {
@@ -37,42 +32,70 @@ class CronController extends Controller
     echo "     Обновить статус посылок (10 штук)\n";
 
     echo "    ".$this->ansiFormat('cron/exchange', Console::FG_GREEN);
-    echo "    Обновить курс can/usd\n";
+    echo "    Обновить курс cad/usd\n";
   }
 
+  /**
+   * Обновить статус посылок (10 штук).
+   */
   public function actionRefresh()
   {
+    $tot_time=time();
     $data=OrderElement::find()
       ->where(['status'=>[4,5]])
       ->orderBy(['cron_refresh' => SORT_ASC])
-      ->limit(10)// берем 10 посылок (надо будет исключить доставленные)
+      ->limit(Yii::$app->config->get('track_refresh_count'))// берем 10 посылок (надо будет исключить доставленные)
       ->all();
 
     foreach ($data as $parcel){
       $parcel->cron_refresh = time();          // записываем последнее время обновления
       $company = OrderElement::GetShippingCarrier($parcel->track_number);
-      if ($company != '') {   // если определили транспортную компанию
-        $html = SHD::file_get_html('https://trackingshipment.net/' .$company.'/' . $parcel->track_number, null, null, 1, 1); // дружественный сервис просмотра состояний посылок
-        $str = $html->find('.output-info p', 0)->innertext; // берем содержимое первого абзаца у тэга с классом output_info
-        if ((strripos($str, 'ummary:') != false) && (strripos($str, 'eliver') != false)) {   // Если есть включение S-ummary И D-eliver-ed
-          echo "Parcel " . $parcel->id . " was delivered".PHP_EOL;
-          $parcel->status = 6;
-        }
-        else{
-          $parcel->status = 5;
-          echo $parcel->id . " not delivered";
-        }
-      }else{
-        if ($company == '') echo $parcel->id . " has unknown shipping company".PHP_EOL;
-        else echo $parcel->id . " has status = 5".PHP_EOL;
+
+      echo PHP_EOL;
+      $st_time=time();
+      echo $this->ansiFormat(date('d/m/Y G:i:s'), Console::FG_BLUE).'>';
+      echo $this->ansiFormat($parcel->track_number, Console::FG_YELLOW).'>';
+      if ($company == '') {   // если не определили транспортную компанию
+        echo " has unknown shipping company" . PHP_EOL;
+        $parcel->save();
+        continue;
+      }
+
+      echo $company.PHP_EOL;
+
+      $html = SHD::file_get_html('https://trackingshipment.net/' .$company.'/' . $parcel->track_number, null, null, 1, 1); // дружественный сервис просмотра состояний посылок
+      $str = $html->find('.output-info p', 0);// берем содержимое первого абзаца у тэга с классом output_info
+
+      if(!$str){//Проверяем нашли ли что то. если нет то берем следующую посылку
+        echo $parcel->id . " посылку не нашло".PHP_EOL;
+        $parcel->save();
+        echo "Время обработки ",$this->ansiFormat(time()-$st_time, Console::FG_BLUE).' секунд'.PHP_EOL;
+        continue;
+      }
+      $str->find('strong', 0)->innertext="";
+      $str=trim(strip_tags($str->innertext));
+      echo $this->ansiFormat($str, Console::FG_GREEN).PHP_EOL;
+      if ((strripos($str, 'eliver') != false)) {   // Если есть включение S-ummary И D-eliver-ed
+        echo "Parcel " . $parcel->id . " was delivered".PHP_EOL;
+        $parcel->status = 6;
+        $parcel->status_dop="";
+      } else{
+        $parcel->status = 5;
+        $parcel->status_dop=$str;
+        echo $parcel->id . " not delivered".PHP_EOL;
       }
       $parcel->save();
+      echo "Время обработки ",$this->ansiFormat(time()-$st_time, Console::FG_BLUE).' секунд'.PHP_EOL;
     }
+    echo PHP_EOL.PHP_EOL."Общее время обработки ",$this->ansiFormat(time()-$tot_time, Console::FG_BLUE).' секунд'.PHP_EOL;
     //   $arr = array ('USPS/9405509699937475900484','USPS/9405509699938333870260','USPS/9407809699939814166833',
     //                  'UPS/1Z4008YY4291160859','UPS/1ZW258314248802240','UPS/1Z2A37W90324146148',
     //                'fedex/786083077470','fedex/786061718512','fedex/786043744820');
   }
 
+  /**
+   * Обновить курс cad/usd
+   */
   public function actionExchange()
   {
     $html = SHD::file_get_html('https://openexchangerates.org/api/latest.json?app_id=a405ef00381748dd895923fb7008ea34', null, null, 1, 1);

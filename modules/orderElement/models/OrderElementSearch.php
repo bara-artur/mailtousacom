@@ -84,7 +84,8 @@ class OrderElementSearch extends OrderElement
             ->andFilterWhere(['like', 'city', $this->city])
             ->andFilterWhere(['like', 'zip', $this->zip])
             ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'state', $this->state]);
+            ->andFilterWhere(['like', 'state', $this->state])
+            ->with(['orderInclude']);
 
         return $dataProvider;
     }
