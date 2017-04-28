@@ -452,7 +452,7 @@ class DefaultController extends Controller
 
       $pac->transport_data=date("d-M-Y", $pac->transport_data);
 
-      if ($pac->track_number == '') {
+      if ($pac->track_number == '' && $pac->track_number_type==0) {
         Yii::$app
           ->getSession()
           ->setFlash(

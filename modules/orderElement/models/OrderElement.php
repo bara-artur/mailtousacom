@@ -108,10 +108,6 @@ class OrderElement extends \yii\db\ActiveRecord
             [['track_number_type','status','payment_state'], 'integer'],
             [['address_type','weight','track_number','track_number_type'], 'safe'],
             [['adress_1', 'adress_2'], 'string', 'max' => 256],
-          [['files'], 'files',
-            'maxSize' => 1024*1024*3,
-            'skipOnEmpty' => true
-          ],
         ];
     }
 

@@ -134,7 +134,6 @@ class DefaultController extends Controller
                     }
                   }
                 }
-
                 $oldModel->save();
             }
             $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
