@@ -65,7 +65,7 @@ $this->title = 'Shipping to USA and Canada';
                   ]); ?>
                 </li>
               <li>
-                <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest(for each)', ['/orderElement/group/print'], [
+                <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest(for each)', ['/orderElement/group/print_for_each'], [
                   'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
                   'id'=>'group-print',
                   'disabled'=>true,

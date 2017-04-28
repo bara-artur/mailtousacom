@@ -110,7 +110,7 @@ $config = [
 
           'orderInclude/<action>'=>'orderInclude/default/<action>',
           'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
-          'orderInclude/<action:border-form|view-order|choose-status|border-form-pdf|pdf|commercial-invoice>/<id:\d+>'=>'orderInclude/default/<action>/',
+          'orderInclude/<action:border-form|view-order|choose-status|border-form-pdf|border-form-pdf-for-each|pdf|commercial-invoice>/<id:\d+>'=>'orderInclude/default/<action>/',
           'orderInclude/<action:group-remove>/<order_id:\d+>/<id:\d+>'=>'orderInclude/default/<action>/',
 
 

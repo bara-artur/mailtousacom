@@ -355,10 +355,14 @@ class DefaultController extends Controller
       }
   }
 
-  public function actionGroupPrint($parcels_id=null){
+  public function actionGroupPrint($parcels_id=null,$for_each=false){
       $order_id = $this->findOrCreateOrder($parcels_id);
       if ($order_id != null) {
-        $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
+        if($for_each) {
+          $this->redirect(['/orderInclude/border-form-pdf-for-each/' . $order_id]);
+        }else {
+          $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
+        }
         return "Create pdf for order " .  $order_id;
       } else {
         return $this->redirect(['/']);
@@ -477,6 +481,7 @@ class DefaultController extends Controller
       switch ($act) {
         case 'update':  {return $this->actionGroupUpdate($parcels_id); break;}
         case 'print':   {return $this->actionGroupPrint($parcels_id);break;}
+        case 'print_for_each':   {return $this->actionGroupPrint($parcels_id,true);break;}
         case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
         case 'commercial_inv_print':    {return $this->actionCommercial_inv_print($parcels_id);break;}
         case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
