@@ -1,4 +1,14 @@
 $(document).ready(function() {
+  fix_autocomplite()
+  $('[role=dialog]').on('show.bs.modal', function(e) {
+    fix_autocomplite()
+  });
+});
+function fix_autocomplite() {
+  $('[autocomplete=off]').attr('readonly',true).on('focus',function(){$(this).removeAttr('readonly')})
+}
+
+$(document).ready(function() {
   $('.secundar_address').hide();
   $('.show_after_all_button').hide();
   init_address_edit();
@@ -66,7 +76,6 @@ $(document).ready(function() {
       $('.return_city').val($('.send_city').val());
     }
     return true;
-
   });
 
   $('.go_to_order').on('click',function(){
@@ -82,7 +91,7 @@ $(document).ready(function() {
       return false;
     }
     return true;
-  })
+  });
 
   $(".reset_filter").on("click", function (){
     event.preventDefault();
@@ -96,14 +105,14 @@ $(document).ready(function() {
   });
 
   $('.hidden_block_communication').on('change',function(){
-    el=$('.'+$(this).attr('name'))
+    el=$('.'+$(this).attr('name'));
     if(el.length<1)return;
     if(!this.checked){
       el.hide();
     }else {
       el.show();
-      el.removeClass('has-error')
-      el.find('.help-block').remove()
+      el.removeClass('has-error');
+      el.find('.help-block').remove();
     }
     els=$('.hidden_block_communication:not(:checked)');
     sum=0;
@@ -121,13 +130,52 @@ $(document).ready(function() {
     $('.tot_qst').text(qst.toFixed(2));
     $('.tot_gst').text(gst.toFixed(2));
 
-  })
+  });
+
+  $('#kvFileinputModal').addClass("modal-lg");
+  $('.modal-dialog').removeClass("modal-lg");
+  $('body').on('click','.file-remove',function(e){
+    e.preventDefault();
+    $this=$(this);
+
+    /*modal_data=$('#ModalRemoteConfirmForm');
+    if(modal_data.length==0){
+      modal_data=$('<form/>', {
+        id: "ModalRemoteConfirmForm"
+      });
+      $('body').append(modal_data);
+    }*/
+    modal.confirmModal(
+      $this.attr('confirm-title'),
+      $this.attr('confirm-message'),
+      undefined,
+      undefined,
+      undefined,
+      $this.attr('href'),
+      "POST"
+    );
+
+    modal_data=$('#ModalRemoteConfirmForm');
+    item=$('<input/>', {
+      type:'hidden',
+      name:'key',
+      value:$this.attr('data-key')
+    });
+    modal_data.append(item);
+
+    return false;
+  });
+  $('body').on('click','.file-download',function(e){
+    window.open(this.href);
+    e.preventDefault();
+    return false;
+  });
 
   $('body').on('click','[role="modal-remote"]',function(){
-    if($(this).hasClass('big_model')) {
-      $('#ajaxCrudModal').addClass("modal-lg")
+    if($(this).hasClass('big_model') ||$(this).hasClass('kv-file-zoom')) {
+      $('#ajaxCrudModal').addClass("modal-lg");
     }else{
-      $('#ajaxCrudModal').removeClass("modal-lg")
+      $('#ajaxCrudModal').removeClass("modal-lg");
     }
   })
 });
@@ -703,14 +751,14 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
   setCookie('parcelCheckedId',stringCoockies,1);
   setCookie('parcelCheckedUser',stringUsers,1);
   setCookie('parcelCheckedInvoice',stringInvoices,1);
-  if ((getCookie('multiUserMode')=='1')&&(difUser==0)){    // выдаем гриттер при переключении многопользовательского режима
+  if ((getCookie('multiUserMode')=='1')&&(difUser==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении многопользовательского режима
     gritterAdd('One user mode', '', 'gritter-success');
   }else {
     if ((getCookie('multiUserMode') == '0') && (difUser == 1)) {  // выдаем гриттер при переключении многопользовательского режима
       gritterAdd('MultiUser mode', '', 'gritter-warning');
     }
   }
-  if ((getCookie('multiTrackNumberMode')=='1')&&(difInvoice==0)){    // выдаем гриттер при переключении многопользовательского режима
+  if ((getCookie('multiTrackNumberMode')=='1')&&(difInvoice==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении многопользовательского режима
     gritterAdd('Now you can use Tracking button', '', 'gritter-success');
   }else {
     if ((getCookie('multiTrackNumberMode') == '0') && (difInvoice == 1)) {  // выдаем гриттер при переключении многопользовательского режима
@@ -911,10 +959,14 @@ function superCheckboxProcessing(){
   oldCookieInvoice = getCookie('parcelCheckedInvoice').split(',');        // все юзеры со всех страниц
   els=$(".checkBoxParcelMainTable:checked");
   if ($("#superCheckbox").prop("checked")) {
-    if (els.length==0) els=$(".checkBoxParcelMainTable"); // если нет выбранного то берем первый попавшийся
-    if (els.length>0)
-    {
+    if (getCookie('parcel_elem_type')=='') { // если нет выбранного то берем первый попавшийся
+      els=$(".checkBoxParcelMainTable");
       elem_type = els[0].getAttribute('name');
+    } else{
+      elem_type = getCookie('parcel_elem_type');
+    }
+    if (elem_type!='')
+    {
       new_elems = $("[name='"+elem_type+"']").not(":checked");
       for (i=0;i<new_elems.length;i++) {
         oldCookie.push(new_elems[i].getAttribute('id'));

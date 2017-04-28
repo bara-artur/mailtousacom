@@ -405,8 +405,6 @@ class DefaultController extends Controller
           */
           return $this->redirect(['index']);
       }
-
-
   }
 
   public function actionBorderForm($id){
@@ -557,7 +555,7 @@ class DefaultController extends Controller
     return ;
   }
 
-  public function actionBorderFormPdf($id){
+  public function actionBorderFormPdf($id,$for_each=false){
     $this->layout = 'pdf';
 
     $order = Order::findOne($id);
@@ -568,8 +566,7 @@ class DefaultController extends Controller
     $headers = Yii::$app->response->headers;
     $headers->add('Content-Type', 'application/pdf');
 
-    $tpl=count($order_data['order_elements'])==1?'borderFormPdf_one_pac':'borderFormPdf';
-
+    $tpl=(count($order_data['order_elements'])==1||$for_each)?'borderFormPdf_one_pac':'borderFormPdf';
     $content = $this->renderPartial($tpl,$order_data);
 
     //echo '<link rel="stylesheet" type="text/css" href="/css/pdf_CBP_Form_7533.css">';
@@ -588,6 +585,10 @@ class DefaultController extends Controller
     ]);
     // return the pdf output as per the destination setting
     return $pdf->render();
+  }
+
+  public function actionBorderFormPdfForEach($id){
+    return $this->actionBorderFormPdf($id,true);
   }
 
   public function actionPdf($id){

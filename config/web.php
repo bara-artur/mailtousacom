@@ -102,13 +102,15 @@ $config = [
           'orderElement/<action>'=>'orderElement/default/<action>',
           'orderElement/create/<id:\d+>'=>'orderElement/default/create',
           'orderElement/group/<act:\w+>'=>'orderElement/default/group',
-          'orderElement/<action>/<parcels_id:\w+>'=>'orderElement/default/<action>',
+          'orderElement/<action:(file-upload|file-delete)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
+          //Дополнить всеми ф-ями
+          'orderElement/<action>/<parcels_id:\d+>'=>'orderElement/default/<action>',
 
           'receiving_points/<action>'=>'receiving_points/default/<action>',
 
           'orderInclude/<action>'=>'orderInclude/default/<action>',
           'orderInclude/create-order/<id:\d+>'=>'orderInclude/default/create-order2/',
-          'orderInclude/<action:border-form|view-order|choose-status|border-form-pdf|pdf|commercial-invoice>/<id:\d+>'=>'orderInclude/default/<action>/',
+          'orderInclude/<action:border-form|view-order|choose-status|border-form-pdf|border-form-pdf-for-each|pdf|commercial-invoice>/<id:\d+>'=>'orderInclude/default/<action>/',
           'orderInclude/<action:group-remove>/<order_id:\d+>/<id:\d+>'=>'orderInclude/default/<action>/',
 
 
