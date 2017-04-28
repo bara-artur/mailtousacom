@@ -634,17 +634,10 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
 }
 .scrit{margin-bottom: -20px;}
 .but_top.fix{
-    /*padding: 4px 4px;
-    border: 0px;
-    background-color: transparent;
-    font-size: 20px;*/
-    padding: 3px 0px;
-    /* border: 0px; */
-    /* background-color: transparent; */
+    padding: 3px 0;
     font-size: 20px;
 }
 /*03032017*/
-/*.label_valid{display:inline-block;}*/
 .col-md-3.marg_p{margin-bottom:20px;}
 .fint_input{
     padding-left: 4px;
