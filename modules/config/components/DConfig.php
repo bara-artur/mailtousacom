@@ -8,26 +8,35 @@ use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use app\modules\config\models\Config;
+use yii\caching\Cache;
 
 class DConfig extends Component
 {
-  public $cache = 0;
   public $dependency = null;
+  public $frontCache;
+  public $cacheKey = 'module/settings';
+  public $cache;
 
-  protected $data = array();
+  protected $data = false;
 
   public function init()
   {
-    $db = $this->getDbConnection();
 
-    $items = $db->createCommand('SELECT * FROM {{config}}')->queryAll();
+    if (!$this->data) {
 
-    foreach ($items as $item)
-    {
-      if ($item['param'])
-        $this->data[$item['param']] = $item['value'] === '' ?  $item['default'] : $item['value'];
+      $this->data=Yii::$app->cache->get($this->cacheKey);
+      if($this->data===false) {
+        $this->data = array();
+        $db = $this->getDbConnection();
+        $items = $db->createCommand('SELECT * FROM {{config}}')->queryAll();
+        foreach ($items as $item) {
+          if ($item['param']) {
+            $this->data[$item['param']] = $item['value'] === '' ? $item['default'] : $item['value'];
+          }
+        }
+        Yii::$app->cache->set($this->cacheKey, $this->data, $this->cache);
+      }
     }
-
     parent::init();
   }
 
@@ -49,8 +58,9 @@ class DConfig extends Component
 
     if ($model->save(false)) // для работы из консоли
       $this->data[$key] = $value;
-    Yii::$app->cache->flush();
 
+    Yii::$app->cache->set($this->cacheKey, $this->data,$this->cache);
+    //Yii::$app->cache->flush();
   }
 
   public function add($params)
@@ -62,7 +72,7 @@ class DConfig extends Component
     }
     elseif ($params)
       $this->createParameter($params);
-    Yii::$app->cache->flush();
+    //Yii::$app->cache->flush();
   }
 
   public function delete($key)
@@ -74,7 +84,7 @@ class DConfig extends Component
     }
     elseif ($key)
       $this->removeParameter($key);
-    Yii::$app->cache->flush();
+    Yii::$app->cache->set($this->cacheKey, false,$this->cache);
   }
 
   protected function getDbConnection()
@@ -102,7 +112,8 @@ class DConfig extends Component
       $model->type = isset($param['type']) ? $param['type'] : 'string';
 
       $model->save();
-      Yii::$app->cache->flush();
+      //Yii::$app->cache->flush();
+      Yii::$app->cache->set($this->cacheKey, $this->data,$this->cache);
     }
   }
 
@@ -111,9 +122,8 @@ class DConfig extends Component
     if (!empty($key))
     {
       $model = Config::find()->where(['param'=>$key])->one();
-      if ($model)
-        $model->delete();
-      Yii::$app->cache->flush();
+      if ($model) $model->delete();
+      Yii::$app->cache->set($this->cacheKey, false,$this->cache);
     }
   }
 }

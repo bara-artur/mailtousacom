@@ -186,8 +186,12 @@ $this->title = 'Shipping to USA and Canada';
            //   'userOrder_id',
                 ['attribute'=> 'user_id',
                   'visible' => (($showTable->showID)&&($admin==1)),
-                  'content'=> function($data){ if ($data->user!=null)
-                    return $data->user->lineInfo; else return '-empty-';
+                  'content'=> function($data){
+                    if ($data->user!=null) {
+                      return $data->user->lineInfo;
+                    }else{
+                      return '-empty-';
+                    }
                   }
                 ],
                 ['attribute'=> 'status',
