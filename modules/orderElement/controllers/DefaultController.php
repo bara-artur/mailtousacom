@@ -310,13 +310,23 @@ class DefaultController extends Controller
     $arr = explode(',', $parcels_id);
     asort($arr);
     $user_id = null;
+    $status = null;
     $flag = 0;
     foreach ($arr as $id) {
       if ($flag == 0) {
         $parcel = OrderElement::findOne(['id' => $id]);
         if ($parcel) {
+          if (($flag == 1) &&   //  если это уже не первая посылка из списка
+              ((($user_id != $parcel->user_id) && ($admin == 0)) ||    // несовпадение юзерров у неАдмина
+               (($status>1) && ($parcel->status<=1)) ||
+                (($status<=1) && ($parcel->status>1))  )) {           // несовпадение статусов
+            return null;
+          }
           $user_id = $parcel->user_id;
+          $status = $parcel->status;
           $flag = 1;
+        }else{
+          return null; // нет посылки из списка
         }
       }
     }
