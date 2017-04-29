@@ -1058,3 +1058,24 @@ border-right: 0px;
 
 .file-preview  .file-drag-handle{display:none;}
 .file-preview{max-height: 330px;overflow:auto;}
+
+:target{
+    animation-name: target-animation;
+    animation-duration: 2s;
+    animation-iteration-count: 3;
+}
+
+@keyframes target-animation {
+    0% {
+        box-shadow: #006ac1 0 0 3px 2px;
+        background: #006ac1;
+    }
+    70% {
+        box-shadow: #9bbdda 0 0 8px 4px;
+        background: #9bbdda;
+    }
+    100%{
+        box-shadow: #006ac1 0 0 3px 2px;
+        background: #006ac1;
+    }
+}

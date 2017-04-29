@@ -117,27 +117,31 @@ class DefaultController extends Controller
             if (isset($_POST['track_number'])){
               $parcel = OrderElement::find()->where(['track_number' => $_POST['track_number']])->one();
               if ($parcel){    // посылка уже в БД
-                if ($oldModel->el_group == '') {
-                  $oldModel->el_group = $parcel->id;
-                }
-                else {  //  проверяем наличие посылки в заказе
-                  $arr = explode(',', $oldModel->el_group);
-                  if (array_search($parcel->id, $arr) !== false){
-                    $success = '7'; //  посылка есть в этом заказе
-                  }else {
-                    array_push($arr, $parcel->id);
-                    asort($arr);
-                    $oldModel->el_group = implode(',',$arr);
+                if ($parcel->user_id == $oldModel->user_id) {
+                  if ($oldModel->el_group == '') {
+                    $oldModel->el_group = $parcel->id;
+                  } else {  //  проверяем наличие посылки в заказе
+                    $arr = explode(',', $oldModel->el_group);
+                    if (array_search($parcel->id, $arr) !== false) {
+                      $success = '7'; //  посылка есть в этом заказе
+                    } else {
+                      array_push($arr, $parcel->id);
+                      asort($arr);
+                      $oldModel->el_group = implode(',', $arr);
+                    }
                   }
+                  if ($oldModel->save()) {
+                    return '/orderInclude/create-order/' . $oldModel->id . '#last_anchor';
+                  } else {
+                    $success = '2';
+                  }
+                }else{
+                  $success = '9';
                 }
-                if ($oldModel->save()){
-                  return '/orderInclude/create-order/'.$oldModel->id.'#last_anchor';
-                }
-                else {$success='2';}
               }else{    //  посылки с трэк номером нет в базе - надо создать
                 if (OrderElement::GetShippingCarrier($_POST['track_number'])){
                   $parcel = new OrderElement();
-                  $parcel->user_id = Yii::$app->user->id;
+                  $parcel->user_id = $oldModel->user_id;
                   $parcel->first_name = '[default]';
                   $parcel->last_name = '[default]';
                   $parcel->company_name = '[default]';

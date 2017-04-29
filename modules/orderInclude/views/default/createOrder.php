@@ -42,8 +42,13 @@ $submitOption = [
             ])?>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
+        <div class="scaner_buttons">
+          <input type="button" class="show_scaner_button" value="Show scaner">
+          <input type="button" class="hide_scaner_button" value="Hide scaner">
+        </div>
         <p class="hide_scaner"><b>Scaner data:</b><br>
           <input type="text" class="scaner_data hide_scaner" size="32">
+          <input type="button" value="Find" class="scaner_find hide_scaner" size="32">
         </p>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
@@ -493,47 +498,84 @@ if($createNewAddress){
    $("#ajaxCrudModal").attr("tabindex",-1);
    });
 
+   function scaner_enter_button(){
+     elem = $('.order_id');
+     order_id = elem.attr('order-id');
+     track_number = $('.scaner_data').val();
+     if ((track_number.length==12) || (track_number.length==13) || (track_number.length==15) ||
+       (track_number.length==16) || (track_number.length==18) || (track_number.length==20) ||
+       (track_number.length==22) ||(track_number.length==26)){
+       $.ajax({
+         type: 'POST',
+         url: 'order/update',
+         data: {order_id: order_id, track_number: track_number},
+         success: function (data) {
+           if (data == 0) {
+           }
+           else if (data == 1) {
+             gritterAdd('Success', 'We find your parcel in DB. Saving successful', 'gritter-success');
+           }
+           else if (data == 2) {
+             gritterAdd('Error', 'We find your parcel in DB, but order saving failed', 'gritter-danger');
+           }
+           else if (data == 3) {
+             gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');
+           }
+           else if (data == 4) {
+             gritterAdd('Error', 'We create new parcel, but order saving failed ', 'gritter-danger');
+           }
+           else if (data == 5) {
+             gritterAdd('Error', 'Track number validation failed', 'gritter-danger');
+           }
+           else if (data == 6) {
+             gritterAdd('Error', 'We create new parcel, but parcel saving was failed', 'gritter-danger');
+           }
+           else if (data == 7) {
+             gritterAdd('Error', 'You have this parcel in current order', 'gritter-warning');
+           }
+           else if (data == 9) {
+             gritterAdd('Error', 'Different user parcels error', 'gritter-danger');
+           }
+           else {
+             gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');
+             location.href = data;
+             location.reload();
+           }
+           // window.location.hash="last_parcel_anchor";
+         },
+         error: function (xhr, str) {
+           $('.order_id').css("color", "red");
+           $('.order_id').val('222');
+           console.log(222);
+         }
+       });
+     }else{
+       gritterAdd('Error','Track number length validation failed','gritter-danger');
+     }
+   }
+
+   $(".scaner_find").on("click",scaner_enter_button);
+   $(".show_scaner_button").on("click",function(){
+     $('.hide_scaner').show(500);
+     $('.scaner_data').focus();
+     $('.scaner_data').val('');
+   });
+   $(".hide_scaner_button").on("click",function () {
+     $('.hide_scaner').hide(500);
+   });
    $("body").on('keydown', function(){
-     if ($('.scaner_data').is(':hidden')) {
-       if ((event.keyCode || event.charCode) == 118) {
+     //if ($('.scaner_data').is(':hidden')) {
+       if ((event.keyCode || event.charCode) == 118) {  // f7
          $('.hide_scaner').show(500);
          $('.scaner_data').focus();
+         $('.scaner_data').val('');
        }
-     }else{
+     //}else{
        if ((event.keyCode || event.charCode) == 13) {
-         $('.hide_scaner').hide(500);
-         elem = $('.order_id');
-         order_id = elem.attr('order-id');
-         track_number = $('.scaner_data').val();
-         $.ajax({
-           type: 'POST',
-           url: 'order/update',
-           data: { order_id: order_id, track_number: track_number},
-           success: function(data) {
-             if (data==0) { }
-             else if (data==1) { gritterAdd('Success', 'We find your parcel in DB. Saving successful', 'gritter-success');}
-             else if (data==2) { gritterAdd('Error','We find your parcel in DB, but order saving failed','gritter-danger'); }
-             else if (data==3) { gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');}
-             else if (data==4) { gritterAdd('Error','We create new parcel, but order saving failed ','gritter-danger'); }
-             else if (data==5) { gritterAdd('Error','Track number validation failed','gritter-danger'); }
-             else if (data==6) { gritterAdd('Error','We create new parcel, but parcel saving was failed','gritter-danger'); }
-             else if (data==7) { gritterAdd('Error','You have this parcel in current order','gritter-warning'); }
-             else {
-               gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');
-               location.href=data;
-               location.reload();
-             }
-             // window.location.hash="last_parcel_anchor";
-           },
-           error:  function(xhr, str){
-             $('.order_id').css( "color", "red" );
-             $('.order_id').val('222');
-             console.log(222);
-           }
-         });
+         scaner_enter_button();
        }
-      }
-    })
+      //}
+    });
    $(".show_modal").on("click", function() {
    $("#ajaxCrudModal").attr("tabindex",-1);
    })});
