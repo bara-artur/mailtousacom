@@ -361,7 +361,7 @@ class DefaultController extends Controller
       if ($order_id != null) {
         return $this->redirect(['/orderInclude/create-order/' . $order_id]);
       } else {
-        return $this->redirect(['/']);
+        return $this->redirect(['/','showTheGritter'=>'Update error. Bad racel IDs', 'gritterType' => 'error']);
       }
   }
 
@@ -375,7 +375,7 @@ class DefaultController extends Controller
         }
         return "Create pdf for order " .  $order_id;
       } else {
-        return $this->redirect(['/']);
+        return $this->redirect(['/','showTheGritter'=>'Update error. Bad racel IDs', 'gritterType' => 'error']);
       }
   }
 
@@ -451,7 +451,7 @@ class DefaultController extends Controller
         $this->redirect(['/orderInclude/commercial-invoice/' . $order_id]);
         return "Create pdf for order " .  $order_id;
       } else {
-        return $this->redirect(['/']);
+        return $this->redirect(['/','showTheGritter'=>'Update error. Bad racel IDs', 'gritterType' => 'error']);
       }
   }
 
@@ -462,7 +462,7 @@ class DefaultController extends Controller
         $this->redirect(['/orderInclude/pdf/' . $order_id]);
         return "Create pdf for order " .  $order_id;
       } else {
-        return $this->redirect(['/']);
+        return $this->redirect(['/','showTheGritter'=>'Update error. Bad racel IDs', 'gritterType' => 'error']);
       }
   }
 
@@ -510,7 +510,7 @@ class DefaultController extends Controller
         $this->redirect(['/additional_services/transport-invoice/' . $order_id]);
         return $order_id;
       } else {
-        return $this->redirect(['/']);
+        return $this->redirect(['/','showTheGritter'=>'Update error. Bad racel IDs', 'gritterType' => 'error']);
       }
     }
 
@@ -523,7 +523,7 @@ class DefaultController extends Controller
           $this->redirect(['/orderInclude/view-order/' . $order_id]);
           return $order_id;
         } else {
-          return $this->redirect(['/']);
+          return $this->redirect(['/','showTheGritter'=>'Update error. Bad racel IDs', 'gritterType' => 'error']);
         }
     }
     /**
