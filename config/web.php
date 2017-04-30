@@ -94,6 +94,7 @@ $config = [
           //Страница пользователя
           '<action:(user)>/<id:\d+>' => 'site/user/',
           '<action:(profile)>' => 'user/default/<action>',
+          'user/<action:(request-month-pay)>' => 'user/default/<action>',
 
           'address/<action>'=>'address/default/<action>',
           'order/<action>'=>'order/default/<action>',
