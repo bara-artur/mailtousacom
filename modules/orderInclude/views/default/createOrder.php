@@ -14,6 +14,7 @@ use kartik\select2\Select2;
 use yii\jui\AutoComplete;
 use app\modules\user\models\User;
 use kartik\file\FileInput;
+use yii\bootstrap\Collapse;
 //http://demos.krajee.com/widget-details/fileinput
 //http://plugins.krajee.com/file-input-ajax-demo/10
 //http://plugins.krajee.com/file-input#options
@@ -242,11 +243,11 @@ $submitOption = [
 
             <?php if ($edit_not_prohibited) {?>
 
-                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item to Parcel', ['create?order-id='.$percel->id],
+                <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item', ['create?order-id='.$percel->id],
                   ['role'=>'modal-remote','title'=> 'Add item to Parcel','data' => [
                       'toggle'=>"tooltip",
                   ],'class'=>'btn btn btn-md btn-science-blue text-center margin-bottom-10'])?>
-                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete Attachment', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
+                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
                   [
                     'role'=>'modal-remote',
                     'title'=> 'Delete Attachment',
@@ -261,12 +262,18 @@ $submitOption = [
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this packages",
                   ])?>
-
+                <?= Html::a('<i class="icon-metro-attachment"></i> Documents', ['#parcels_'.$percel->id.''],
+                    [
+                        'id'=>'#parcels_'.$percel->id.'',
+                        'title'=> 'Attachment documents to parcel',
+                        'data-toggle' => 'collapse',
+                        'class' => 'btn btn-primary text-center margin-bottom-10',
+                    ]) ?>
 
 
             <?php } ?>
             <?php if (count($order_elements)>1){?>
-              <?=Html::a('<i class="icon-metro-new-tab fa-flip-horizontal"></i> Unfasten Attach',
+              <?=Html::a('<i class="icon-metro-new-tab fa-flip-horizontal"></i> Unfasten',
                 ['/orderInclude/group-remove/'.$order_id."/".$percel->id],
                 [
                   'class' => 'btn btn-warning btn-md text-center margin-bottom-10',
@@ -282,27 +289,48 @@ Parcel will be moved back to the list of parcels.',
                   'role'=>"modal-remote",
                 ]); ?>
             <?php }?>
-
             <?php if ($edit_not_prohibited==0) {?>
-              <?=Html::a('<i class="fa fa-credit-card"></i> Payments view', ['/payment/show-parcel-includes/' . $percel->id],
+              <?=Html::a('<i class="fa fa-credit-card"></i> Payments', ['/payment/show-parcel-includes/' . $percel->id],
                 [
                 'id' => 'payment-show-includes',
+                'title'=> 'View payments',
                 'role' => 'modal-remote',
                 'class' => 'btn btn-science-blue show_modal big_model text-center margin-bottom-10',
+                'data' => ['toggle'=>"tooltip"],
                 ]
                 )?>
-                 <?=Html::a('<i class="fa fa-list"></i> History view', ['/logs/' . $percel->id],
+                 <?=Html::a('<i class="fa fa-list"></i> History', ['/logs/' . $percel->id],
                 [
                 'id' => 'payment-show-includes',
+                'title'=> 'View history',
                 'role' => 'modal-remote',
                 'class' => 'btn btn-science-blue show_modal text-center margin-bottom-10',
+                'data' => ['toggle'=>"tooltip"],
                 ]
                 )?>
+                <?= Html::a('<i class="icon-metro-attachment"></i> Documents', ['#parcels_'.$percel->id.''],
+                    [
+                        'id'=>'#parcels_'.$percel->id.'',
+                        'title'=> 'Attachment documents to parcel',
+                        'data-toggle' => 'collapse',
+                        'class' => 'btn btn-primary text-center margin-bottom-10',
+                    ]) ?>
 
          <?php } ?>
               </div>
+
+                <div class="collapse" id="parcels_<?=$percel->id;?>">
+                    <div class="col-md-12">
             <?php
-            echo '<label class="control-label">Add Attachments</label>';
+            echo '<span class="control-label">PLEASE, ADD DOCUMENTS FOR PARCEL</span>'
+            . Html::a('HIDE <i class="fa fa-caret-up"></i>', ['#parcels_'.$percel->id.''],
+                    [
+                        'id'=>'#parcels_'.$percel->id.'',
+                        'class' => 'pull-right font-weight-700',
+                        'title'=> 'Hide window addition of documents',
+                        'data-toggle' => 'collapse',
+
+                    ]);
             $percel_files=$percel->fileList();
             echo FileInput::widget([
               'model' => $percel,
@@ -313,7 +341,7 @@ Parcel will be moved back to the list of parcels.',
               ],
               'pluginOptions' => [
                 'uploadUrl' => Url::to(['/orderElement/file-upload/'.$percel->id]),
-                'browseClass'=> "btn btn-success",
+                'browseClass'=> "btn btn-success pull-right",
                 'browseLabel'=> "Add documents",
                 "layoutTemplates"=> [
                   "main1"=>
@@ -340,7 +368,7 @@ Parcel will be moved back to the list of parcels.',
                     '  <div class="modal-content">'.
                     '    <div class="modal-header">' .
                     '      <div class="kv-zoom-actions pull-right">{close}</div>' .
-                    '      <h3 class="modal-title">{heading} <small><span class="kv-zoom-title"></span></small></h3>' .
+                    '      <h4 class="modal-title">{heading} : <small><span class="kv-zoom-title"></span></small></h4>' .
                     '    </div>' .
                     '    <div class="modal-body">' .
                     '      <div class="floating-buttons"></div>'.
@@ -358,14 +386,17 @@ Parcel will be moved back to the list of parcels.',
                     Html::a('<i class="glyphicon glyphicon-download-alt"></i>', "{data}",[
                       "target"=>"_blank",
                       "data-pjax"=>false,
-                      "class"=>"file-download"
+                      "class"=>"file-download btn btn-sm fg-white bg-primary text-center",
+                      'title'=> 'Download document'
+
                     ]).
                     '{zoom}'
                   ,
                   "actionDelete"=>
                     '<a
                       href="'.'/orderElement/file-delete/'.$percel->id.'"
-                      class="file-remove btn btn-sm" 
+                      title= "Delete document"
+                      class="btn btn-sm file-remove bg-danger pull-right" 
                       confirm-message="Are you sure to delete this document?"
                       confirm-title="Delete"
                       {dataKey}
@@ -430,8 +461,10 @@ Parcel will be moved back to the list of parcels.',
               ]
             ]);
             ?>
-        </div>
 
+                    </div>
+            </div>
+            </div>
         <?php Pjax::end(); ?>
         </div>
         <hr>

@@ -550,7 +550,7 @@ h5.total_package{
     padding-bottom: 2px;
     margin-bottom: 4px;
 }
-.bord_butt{margin-top: 8px;}
+.bord_butt{margin-top: 8px;z-index: 100;}
 .marg_p p{margin: 0 0 8px;}
 .btn-success-border:hover{
     color: #354346;
@@ -1051,3 +1051,25 @@ border-right: 0px;
 
 .file-preview  .file-drag-handle{display:none;}
 .file-preview{max-height: 330px;overflow:auto;}
+.file-preview
+{
+    border-radius: 0;
+}
+.file-drop-zone {
+    border-radius: 0;
+}
+.file-drop-zone-title {
+    font-size: 1.1em;
+}
+.btn.btn-sm.file-remove.bg-danger i{color:#ffffff;}
+.kv-file-zoom.btn.btn-xs.btn-default{padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 0;
+    float:left;
+
+}
+.file-zoom-dialog .btn-navigate {
+    font-size: 3em;
+    color: #354346;
+}
