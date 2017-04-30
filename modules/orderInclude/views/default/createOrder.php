@@ -73,7 +73,9 @@ $submitOption = [
     Pjax::begin();
     if($order_elements){
 
-      foreach ($order_elements as $k=>$percel) {?>
+      foreach ($order_elements as $k=>$percel) {
+        $percel_files=$percel->fileList();
+        ?>
         <div class="row">
           <div class="col-md-12"><h5 class="modern_border">Parcel # <?= $k+1 ?> </h5></div>
           <div class="col-md-3 marg_p">
@@ -308,7 +310,12 @@ Parcel will be moved back to the list of parcels.',
                 'data' => ['toggle'=>"tooltip"],
                 ]
                 )?>
-                <?= Html::a('<i class="icon-metro-attachment"></i> Documents', ['#parcels_'.$percel->id.''],
+                <?= Html::a('
+                    <i class="icon-metro-attachment"></i>
+                    Documents
+                    <span col_file='.count($percel_files['initialPreview']).'></span>
+                    ',
+                    ['#parcels_'.$percel->id.''],
                     [
                         'id'=>'#parcels_'.$percel->id.'',
                         'title'=> 'Attachment documents to parcel',
@@ -331,7 +338,6 @@ Parcel will be moved back to the list of parcels.',
                         'data-toggle' => 'collapse',
 
                     ]);
-            $percel_files=$percel->fileList();
             echo FileInput::widget([
               'model' => $percel,
               'attribute' => 'files['.$percel->id.']',
@@ -434,18 +440,13 @@ Parcel will be moved back to the list of parcels.',
                 'filebatchuploadcomplete' => "function(event, files, extra) {
                   $('.kv-upload-progress .progress').hide()
                  }",
-                "filepredelete_"=>"
-                    function(jqXHR) {
-                        var abort = true;
-                        if (confirm(\"Are you sure you want to delete this image?\")) {
-                            abort = false;
-                        }
-                        return abort; // you can also send any data/object that you can receive on `filecustomerror` event
-                    }
-                ",
                 "filebatchselected"=>'function(event, files) {
                   $this=$(this).fileinput("upload");
-                  
+                }',
+                "filebatchuploadsuccess"=>'function(event, data, previewId, index) {
+                  $this=$(this)
+                  col_file=data.response.initialPreview.length
+                  $this.closest(\'.order-include-index\').find(\'[col_file]\').attr("col_file",col_file)
                 }',
                 "filebatchuploaderror"=>"
                   function(event, data, msg) {
