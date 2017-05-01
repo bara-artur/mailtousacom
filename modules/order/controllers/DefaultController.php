@@ -130,7 +130,7 @@ class DefaultController extends Controller
                       $oldModel->el_group = implode(',', $arr);
                     }
                   }
-                  if ($oldModel->save()) {
+                  if ($oldModel->save(false)) {
                     return '/orderInclude/create-order/' . $oldModel->id . '#last_anchor';
                   } else {
                     $success = '2';
@@ -162,7 +162,7 @@ class DefaultController extends Controller
                     } else {
                       $oldModel->el_group = $oldModel->el_group . ',' . $parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
                     }
-                    if ($oldModel->save()) {
+                    if ($oldModel->save(false)) {
                       return '/orderInclude/create-order/'.$oldModel->id.'#last_anchor';
                     } else {
                       $success = '4';   // заказ не сохранился в базе
