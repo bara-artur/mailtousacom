@@ -49,6 +49,7 @@ $submitOption = [
         <p class="hide_scaner"><b>Scaner data:</b><br>
           <input type="text" class="scaner_data hide_scaner" size="32">
           <input type="button" value="Find" class="scaner_find hide_scaner" size="32">
+          <span class="dowloadTrackNumber"> Processing... </span>
         </p>
         <div class="scaner_buttons">
           <input type="button" class="hide_scaner_button" value="Hide scaner">
@@ -524,6 +525,7 @@ if($createNewAddress){
   //исправить!!!!!!!
   $(document).ready(function() {
    $('.hide_scaner').hide();
+   $('.dowloadTrackNumber').hide();
    $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
    $("#ajaxCrudModal").removeAttr("tabindex");
    });
@@ -538,6 +540,7 @@ if($createNewAddress){
      if ((track_number.length==12) || (track_number.length==13) || (track_number.length==15) ||
        (track_number.length==16) || (track_number.length==18) || (track_number.length==20) ||
        (track_number.length==22) ||(track_number.length==26)){
+       $(".dowloadTrackNumber").show();
        $.ajax({
          type: 'POST',
          url: 'order/update',
@@ -574,10 +577,12 @@ if($createNewAddress){
              location.href = data;
              location.reload();
            }
+           $(".dowloadTrackNumber").hide();
            // window.location.hash="last_parcel_anchor";
          },
          error: function (xhr, str) {
            $('.order_id').css("color", "red");
+           $(".dowloadTrackNumber").hide();
          }
        });
      }else{
