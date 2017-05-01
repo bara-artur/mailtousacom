@@ -609,5 +609,8 @@ if($createNewAddress){
     });
    $(".show_modal").on("click", function() {
    $("#ajaxCrudModal").attr("tabindex",-1);
-   })});
+
+   });
+   $('#last_anchor').find('#lb').focus().select();
+  });
 </script>

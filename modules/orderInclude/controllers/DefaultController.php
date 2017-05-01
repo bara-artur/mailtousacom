@@ -115,7 +115,7 @@ class DefaultController extends Controller
     }
     if (isset(Yii::$app->request->cookies['parcelAnchorId'])) {
       $last = Yii::$app->request->cookies['parcelAnchorId']->value; // включаем анимацию
-      unset(Yii::$app->response->cookies['parcelAnchorId']); // анимацию включаем только один раз при перезагрузке
+   //   unset(Yii::$app->response->cookies['parcelAnchorId']); // анимацию включаем только один раз при перезагрузке
     }
     else {
       $last = null;  // нет анимации
