@@ -202,12 +202,22 @@ class OrderElement extends \yii\db\ActiveRecord
     return $query;
   }
 
-  public function getPath(){
+
+  public function getPath($test=true){
     $path='order_docs/'.floor($this->id/100).'/'.($this->id % 100).'/';
-    if(!is_readable($path)){
+    if($test && !is_readable($path)){
       mkdir($path,0777,true);
     }
     return $path;
+  }
+
+  public function getDocsCount(){
+    $path=$this->getPath(false);
+    if(!is_readable($path)){
+      return 0;
+    }
+    $dh  = scandir(realpath($path));
+    return count($dh)-2;
   }
 
   public function delFile($key){
