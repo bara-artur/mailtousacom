@@ -276,7 +276,8 @@ $this->title = 'Shipping to USA and Canada';
                 // 'order_status',
                 // 'created_at',
                 // 'transport_data',
-                ['attribute' => 'Action','content' => function($data){
+                ['attribute' => 'Action',
+                  'content' => function($data){
                     $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
                     $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
                     $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);

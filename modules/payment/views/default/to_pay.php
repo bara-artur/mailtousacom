@@ -282,6 +282,33 @@ $submitOption = [
                 ?>
             </div>
             <?php
+        }else{
+            if($user->month_pay==1){
+                $pay_variant=[
+                  3 => "Moth Payment",
+                  4 => "Pay now"
+                ];
+                ?>
+                <div class="col-md-offset-4 col-md-6 trans_text custom-radio margin-top-10">
+                    <b>Choose a payment method</b>
+                    <hr class="margin-off-top margin-bottom-10">
+                    <?= Html::radioList('payment_type',3,
+                      $pay_variant,
+                      [
+                        'item' => function($index, $label, $name, $checked, $value) {
+                            $return = '<label>';
+                            $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" '.($checked?"checked":'').'>';
+                            $return .= '<span></span>&nbsp;&nbsp;';
+                            $return .= ucwords($label);
+                            $return .= '</label><br>';
+                            return $return;
+                        }
+                      ]
+                    );
+                    ?>
+                </div>
+                <?php
+            }
         }?>
 
 
