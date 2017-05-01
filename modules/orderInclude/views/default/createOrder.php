@@ -45,12 +45,14 @@ $submitOption = [
       <div class="col-md-8 col-sm-12 text-center">
         <div class="scaner_buttons">
           <input type="button" class="show_scaner_button" value="Show scaner">
-          <input type="button" class="hide_scaner_button" value="Hide scaner">
         </div>
         <p class="hide_scaner"><b>Scaner data:</b><br>
           <input type="text" class="scaner_data hide_scaner" size="32">
           <input type="button" value="Find" class="scaner_find hide_scaner" size="32">
         </p>
+        <div class="scaner_buttons">
+          <input type="button" class="hide_scaner_button" value="Hide scaner">
+        </div>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
           <h4 class="order_id" order-id=<?=$order_id?> >Order #<?=$order_id?> for Transportation</br>
@@ -186,9 +188,6 @@ $submitOption = [
                   <div class="input-group">
                     <span class="input-group-addon fint_input padding-off-left">Weight parcel :</span>
                     <?php if ($edit_not_prohibited) {?>
-                      <?php if ($k == (count($order_elements)-1)){?>
-                              <span id="last_parcel_anchor"></span>
-                      <?php } ?>
                       <input size="5" type="text" id="lb" class="lb-oz-tn-onChange num form_lb form-control" name="lb" maxlength="3" max=100 value="<?=$percel->weight_lb;?>">
                     <?php }else{ ?>
                       <span class="input-group-addon fint_input"><?=$percel->weight_lb;?></span>
@@ -579,8 +578,6 @@ if($createNewAddress){
          },
          error: function (xhr, str) {
            $('.order_id').css("color", "red");
-           $('.order_id').val('222');
-           console.log(222);
          }
        });
      }else{

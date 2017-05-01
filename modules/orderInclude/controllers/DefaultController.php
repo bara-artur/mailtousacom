@@ -70,6 +70,8 @@ class DefaultController extends Controller
     //получаем посылки в заказе
     //  var_dump(Yii::$app->request);
     //$totalPriceArray = [0];
+   // if (isset(Yii::$app->response->cookies['parcelAnchorId'])) var_dump(Yii::$app->response->cookies['parcelIdAnchor']->value);
+   // else var_dump($_COOKIE);
     $totalPriceArray=[];
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
@@ -86,8 +88,6 @@ class DefaultController extends Controller
     $numbers = explode(',',$order->el_group);
 
     $edit_not_prohibited = 1;
-    $max_createdAt = 0;
-    $max_createdAtId = 0;
     $hideNext = 0;
     $order_elements = [];
     $ids = '';
@@ -104,10 +104,6 @@ class DefaultController extends Controller
           if ($parcel->status > 1){
             $edit_not_prohibited = 0;
           }
-          if ($parcel->created_at > $max_createdAt){
-            $max_createdAt = $parcel->created_at;
-            $max_createdAtId = $parcel->id;
-          }
           $totalPrice = 0;
           foreach ($parcel->orderInclude as $ordInclude) {
             $totalPrice += ($ordInclude->price * $ordInclude->quantity);
@@ -117,7 +113,13 @@ class DefaultController extends Controller
         }
       }
     }
-
+    if (isset(Yii::$app->request->cookies['parcelAnchorId'])) {
+      $last = Yii::$app->request->cookies['parcelAnchorId']->value; // включаем анимацию
+      unset(Yii::$app->response->cookies['parcelAnchorId']); // анимацию включаем только один раз при перезагрузке
+    }
+    else {
+      $last = null;  // нет анимации
+    }
     $message_for_edit_prohibited_order = 'Editing order prohibited';
 
     return $this->render('createOrder', [
@@ -131,7 +133,7 @@ class DefaultController extends Controller
       'ids' =>$ids,
       'user_ids' => $user_ids,
       'track_number_types' => $track_number_types,
-      'last' => $max_createdAtId,
+      'last' => $last,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/

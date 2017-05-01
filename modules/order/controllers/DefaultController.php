@@ -131,6 +131,10 @@ class DefaultController extends Controller
                     }
                   }
                   if ($oldModel->save(false)) {
+                    Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                      'name' => 'parcelAnchorId',
+                      'value' => $parcel->id,
+                    ]));
                     return '/orderInclude/create-order/' . $oldModel->id . '#last_anchor';
                   } else {
                     $success = '2';
@@ -163,6 +167,10 @@ class DefaultController extends Controller
                       $oldModel->el_group = $oldModel->el_group . ',' . $parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
                     }
                     if ($oldModel->save(false)) {
+                      Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                        'name' => 'parcelAnchorId',
+                        'value' => $parcel->id,
+                      ]));
                       return '/orderInclude/create-order/'.$oldModel->id.'#last_anchor';
                     } else {
                       $success = '4';   // заказ не сохранился в базе

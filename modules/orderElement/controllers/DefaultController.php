@@ -174,6 +174,10 @@ class DefaultController extends Controller
                 $model-> user_id = $order->user_id;
                 $model-> created_at = time();
                 if ($model->save()) {
+                  Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                    'name' => 'parcelAnchorId',
+                    'value' => $model->id,
+                  ]));
                   if ($order->el_group == null) {
                     $order->el_group = '' . $model->id;
                   } else {
