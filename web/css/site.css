@@ -335,9 +335,9 @@ a.desc:after {
     }
     .navbar-nav > li > a
     {
-    padding-left:10px;
-    padding-right:10px;
-    font-size: 14px;
+        padding-left:10px;
+        padding-right:10px;
+        font-size: 14px;
     }
     .nav li > form > button.logout {
         margin-top: 10px;
@@ -550,7 +550,7 @@ h5.total_package{
     padding-bottom: 2px;
     margin-bottom: 4px;
 }
-.bord_butt{margin-top: 8px;}
+.bord_butt{margin-top: 8px;z-index: 100;}
 .marg_p p{margin: 0 0 8px;}
 .btn-success-border:hover{
     color: #354346;
@@ -634,17 +634,10 @@ span.trans_count{font-size:18px;font-weight:600;color:#05389F;}
 }
 .scrit{margin-bottom: -20px;}
 .but_top.fix{
-    /*padding: 4px 4px;
-    border: 0px;
-    background-color: transparent;
-    font-size: 20px;*/
-    padding: 3px 0px;
-    /* border: 0px; */
-    /* background-color: transparent; */
+    padding: 3px 0;
     font-size: 20px;
 }
 /*03032017*/
-/*.label_valid{display:inline-block;}*/
 .col-md-3.marg_p{margin-bottom:20px;}
 .fint_input{
     padding-left: 4px;
@@ -743,7 +736,7 @@ div.icon_integ_ebay:hover,div.icon_integ_amazon:hover,div.icon_integ_shop:hover{
 .showParcelTableForm.form-group{margin-bottom:0px !important;}
 .showParcelTableForm input[type=checkbox]{display:none !important;}
 .check_hide input[type=checkbox]{display:none !important;
- }
+}
 span.input-group-addon.fint_input input[type=checkbox]{display:none !important;}
 span#results.resInd0{color:#05389F !important;}
 h5.max_price{padding: 4px;
@@ -786,11 +779,11 @@ div.notpaid_img{background: url("/img/notpaid.png");
     top: 100px;
     right: 34%;}
 .block_adm{
-   /* margin:10px 0px;
-    border-top:1px dotted #ccc;
-    border-bottom:1px dotted #ccc;
-    padding:10px 0px;
-    background-color: #F9F9F9;*/
+    /* margin:10px 0px;
+     border-top:1px dotted #ccc;
+     border-bottom:1px dotted #ccc;
+     padding:10px 0px;
+     background-color: #F9F9F9;*/
     background-color: #F9F9F9;
     padding-top: 4px;
     text-align: center;
@@ -891,7 +884,7 @@ div.icon_integ_shop{
     outline: 0!important;
 }
 .select2-container--krajee.select2-container--open .select2-selection, .select2-container--krajee .select2-selection:focus {
-     -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075), 0 0 6px rgba(102, 175, 233, 0)!important;
+    -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075), 0 0 6px rgba(102, 175, 233, 0)!important;
     box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075), 0 0 0 rgba(102, 175, 233, 0)!important;
     -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s!important;
     -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s!important;
@@ -956,8 +949,8 @@ div.trans_count {
     border-bottom: 0px solid  #4C648E;
 }
 .table-art th{
-background-color: #4c648e;
-color: #fff;}
+    background-color: #4c648e;
+    color: #fff;}
 .table-art td{
     color: #000;}
 .table-pod td{
@@ -1018,8 +1011,8 @@ button.navbar-toggle{margin-right:30px;}
     border: 1px solid transparent !important;
 }
 @media screen and (max-width: 1200px){
-.group_100{width: 46%;
-    margin-bottom: 4px;}
+    .group_100{width: 46%;
+        margin-bottom: 4px;}
 }
 /*12042017*/
 .but_tab_marg_inl
@@ -1035,8 +1028,8 @@ button.navbar-toggle{margin-right:30px;}
 }
 .pay_list5
 {
-border: 1px solid #ccc;
-border-right: 0px;
+    border: 1px solid #ccc;
+    border-right: 0px;
 }
 .pay_list6
 {
@@ -1058,6 +1051,59 @@ border-right: 0px;
 
 .file-preview  .file-drag-handle{display:none;}
 .file-preview{max-height: 330px;overflow:auto;}
+
+.file-preview
+{
+    border-radius: 0;
+}
+.file-drop-zone {
+    border-radius: 0;
+}
+.file-drop-zone-title {
+    font-size: 1.1em;
+}
+.btn.btn-sm.file-remove.bg-danger i{color:#ffffff;}
+.kv-file-zoom.btn.btn-xs.btn-default{padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 0;
+    float:left;
+
+}
+.file-zoom-dialog .btn-navigate {
+    font-size: 3em;
+    color: #354346;
+}
+table{font-size:14px;}
+.table>tbody>tr>td
+{
+    vertical-align: middle;
+    padding: 6px;
+    line-height: 1.3;
+}
+.btn {
+    padding: 6px 12px;}
+
+[col_file]{
+    position:relative;
+}
+[col_file]:before{
+    content:attr(col_file);
+    position:absolute;
+    top: -20px;
+    right: -20px;
+    color: #354346;
+    background: #fff;
+    border-radius: 100%;
+    width: 20px;
+    line-height: 20px;
+    border: #354346 2px solid;
+    box-shadow: #fff 0 0 0 1px;
+}
+[col_file="0"]:before{
+    content:"";
+    display:none;
+}
 
 :target{
     animation-name: target-animation;

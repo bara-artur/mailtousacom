@@ -134,7 +134,6 @@ class DefaultController extends Controller
                     }
                   }
                 }
-
                 $oldModel->save();
             }
             $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
@@ -435,9 +434,11 @@ class DefaultController extends Controller
           a=$(\'[data-key="'.$request->post('key').'"]\').parentsUntil(\'.file-preview-thumbnails\').last();
           b=a.closest(\'.file-drop-zone\')
           a.remove();
-          if(b.find(\'.file-preview-thumbnails>div:not(.kv-zoom-cache) .file-remove\').length==0){
+          col_file=b.find(\'.file-preview-thumbnails>div:not(.kv-zoom-cache) .file-remove\').length
+          if(col_file==0){
             b.append(\'<div class="file-drop-zone-title">Drag &amp; drop files here …<br>(or click to select file)</div>\')
           }
+          b.closest(\'.order-include-index\').find(\'[col_file]\').attr("col_file",col_file)
           gritterAdd(\'File deleting\', \'Delete successful\', \'gritter-success\');
         </script>',
       'footer'=> ""

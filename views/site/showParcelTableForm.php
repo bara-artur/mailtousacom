@@ -10,6 +10,7 @@ use yii\web\JsExpression;
 use yii\jui\AutoComplete;
 use yii\helpers\Url;
 use app\modules\orderElement\models\OrderElement;
+use kartik\widgets\SwitchInput;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\order\models\orderFilterForm */
@@ -23,7 +24,12 @@ use app\modules\orderElement\models\OrderElement;
           <div class="row">
         <?php if ($admin==1) { ?>
             <div class="col-md-2">
-              <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span>User','class'=>'']) ?>
+              <?= $form->field($model, 'showID')->widget(SwitchInput::className(),[
+                  'options'=> ['label' => 'User'],
+                  'type' => SwitchInput::CHECKBOX,
+                  'pluginOptions' => ['size' => 'mini','onColor' => 'success'],
+              ])->label(false);?>
+
             </div>
         <?php } ?>
             <div class="col-md-2">
