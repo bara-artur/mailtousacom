@@ -20,7 +20,7 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at', 'last_online', 'ebay_account', 'ebay_last_update'], 'integer'],
+            [['id', 'status', 'created_at', 'updated_at', 'last_online', 'ebay_account', 'ebay_last_update','month_pay'], 'integer'],
             [['username', 'email', 'first_name', 'last_name', 'fullName', 'password_hash', 'photo', 'password_reset_token', 'email_confirm_token', 'auth_key', 'login_at', 'ip', 'phone', 'docs', 'ebay_token','role'], 'safe'],
         ];
     }
@@ -72,6 +72,7 @@ class UserSearch extends User
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
+            'month_pay' => $this->month_pay,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'login_at' => $this->login_at,

@@ -38,8 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'username',
             'email:email',
             'fullName',
@@ -48,26 +46,30 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw',
             'filter'=> array(''=>'All',0=>"Blocked",1=>'Active',2=>"Wait"),
             'content' => function($data){
-              return Html::dropDownList('usrStatus'.$data->id, $data->status, ['0'=>'Blocked','1'=>'Active','2'=>'Wait'], ['class' => 'user_droplist']);
-
+              return Html::dropDownList(
+                'status',
+                $data->status,
+                ['0'=>'Blocked','1'=>'Active','2'=>'Wait'],
+                [
+                  'class' => 'user_droplist',
+                  'user'=>$data->id
+                ]);
             },
-            /*'value' => function ($model, $key, $index, $column) {
-                switch ($model->status) {
-                    case 0:
-                        return '<span class="label label-danger">
-            <i class="glyphicon glyphicon-lock"></i>Blocked</span>';
-                        break;
-                    case 2:
-                        return '<span class="label label-warning">
-              <i class="glyphicon glyphicon-hourglass"></i>Wait</span>';
-                        break;
-                    case 1:
-                        return '<span class="label label-success">
-              <i class="glyphicon glyphicon-ok"></i>Active</span>';
-                        break;
-                }
-                return false;
-            },*/
+          ],
+          [
+            'attribute'=>'month_pay',
+            'format' => 'raw',
+            'filter'=> array(''=>'All',0=>"Normal",1=>'Active',2=>"Request"),
+            'content' => function($data){
+              return Html::dropDownList(
+                'month_pay',
+                $data->month_pay,
+                ['0'=>'','1'=>'Active','2'=>'Request'],
+                [
+                  'class' => 'user_droplist',
+                  'user'=>$data->id
+                ]);
+            },
           ],
           [
             'attribute'=>'role',

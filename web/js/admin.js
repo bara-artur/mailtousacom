@@ -19,13 +19,12 @@ function ajax_send_admin_user_status_onchange(){
     //index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /3);
 
     name = elem.name;
-    usrStatus = 'none';
-    id = name.substr(9,name.length-9);
-    usrStatus = elem.value;
+    id = $(elem).attr('user');
+    value = elem.value;
     $.ajax({
       type: 'POST',
-      url: 'user/admin/update-status',
-      data: { user_id: id, status: usrStatus},
+      url: 'user/admin/update-user',
+      data: { user_id: id, value: value,name:name},
       success: function(data) {
         if (data)  gritterAdd('Saving', 'Saving successful.', 'gritter-success');
         else gritterAdd('Error','Saving Error.','gritter-danger');

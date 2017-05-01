@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\modules\user\models\User;
 
 AppAsset::register($this);
 ?>
@@ -44,9 +45,15 @@ AppAsset::register($this);
     }else{
         if(Yii::$app->user->identity->isManager()) {
             if (Yii::$app->user->can('userManager')) {
+                $user_req=User::find()->where(['month_pay'=>2])->asArray()->all();
+                $user_req_cnt=count($user_req);
                 $user_menu[] = '<li>' .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Parcels', ['/'], ['class' => 'profile-link']). '</li>'
                     .'<li>'
-                    . Html::a('<i class="fa fa-users"></i>&nbsp;&nbsp;Users', ['/user/admin'], ['class' => 'profile-link'])
+                    . Html::a('
+                        <i class="fa fa-users"></i>
+                        &nbsp;&nbsp;
+                        Users'.($user_req_cnt>0?'<span col_req="'.$user_req_cnt.'"></span>':'')
+                    , ['/user/admin'.($user_req_cnt>0?'?UserSearch%5Bmonth_pay%5D=2':'')], ['class' => 'profile-link'])
                     .'</li>';
             }
             if(false){

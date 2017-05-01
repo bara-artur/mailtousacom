@@ -246,14 +246,15 @@ class AdminController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdateStatus()
+    public function actionUpdateUser()
     {
       $request = Yii::$app->request;
       $user_id=$request->post('user_id');
+      $name=$request->post('name');
       $user = User::find()->where(['id' => $user_id])->one();
       if ($user) {
          if (($user_id) && ($request->isAjax)) {
-           $user->status=$request->post('status');
+           $user->$name=$request->post('value');
            $user->removeEmailConfirmToken();
            $user->removePasswordResetToken();
            $user->save();
