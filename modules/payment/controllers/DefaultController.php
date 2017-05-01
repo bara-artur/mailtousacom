@@ -513,7 +513,7 @@ class DefaultController extends Controller
           $invoice_total['gst']-=$paySuccessful[0]['gst'];
         };
 
-        //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
+        //если есть сумма к оплате добовляем ее к глобальному массиву платежа
         if($invoice_total['price']>0) {
           $pay_array[] = [
             'element_id' => $pac->id,
