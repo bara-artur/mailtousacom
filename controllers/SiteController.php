@@ -69,6 +69,9 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
+      $gritter = Yii::$app->request->cookies['showTheGritter'];
+      Yii::$app->response->cookies->remove('showTheGritter');
+
       if ((Yii::$app->request->cookies['parcelCheckedId'])&&
           (Yii::$app->request->cookies['parcelCheckedUser'])){  // если мы получили куки от order/select/$id
         setcookie('parcelCheckedId',Yii::$app->request->cookies['parcelCheckedId']->value);
@@ -132,7 +135,6 @@ class SiteController extends Controller
       $dataProvider = $searchModel->search($query,$time_to);
 
       $showTable = new ShowParcelTableForm($user->parcelTableOptions);
-
       return $this->render('index', [
         'searchModel' => $searchModel,
         'orderElements' => $dataProvider,
@@ -142,7 +144,8 @@ class SiteController extends Controller
         'receiving_point' => (isset($receiving_point))?($receiving_point->address):(''),
         'show_view_button' => Yii::$app->user->can('orderChangeForAdmin'),
         'show_trackInvoice_button' => Yii::$app->user->can('trackInvoice'),
-        'admin' => $admin
+        'admin' => $admin,
+        'gritter' => $gritter,
       ]);
     }
 

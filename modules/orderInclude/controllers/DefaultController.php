@@ -73,6 +73,7 @@ class DefaultController extends Controller
    // if (isset(Yii::$app->response->cookies['parcelAnchorId'])) var_dump(Yii::$app->response->cookies['parcelIdAnchor']->value);
    // else var_dump($_COOKIE);
     $totalPriceArray=[];
+    $admin = Yii::$app->user->identity->isManager();
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
     $model = new OrderElement();
@@ -84,6 +85,12 @@ class DefaultController extends Controller
       $order->created_at = time();
       $order->el_group = '';
       $order->save();
+    }
+    else{
+      if (($admin)&&(Yii::$app->user->id != $order->id)){
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Unknown order ID','gritter-danger')",]));
+        return $this->redirect(['/']);
+      }
     }
     $numbers = explode(',',$order->el_group);
 

@@ -324,27 +324,14 @@ $this->title = 'Shipping to USA and Canada';
     </div>
 
     <?php
-      $gritter = 0;
-      if (isset($gritterType)&&isset($showTheGritter)&&(strcasecmp($gritterType,'error'))) $gritter = 1;
-      if (isset($gritterType)&&isset($showTheGritter)&&(strcasecmp($gritterType,'success'))) $gritter = 2;
-      if (isset($gritterType)&&isset($showTheGritter)&&(strcasecmp($gritterType,'warning'))) $gritter = 3;
-      if (isset($gritterType)&&isset($showTheGritter)&&(strcasecmp($gritterType,'info'))) $gritter = 4;
-    ?>
-
-    <?php
       echo "
         <script>
            $(document).ready(function() {
               ".(($show_modal_for_point == 1)?(
-                'setTimeout( function(){
-                $(\'#choose_receiving_point\').click();
-                },200)'):(''))."
-              ".
-                (($gritter==1)?("gritterAdd('Error',".$showTheGritter.",'gritter-danger')"):("")).
-                (($gritter==2)?("gritterAdd('Success',".$showTheGritter.",'gritter-success')"):("")).
-                (($gritter==3)?("gritterAdd('Warning',".$showTheGritter.",'gritter-warning')"):("")).
-                (($gritter==4)?("gritterAdd('Info',".$showTheGritter.",'gritter-info')"):(""))
-              ."
+                "setTimeout( function(){
+                $('#choose_receiving_point').click();
+                },200);"):("")).
+                $gritter."
               });
         </script>
       ";

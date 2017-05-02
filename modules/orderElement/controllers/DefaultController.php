@@ -364,7 +364,8 @@ class DefaultController extends Controller
       if ($order_id != null) {
         return $this->redirect(['/orderInclude/create-order/' . $order_id]);
       } else {
-        return $this->redirect(['/','showTheGritter'=>'Update error. Bad parcel IDs', 'gritterType' => 'error']);
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Update error. Bad parcel IDs','gritter-danger')",]));
+        return $this->redirect(['/']);
       }
   }
 
