@@ -102,7 +102,7 @@ $config = [
           'orderElement/<action>'=>'orderElement/default/<action>',
           'orderElement/create/<id:\d+>'=>'orderElement/default/create',
           'orderElement/group/<act:\w+>'=>'orderElement/default/group',
-          'orderElement/<action:(file-upload|file-delete)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
+          'orderElement/<action:(file-upload|file-delete|files)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
           //Дополнить всеми ф-ями
           'orderElement/<action:track-invoice|group-view|group-print-advanced|commercial_inv_print|group-print|group-update|group-delete>/<parcels_id:\d+>'=>'orderElement/default/<action>',
 

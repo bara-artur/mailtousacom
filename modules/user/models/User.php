@@ -56,7 +56,7 @@ class User extends ActiveRecord  implements IdentityInterface
             ['password', 'string', 'min' => 6, 'max' => 61],
             ['ebay_token', 'string'],
             ['parcelTableOptions', 'string', 'max' => 256],
-            [['ebay_account','ebay_last_update'], 'integer'],
+            [['ebay_account','ebay_last_update','month_pay'], 'integer'],
             [['doc1','doc2'], 'image',
               'minHeight' => 600,
               'minWidth' => 600,

@@ -382,6 +382,50 @@ class DefaultController extends Controller
       }
   }
 
+  //Выводим спсок файлов для посвлки
+  public function actionFiles($parcels_id){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return $this->redirect(['/']);
+    }
+
+    $pac=OrderElement::findOne($parcels_id);
+    if($pac->user_id!=Yii::$app->user->getId() && !Yii::$app->user->identity->isManager()){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Not enough access rights'
+        );
+      return $this->redirect(['/']);
+    };
+
+    if($pac->getDocsCount()==0){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'The package does not have any attached documents'
+        );
+      return $this->redirect(['/']);
+    }
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return [
+      'title'=> "Documents for parcel #".$parcels_id,
+      'content'=>$this->renderAjax('files_view', [
+        'percel' => $pac,
+      ]),
+      'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+    ];
+  }
+
   public function actionFileUpload($parcels_id){
     $request=Yii::$app->request;
     if(!$request->isPost && !$request->isAjax){

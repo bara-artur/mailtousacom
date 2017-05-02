@@ -276,7 +276,11 @@ $submitOption = [
                     'data-confirm-title'=>"Are you sure?",
                     'data-confirm-message'=>"Are you sure want to delete this packages",
                   ])?>
-                <?= Html::a('<i class="icon-metro-attachment"></i> Documents', ['#parcels_'.$percel->id.''],
+                <?= Html::a('
+                      <i class="icon-metro-attachment"></i>
+                      Documents
+                      <span col_file='.count($percel_files['initialPreview']).'></span>
+                      ', ['#parcels_'.$percel->id.''],
                     [
                         'id'=>'#parcels_'.$percel->id.'',
                         'title'=> 'Attachment documents to parcel',

@@ -277,6 +277,18 @@ $this->title = 'Shipping to USA and Canada';
                 // 'created_at',
                 // 'transport_data',
                 ['attribute' => 'Action','content' => function($data){
+                    $filesCount=$data->getDocsCount();
+                    $button_files=Html::a('
+                      <i class="icon-metro-attachment"></i>
+                      Documents
+                      <span col_file='.$filesCount.'></span>
+                      ', ['/orderElement/files/'.$data->id.''],
+                      [
+                        'title'=> 'Show documents from parcel',
+                        'class' => 'btn btn-primary btn-sm marg_but big_model',
+                        'role'=>'modal-remote',
+                        'data-pjax'=>0
+                      ]);
                     $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
                     $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
                     $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
@@ -300,7 +312,8 @@ $this->title = 'Shipping to USA and Canada';
                           'class'=>'btn btn-sm btn-info show_modal marg_but',
                         ]
                       );
-                    return (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
+                    return ($filesCount>0?$button_files:"").
+                            (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
                            (($data->payment_state==0)?($button_delete_parcel):("")).          // удаление посылок
                             $button_print_pdf.                                                // печать PDF
                            (($data->status>2)?($button_payments):(""));                       // история платежей

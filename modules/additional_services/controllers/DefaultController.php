@@ -143,7 +143,7 @@ class DefaultController extends Controller
               $flat_rate[$ti->price]=1;
             };
 
-            $total['sub_total']+=$ti->price+$data['price_tk'];
+            $total['sub_total']+=$ti->price+$ti->dop_price;
             $total['qst']+=$ti->dop_qst+$ti->qst;
             $total['gst']+=$ti->dop_gst+$ti->gst;
           }

@@ -1084,7 +1084,7 @@ table{font-size:14px;}
 .btn {
     padding: 6px 12px;}
 
-[col_file]{
+[col_file],[col_req]{
     position:relative;
 }
 [col_file]:before{
@@ -1103,6 +1103,21 @@ table{font-size:14px;}
 [col_file="0"]:before{
     content:"";
     display:none;
+}
+
+[col_req]:before{
+    content: attr(col_req);
+    position:absolute;
+    top: -15px;
+    right: -20px;
+    color: #354346;
+    background: #fff;
+    border-radius: 100%;
+    width: 20px;
+    line-height: 20px;
+    border: #354346 2px solid;
+    box-shadow: #fff 0 0 0 1px;
+    text-align: center;
 }
 
 :target{
