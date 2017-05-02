@@ -167,6 +167,12 @@ class DefaultController extends Controller
       throw new NotFoundHttpException('You can pay only for your packages.');
     }
 
+    if(Yii::$app->user->identity->isManager()){
+      $user=User::find()->where(['id'=>$user_id])->one();
+    }else{
+      $user=Yii::$app->user->identity;
+    }
+
     //узнаем налог пользователя
     $query = new Query;
     $query->select('state')
@@ -337,6 +343,17 @@ class DefaultController extends Controller
           return $this->redirect(['/']);
         };
 
+        //если есть раздрешения и выбрали оплату за месяц
+        if($user->month_pay==1 && $request->post('payment_type')==3){
+          $order->setData([
+            'payment_state'=>3,
+          ]);
+
+          \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and accepted to the warehouse and is waiting for dispatch.');
+          return $this->redirect(['/']);
+        }
+
+        //в остальных случаях создаем платеж и проводим его
         //Генерируем новый платеж оплаты налом
         $pays = PaymentsList::create([
           'client_id' => $user_id,
@@ -367,11 +384,21 @@ class DefaultController extends Controller
           'payment_state'=>2,
         ]);
 
-        \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse and is waiting for dispatch.');
+        \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse.');
         return $this->redirect(['/']);
 
       }else{
         //для пользователя
+
+        //если есть раздрешения и выбрали оплату за месяц
+        if($user->month_pay==1 && $request->post('payment_type')==3){
+          $order->setData([
+            'payment_state'=>3,
+          ]);
+
+          \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and successfully issued.');
+          return $this->redirect(['/']);
+        }
 
         //Когда выбрали оплату на точке
         if($request->post('payment_type')==2){
@@ -429,7 +456,8 @@ class DefaultController extends Controller
     return $this->render('to_pay', [
       'order_id'=>$id,
       'paces'=>$el_group,
-      'total'=>$total
+      'total'=>$total,
+      'user'=>$user,
     ]);
   }
 

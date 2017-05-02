@@ -56,13 +56,29 @@ class PaymentsList extends \yii\db\ActiveRecord
         );
     }
 
-    public static function getTextStatusParcel(){
-        return array(
-            ''=>'All',
-            '0'=>"<div class='dan_pay'>Not pay</div>",
-            '1'=>'<div class="awa_pay">Awaiting</div>',
-            '2'=>'<div class="acc_pay">Accepted</div>',
-        );
+  public static function getTextStatusParcel(){
+    return array(
+      ''=>'All',
+      '0'=>"<div class='dan_pay'>Not pay</div>",
+      '1'=>'<div class="awa_pay">Awaiting</div>',
+      '2'=>'<div class="acc_pay">Accepted</div>',
+      '3'=>'Pending payment once a month',
+    );
+  }
+
+    public static function statusText($param)
+    {
+        $textForStatus = PaymentsList::getTextStatus();
+        if (isset($textForStatus[$param])) return  $textForStatus[$param];
+        else return 'Unknown status';
+    }
+
+    public static function statusTextParcel($param)
+    {
+        $textForStatus = PaymentsList::getTextStatusParcel();
+        if ($param=='-1') return 'Canceled';
+        if (isset($textForStatus[$param])) return  $textForStatus[$param];
+        else return 'Unknown status';
     }
 
     public static function statusPayText($param)

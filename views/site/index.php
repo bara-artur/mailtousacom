@@ -282,7 +282,8 @@ $this->title = 'Shipping to USA and Canada';
                 // 'order_status',
                 // 'created_at',
                 // 'transport_data',
-                ['attribute' => 'Action','content' => function($data){
+                ['attribute' => 'Action',
+                  'content' => function($data){
                     $filesCount=$data->getDocsCount();
                     $button_files=Html::a('
                       <i class="icon-metro-attachment"></i>

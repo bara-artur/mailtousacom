@@ -11,6 +11,7 @@ use yii\widgets\DetailView;
 use app\components\ParcelPrice;
 use kartik\widgets\DatePicker;
 
+CrudAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
@@ -25,7 +26,8 @@ $submitOption = [
 ];
 
 ?>
-<form id="w0" class=""  method="post">
+<?php Pjax::begin(); ?>
+<form id="crud-datatable-pjax" class=""  method="post" >
     <h4 class="modernui-neutral2">Order payment</h4>
     <?php
     foreach ($paces as $pac) {
@@ -230,21 +232,26 @@ $submitOption = [
         }
         ?>
         <?php
-        if(!Yii::$app->user->identity->isManager()){?>
+        if(!Yii::$app->user->identity->isManager()){
+            $pay_variant=[
+              1 => "PayPal (+".
+                Yii::$app->config->get('paypal_commision_dolia').
+                "%+$".
+                Yii::$app->config->get('paypal_commision_fixed').
+                "= $".
+                number_format($total['pay_pal'],2,"."," ").
+                ")",
+              2 => "I will pay at warehouse"
+            ];
+            if(Yii::$app->user->identity->month_pay==1){
+              $pay_variant[3]='Moth payment';
+            }
+            ?>
             <div class="col-md-offset-4 col-md-6 trans_text custom-radio margin-top-10">
                 <b>Choose a payment method</b>
                     <hr class="margin-off-top margin-bottom-10">
                 <?= Html::radioList('payment_type',null,
-                    [
-                        1 => "PayPal (+".
-                          Yii::$app->config->get('paypal_commision_dolia').
-                          "%+$".
-                          Yii::$app->config->get('paypal_commision_fixed').
-                          "= $".
-                          number_format($total['pay_pal'],2,"."," ").
-                          ")",
-                        2 => "I will pay at warehouse"
-                    ],[
+                    $pay_variant,[
                         'item' => function($index, $label, $name, $checked, $value) {
                             $return = '<label>';
                             $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" >';
@@ -255,9 +262,53 @@ $submitOption = [
                         }
                     ]
                 );
+                if(Yii::$app->user->identity->month_pay==0){
+                    ?>
+                    <?=Html::a('Add month payment variant',
+                      ['/user/request-month-pay'],
+                      [
+                        'class' => 'btn btn-danger btn-md',
+                        'data' => [
+                          'confirm-message' => 'This request must confirm the manager. Want to send an inquiry?',
+                          'confirm-title'=>"Request for monthly payment",
+                          'pjax'=>'false',
+                          'toggle'=>"tooltip",
+                          'request-method'=>"post",
+                        ],
+                        'role'=>"modal-remote",
+                      ]); ?>
+                    <?php
+                }
                 ?>
             </div>
             <?php
+        }else{
+            if($user->month_pay==1){
+                $pay_variant=[
+                  3 => "Moth Payment",
+                  4 => "Pay now"
+                ];
+                ?>
+                <div class="col-md-offset-4 col-md-6 trans_text custom-radio margin-top-10">
+                    <b>Choose a payment method</b>
+                    <hr class="margin-off-top margin-bottom-10">
+                    <?= Html::radioList('payment_type',3,
+                      $pay_variant,
+                      [
+                        'item' => function($index, $label, $name, $checked, $value) {
+                            $return = '<label>';
+                            $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" '.($checked?"checked":'').'>';
+                            $return .= '<span></span>&nbsp;&nbsp;';
+                            $return .= ucwords($label);
+                            $return .= '</label><br>';
+                            return $return;
+                        }
+                      ]
+                    );
+                    ?>
+                </div>
+                <?php
+            }
         }?>
 
 
@@ -297,6 +348,13 @@ $submitOption = [
     </div>
 
 </form>
+<?php Pjax::end(); ?>
+
+<?php Modal::begin([
+  "id"=>"ajaxCrudModal",
+  "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>
 
 <script>
     function vaidate_comment(){
