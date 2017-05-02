@@ -44,16 +44,13 @@ $submitOption = [
       </div>
       <div class="col-md-8 col-sm-12 text-center">
         <div class="scaner_buttons">
-          <input type="button" class="show_scaner_button" value="Show scaner">
+          <input type="button" class="show_scaner_button  btn btn-info btn-xs2" value="Show scaner">
         </div>
         <p class="hide_scaner"><b>Scaner data:</b><br>
           <input type="text" class="scaner_data hide_scaner" size="32">
-          <input type="button" value="Find" class="scaner_find hide_scaner" size="32">
+          <input type="button" value="Find" class="scaner_find hide_scaner  btn btn-warning btn-xs2" size="32">
           <span class="dowloadTrackNumber"> Processing... </span>
         </p>
-        <div class="scaner_buttons">
-          <input type="button" class="hide_scaner_button" value="Hide scaner">
-        </div>
       </div>
       <div class="col-md-8 col-sm-12 text-center">
           <h4 class="order_id" order-id=<?=$order_id?> >Order #<?=$order_id?> for Transportation</br>
@@ -599,12 +596,16 @@ if($createNewAddress){
 
    $(".scaner_find").on("click",scaner_enter_button);
    $(".show_scaner_button").on("click",function(){
-     $('.hide_scaner').show(500);
-     $('.scaner_data').focus();
-     $('.scaner_data').val('');
-   });
-   $(".hide_scaner_button").on("click",function () {
-     $('.hide_scaner').hide(500);
+     if ($(".show_scaner_button").val()=="Show scaner") {
+       $(".show_scaner_button").val('Hide scaner');
+       $('.hide_scaner').show(500);
+       $('.scaner_data').focus();
+       $('.scaner_data').val('');
+     }
+     else {
+       $(".show_scaner_button").val('Show scaner');
+       $('.hide_scaner').hide(500);
+     }
    });
    $("body").on('keydown', function(){
      //if ($('.scaner_data').is(':hidden')) {
@@ -612,6 +613,7 @@ if($createNewAddress){
          $('.hide_scaner').show(500);
          $('.scaner_data').focus();
          $('.scaner_data').val('');
+         $(".show_scaner_button").val('Hide scaner');
        }
      //}else{
        if ((event.keyCode || event.charCode) == 13) {
