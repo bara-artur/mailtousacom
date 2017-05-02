@@ -176,10 +176,11 @@ $this->title = 'Shipping to USA and Canada';
                       'id'=>$data->id,
                       'user'=> $data->user_id,
                       'invoice'=> $data->track_number_type,
-                      'label' => '<span class="fa fa-check"></span>',
+                      'label' => '<span class="fa fa-check "></span>',
                     ]);
                   },
                   'visible' => ($admin==1),
+                    'contentOptions' =>['class'=>'table_check'],
                 ],
         //        ['class' => 'yii\grid\SerialColumn',
         //          'visible' => $showTable->showSerial,],
@@ -193,6 +194,7 @@ $this->title = 'Shipping to USA and Canada';
                       return '-empty-';
                     }
                   }
+
                 ],
                 ['attribute'=> 'status',
                   'content' => function($data){
@@ -202,13 +204,13 @@ $this->title = 'Shipping to USA and Canada';
                   'visible' => $showTable->showStatus,
                 ],
                 [
-                 'header'=> 'Parcel items',
+                 'header'=> 'Parcel Items',
                  'content' => function($data){
-                     $itemString = '';
+                     $itemString = '<ul class="list-group">';
                      if ($data->includes) {
                        foreach ($data->includes as $item) {
-                         if ($itemString) $itemString=$itemString.',  ';
-                         $itemString = $itemString . $item['name'];
+                         if ($itemString) $itemString=$itemString.'<li class="list-group-item2"><i class="fa fa-caret-right"></i> ';
+                         $itemString = $itemString . $item['name'].'</li></ol>';
                        }
                      }
                    return $itemString;
@@ -216,6 +218,7 @@ $this->title = 'Shipping to USA and Canada';
                  'visible' => $showTable->showItems,
                 ],
                 ['attribute'=> 'created_at',
+                    'options' => ['width' => '82'],
                     'content'=> function($data){
                         if ($data->created_at == 0) return '-';
                         else return date(Yii::$app->config->get('data_time_format_php'),$data->created_at);
@@ -224,6 +227,8 @@ $this->title = 'Shipping to USA and Canada';
                     'visible' => $showTable->showCreatedAt,
                 ],
                 ['attribute'=> 'payment_state',
+                    'label'=> 'Payment',
+                    'contentOptions' =>['class'=>'table_check'],
                   'content' => function($data){
                     return PaymentsList::statusTextParcel($data->payment_state);
                   },
@@ -249,6 +254,7 @@ $this->title = 'Shipping to USA and Canada';
                 ],
                 [
                     'attribute' => 'gst',
+                    'label'=> 'GST/HST',
                     'content'=> function($data){
                         if ($data->gst == 0) return '-';
                         else return number_format($data->gst,2);
@@ -281,7 +287,6 @@ $this->title = 'Shipping to USA and Canada';
                     $filesCount=$data->getDocsCount();
                     $button_files=Html::a('
                       <i class="icon-metro-attachment"></i>
-                      Documents
                       <span col_file='.$filesCount.'></span>
                       ', ['/orderElement/files/'.$data->id.''],
                       [
@@ -290,34 +295,40 @@ $this->title = 'Shipping to USA and Canada';
                         'role'=>'modal-remote',
                         'data-pjax'=>0
                       ]);
-                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span> Print', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
-                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
-                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span> View', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
-                    $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i> Delete',
-                      ['/orderElement/group-delete/' . $data->id],
-                      [
-                        'class' => 'btn btn-danger btn-sm marg_but',
-                        'data' => [
-                          'confirm-message' => 'Are you sure to delete this item?',
-                          'confirm-title'=>"Delete",
-                          'pjax'=>'false',
-                          'toggle'=>"tooltip",
-                          'request-method'=>"post",
-                        ],
-                        'role'=>"modal-remote",
-                      ]);
-                    $button_payments =  Html::a('Payments', ['/payment/show-parcel-includes/'.$data->id],
+                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but','title'=> 'Edit parcel',
+                        'data' => ['toggle'=>"tooltip"],]);
+                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span>', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but','title'=> 'View parcel',
+                        'data' => ['toggle'=>"tooltip"],]);
+                    $button_payments =  Html::a('&nbsp;<i class="fa fa-dollar"></i> ', ['/payment/show-parcel-includes/'.$data->id],
                         [
                           'id'=>'payment-show-includes',
                           'role'=>'modal-remote',
-                          'class'=>'btn btn-sm btn-info show_modal marg_but',
+                          'title'=> 'View payments',
+                          'data' => ['toggle'=>"tooltip"],
+                          'class'=>'btn btn-sm btn-success show_modal marg_but',
                         ]
                       );
-                    return ($filesCount>0?$button_files:"").
-                            (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
-                           (($data->payment_state==0)?($button_delete_parcel):("")).          // удаление посылок
+                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but','title'=> 'Print cargo manifest',
+                        'data' => ['toggle'=>"tooltip"],]);
+                    $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i>',
+                        ['/orderElement/group-delete/' . $data->id],
+                        [
+                            'class' => 'btn btn-danger btn-sm marg_but',
+                            'title'=> 'Delete parcel',
+                            'data' => [
+                                'confirm-message' => 'Are you sure to delete this item?',
+                                'confirm-title'=>"Delete",
+                                'pjax'=>'false',
+                                'toggle'=>"tooltip",
+                                'request-method'=>"post",
+                            ],
+                            'role'=>"modal-remote",
+                        ]);
+                    return  (($data->status>2)?($button_payments):("")).                       // история платежей
+                        (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
+                            ($filesCount>0?$button_files:"").                                    //документы на печать
                             $button_print_pdf.                                                // печать PDF
-                           (($data->status>2)?($button_payments):(""));                       // история платежей
+                    (($data->payment_state==0)?($button_delete_parcel):(""));         // удаление посылок
                 }],
             ],
         ]); ?>

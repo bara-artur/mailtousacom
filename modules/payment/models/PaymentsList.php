@@ -29,23 +29,39 @@ class PaymentsList extends \yii\db\ActiveRecord
             '-1'=>'Canceled',
         );
     }
-  public static function getPayStatus(){
-    return array(
-      ''=>'All',
-      '0'=>"-",
-      '1'=>'PayPal',
-      '2'=>'At the point',
-      '3'=>'Per month',
-      '4'=>'Unknown'
-    );
-  }
+
+    public static function statusText($param)
+    {
+        $textForStatus = PaymentsList::getTextStatus();
+        if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
+        else return 'Unknown status';
+    }
+
+    public static function statusTextParcel($param)
+    {
+        $textForStatus = PaymentsList::getTextStatusParcel();
+        if ($param=='-1') return 'Canceled';
+        if ($param < (count($textForStatus)-1)) return  $textForStatus[$param];
+        else return 'Unknown status';
+    }
+
+    public static function getPayStatus(){
+        return array(
+            ''=>'All',
+            '0'=>"-",
+            '1'=>'PayPal',
+            '2'=>'Per month',
+            '3'=>'At the point',
+            '4'=>'Unknown'
+        );
+    }
 
   public static function getTextStatusParcel(){
     return array(
       ''=>'All',
-      '0'=>"Not pay",
-      '1'=>'Awaiting review',
-      '2'=>'Payment accepted',
+      '0'=>"<div class='dan_pay'>Not pay</div>",
+      '1'=>'<div class="awa_pay">Awaiting</div>',
+      '2'=>'<div class="acc_pay">Accepted</div>',
       '3'=>'Pending payment once a month',
     );
   }

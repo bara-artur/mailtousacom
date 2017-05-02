@@ -1004,3 +1004,9 @@ function init_superCheckbox_processing() {
     superCheckboxProcessing();
   })
 }
+$(function(){
+    $('#more').click(function(){
+        $(this).hide();
+        $('#more ~ li').fadeIn();
+    });
+});
