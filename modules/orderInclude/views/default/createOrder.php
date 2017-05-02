@@ -132,7 +132,9 @@ $submitOption = [
                       <th>Country</th>
                       <th>Quantity</th>
                       <th>Reference number</th>
-                      <th>Action</th>
+                      <?php if ($edit_not_prohibited){ ?>
+                        <th>Action</th>
+                      <?php } ?>
                     </tr>
                     <?php $includes=$percel->getIncludes();?>
                     <?php $total_weight=0;?>
@@ -150,24 +152,24 @@ $submitOption = [
                         <?php } ?>
                         <td><?=$item['quantity'];?></td>
                         <td><?=$item['reference_number'];?></td>
-                        <td>
-                          <div class="but_tab_style">
-                            <?php if ($edit_not_prohibited) {?>
-                              <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit', ['/orderInclude/update?id='.$item['id']],
-                                ['role'=>'modal-remote','title'=> 'Edit','data-pjax'=>0,'class'=>'btn btn-info btn-sm '])?>
-                              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderInclude/delete?id='.$item['id']],
-                                [
-                                  'role'=>'modal-remote',
-                                  'title'=> 'Delete',
-                                  'data-pjax'=>0,
-                                  'class'=>'btn btn-danger btn-sm w0-action-del',
-                                  'data-request-method'=>"post",
-                                  'data-confirm-title'=>"Are you sure?",
-                                  'data-confirm-message'=>"Are you sure want to delete this item",
-                                ])?>
-                            <?php } ?>
-                               </div>
-                        </td>
+                        <?php if ($edit_not_prohibited) {?>
+                          <td>
+                            <div class="but_tab_style">
+                                <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit', ['/orderInclude/update?id='.$item['id']],
+                                  ['role'=>'modal-remote','title'=> 'Edit','data-pjax'=>0,'class'=>'btn btn-info btn-sm '])?>
+                                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderInclude/delete?id='.$item['id']],
+                                  [
+                                    'role'=>'modal-remote',
+                                    'title'=> 'Delete',
+                                    'data-pjax'=>0,
+                                    'class'=>'btn btn-danger btn-sm w0-action-del',
+                                    'data-request-method'=>"post",
+                                    'data-confirm-title'=>"Are you sure?",
+                                    'data-confirm-message'=>"Are you sure want to delete this item",
+                                  ])?>
+                                 </div>
+                          </td>
+                        <?php } ?>
                       </tr>
                     <?php }?>
                   </table>
