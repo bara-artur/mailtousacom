@@ -51,7 +51,7 @@ $this->title = 'Shipping to USA and Canada';
               'disabled'=>true,
             ]); ?>
             <div class="btn-group">
-            <button type="button" class="btn btn-md btn-blue-gem dropdown-toggle InSystem_show Draft_show difUserIdHide" data-toggle="dropdown">
+            <button type="button" class="btn btn-md btn-blue-gem dropdown-toggle InSystem_show Draft_show difUserIdHide difScanerHide" data-toggle="dropdown">
                 <span class="glyphicon glyphicon-print"></span> Print
                 <span class="caret"></span>
             </button>
@@ -176,6 +176,7 @@ $this->title = 'Shipping to USA and Canada';
                       'id'=>$data->id,
                       'user'=> $data->user_id,
                       'invoice'=> $data->track_number_type,
+                      'scaner_data'=> ((strcasecmp($data->first_name,'[default]')==0)?(1):(0)),
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },
