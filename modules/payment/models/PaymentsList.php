@@ -59,9 +59,9 @@ class PaymentsList extends \yii\db\ActiveRecord
     public static function getTextStatusParcel(){
         return array(
             ''=>'All',
-            '0'=>"Not pay",
-            '1'=>'Awaiting review',
-            '2'=>'Payment accepted',
+            '0'=>"<span class='bg-danger fg-white padd_pay' style=''> Not pay </span>",
+            '1'=>'<span class="bg-yellow fg-white padd_pay">Awaiting</span>',
+            '2'=>'<span class=" padd_pay" style="border: 1px solid #199900;color:#199900;">Accepted</span>',
         );
     }
 
