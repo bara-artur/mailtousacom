@@ -43,16 +43,18 @@ $submitOption = [
               'data-forscanercookie'=> $scaner_data_list,
             ])?>
       </div>
-      <div class="col-md-8 col-sm-12 text-center">
-        <div class="scaner_buttons">
-          <input type="button" class="show_scaner_button  btn btn-info btn-xs2" value="Show scaner">
+      <?php if ($admin){ ?>
+        <div class="col-md-8 col-sm-12 text-center">
+          <div class="scaner_buttons">
+            <input type="button" class="show_scaner_button  btn btn-info btn-xs2" value="Show scaner">
+          </div>
+          <p class="hide_scaner"><b>Scaner data:</b><br>
+            <input type="text" class="scaner_data hide_scaner" size="32">
+            <input type="button" value="Find" class="scaner_find hide_scaner  btn btn-warning btn-xs2" size="32">
+            <span class="dowloadTrackNumber"> Processing... </span>
+          </p>
         </div>
-        <p class="hide_scaner"><b>Scaner data:</b><br>
-          <input type="text" class="scaner_data hide_scaner" size="32">
-          <input type="button" value="Find" class="scaner_find hide_scaner  btn btn-warning btn-xs2" size="32">
-          <span class="dowloadTrackNumber"> Processing... </span>
-        </p>
-      </div>
+      <?php } ?>
       <div class="col-md-8 col-sm-12 text-center">
           <h4 class="order_id" order-id=<?=$order_id?> >Order #<?=$order_id?> for Transportation</br>
           <?php if (!$edit_not_prohibited) {?>
@@ -618,7 +620,7 @@ if($createNewAddress){
        }
      //}else{
        if ((event.keyCode || event.charCode) == 13) {
-         scaner_enter_button();
+         if ($('.scaner_data').length>0) scaner_enter_button();
        }
       //}
     });

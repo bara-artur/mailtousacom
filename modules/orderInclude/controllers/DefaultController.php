@@ -87,7 +87,7 @@ class DefaultController extends Controller
       $order->save();
     }
     else{
-      if (($admin)&&(Yii::$app->user->id != $order->id)){
+      if ((!$admin)&&(Yii::$app->user->id != $order->user_id)){
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Unknown order ID','gritter-danger')",]));
         return $this->redirect(['/']);
       }
@@ -144,6 +144,7 @@ class DefaultController extends Controller
       'track_number_types' => $track_number_types,
       'scaner_data_list' => $scaner_data_list,
       'last' => $last,
+      'admin' => $admin,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
