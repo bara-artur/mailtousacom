@@ -26,15 +26,4 @@ class m170502_192109_create_additional_services_config extends Migration
       $this->dropTable('additional_services_list');
         return false;
     }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
 }
