@@ -316,7 +316,7 @@ $this->title = 'Shipping to USA and Canada';
                     return ($filesCount>0?$button_files:"").
                             (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
                            (($data->payment_state==0)?($button_delete_parcel):("")).          // удаление посылок
-                            $button_print_pdf.                                                // печать PDF
+                           ((strcasecmp($data->first_name,'[default]')!=0)?($button_print_pdf):("")).                                                // печать PDF
                            (($data->status>2)?($button_payments):(""));                       // история платежей
                 }],
             ],
