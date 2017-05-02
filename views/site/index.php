@@ -308,8 +308,8 @@ $this->title = 'Shipping to USA and Canada';
                           'class'=>'btn btn-sm btn-success show_modal marg_but',
                         ]
                       );
-                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but','title'=> 'Print cargo manifest',
-                        'data' => ['toggle'=>"tooltip"],]);
+                    $button_print_pdf = Html::a('<i class="fa fa-print"></i>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-science-blue-border marg_but','title'=> 'Print cargo manifest',
+                        'data' => ['toggle'=>"tooltip"],'target' => '_blank',]);
                     $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i>',
                         ['/orderElement/group-delete/' . $data->id],
                         [

@@ -262,12 +262,14 @@ $submitOption = [
                         }
                     ]
                 );
+
                 if(Yii::$app->user->identity->month_pay==0){
                     ?>
-                    <?=Html::a('Add month payment variant',
+                    <hr class="margin-off-top margin-bottom-10">
+                    <?=Html::a('Request for monthly payment <i class="icon-metro-calendar"></i>',
                       ['/user/request-month-pay'],
                       [
-                        'class' => 'btn btn-danger btn-md',
+                        'class' => 'btn btn-dark-border btn-md pull-right',
                         'data' => [
                           'confirm-message' => 'This request must confirm the manager. Want to send an inquiry?',
                           'confirm-title'=>"Request for monthly payment",

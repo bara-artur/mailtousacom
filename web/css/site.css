@@ -1101,7 +1101,7 @@ table{font-size:14px;}
     line-height: 20px;
     border: #354346 0px solid;
     background: #FFC800;
-    box-shadow: #fff 0 0 0 1px;
+    font-weight:400;
 }
 [col_file="0"]:before{
     content:"";
@@ -1109,16 +1109,14 @@ table{font-size:14px;}
 }
 [col_req]:before{
     content: attr(col_req);
-    position:absolute;
+    position: absolute;
     top: -15px;
     right: -20px;
-    color: #354346;
-    background: #fff;
+    color: #000;
+    background: #ffc800;
     border-radius: 100%;
     width: 20px;
     line-height: 20px;
-    border: #354346 2px solid;
-    box-shadow: #fff 0 0 0 1px;
     text-align: center;
 }
 .table_check{
