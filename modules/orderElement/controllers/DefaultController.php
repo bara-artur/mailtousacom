@@ -364,7 +364,7 @@ class DefaultController extends Controller
       if ($order_id != null) {
         return $this->redirect(['/orderInclude/create-order/' . $order_id]);
       } else {
-        return $this->redirect(['/','showTheGritter'=>'Update error. Bad racel IDs', 'gritterType' => 'error']);
+        return $this->redirect(['/','showTheGritter'=>'Update error. Bad parcel IDs', 'gritterType' => 'error']);
       }
   }
 

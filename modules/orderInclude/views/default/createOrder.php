@@ -536,7 +536,10 @@ if($createNewAddress){
    $( "#crud-datatable-pjax" ).on( "click", ".btn-science-blue", function( event ) { // делегируем событие для динамической кнопки добавить
    $("#ajaxCrudModal").attr("tabindex",-1);
    });
-
+   if (getCookie('successGritter')){
+     gritterAdd('Success', 'We add the new parcel to your order', 'gritter-success');
+     setCookie('successGritter','',1);
+   }
    function scaner_enter_button(){
      elem = $('.order_id');
      order_id = elem.attr('order-id');
@@ -577,7 +580,7 @@ if($createNewAddress){
              gritterAdd('Error', 'Different user parcels error', 'gritter-danger');
            }
            else {
-             gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');
+             setCookie('successGritter','1',1);
              location.href = data;
              location.reload();
            }
