@@ -718,6 +718,7 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
     if (elem_checked.length>0){
       firstParcelUser = elem_checked[0].getAttribute('user');
       firstParcelInvoice = elem_checked[0].getAttribute('invoice');
+      firstParcelScaner = elem_checked[0].getAttribute('scaner_data');
     }
   }
   if (getCookie('parcelCheckedId')!='') {
@@ -913,7 +914,6 @@ function main_table_checkbox(current_element){
      $(".group-admin-view").attr('disabled', true);
    }
  }
-
  $("#for_group_actions").html('<b>Checked parcels:</b> ' + string);
  // $(".group-admin-view").attr("href","/orderElement/group-view"+parcel_ids);
  // $(".group-update").attr("href","/orderElement/group-update"+parcel_ids);
