@@ -11,11 +11,23 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\modules\user\models\Profile;
+use \yii\web\Response;
+
 /**
  * DefaultController implements the CRUD actions for User model.
  */
 class DefaultController extends Controller
 {
+
+  public function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest) {
+      $this->redirect(['/']);
+      return false;
+    }
+    return parent::beforeAction($action);
+  }
+
     public function actions()
     {
         return [
@@ -46,7 +58,6 @@ class DefaultController extends Controller
     }
 
     $request = Yii::$app->request;
-    $request = Yii::$app->request;
     if($request->isPost) {
       if($model->load($post) && $model->validate() && $model->save()){
         Yii::$app->getSession()->setFlash('success', 'Profile updated.');
@@ -57,5 +68,27 @@ class DefaultController extends Controller
     return $this->render('profile', [
       'model' => $model,
     ]);
+  }
+
+  public function actionRequestMonthPay(){
+    $request = Yii::$app->request;
+
+    if(!$request->isAjax || !$request->isPost) {
+      throw new NotFoundHttpException('The requested page could not be found.');
+    }
+
+    Yii::$app->getSession()->setFlash('success', 'Request has been sent. Wait for the administrator\'s response.');
+
+    $user=User::findIdentity(Yii::$app->user->id);
+    $user->month_pay=2;
+    $user->save();
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return [
+      'title' => "Request has been sent.",
+      'content' => '',
+      'forceClose'=>true,
+      'forceReload'=>'#crud-datatable-pjax'
+    ];
   }
 }
