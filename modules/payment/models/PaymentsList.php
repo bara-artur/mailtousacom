@@ -66,21 +66,6 @@ class PaymentsList extends \yii\db\ActiveRecord
     );
   }
 
-    public static function statusText($param)
-    {
-        $textForStatus = PaymentsList::getTextStatus();
-        if (isset($textForStatus[$param])) return  $textForStatus[$param];
-        else return 'Unknown status';
-    }
-
-    public static function statusTextParcel($param)
-    {
-        $textForStatus = PaymentsList::getTextStatusParcel();
-        if ($param=='-1') return 'Canceled';
-        if (isset($textForStatus[$param])) return  $textForStatus[$param];
-        else return 'Unknown status';
-    }
-
     public static function statusPayText($param)
     {
         $textForStatus = PaymentsList::getPayStatus();
