@@ -204,7 +204,7 @@ $this->title = 'Shipping to USA and Canada';
                   'visible' => $showTable->showStatus,
                 ],
                 [
-                 'header'=> 'Parcel items',
+                 'header'=> 'Parcel Items',
                  'content' => function($data){
                      $itemString = '<ul class="list-group">';
                      if ($data->includes) {
@@ -218,6 +218,7 @@ $this->title = 'Shipping to USA and Canada';
                  'visible' => $showTable->showItems,
                 ],
                 ['attribute'=> 'created_at',
+                    'options' => ['width' => '82'],
                     'content'=> function($data){
                         if ($data->created_at == 0) return '-';
                         else return date(Yii::$app->config->get('data_time_format_php'),$data->created_at);
@@ -226,6 +227,7 @@ $this->title = 'Shipping to USA and Canada';
                     'visible' => $showTable->showCreatedAt,
                 ],
                 ['attribute'=> 'payment_state',
+                    'label'=> 'Payment',
                     'contentOptions' =>['class'=>'table_check'],
                   'content' => function($data){
                     return PaymentsList::statusTextParcel($data->payment_state);
@@ -252,6 +254,7 @@ $this->title = 'Shipping to USA and Canada';
                 ],
                 [
                     'attribute' => 'gst',
+                    'label'=> 'GST/HST',
                     'content'=> function($data){
                         if ($data->gst == 0) return '-';
                         else return number_format($data->gst,2);
@@ -291,9 +294,11 @@ $this->title = 'Shipping to USA and Canada';
                         'role'=>'modal-remote',
                         'data-pjax'=>0
                       ]);
-                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
-                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span>', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but']);
-                    $button_payments =  Html::a('<i class="fa fa-dollar"></i> ', ['/payment/show-parcel-includes/'.$data->id],
+                    $button_update_parcel = Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but','title'=> 'Edit parcel',
+                        'data' => ['toggle'=>"tooltip"],]);
+                    $button_view_parcel = Html::a('<span class="fa fa-eye"></span>', ['/orderElement/group-update/' . $data->id], ['class' => 'btn btn-sm btn-science-blue marg_but','title'=> 'View parcel',
+                        'data' => ['toggle'=>"tooltip"],]);
+                    $button_payments =  Html::a('&nbsp;<i class="fa fa-dollar"></i> ', ['/payment/show-parcel-includes/'.$data->id],
                         [
                           'id'=>'payment-show-includes',
                           'role'=>'modal-remote',
@@ -302,7 +307,8 @@ $this->title = 'Shipping to USA and Canada';
                           'class'=>'btn btn-sm btn-success show_modal marg_but',
                         ]
                       );
-                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but']);
+                    $button_print_pdf = Html::a('<span class="glyphicon glyphicon-print"></span>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-blue-gem marg_but','title'=> 'Print cargo manifest',
+                        'data' => ['toggle'=>"tooltip"],]);
                     $button_delete_parcel = Html::a('<i class="icon-metro-remove"></i>',
                         ['/orderElement/group-delete/' . $data->id],
                         [
@@ -317,11 +323,11 @@ $this->title = 'Shipping to USA and Canada';
                             ],
                             'role'=>"modal-remote",
                         ]);
-                    return ($filesCount>0?$button_files:"").
-                            (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
-                           (($data->payment_state==0)?($button_delete_parcel):("")).          // удаление посылок
+                    return  (($data->status>2)?($button_payments):("")).                       // история платежей
+                        (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
+                            ($filesCount>0?$button_files:"").                                    //документы на печать
                             $button_print_pdf.                                                // печать PDF
-                           (($data->status>2)?($button_payments):(""));                       // история платежей
+                    (($data->payment_state==0)?($button_delete_parcel):(""));         // удаление посылок
                 }],
             ],
         ]); ?>
