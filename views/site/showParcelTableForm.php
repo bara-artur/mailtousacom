@@ -23,14 +23,9 @@ use kartik\widgets\SwitchInput;
       <div class="col-md-10">
           <div class="row">
         <?php if ($admin==1) { ?>
-            <div class="col-md-2">
-              <?= $form->field($model, 'showID')->widget(SwitchInput::className(),[
-                  'options'=> ['label' => 'User'],
-                  'type' => SwitchInput::CHECKBOX,
-                  'pluginOptions' => ['size' => 'mini','onColor' => 'success'],
-              ])->label(false);?>
-
-            </div>
+          <div class="col-md-2">
+            <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span> User','class'=>''])?>
+          </div>
         <?php } ?>
             <div class="col-md-2">
               <?= $form->field($model, 'showStatus')->checkbox(['label' => '<span class="fa fa-check otst"></span> Status','class'=>''])?>
