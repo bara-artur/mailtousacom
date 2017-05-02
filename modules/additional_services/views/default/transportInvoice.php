@@ -9,30 +9,40 @@ use yii\helpers\Url;
 
 CrudAsset::register($this);
 
-$this->title = 'Order group';
+$this->title = 'Transport invoice';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+<h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
 <?php Pjax::begin();?>
 <?php $form = ActiveForm::begin(); ?>
+<div class="row">
+    <div class="col-md-4">
   <p>
     Invoice number
     <?=Html::input('text', 'invoice', $data['invoice'], [
       'class' => ''
     ]);?>
   </p>
+    </div>
+    <div class="col-md-4">
   <p>
     Referring code
     <?=Html::input('text', 'ref_code', $data['ref_code'], [
       'class' => ''
     ]);?>
   </p>
+    </div>
+    <div class="col-md-4">
   <p>
     Contract number
     <?=Html::input('text', 'contract_number', $data['contract_number'], [
       'class' => ''
     ]);?>
   </p>
+    </div>
+</div>
+<hr>
       <table class="table table-pod" id="crud-datatable-pjax">
         <tr>
           <th>#</th>
@@ -91,8 +101,9 @@ $this->params['breadcrumbs'][] = $this->title;
           }
         ?>
       </table>
+<hr>
   <div class="form-group">
-    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-primary']) ?>
+    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
   </div>
 <?php ActiveForm::end(); ?>
 <?php Pjax::end();;?>
