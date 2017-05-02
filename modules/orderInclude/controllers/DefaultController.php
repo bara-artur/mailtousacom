@@ -297,7 +297,10 @@ class DefaultController extends Controller
               ];
           }else if($model->load($request->post())&&($model->save())){
               //$model->order_id = $request->post('order_id');
-
+              Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                'name' => 'parcelAnchorId',
+                'value' => $model->order_id,
+              ]));
               return [
                   'forceReload'=>'#crud-datatable-pjax',
                   'title'=> "Create new OrderInclude",
