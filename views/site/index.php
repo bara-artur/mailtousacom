@@ -24,7 +24,7 @@ $this->title = 'Shipping to USA and Canada';
               <?php if ($orderElements) { ?>
                   <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?php } ?>
-              <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn2 btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
@@ -290,7 +290,7 @@ $this->title = 'Shipping to USA and Canada';
                       ', ['/orderElement/files/'.$data->id.''],
                       [
                         'title'=> 'Show documents from parcel',
-                        'class' => 'btn btn-primary btn-sm marg_but big_model',
+                        'class' => 'btn btn-primary btn-sm marg_but2 big_model',
                         'role'=>'modal-remote',
                         'data-pjax'=>0
                       ]);

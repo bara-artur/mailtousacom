@@ -12,7 +12,7 @@ use yii\helpers\Url;
      width="264"
      height="35"/></td>
             <td  valign="bottom" align="right" style="font-size:8px;">
-               reducing you shipping expenses
+               reducing your shipping expenses
     </td>
 </tr>
 </table>

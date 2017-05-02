@@ -984,7 +984,11 @@ color: #fff;}
     line-height: 1;
     height: 24px;
 }
-.marg_but{margin-right:4px;display:inline; }
+.marg_but{margin-right:4px;
+    display:inline;
+    padding: 9px 12px;
+    font-size: 14px;
+}
 button.navbar-toggle{margin-right:30px;}
 .lr_bord{
     border-left: 1px dotted #ccc;
@@ -1080,8 +1084,8 @@ table{font-size:14px;}
     padding: 6px;
     line-height: 1.3;
 }
-.btn {
-    padding: 6px 12px;}
+/*.btn {
+    padding: 6px 12px;}*/
 
 [col_file],[col_req]{
     position:relative;
@@ -1091,7 +1095,7 @@ table{font-size:14px;}
     position: absolute;
     top: -17px;
     right: -17px;
-    color: #354346;
+    color: #000;
     border-radius: 100%;
     width: 20px;
     line-height: 20px;
@@ -1135,3 +1139,10 @@ table{font-size:14px;}
 div.acc_pay{border: 2px solid #199900;background-color:#ffffff;max-width:100%;}
 div.dan_pay {border: 2px solid #E51400;background-color:#ffffff;max-width:100%;}
 div.awa_pay{border: 2px solid #006AC1;background-color:#ffffff;max-width:100%;}
+.marg_but2
+{
+margin-right: 4px;
+display: inline;
+padding: 9px;
+font-size: 14px;
+}

@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
 <hr>
+<div class="table table-responsive">
       <table class="table table-pod" id="crud-datatable-pjax">
         <tr>
           <th>#</th>
@@ -101,6 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
           }
         ?>
       </table>
+</div>
 <hr>
   <div class="form-group">
     <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
