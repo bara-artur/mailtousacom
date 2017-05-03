@@ -49,7 +49,6 @@ class DefaultController extends Controller
         ]);
     }
 
-
     /**
      * Displays a single AdditionalServices model.
      * @param integer $id

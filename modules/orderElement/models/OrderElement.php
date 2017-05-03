@@ -163,6 +163,9 @@ class OrderElement extends \yii\db\ActiveRecord
   }
 
   public function getTrackInvoice(){
+    if($this->track_number_type!=1){
+      return false;
+    }
     $el=AdditionalServices::find()->where(['parcel_id_lst'=>$this->id,'type'=>1])->one();
     if(!$el){
       $el=NEW AdditionalServices;
@@ -175,6 +178,18 @@ class OrderElement extends \yii\db\ActiveRecord
       $el->create=time();
     };
     return $el;
+  }
+
+  public function getRecipientData(){
+    if($this->first_name=='[default]'){
+      return "<div>By scanner</div>";
+    };
+
+    return '<div>'.$this->first_name.' '.$this->last_name.'</div>'.
+            '<div>'.$this->company_name.'</div>'.
+            '<div>'.$this->getStateText().'</div>'.
+            '<div>'.$this->city.'</div>';
+            '<div>'.$this->zip.'</div>';
   }
 
   public function getWeight_lb(){
