@@ -174,7 +174,8 @@ return [
     'Washington',
     'West Virginia',
     'Wisconsin',
-    'Wyoming'],
+    'Wyoming',
+    'default',],
   'ShippingCarrier'=>[
     'ups'=>"UPS",
     'usps'=>'USPS',

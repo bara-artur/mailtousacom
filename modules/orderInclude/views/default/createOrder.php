@@ -40,16 +40,28 @@ $submitOption = [
               'data-forCookie'=> $ids,
               'data-forusercookie'=> $user_ids,
               'data-forinvoicecookie'=> $track_number_types,
+              'data-forscanercookie'=> $scaner_data_list,
             ])?>
       </div>
+      <?php if ($admin){ ?>
+        <div class="col-md-8 col-sm-12 text-center">
+          <div class="scaner_buttons">
+            <input type="button" class="show_scaner_button  btn btn-info btn-xs2" value="Show scaner">
+          </div>
+          <p class="hide_scaner"><b>Scaner data:</b><br>
+            <input type="text" class="scaner_data hide_scaner" size="32">
+            <input type="button" value="Find" class="scaner_find hide_scaner  btn btn-warning btn-xs2" size="32">
+            <span class="dowloadTrackNumber"> Processing... </span>
+          </p>
+        </div>
+      <?php } ?>
       <div class="col-md-8 col-sm-12 text-center">
-          <h4 class="">Order #<?=$order_id?> for Transportation</br>
+          <h4 class="order_id" order-id=<?=$order_id?> >Order #<?=$order_id?> for Transportation</br>
           <?php if (!$edit_not_prohibited) {?>
               <span class="prohibit_editing text-danger"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></span>
           <?php } ?>
           </h4>
-    </div>
-
+      </div>
   </div>
 <hr class="bottom_line2">
 
@@ -76,7 +88,7 @@ $submitOption = [
       foreach ($order_elements as $k=>$percel) {
         $percel_files=$percel->fileList();
         ?>
-        <div class="row">
+        <div <?= (($last==$percel->id)?('id=last_anchor'):('')) ?> class="row">
           <div class="col-md-12"><h5 class="modern_border">Parcel # <?= $k+1 ?> </h5></div>
           <div class="col-md-3 marg_p">
             <h5 class="deliv_address">Delivery address</h5><p><b>First name:</b>  <?=$percel->first_name;?></p>
@@ -120,7 +132,9 @@ $submitOption = [
                       <th>Country</th>
                       <th>Quantity</th>
                       <th>Reference number</th>
-                      <th>Action</th>
+                      <?php if ($edit_not_prohibited){ ?>
+                        <th>Action</th>
+                      <?php } ?>
                     </tr>
                     <?php $includes=$percel->getIncludes();?>
                     <?php $total_weight=0;?>
@@ -138,24 +152,24 @@ $submitOption = [
                         <?php } ?>
                         <td><?=$item['quantity'];?></td>
                         <td><?=$item['reference_number'];?></td>
-                        <td>
-                          <div class="but_tab_style">
-                            <?php if ($edit_not_prohibited) {?>
-                              <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit', ['/orderInclude/update?id='.$item['id']],
-                                ['role'=>'modal-remote','title'=> 'Edit','data-pjax'=>0,'class'=>'btn btn-info btn-sm '])?>
-                              <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderInclude/delete?id='.$item['id']],
-                                [
-                                  'role'=>'modal-remote',
-                                  'title'=> 'Delete',
-                                  'data-pjax'=>0,
-                                  'class'=>'btn btn-danger btn-sm w0-action-del',
-                                  'data-request-method'=>"post",
-                                  'data-confirm-title'=>"Are you sure?",
-                                  'data-confirm-message'=>"Are you sure want to delete this item",
-                                ])?>
-                            <?php } ?>
-                               </div>
-                        </td>
+                        <?php if ($edit_not_prohibited) {?>
+                          <td>
+                            <div class="but_tab_style">
+                                <?=Html::a('<i class="glyphicon glyphicon-pencil"></i> Edit', ['/orderInclude/update?id='.$item['id']],
+                                  ['role'=>'modal-remote','title'=> 'Edit','data-pjax'=>0,'class'=>'btn btn-info btn-sm '])?>
+                                <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderInclude/delete?id='.$item['id']],
+                                  [
+                                    'role'=>'modal-remote',
+                                    'title'=> 'Delete',
+                                    'data-pjax'=>0,
+                                    'class'=>'btn btn-danger btn-sm w0-action-del',
+                                    'data-request-method'=>"post",
+                                    'data-confirm-title'=>"Are you sure?",
+                                    'data-confirm-message'=>"Are you sure want to delete this item",
+                                  ])?>
+                                 </div>
+                          </td>
+                        <?php } ?>
                       </tr>
                     <?php }?>
                   </table>
@@ -516,13 +530,106 @@ if($createNewAddress){
 <script>
   //исправить!!!!!!!
   $(document).ready(function() {
+   $('.hide_scaner').hide();
+   $('.dowloadTrackNumber').hide();
    $( "#ajaxCrudModal" ).on( "click", ".select2", function( event ) { // делегируем событие для динамического select2
    $("#ajaxCrudModal").removeAttr("tabindex");
    });
    $( "#crud-datatable-pjax" ).on( "click", ".btn-science-blue", function( event ) { // делегируем событие для динамической кнопки добавить
    $("#ajaxCrudModal").attr("tabindex",-1);
    });
+   if (getCookie('successGritter')){
+     gritterAdd('Success', 'We add the new parcel to your order', 'gritter-success');
+     setCookie('successGritter','',1);
+   }
+   function scaner_enter_button(){
+     elem = $('.order_id');
+     order_id = elem.attr('order-id');
+     track_number = $('.scaner_data').val();
+     if ((track_number.length==12) || (track_number.length==13) || (track_number.length==15) ||
+       (track_number.length==16) || (track_number.length==18) || (track_number.length==20) ||
+       (track_number.length==22) ||(track_number.length==26)){
+       $(".dowloadTrackNumber").show();
+       $.ajax({
+         type: 'POST',
+         url: 'order/update',
+         data: {order_id: order_id, track_number: track_number},
+         success: function (data) {
+           if (data == 0) {
+           }
+           else if (data == 1) {
+             gritterAdd('Success', 'We find your parcel in DB. Saving successful', 'gritter-success');
+           }
+           else if (data == 2) {
+             gritterAdd('Error', 'We find your parcel in DB, but order saving failed', 'gritter-danger');
+           }
+           else if (data == 3) {
+             gritterAdd('Success', 'We create new parcel. Saving successful', 'gritter-success');
+           }
+           else if (data == 4) {
+             gritterAdd('Error', 'We create new parcel, but order saving failed ', 'gritter-danger');
+           }
+           else if (data == 5) {
+             gritterAdd('Error', 'Track number validation failed', 'gritter-danger');
+           }
+           else if (data == 6) {
+             gritterAdd('Error', 'We create new parcel, but parcel saving was failed', 'gritter-danger');
+           }
+           else if (data == 7) {
+             gritterAdd('Error', 'You have this parcel in current order', 'gritter-warning');
+           }
+           else if (data == 9) {
+             gritterAdd('Error', 'Different user parcels error', 'gritter-danger');
+           }
+           else {
+             setCookie('successGritter','1',1);
+             location.href = data;
+             location.reload();
+           }
+           $(".dowloadTrackNumber").hide();
+           // window.location.hash="last_parcel_anchor";
+         },
+         error: function (xhr, str) {
+           $('.order_id').css("color", "red");
+           $(".dowloadTrackNumber").hide();
+         }
+       });
+     }else{
+       gritterAdd('Error','Track number length validation failed','gritter-danger');
+     }
+   }
+
+   $(".scaner_find").on("click",scaner_enter_button);
+   $(".show_scaner_button").on("click",function(){
+     if ($(".show_scaner_button").val()=="Show scaner") {
+       $(".show_scaner_button").val('Hide scaner');
+       $('.hide_scaner').show(500);
+       $('.scaner_data').focus();
+       $('.scaner_data').val('');
+     }
+     else {
+       $(".show_scaner_button").val('Show scaner');
+       $('.hide_scaner').hide(500);
+     }
+   });
+   $("body").on('keydown', function(){
+     //if ($('.scaner_data').is(':hidden')) {
+       if ((event.keyCode || event.charCode) == 118) {  // f7
+         $('.hide_scaner').show(500);
+         $('.scaner_data').focus();
+         $('.scaner_data').val('');
+         $(".show_scaner_button").val('Hide scaner');
+       }
+     //}else{
+       if ((event.keyCode || event.charCode) == 13) {
+         if ($('.scaner_data').length>0) scaner_enter_button();
+       }
+      //}
+    });
    $(".show_modal").on("click", function() {
    $("#ajaxCrudModal").attr("tabindex",-1);
-   })});
+
+   });
+   $('#last_anchor').find('#lb').focus().select();
+  });
 </script>
