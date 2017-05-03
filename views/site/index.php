@@ -287,7 +287,6 @@ $this->title = 'Shipping to USA and Canada';
                     $filesCount=$data->getDocsCount();
                     $button_files=Html::a('
                       <i class="icon-metro-attachment"></i>
-                      Documents
                       <span col_file='.$filesCount.'></span>
                       ', ['/orderElement/files/'.$data->id.''],
                       [
@@ -335,19 +334,21 @@ $this->title = 'Shipping to USA and Canada';
         ]); ?>
     </div>
 
-    <?php
-      echo "
-        <script>
-           $(document).ready(function() {
-              ".(($show_modal_for_point == 1)?(
-                "setTimeout( function(){
-                $('#choose_receiving_point').click();
-                },200);"):("")).
-                $gritter."
-              });
-        </script>
-      ";
-} ?>
+    <script>
+       $(document).ready(function() {
+         <?php
+          if($show_modal_for_point == 1){
+            ?>
+            setTimeout( function(){
+              $('#choose_receiving_point').click();
+            },200);
+            <?php
+         }
+         ?>
+         $gritter
+       });
+    </script>
+
 
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",
