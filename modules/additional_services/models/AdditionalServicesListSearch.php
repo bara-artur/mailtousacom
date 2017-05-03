@@ -18,7 +18,7 @@ class AdditionalServicesListSearch extends AdditionalServicesList
     public function rules()
     {
         return [
-            [['id', 'type', 'dop_connection', 'only_one', 'active'], 'integer'],
+            [['id', 'type', 'active'], 'integer'],
             [['name'], 'safe'],
             [['base_price'], 'number'],
         ];
@@ -62,9 +62,6 @@ class AdditionalServicesListSearch extends AdditionalServicesList
         $query->andFilterWhere([
             'id' => $this->id,
             'type' => $this->type,
-            'base_price' => $this->base_price,
-            'dop_connection' => $this->dop_connection,
-            'only_one' => $this->only_one,
             'active' => $this->active,
         ]);
 

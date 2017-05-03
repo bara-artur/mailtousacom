@@ -25,6 +25,21 @@ class AdditionalServicesList extends \yii\db\ActiveRecord
         return 'additional_services_list';
     }
 
+  public function typeList()
+  {
+    return [
+      1=>'For a single parcel',
+      2=>'For multiple packages',
+    ];
+  }
+
+  public function connectionList()
+  {
+    return [
+      0=>"none",
+      1=>'Track number',
+    ];
+  }
     /**
      * @inheritdoc
      */
@@ -48,9 +63,20 @@ class AdditionalServicesList extends \yii\db\ActiveRecord
             'name' => 'Name',
             'type' => 'Type',
             'base_price' => 'Base Price',
-            'dop_connection' => 'Dop Connection',
-            'only_one' => 'Only One',
+            'dop_connection' => 'Additional communication',
+            'only_one' => 'Count in one parcel',
             'active' => 'Active',
         ];
     }
+
+  /**
+   * @return int
+   */
+  public function getTypeText(){
+    $list=$this->typeList();
+    if(!isset($list[$this->type])){
+      return "";
+    }
+    return $list[$this->type];
+  }
 }
