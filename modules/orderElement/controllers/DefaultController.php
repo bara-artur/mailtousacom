@@ -549,18 +549,18 @@ class DefaultController extends Controller
         case 'commercial_inv_print':    {return $this->actionCommercial_inv_print($parcels_id);break;}
         case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
         case 'view':    {return $this->actionGroupView($parcels_id);break;}
-        case 'track_invoice':    {return $this->actionTrackInvoice($parcels_id);break;}
+        case 'invoice':    {return $this->actionInvoice($parcels_id);break;}
       }
     }
     Yii::$app->getSession()->setFlash('error', 'Action not found.');
     return $this->redirect(['/']);
   }
 
-    public function actionTrackInvoice($parcels_id){
+    public function actionInvoice($parcels_id){
       //может запустить только админ. Но для 1-го пользоавателя
       $order_id = $this->findOrCreateOrder($parcels_id,1);
       if ($order_id != null) {
-        $this->redirect(['/additional_services/transport-invoice/' . $order_id]);
+        $this->redirect(['/invoice/create/' . $order_id]);
         return $order_id;
       } else {
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Invoice error. Bad parcel IDs','gritter-danger')",]));

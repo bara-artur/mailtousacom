@@ -78,6 +78,8 @@ $config = [
           '/logs/<action>/<action2>'=>'404',
           'additional_services/default/<action>'=>'404',
           'additional_services/default/<action>/<action2>'=>'404',
+          'invoice/default/<action>'=>'404',
+          'invoice/default/<action>/<action2>'=>'404',
 
           '/'=>'/site/index',
           //получение города по стране
@@ -127,6 +129,8 @@ $config = [
           'ebay/<action:callback>'=>'ebay/default/<action>/',
 
           'logs/<id:\d+>'=>'logs/default/index/',
+
+          'invoice/<action:create>/<id:\d+>'=>'invoice/default/<action>/',
         ],
     ],
     'config'=>array(
@@ -208,6 +212,9 @@ $config = [
     ],
     'config' => [
       'class' => 'app\modules\config\Module'
+    ],
+    'invoice' => [
+      'class' => 'app\modules\invoice\Module',
     ],
   ],
 ];

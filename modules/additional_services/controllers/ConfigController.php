@@ -14,6 +14,16 @@ use yii\filters\VerbFilter;
  */
 class ConfigController extends Controller
 {
+
+  public function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest) {
+      $this->redirect(['/']);
+      return false;
+    }
+    return parent::beforeAction($action);
+  }
+
     /**
      * @inheritdoc
      */
