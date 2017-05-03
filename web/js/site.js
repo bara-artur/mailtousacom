@@ -731,9 +731,9 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
         if (firstParcelUser != oldCookieUser[i]) {
           difUser = 1;
         }
-        if ((firstParcelInvoice != oldCookieInvoice[i])||(firstParcelInvoice==0)) {
-          difInvoice = 1;
-        }
+   //     if ((firstParcelInvoice != oldCookieInvoice[i])||(firstParcelInvoice==0)) {
+          // difInvoice = 1;  // отказались от управление кнопкой Tracking
+     //   }
         if ((firstParcelScaner != oldCookieScaner[i])||(firstParcelScaner==1)) {
           difScaner = 1;
         }
@@ -752,9 +752,9 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
     if (firstParcelUser!=elem_checked[i].getAttribute('user')) {
       difUser = 1;
     }
-    if ((firstParcelInvoice!=elem_checked[i].getAttribute('invoice'))||(firstParcelInvoice==0)) {
-      difInvoice = 1;
-    }
+   // if ((firstParcelInvoice!=elem_checked[i].getAttribute('invoice'))||(firstParcelInvoice==0)) {
+     // difInvoice = 1;   // отказались от управление кнопкой Tracking
+    //}
     if ((firstParcelScaner!=elem_checked[i].getAttribute('scaner_data'))||(firstParcelScaner==1)) {
       difScaner = 1;
     }
@@ -774,13 +774,14 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
       gritterAdd('MultiUser mode', '', 'gritter-warning');
     }
   }
-  if ((getCookie('multiTrackNumberMode')=='1')&&(difInvoice==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении режима разных трэк номеров
-    gritterAdd('Now you can use Tracking button', '', 'gritter-success');
-  }else {
-    if ((getCookie('multiTrackNumberMode') == '0') && (difInvoice == 1)) {  // выдаем гриттер при переключении режима разных трэк номеров
-      gritterAdd("You check parcel with your own track number. Now you can't use Tracking button", '', 'gritter-warning');
-    }
-  }
+ // отказались от управление кнопкой Tracking
+ // if ((getCookie('multiTrackNumberMode')=='1')&&(difInvoice==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении режима разных трэк номеров
+ //   gritterAdd('Now you can use Tracking button', '', 'gritter-success');
+ // }else {
+ //   if ((getCookie('multiTrackNumberMode') == '0') && (difInvoice == 1)) {  // выдаем гриттер при переключении режима разных трэк номеров
+ //     gritterAdd("You check parcel with your own track number. Now you can't use Tracking button", '', 'gritter-warning');
+ //   }
+ // }
   if ((getCookie('multiScanerMode')=='1')&&(difScaner==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении режима отсканированных посылок
     gritterAdd('Now you can use Print button', '', 'gritter-success');
   }else {
@@ -789,7 +790,7 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
     }
   }
   setCookie('multiUserMode',difUser,1);
-  setCookie('multiTrackNumberMode',difInvoice,1);
+ // setCookie('multiTrackNumberMode',difInvoice,1); // отказались от управление кнопкой Tracking
   setCookie('multiScanerMode',difScaner,1);
   if (elem_checked.length>0) {
     setCookie('parcel_elem_type', elem_checked[0].getAttribute('name'), 1);
@@ -855,7 +856,7 @@ function main_table_checkbox(current_element){
     setCookie('parcel_elem_type','',1);
     setCookie('parcel_user_id','',1);
     setCookie('multiUserMode',0,1);
-    setCookie('multiTrackNumberMode',0,1);
+  //  setCookie('multiTrackNumberMode',0,1);
     $('.clearParcelsIdCookie').hide();
     elems_prohibeted = $(".select_prohibited");
     elems_prohibeted.parents('td').fadeTo(500, 1);
@@ -899,15 +900,15 @@ function main_table_checkbox(current_element){
      } else {
        $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
      }
-     if (getCookie('multiTrackNumberMode') == '1'){  // Работа с кнопкой Tracking
-       $('.difInvoiceHide').attr('disabled',true);
-     }else {
-       $('.difInvoiceHide').attr('disabled', false); // Работа с кнопкой Tracking
-     }
-     if (getCookie('multiScanerMode') == '1'){  // Работа с кнопкой Tracking
+  //   if (getCookie('multiTrackNumberMode') == '1'){  // Работа с кнопкой Tracking
+  //     $('.difInvoiceHide').attr('disabled',true);
+  //   }else {
+  //     $('.difInvoiceHide').attr('disabled', false); // Работа с кнопкой Tracking
+  //   }
+     if (getCookie('multiScanerMode') == '1'){  // Работа с кнопкой Print
        $('.difScanerHide').attr('disabled',true);
      }else {
-       $('.difScanerHide').attr('disabled', false); // Работа с кнопкой Tracking
+       $('.difScanerHide').attr('disabled', false); // Работа с кнопкой Print
      }
    } else {
      $('.InSystem_show,.Draft_show').attr('disabled', true);
