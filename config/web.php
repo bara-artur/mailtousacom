@@ -105,7 +105,7 @@ $config = [
           'orderElement/group/<act:\w+>'=>'orderElement/default/group',
           'orderElement/<action:(file-upload|file-delete|files)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
           //Дополнить всеми ф-ями
-          'orderElement/<action:track-invoice|group-view|group-print-advanced|commercial_inv_print|group-print|group-update|group-delete>/<parcels_id:\d+>'=>'orderElement/default/<action>',
+          'orderElement/<action:group-view|group-print-advanced|commercial_inv_print|group-print|group-update|group-delete>/<parcels_id:\d+>'=>'orderElement/default/<action>',
 
           'receiving_points/<action>'=>'receiving_points/default/<action>',
 
@@ -115,12 +115,12 @@ $config = [
           'orderInclude/<action:group-remove>/<order_id:\d+>/<id:\d+>'=>'orderInclude/default/<action>/',
 
 
-          'payment/<action:order|track-invoice>/<id:\d+>'=>'payment/default/<action>/',
+          'payment/<action:order|invoice>/<id:\d+>'=>'payment/default/<action>/',
           'payment/<action>/<id:\d+>'=>'payment/default/<action>/',
           'payment/<action:finish>'=>'payment/default/<action>/',
           'payment/<action>'=>'payment/default/<action>/',
 
-          'additional_services/<action:transport-invoice>/<id:\d+>'=>'additional_services/default/<action>/',
+          'additional_services/<action:invoice>/<id:\d+>'=>'additional_services/default/<action>/',
           //'additional_services/<action:transport-invoice>/'=>'additional_services/default/<action>/',
 
           'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',

@@ -39,8 +39,8 @@ $this->title = 'Shipping to USA and Canada';
               ]); ?>
             <?php }?>
             <?php if ($show_view_button==true){ ?>
-                <?=Html::a('<i class="icon-metro-location-2"></i> Tracking', ['/orderElement/group/track_invoice'], [
-                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide',
+                <?=Html::a('<i class="fa fa-credit-card"></i> Invoice', ['/orderElement/group/invoice'], [
+                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide_',
                     'id'=>'group-admin-view',
                 ]); ?>
             <?php }?>
