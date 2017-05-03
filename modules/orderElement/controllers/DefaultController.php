@@ -127,6 +127,7 @@ class DefaultController extends Controller
                       (OrderElement::GetShippingCarrier($_POST['track_number'])!=null)){
                     $oldModel->track_number = $_POST['track_number'];
                   }else{
+                    $oldModel->save();
                     if (OrderElement::GetShippingCarrier($_POST['track_number'])==null) {
                       return "Undefined track number. We can't recognize shipping company.";
                     }else{
