@@ -984,7 +984,9 @@ div.trans_count {
     line-height: 1;
     height: 24px;
 }
-.marg_but{margin-right:4px;display:inline; }
+.marg_but{margin-right:4px;display:inline;
+    padding: 9px 12px;
+    font-size: 14px; }
 button.navbar-toggle{margin-right:30px;}
 .lr_bord{
     border-left: 1px dotted #ccc;
@@ -1161,4 +1163,14 @@ font-size: 14px;
         box-shadow: #006ac1 0 0 3px 2px;
         background: #006ac1;
     }
+}
+.btn-pay {
+    color: #1d1d1d;
+    background-color: #ffc800;
+    border-color: #ffc800;
+    transition: all 100ms linear;
+}
+.link_tracking{
+    color: #05389F;
+    font-weight: bold;
 }
