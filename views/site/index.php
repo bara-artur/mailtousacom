@@ -345,7 +345,7 @@ $this->title = 'Shipping to USA and Canada';
             <?php
          }
          ?>
-         $gritter
+         <?=$gritter;?>
        });
     </script>
 
