@@ -11,7 +11,7 @@ use yii\helpers\Html;
 <?php
     if(!Yii::$app->user->identity->isManager()){
 ?>
-<div class="form_parcel_create_type_0 push-up-margin-thin">
+<div class="form_parcel_create_type_0 push-up-margin-thin" <?= (($skipIntegration==1)?("style='display: none;'"):("")) ?> >
     <div class="row">
         <div class="col-md-12"><h6 class="modernui-neutral4">Please connect you stores with our WMS ( warehouse
                 management software )</h6>
@@ -37,7 +37,7 @@ use yii\helpers\Html;
     <div class="col-md-12">
         <div class="text_b padding-left-10 dot_bot">
             <label>
-                <input type="checkbox" onchange="form_parcel_create_type(this)">
+                <input type="checkbox" onchange="form_parcel_create_type(this)" <?= (($skipIntegration==1)?("checked"):("")) ?> >
                 <span class="fa fa-check otst"></span>
                 Skip integration,I will enter my orders manually
             </label>
@@ -46,7 +46,7 @@ use yii\helpers\Html;
 </div>
 
 
-<div class="form_parcel_create_type_1" style="display: none;">
+<div class="form_parcel_create_type_1" <?= (($skipIntegration==1)?(""):("style='display: none;'")) ?> >
 <?php
     }else{
 ?>

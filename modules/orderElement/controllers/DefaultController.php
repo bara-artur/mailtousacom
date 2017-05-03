@@ -165,6 +165,7 @@ class DefaultController extends Controller
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
+                      'skipIntegration' => 0,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
@@ -198,6 +199,7 @@ class DefaultController extends Controller
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
+                      'skipIntegration' => 1,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                       Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
@@ -210,6 +212,7 @@ class DefaultController extends Controller
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
+                      'skipIntegration' => 0,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
