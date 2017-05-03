@@ -69,7 +69,10 @@ class DefaultController extends Controller
     //получаем посылки в заказе
     //  var_dump(Yii::$app->request);
     //$totalPriceArray = [0];
+   // if (isset(Yii::$app->response->cookies['parcelAnchorId'])) var_dump(Yii::$app->response->cookies['parcelIdAnchor']->value);
+   // else var_dump($_COOKIE);
     $totalPriceArray=[];
+    $admin = Yii::$app->user->identity->isManager();
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
     $model = new OrderElement();
@@ -82,6 +85,12 @@ class DefaultController extends Controller
       $order->el_group = '';
       $order->save();
     }
+    else{
+      if ((!$admin)&&(Yii::$app->user->id != $order->user_id)){
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Unknown order ID','gritter-danger')",]));
+        return $this->redirect(['/']);
+      }
+    }
     $numbers = explode(',',$order->el_group);
 
     $edit_not_prohibited = 1;
@@ -90,6 +99,7 @@ class DefaultController extends Controller
     $ids = '';
     $user_ids = '';
     $track_number_types = '';
+    $scaner_data_list = '';
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
@@ -97,6 +107,7 @@ class DefaultController extends Controller
           $ids = $ids.$parcel->id.',';
           $user_ids = $user_ids.$parcel->user_id.',';
           $track_number_types = $track_number_types.$parcel->track_number_type.',';
+          $scaner_data_list = $scaner_data_list.((strcasecmp($parcel->first_name,'[default]')==0)?(1):(0)).',';
           $order_elements[] = $parcel;
           if ($parcel->status > 1){
             $edit_not_prohibited = 0;
@@ -110,7 +121,13 @@ class DefaultController extends Controller
         }
       }
     }
-
+    if (isset(Yii::$app->request->cookies['parcelAnchorId'])) {
+      $last = Yii::$app->request->cookies['parcelAnchorId']->value; // включаем анимацию
+   //   unset(Yii::$app->response->cookies['parcelAnchorId']); // анимацию включаем только один раз при перезагрузке
+    }
+    else {
+      $last = null;  // нет анимации
+    }
     $message_for_edit_prohibited_order = 'Editing order prohibited';
 
     return $this->render('createOrder', [
@@ -124,6 +141,9 @@ class DefaultController extends Controller
       'ids' =>$ids,
       'user_ids' => $user_ids,
       'track_number_types' => $track_number_types,
+      'scaner_data_list' => $scaner_data_list,
+      'last' => $last,
+      'admin' => $admin,
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
@@ -287,7 +307,10 @@ class DefaultController extends Controller
               ];
           }else if($model->load($request->post())&&($model->save())){
               //$model->order_id = $request->post('order_id');
-
+              Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                'name' => 'parcelAnchorId',
+                'value' => $model->order_id,
+              ]));
               return [
                   'forceReload'=>'#crud-datatable-pjax',
                   'title'=> "Create new OrderInclude",
@@ -462,7 +485,7 @@ class DefaultController extends Controller
       }
 
       $pac->includes_packs = $pac->getIncludes();
-      if (count($pac->includes_packs) == 0) {
+      if ((count($pac->includes_packs) == 0)&&(strcasecmp($pac->first_name,'[default]')!=0)) {
         Yii::$app
           ->getSession()
           ->setFlash(

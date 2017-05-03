@@ -51,7 +51,7 @@ $this->title = 'Shipping to USA and Canada';
               'disabled'=>true,
             ]); ?>
             <div class="btn-group">
-            <button type="button" class="btn btn-md btn-blue-gem dropdown-toggle InSystem_show Draft_show difUserIdHide" data-toggle="dropdown">
+            <button type="button" class="btn btn-md btn-blue-gem dropdown-toggle InSystem_show Draft_show difUserIdHide difScanerHide" data-toggle="dropdown">
                 <span class="glyphicon glyphicon-print"></span> Print
                 <span class="caret"></span>
             </button>
@@ -176,11 +176,12 @@ $this->title = 'Shipping to USA and Canada';
                       'id'=>$data->id,
                       'user'=> $data->user_id,
                       'invoice'=> $data->track_number_type,
-                      'label' => '<span class="fa fa-check "></span>',
+                      'scaner_data'=> ((strcasecmp($data->first_name,'[default]')==0)?(1):(0)),
+                      'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },
                   'visible' => ($admin==1),
-                    'contentOptions' =>['class'=>'table_check'],
+                  'contentOptions' =>['class'=>'table_check'],
                 ],
         //        ['class' => 'yii\grid\SerialColumn',
         //          'visible' => $showTable->showSerial,],
@@ -194,7 +195,6 @@ $this->title = 'Shipping to USA and Canada';
                       return '-empty-';
                     }
                   }
-
                 ],
                 ['attribute'=> 'status',
                   'content' => function($data){
@@ -325,25 +325,30 @@ $this->title = 'Shipping to USA and Canada';
                             'role'=>"modal-remote",
                         ]);
                     return  (($data->status>2)?($button_payments):("")).                       // история платежей
-                        (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
+                            (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
                             ($filesCount>0?$button_files:"").                                    //документы на печать
-                            $button_print_pdf.                                                // печать PDF
-                    (($data->payment_state==0)?($button_delete_parcel):(""));         // удаление посылок
+                            ((strcasecmp($data->first_name,'[default]')!=0)?($button_print_pdf):("")).                                                // печать PDF
+                            (($data->payment_state==0)?($button_delete_parcel):(""));         // удаление посылок
                 }],
             ],
         ]); ?>
     </div>
-    <?php if ($show_modal_for_point == 1) {
-      echo "
-        <script>
-           $(document).ready(function() {
-              setTimeout( function(){
-                $('#choose_receiving_point').click();
-                },200);
-              });
-        </script>
-      ";
-} ?>
+
+    <script>
+       $(document).ready(function() {
+         <?php
+          if($show_modal_for_point == 1){
+            ?>
+            setTimeout( function(){
+              $('#choose_receiving_point').click();
+            },200);
+            <?php
+         }
+         ?>
+         <?=$gritter;?>
+       });
+    </script>
+
 
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",

@@ -174,6 +174,10 @@ class DefaultController extends Controller
                 $model-> user_id = $order->user_id;
                 $model-> created_at = time();
                 if ($model->save()) {
+                  Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                    'name' => 'parcelAnchorId',
+                    'value' => $model->id,
+                  ]));
                   if ($order->el_group == null) {
                     $order->el_group = '' . $model->id;
                   } else {
@@ -309,13 +313,23 @@ class DefaultController extends Controller
     $arr = explode(',', $parcels_id);
     asort($arr);
     $user_id = null;
+    $status = null;
     $flag = 0;
     foreach ($arr as $id) {
       if ($flag == 0) {
         $parcel = OrderElement::findOne(['id' => $id]);
         if ($parcel) {
+          if (($flag == 1) &&   //  если это уже не первая посылка из списка
+              ((($user_id != $parcel->user_id) && ($admin == 0)) ||    // несовпадение юзерров у неАдмина
+               (($status>1) && ($parcel->status<=1)) ||
+                (($status<=1) && ($parcel->status>1))  )) {           // несовпадение статусов
+            return null;
+          }
           $user_id = $parcel->user_id;
+          $status = $parcel->status;
           $flag = 1;
+        }else{
+          return null; // нет посылки из списка
         }
       }
     }
@@ -350,6 +364,7 @@ class DefaultController extends Controller
       if ($order_id != null) {
         return $this->redirect(['/orderInclude/create-order/' . $order_id]);
       } else {
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Update error. Bad parcel IDs','gritter-danger')",]));
         return $this->redirect(['/']);
       }
   }
@@ -364,6 +379,7 @@ class DefaultController extends Controller
         }
         return "Create pdf for order " .  $order_id;
       } else {
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
         return $this->redirect(['/']);
       }
   }
@@ -486,6 +502,7 @@ class DefaultController extends Controller
         $this->redirect(['/orderInclude/commercial-invoice/' . $order_id]);
         return "Create pdf for order " .  $order_id;
       } else {
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
         return $this->redirect(['/']);
       }
   }
@@ -497,6 +514,7 @@ class DefaultController extends Controller
         $this->redirect(['/orderInclude/pdf/' . $order_id]);
         return "Create pdf for order " .  $order_id;
       } else {
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Update error. Bad parcel IDs','gritter-danger')",]));
         return $this->redirect(['/']);
       }
   }
@@ -545,6 +563,7 @@ class DefaultController extends Controller
         $this->redirect(['/additional_services/transport-invoice/' . $order_id]);
         return $order_id;
       } else {
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Invoice error. Bad parcel IDs','gritter-danger')",]));
         return $this->redirect(['/']);
       }
     }
@@ -558,6 +577,7 @@ class DefaultController extends Controller
           $this->redirect(['/orderInclude/view-order/' . $order_id]);
           return $order_id;
         } else {
+          Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','View error. Bad parcel IDs','gritter-danger')",]));
           return $this->redirect(['/']);
         }
     }

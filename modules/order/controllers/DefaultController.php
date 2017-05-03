@@ -2,6 +2,7 @@
 
 namespace app\modules\order\controllers;
 
+use app\modules\orderElement\models\OrderElement;
 use app\modules\orderInclude\models\OrderInclude;
 use Yii;
 use app\modules\order\models\Order;
@@ -107,14 +108,82 @@ class DefaultController extends Controller
       if (($user!=null)&&(1)) {
         $order_id = $_POST['order_id'];
         $request = Yii::$app->request;
-        $success = false;
+        $success = '123';
         if (($order_id) && ($request->isAjax)) {
           $oldModel = Order::find()->where(['id' => $order_id])->one();
           if ($oldModel) {
-            if (($_POST['order_status'] != null)&&($_POST['order_status'] != 'none')) $oldModel->order_status = $_POST['order_status'];
-            if (($_POST['payment_state'] != null)&&($_POST['payment_state'] != 'none')) $oldModel->payment_state = $_POST['payment_state'];
+           // if (($_POST['order_status'] != null)&&($_POST['order_status'] != 'none')) $oldModel->order_status = $_POST['order_status'];
+           // if (($_POST['payment_state'] != null)&&($_POST['payment_state'] != 'none')) $oldModel->payment_state = $_POST['payment_state'];
+            if (isset($_POST['track_number'])){
+              $parcel = OrderElement::find()->where(['track_number' => $_POST['track_number']])->one();
+              if ($parcel){    // посылка уже в БД
+                if ($parcel->user_id == $oldModel->user_id) {
+                  if ($oldModel->el_group == '') {
+                    $oldModel->el_group = $parcel->id;
+                  } else {  //  проверяем наличие посылки в заказе
+                    $arr = explode(',', $oldModel->el_group);
+                    if (array_search($parcel->id, $arr) !== false) {
+                      $success = '7'; //  посылка есть в этом заказе
+                    } else {
+                      array_push($arr, $parcel->id);
+                      asort($arr);
+                      $oldModel->el_group = implode(',', $arr);
+                    }
+                  }
+                  if ($oldModel->save(false)) {
+                    Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                      'name' => 'parcelAnchorId',
+                      'value' => $parcel->id,
+                    ]));
+                    return '/orderInclude/create-order/' . $oldModel->id . '#last_anchor';
+                  } else {
+                    $success = '2';
+                  }
+                }else{
+                  $success = '9';
+                }
+              }else{    //  посылки с трэк номером нет в базе - надо создать
+                if (OrderElement::GetShippingCarrier($_POST['track_number'])){
+                  $parcel = new OrderElement();
+                  $parcel->user_id = $oldModel->user_id;
+                  $parcel->first_name = '[default]';
+                  $parcel->last_name = '[default]';
+                  $parcel->company_name = '[default]';
+                  $parcel->adress_1 = '[default]';
+                  $parcel->adress_2 = '[default]';
+                  $parcel->city = '[default]';
+                  $parcel->zip = '00000';
+                  $parcel->phone = '0000000000';
+                  $parcel->state = '51';
+                  $parcel->created_at = time();
+                  $parcel->track_number = $_POST['track_number'];
+                  $parcel->track_number_type = 0;
+                  $parcel->weight = 0;
+                  $parcel->address_type = 0;
+                  if ($parcel->save()) {
+                    if ($oldModel->el_group == '') {
+                      $oldModel->el_group = $parcel->id;
+                    } else {
+                      $oldModel->el_group = $oldModel->el_group . ',' . $parcel->id; // можно вставить проверку на нахождение этой посылки в заказе
+                    }
+                    if ($oldModel->save(false)) {
+                      Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                        'name' => 'parcelAnchorId',
+                        'value' => $parcel->id,
+                      ]));
+                      return '/orderInclude/create-order/'.$oldModel->id.'#last_anchor';
+                    } else {
+                      $success = '4';   // заказ не сохранился в базе
+                    }
+                  }else{
+                    $success = '6';   // посылка не сохранилась в базе
+                  }
+                }else{
+                  $success = '5'; // не прошла валидация трэк номера по компаниям
+                }
+              }
+            }
 
-            $success = $oldModel->save();
           }
         }
         return $success;

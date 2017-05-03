@@ -335,9 +335,9 @@ a.desc:after {
     }
     .navbar-nav > li > a
     {
-    padding-left:10px;
-    padding-right:10px;
-    font-size: 14px;
+        padding-left:10px;
+        padding-right:10px;
+        font-size: 14px;
     }
     .nav li > form > button.logout {
         margin-top: 10px;
@@ -736,7 +736,7 @@ div.icon_integ_ebay:hover,div.icon_integ_amazon:hover,div.icon_integ_shop:hover{
 .showParcelTableForm.form-group{margin-bottom:0px !important;}
 .showParcelTableForm input[type=checkbox]{display:none !important;}
 .check_hide input[type=checkbox]{display:none !important;
- }
+}
 span.input-group-addon.fint_input input[type=checkbox]{display:none !important;}
 span#results.resInd0{color:#05389F !important;}
 h5.max_price{padding: 4px;
@@ -779,11 +779,11 @@ div.notpaid_img{background: url("/img/notpaid.png");
     top: 100px;
     right: 34%;}
 .block_adm{
-   /* margin:10px 0px;
-    border-top:1px dotted #ccc;
-    border-bottom:1px dotted #ccc;
-    padding:10px 0px;
-    background-color: #F9F9F9;*/
+    /* margin:10px 0px;
+     border-top:1px dotted #ccc;
+     border-bottom:1px dotted #ccc;
+     padding:10px 0px;
+     background-color: #F9F9F9;*/
     background-color: #F9F9F9;
     padding-top: 4px;
     text-align: center;
@@ -884,7 +884,7 @@ div.icon_integ_shop{
     outline: 0!important;
 }
 .select2-container--krajee.select2-container--open .select2-selection, .select2-container--krajee .select2-selection:focus {
-     -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075), 0 0 6px rgba(102, 175, 233, 0)!important;
+    -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075), 0 0 6px rgba(102, 175, 233, 0)!important;
     box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075), 0 0 0 rgba(102, 175, 233, 0)!important;
     -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s!important;
     -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s!important;
@@ -949,8 +949,8 @@ div.trans_count {
     border-bottom: 0px solid  #4C648E;
 }
 .table-art th{
-background-color: #4c648e;
-color: #fff;}
+    background-color: #4c648e;
+    color: #fff;}
 .table-art td{
     color: #000;}
 .table-pod td{
@@ -984,11 +984,7 @@ color: #fff;}
     line-height: 1;
     height: 24px;
 }
-.marg_but{margin-right:4px;
-    display:inline;
-    padding: 9px 12px;
-    font-size: 14px;
-}
+.marg_but{margin-right:4px;display:inline; }
 button.navbar-toggle{margin-right:30px;}
 .lr_bord{
     border-left: 1px dotted #ccc;
@@ -1015,8 +1011,8 @@ button.navbar-toggle{margin-right:30px;}
     border: 1px solid transparent !important;
 }
 @media screen and (max-width: 1200px){
-.group_100{width: 46%;
-    margin-bottom: 4px;}
+    .group_100{width: 46%;
+        margin-bottom: 4px;}
 }
 /*12042017*/
 .but_tab_marg_inl
@@ -1032,8 +1028,8 @@ button.navbar-toggle{margin-right:30px;}
 }
 .pay_list5
 {
-border: 1px solid #ccc;
-border-right: 0px;
+    border: 1px solid #ccc;
+    border-right: 0px;
 }
 .pay_list6
 {
@@ -1107,6 +1103,7 @@ table{font-size:14px;}
     content:"";
     display:none;
 }
+
 [col_req]:before{
     content: attr(col_req);
     position: absolute;
@@ -1143,4 +1140,25 @@ margin-right: 4px;
 display: inline;
 padding: 9px;
 font-size: 14px;
+}
+
+:target{
+    animation-name: target-animation;
+    animation-duration: 2s;
+    animation-iteration-count: 3;
+}
+
+@keyframes target-animation {
+    0% {
+        box-shadow: #006ac1 0 0 3px 2px;
+        background: #006ac1;
+    }
+    70% {
+        box-shadow: #9bbdda 0 0 8px 4px;
+        background: #9bbdda;
+    }
+    100%{
+        box-shadow: #006ac1 0 0 3px 2px;
+        background: #006ac1;
+    }
 }
