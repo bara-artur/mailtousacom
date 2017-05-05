@@ -90,7 +90,7 @@ $config = [
           //'site/<action>'=>'404',
           'site/<action>/<action2>'=>'404',
           //базовые страницы в основном контроллере
-          '<action:(top|shop|about|blog|legends|mans|competitions|onlinehelp)>' => 'site/<action>',
+          '<action:(top|shop|about|blog|legends|mans|competitions|onlinehelp|archive)>' => 'site/<action>',
           //Страница пользователя
           '<action:(user)>/<id:\d+>' => 'site/user/',
           '<action:(profile)>' => 'user/default/<action>',

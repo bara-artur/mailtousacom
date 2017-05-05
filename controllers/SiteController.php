@@ -149,7 +149,33 @@ class SiteController extends Controller
       ]);
     }
 
-    /**
+    public function actionArchive()
+    {
+      $admin = 0;
+      $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+      if (($user!=null)&&($user->isManager())) $admin = 1;
+
+      $query['OrderElementSearch'] = Yii::$app->request->queryParams;
+      $query['OrderElementSearch']['archive'] = 1;
+      $time_to = ['created_at_to' => null];
+      $time_to += ['transport_date_to' => null];
+      $time_to += ['price_end' => null];
+      $searchModel = new OrderElementSearch();
+      $dataProvider = $searchModel->search($query,$time_to);
+
+      if ($admin==0) {
+        if (array_key_exists('OrderElementSearch', $query)) $query['OrderElementSearch'] += ['user_id' => Yii::$app->user->id];
+        else $query['OrderElementSearch'] = ['user_id' => Yii::$app->user->id];
+      }
+
+      return $this->render('archive',[
+        'admin' => $admin,
+        'dataProvider' => $dataProvider,
+
+      ]);
+    }
+
+  /**
      * Login action.
      *
      * @return string
