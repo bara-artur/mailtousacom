@@ -7,6 +7,8 @@ use app\modules\orderElement\models\OrderElement;
 use app\modules\user\models\User;
 use yii\db\Query;
 use app\modules\address\models\Address;
+use app\modules\additional_services\models\AdditionalServicesList;
+use app\modules\additional_services\models\AdditionalServices;
 
 /**
  * This is the model class for table "order".
@@ -55,8 +57,59 @@ class Order extends \yii\db\ActiveRecord
         return OrderElement::find()->where(['id' =>explode(',',$this->el_group)])->all();
     }
 
+    public function addAdditionalService($service){
+      $tpl=AdditionalServicesList::find()->where(['id'=>$service,'active'=>1])->one();
 
-    /**
+      if($tpl->type==1){
+        $items=$this->getOrderElement();
+        foreach ($items as $pac){
+          $pac->addAdditionalService($service,false);
+        }
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'info',
+            'The service has been added to the selection of parcels in the sample.'
+          );
+      }else{
+        $el=NEW AdditionalServices;
+        $el->type=$service;
+        $el->client_id=$this->user_id;
+        $el->user_id=Yii::$app->user->id;
+        $el->parcel_id_lst=(string)$this->id;
+        $el->price=$tpl->base_price;
+        $el->group_id=1;
+        $el->kurs=Yii::$app->config->get('USD_CAD');
+        $el->create=time();
+        $el->save();
+
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'info',
+            'The service is added to the parcel selection.'
+          );
+      }
+
+      return true;
+    }
+
+
+    public function getAdditionalService(){
+      $el=AdditionalServices::find();
+
+      $els=explode(',',$this->el_group);
+      foreach($els as $pac){
+        $el->orWhere(['parcel_id_lst'=>$pac]);
+        $el->orWhere(['like','parcel_id_lst','%,'.$pac.',%']);
+        $el->orWhere(['like','parcel_id_lst',$pac.',%']);
+        $el->orWhere(['like','parcel_id_lst','%,'.$pac]);
+      }
+      $el->andWhere(['group_id'=>1]);
+      $el->all();
+
+      return 0;
+    }   /**
      * @inheritdoc
      */
     public function rules()
@@ -83,6 +136,7 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+    //Собираем сумарные даные по заказу (в основном для PDF)
   public function getSumData($id,$test_data=false){
     $order_elements = $this->getOrderElement();
 

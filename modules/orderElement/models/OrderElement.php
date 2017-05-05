@@ -11,7 +11,7 @@ use app\modules\receiving_points\models\ReceivingPoints;
 use app\modules\additional_services\models\AdditionalServices;
 use app\modules\payment\models\PaymentInclude;
 use yii\web\UploadedFile;
-
+use app\modules\additional_services\models\AdditionalServicesList;
 /**
  * This is the model class for table "order_element".
  *
@@ -28,12 +28,13 @@ use yii\web\UploadedFile;
  */
 class OrderElement extends \yii\db\ActiveRecord
 {
-    public $includes_packs;
-    public $sub_total;
-    public $files;
-    /**
-     * @inheritdoc
-     */
+  public $includes_packs;
+  public $sub_total;
+  public $files;
+
+  /**
+   * @inheritdoc
+   */
   public static function getTextStatus(){
     return array(
       ''=>'All',
@@ -66,7 +67,6 @@ class OrderElement extends \yii\db\ActiveRecord
     else return 'Unknown status';
   }
 
-
   //Получение полного статуса прописью в зависимости от текущего статуса и доп поля
   public function getFullTextStatus()
   {
@@ -87,51 +87,50 @@ class OrderElement extends \yii\db\ActiveRecord
     return $txt;
   }
 
-    public static function tableName()
-    {
-        return 'order_element';
-    }
+  public static function tableName(){
+      return 'order_element';
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['first_name', 'last_name','company_name', 'adress_1','city', 'zip', 'state'], 'required'],
-            [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
-            [['company_name'], 'string', 'max' => 128],
-            [['zip'], 'string', 'min' => 5],
-            [['track_number'], 'string'],
-            [['price','qst','gst'],'double'],
-            [['weight'], 'double'],
-            [['track_number_type','status','payment_state'], 'integer'],
-            [['address_type','weight','track_number','track_number_type'], 'safe'],
-            [['adress_1', 'adress_2'], 'string', 'max' => 256],
-        ];
-    }
+  /**
+   * @inheritdoc
+   */
+  public function rules()
+  {
+      return [
+          [['first_name', 'last_name','company_name', 'adress_1','city', 'zip', 'state'], 'required'],
+          [['first_name', 'last_name', 'city', 'zip', 'phone', 'state'], 'string', 'max' => 60],
+          [['company_name'], 'string', 'max' => 128],
+          [['zip'], 'string', 'min' => 5],
+          [['track_number'], 'string'],
+          [['price','qst','gst'],'double'],
+          [['weight'], 'double'],
+          [['track_number_type','status','payment_state'], 'integer'],
+          [['address_type','weight','track_number','track_number_type'], 'safe'],
+          [['adress_1', 'adress_2'], 'string', 'max' => 256],
+      ];
+  }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'user_id'=>"User",
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
-            'company_name' => 'Company Name',
-            'adress_1' => 'Adress 1',
-            'adress_2' => 'Adress 2',
-            'city' => 'City',
-            'zip' => 'Zip',
-            'phone' => 'Phone',
-            'state' => 'State',
-            'qst' => 'PST',
-            'gst' => 'GST/HST',
-        ];
-    }
+  /**
+   * @inheritdoc
+   */
+  public function attributeLabels()
+  {
+      return [
+          'id' => 'ID',
+          'user_id'=>"User",
+          'first_name' => 'First Name',
+          'last_name' => 'Last Name',
+          'company_name' => 'Company Name',
+          'adress_1' => 'Adress 1',
+          'adress_2' => 'Adress 2',
+          'city' => 'City',
+          'zip' => 'Zip',
+          'phone' => 'Phone',
+          'state' => 'State',
+          'qst' => 'PST',
+          'gst' => 'GST/HST',
+      ];
+  }
 
   public function getUser(){
     return $this->hasOne(User::className(), ['id' => 'user_id']);
@@ -162,22 +161,107 @@ class OrderElement extends \yii\db\ActiveRecord
     return $payments;
   }
 
+  /*
+   * Возвращает данные о сервисах к данной посылке. Выводит только услуги для этой посылки.
+   * $show_track_invoice - выводить/нет данные о инвойсе трек номера
+   */
+  public function getAdditionalServiceList($show_track_invoice=true){
+    $els=AdditionalServices::find()->where(['parcel_id_lst'=>$this->id]);
+    if(!$show_track_invoice){
+      $els=$els->andWhere(['!=','type',1]);
+    }
+    return $els->all();
+  }
+
+  //добавляем услугу к посылки. Проверяем существование услуги
+  public function addAdditionalService($service,$show_flash_message=true){
+    if($service==1){
+
+      return;
+    }
+
+    $tpl=AdditionalServicesList::find()->where(['id'=>$service,'active'=>1])->one();
+    if(!$tpl){
+      if($show_flash_message) {
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'Service not found.'
+          );
+      };
+      return false;
+    }
+
+    if($tpl->only_one==1){
+      $service_item=$this->getAdditionalService($service);
+      if($service!=1){
+        $service_item=$service_item[0];
+      }
+
+      if(!$service_item->isNewRecord){
+        if($show_flash_message) {
+          Yii::$app
+            ->getSession()
+            ->setFlash(
+              'error',
+              'This service can be only one for each package.'
+            );
+        };
+        return false;
+      };
+    }
+
+    $el=NEW AdditionalServices;
+    $el->type=$service;
+    $el->client_id=$this->user_id;
+    $el->user_id=Yii::$app->user->id;
+    $el->parcel_id_lst=(string)$this->id;
+    $el->price=$tpl->base_price;
+    $el->kurs=Yii::$app->config->get('USD_CAD');
+    $el->create=time();
+
+    return $el->save();
+  }
+
+  //Получить запись о конкретном сервисе или создать для него стартовую модель
+  public function getAdditionalService($service,$save_on_create=false){
+    $el=AdditionalServices::find()->where(['parcel_id_lst'=>$this->id,'type'=>$service]);
+    if($service==1){
+      $el=$el->one();
+    }else{
+      $el=$el->all();
+    };
+    if(!$el || count($el)==0){
+      $tpl=AdditionalServicesList::find()->where(['id'=>$service,'active'=>1])->one();
+      if(!$tpl)return false;
+
+      $el=NEW AdditionalServices;
+      $el->type=$service;
+      $el->client_id=$this->user_id;
+      $el->user_id=Yii::$app->user->id;
+      $el->parcel_id_lst=(string)$this->id;
+      $el->price=$tpl->base_price;
+      $el->kurs=Yii::$app->config->get('USD_CAD');
+      $el->create=time();
+
+      if($save_on_create){
+        $el->save();
+      }
+
+      if($service!=1){
+        $el=[$el];
+      }
+    }
+    return $el;
+  }
+
+  //Получем данные трек инвойса
   public function getTrackInvoice(){
     if($this->track_number_type!=1){
       return false;
     }
-    $el=AdditionalServices::find()->where(['parcel_id_lst'=>$this->id,'type'=>1])->one();
-    if(!$el){
-      $el=NEW AdditionalServices;
-      $el->type=1;
-      $el->client_id=$this->user_id;
-      $el->user_id=Yii::$app->user->id;
-      $el->parcel_id_lst=(string)$this->id;
-      $el->price=0;
-      $el->kurs=Yii::$app->config->get('USD_CAD');
-      $el->create=time();
-    };
-    return $el;
+    return $this->getAdditionalService(1);
   }
 
   public function getRecipientData(){
@@ -192,10 +276,12 @@ class OrderElement extends \yii\db\ActiveRecord
             '<div>'.$this->zip.'</div>';
   }
 
+  //Возвращает знаение веса в Lb(только целое число)
   public function getWeight_lb(){
     return floor($this->weight);
   }
 
+  //Возвращает дробную часть веса в Oz(только целое число)
   public function getWeight_oz(){
     return floor(($this->weight-floor($this->weight))*16);
   }
@@ -216,7 +302,6 @@ class OrderElement extends \yii\db\ActiveRecord
     $query = OrderInclude::find()->where(['order_id'=>$this->id])->asArray()->all();
     return $query;
   }
-
 
   public function getPath($test=true){
     $path='order_docs/'.floor($this->id/100).'/'.($this->id % 100).'/';
@@ -240,6 +325,7 @@ class OrderElement extends \yii\db\ActiveRecord
     if(is_readable($path.$key)){
       return unlink($path.$key);
     }
+    return false;
   }
 
   public function fileOutArray($url_arr){
