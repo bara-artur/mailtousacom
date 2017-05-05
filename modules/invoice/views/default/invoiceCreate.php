@@ -93,7 +93,47 @@ if(count($usluga['many'])>0) {
     </div>
 </div>
 <hr>
-<h2>For personal parcel</h2>
+<?php
+  if($order_service && count($order_service)>0) {
+    ?>
+    <h2>Услуги групповых посылок</h2>
+    <div class="table table-responsive">
+      <table class="table table-art" id="crud-datatable-pjax">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Price</th>
+          <th></th>
+        </tr>
+        <?php
+
+        $item_i = 0;
+        foreach ($order_service as $as) {
+          $item_i += 1;
+          ?>
+          <tr>
+            <td><?= $item_i; ?></td>
+            <td><?= $as->getName(); ?></td>
+            <td><?= date(Yii::$app->config->get('data_time_format_php'), $as->create); ?></td>
+            <td><?= $as->getTextStatus(); ?></td>
+            <td>
+              <?= Html::input('text', 'tr_gen_price_' . $as->id, number_format((float)$as->price, 2, '.', ''), [
+                'class' => 'tr_input'
+              ]); ?>
+            </td>
+            <td></td>
+          </tr>
+          <?php
+        }
+        ?>
+      </table>
+    </div>
+    <?php
+  }
+?>
+<h2>Услуги для отдельных посылок</h2>
 <div class="table table-responsive">
   <table class="table table-art" id="crud-datatable-pjax">
     <tr>
@@ -161,6 +201,7 @@ if(count($usluga['many'])>0) {
                 <th>#</th>
                 <th>Name</th>
                 <th>Add date</th>
+                <th>Status</th>
                 <th>Service fee, CAN</th>
                 <th>Additional information</th>
                 <th>Shipping fee, USD</th>
@@ -169,6 +210,7 @@ if(count($usluga['many'])>0) {
                 <td>1</td>
                 <td>Pay for weight</td>
                 <td><?=date(Yii::$app->config->get('data_time_format_php'),$parcel->created_at);?></td>
+                <td></td>
                 <td><?=number_format($parcel->price,2,'.','');?></td>
                 <td>-</td>
                 <td>-</td>
@@ -183,6 +225,7 @@ if(count($usluga['many'])>0) {
                       <td><?=$item_i;?></td>
                       <td>Track number</td>
                       <td><?=date(Yii::$app->config->get('data_time_format_php'),$as->create);?></td>
+                      <td><?= $as->getTextStatus(); ?></td>
                       <td>
                         <?= Html::input('text', 'tr_gen_price_' . $parcel->id, number_format((float)$as->price, 2, '.', ''), [
                           'class' => 'tr_input'
@@ -209,8 +252,9 @@ if(count($usluga['many'])>0) {
                   ?>
                   <tr>
                     <td><?=$item_i;?></td>
-                    <td>Track number</td>
+                    <td><?=$as->getName();?></td>
                     <td><?=date(Yii::$app->config->get('data_time_format_php'),$as->create);?></td>
+                    <td><?= $as->getTextStatus(); ?></td>
                     <td>
                       <?= Html::input('text', 'tr_gen_price_' . $parcel->id, number_format((float)$as->price, 2, '.', ''), [
                         'class' => 'tr_input'

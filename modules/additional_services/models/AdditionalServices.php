@@ -23,6 +23,8 @@ use app\modules\payment\models\PaymentInclude;
  */
 class AdditionalServices extends \yii\db\ActiveRecord
 {
+
+  public $additionalInfo = false;
     /**
      * @inheritdoc
      */
@@ -115,5 +117,12 @@ class AdditionalServices extends \yii\db\ActiveRecord
             'gst' => 'Gst',
             'qst' => 'Qst',
         ];
+    }
+
+    public function getName(){
+      if(!$this->additionalInfo){
+        $this->additionalInfo=AdditionalServicesList::find()->where(['id'=>$this->type])->one();
+      }
+      return $this->additionalInfo->name;
     }
 }

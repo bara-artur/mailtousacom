@@ -76,7 +76,7 @@ class Order extends \yii\db\ActiveRecord
         $el->type=$service;
         $el->client_id=$this->user_id;
         $el->user_id=Yii::$app->user->id;
-        $el->parcel_id_lst=(string)$this->id;
+        $el->parcel_id_lst=(string)$this->el_group;
         $el->price=$tpl->base_price;
         $el->group_id=1;
         $el->kurs=Yii::$app->config->get('USD_CAD');
@@ -101,14 +101,13 @@ class Order extends \yii\db\ActiveRecord
       $els=explode(',',$this->el_group);
       foreach($els as $pac){
         $el->orWhere(['parcel_id_lst'=>$pac]);
-        $el->orWhere(['like','parcel_id_lst','%,'.$pac.',%']);
-        $el->orWhere(['like','parcel_id_lst',$pac.',%']);
-        $el->orWhere(['like','parcel_id_lst','%,'.$pac]);
+        $el->orWhere(['like','parcel_id_lst','%,'.$pac.',%',false]);
+        $el->orWhere(['like','parcel_id_lst',$pac.',%',false]);
+        $el->orWhere(['like','parcel_id_lst','%,'.$pac,false]);
       }
       $el->andWhere(['group_id'=>1]);
-      $el->all();
-
-      return 0;
+      $el=$el->all();
+      return $el;
     }   /**
      * @inheritdoc
      */
