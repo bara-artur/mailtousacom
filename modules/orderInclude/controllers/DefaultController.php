@@ -479,7 +479,7 @@ class DefaultController extends Controller
           ->getSession()
           ->setFlash(
             'error',
-            'Track number validation failed in Parcel №'.($i+1)
+            'Track number validation failed in Parcel #'.($i+1)
           );
         return $this->redirect('/orderInclude/create-order/' . $id);
       }
@@ -490,7 +490,7 @@ class DefaultController extends Controller
           ->getSession()
           ->setFlash(
             'error',
-            'The package №'.($i+1).' must have at least one attachment.'
+            'The package #'.($i+1).' must have at least one attachment.'
           );
         return $this->redirect('/orderInclude/create-order/' . $id);
       }
@@ -588,11 +588,19 @@ class DefaultController extends Controller
     //return $content;
     // setup kartik\mpdf\Pdf component
     $pdf = new Pdf([
+        'format' => Pdf::FORMAT_LETTER,
       'content' => $content,
+       'marginLeft'=>'0',
+        'marginRight'=>'0',
+        'marginTop'=>'0',
+        'marginBottom'=>'0',
+        'defaultFont'=>'arialmt',
+
+        //'defaultCSS'=>'',
       //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
       'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
-      'cssInline' => '.kv-heading-1{font-size:180px}',
-      'options' => ['title' => 'CBP Form 7533 for order №'.$id],
+      //'cssInline' => '.kv-heading-1{font-size:12px;}',
+      'options' => ['title' => 'CBP Form 7533 for order #'.$id],
       'methods' => [
         //'SetHeader'=>['Krajee Report Header'],
         //'SetFooter'=>['{PAGENO}'],
@@ -627,8 +635,8 @@ class DefaultController extends Controller
       'content' => $content,
       //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
       'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
-      'cssInline' => '.kv-heading-1{font-size:180px}',
-      'options' => ['title' => 'Table for order №'.$id],
+      'cssInline' => '.kv-heading-1{font-size:18px}',
+      'options' => ['title' => 'Table for order #'.$id],
       'methods' => [
         //'SetHeader'=>['Krajee Report Header'],
         //'SetFooter'=>['{PAGENO}'],
@@ -660,8 +668,8 @@ class DefaultController extends Controller
       'content' => $content,
       //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
       'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
-      'cssInline' => '.kv-heading-1{font-size:180px}',
-      'options' => ['title' => 'Commercial invoice for order №'.$id],
+      'cssInline' => '.kv-heading-1{font-size:12px}',
+      'options' => ['title' => 'Commercial invoice for order #'.$id],
       'methods' => [
         //'SetHeader'=>['Krajee Report Header'],
         //'SetFooter'=>['{PAGENO}'],
