@@ -130,6 +130,7 @@ class SiteController extends Controller
         if (array_key_exists('OrderElementSearch', $query)) $query['OrderElementSearch'] += ['user_id' => Yii::$app->user->id];
         else $query['OrderElementSearch'] = ['user_id' => Yii::$app->user->id];
       }
+      $query['OrderElementSearch']['archive'] = 0; //  не выводим архивные посылки на главную
 
       $searchModel = new OrderElementSearch();
       $dataProvider = $searchModel->search($query,$time_to);
@@ -160,14 +161,12 @@ class SiteController extends Controller
       $time_to = ['created_at_to' => null];
       $time_to += ['transport_date_to' => null];
       $time_to += ['price_end' => null];
-      $searchModel = new OrderElementSearch();
-      $dataProvider = $searchModel->search($query,$time_to);
-
       if ($admin==0) {
         if (array_key_exists('OrderElementSearch', $query)) $query['OrderElementSearch'] += ['user_id' => Yii::$app->user->id];
         else $query['OrderElementSearch'] = ['user_id' => Yii::$app->user->id];
       }
-
+      $searchModel = new OrderElementSearch();
+      $dataProvider = $searchModel->search($query,$time_to);
       return $this->render('archive',[
         'admin' => $admin,
         'dataProvider' => $dataProvider,
