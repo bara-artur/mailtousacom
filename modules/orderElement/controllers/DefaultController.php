@@ -349,6 +349,7 @@ class DefaultController extends Controller
         }else{
           $order->user_id = Yii::$app->user->id;
         }
+        $order->client_id = $user_id;
         $order->save();
         return $order->id;
       }

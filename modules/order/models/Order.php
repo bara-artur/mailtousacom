@@ -64,6 +64,7 @@ class Order extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [[ 'user_id'], 'integer'],
+            [[ 'client_id'], 'integer'],
             [[ 'el_group'], 'string'],
             [['created_at'], 'safe'],
         ];
@@ -77,7 +78,8 @@ class Order extends \yii\db\ActiveRecord
         return [
             'id' => 'Order ID',
             'user_id' => 'User ID',
-            'el_group' => 'User ID',
+            'client_id' => 'Client ID',
+            'el_group' => 'Parcels ID',
             'created_at' => 'Created At',
 
         ];
