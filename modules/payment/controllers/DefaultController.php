@@ -174,23 +174,11 @@ class DefaultController extends Controller
     }
 
     //узнаем налог пользователя
-    $query = new Query;
-    $query->select('state')
-      ->from('new_address')
-      ->where(['user_id'=>$user_id]);
-    $row = $query->one();
-
-    if(!$row){
+    $tax=$user->getTax();
+    if(!$tax){
       Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
       return $this->redirect(['/']);
     }
-    $user_state=$row['state'];
-
-    $query = new Query;
-    $query->select(['qst','gst'])
-      ->from('state')
-      ->where(['name'=>$user_state]);
-    $tax = $query->one();
 
     $total=array(
       'price'=>0,

@@ -514,6 +514,29 @@ class User extends ActiveRecord  implements IdentityInterface
         }
     }
 
+    //получение налоговой ставки пользователя
+    public function getTax(){
+      //узнаем налог пользователя
+      $query = new Query;
+      $query->select('state')
+        ->from('new_address')
+        ->where(['user_id'=>$this->id]);
+      $row = $query->one();
+
+      if(!$row){
+        return false;
+      }
+      $user_state=$row['state'];
+
+      $query = new Query;
+      $query->select(['qst','gst'])
+        ->from('state')
+        ->where(['name'=>$user_state]);
+      $tax = $query->one();
+
+      return $tax;
+    }
+
     /**
      * Удаляем изображение при его наличии
      */

@@ -130,7 +130,7 @@ $config = [
 
           'logs/<id:\d+>'=>'logs/default/index/',
 
-          'invoice/<action:create>/<id:\d+>'=>'invoice/default/<action>/',
+          'invoice/<action:create|update>/<id:\d+>'=>'invoice/default/<action>/',
           'invoice/<action:add-service-to-parcel|add-service-to-all>/<id:\d+>/<service:\d+>'=>'invoice/default/<action>/',
         ],
     ],

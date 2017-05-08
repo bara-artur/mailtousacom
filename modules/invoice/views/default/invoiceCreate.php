@@ -70,7 +70,7 @@ if(count($usluga['many'])>0) {
     <div class="col-md-4">
   <p>
     Invoice number
-    <?=Html::input('text', 'invoice', $data['invoice'], [
+    <?=Html::input('text', 'invoice', $session['invoice_'.$order_id], [
       'class' => ''
     ]);?>
   </p>
@@ -78,7 +78,7 @@ if(count($usluga['many'])>0) {
     <div class="col-md-4">
   <p>
     Referring code
-    <?=Html::input('text', 'ref_code', $data['ref_code'], [
+    <?=Html::input('text', 'ref_code', $session['ref_code_'.$order_id], [
       'class' => ''
     ]);?>
   </p>
@@ -86,7 +86,7 @@ if(count($usluga['many'])>0) {
     <div class="col-md-4">
   <p>
     Contract number
-    <?=Html::input('text', 'contract_number', $data['contract_number'], [
+    <?=Html::input('text', 'contract_number', $session['contract_number_'.$order_id], [
       'class' => ''
     ]);?>
   </p>
@@ -100,6 +100,7 @@ if(count($usluga['many'])>0) {
     <div class="table table-responsive">
       <table class="table table-art" id="crud-datatable-pjax">
         <tr>
+          <th>Print</th>
           <th>#</th>
           <th>Name</th>
           <th>Date</th>
@@ -114,12 +115,16 @@ if(count($usluga['many'])>0) {
           $item_i += 1;
           ?>
           <tr>
+            <td><?=Html::checkbox('ch_invoice_'.$as->id,true,[
+                'label' => '<span class="fa fa-check"></span>',
+                'class'=>'invoice_check'
+              ]);;?></td>
             <td><?= $item_i; ?></td>
             <td><?= $as->getName(); ?></td>
             <td><?= date(Yii::$app->config->get('data_time_format_php'), $as->create); ?></td>
             <td><?= $as->getTextStatus(); ?></td>
             <td>
-              <?= Html::input('text', 'tr_gen_price_' . $as->id, number_format((float)$as->price, 2, '.', ''), [
+              <?= Html::input('text', 'tr_invoice_'.$as->id, number_format((float)$as->price, 2, '.', ''), [
                 'class' => 'tr_input'
               ]); ?>
             </td>
@@ -198,6 +203,7 @@ if(count($usluga['many'])>0) {
           <td class="padding-off-top" colspan="<?=count($users_parcel) > 1?5:4;?>">
             <table class="table table-pod">
               <tr>
+                <th>Print</th>
                 <th>#</th>
                 <th>Name</th>
                 <th>Add date</th>
@@ -207,6 +213,10 @@ if(count($usluga['many'])>0) {
                 <th>Shipping fee, USD</th>
               </tr>
               <tr>
+                <td><?=Html::checkbox('ch_parcel_'.$parcel->id,true,[
+                    'label' => '<span class="fa fa-check"></span>',
+                    'class'=>'invoice_check'
+                  ]);;?></td>
                 <td>1</td>
                 <td>Pay for weight</td>
                 <td><?=date(Yii::$app->config->get('data_time_format_php'),$parcel->created_at);?></td>
@@ -222,6 +232,10 @@ if(count($usluga['many'])>0) {
                   $item_i+=1;
                   ?>
                     <tr>
+                      <td><?=Html::checkbox('ch_invoice_'.$parcel->id,true,[
+                          'label' => '<span class="fa fa-check"></span>',
+                          'class'=>'invoice_check'
+                        ]);;?></td>
                       <td><?=$item_i;?></td>
                       <td>Track number</td>
                       <td><?=date(Yii::$app->config->get('data_time_format_php'),$as->create);?></td>
@@ -251,12 +265,16 @@ if(count($usluga['many'])>0) {
                   $item_i+=1;
                   ?>
                   <tr>
+                    <td><?=Html::checkbox('ch_invoice_'.$as->id,true,[
+                        'label' => '<span class="fa fa-check"></span>',
+                        'class'=>'invoice_check'
+                      ]);;?></td>
                     <td><?=$item_i;?></td>
                     <td><?=$as->getName();?></td>
                     <td><?=date(Yii::$app->config->get('data_time_format_php'),$as->create);?></td>
                     <td><?= $as->getTextStatus(); ?></td>
                     <td>
-                      <?= Html::input('text', 'tr_gen_price_' . $parcel->id, number_format((float)$as->price, 2, '.', ''), [
+                      <?= Html::input('text', 'tr_invoice_' . $as->id, number_format((float)$as->price, 2, '.', ''), [
                         'class' => 'tr_input'
                       ]); ?>
                     </td>
@@ -293,3 +311,9 @@ if(count($usluga['many'])>0) {
   "footer"=>"",// always need it for jquery plugin
 ])?>
 <?php Modal::end(); ?>
+
+<script>
+  $(document).ready(function() {
+    init_invoice_save(<?=$order_id;?>);
+  })
+</script>
