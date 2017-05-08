@@ -192,4 +192,11 @@ return [
     0=>"manual",
     1=>"eBay"
   ],
+  'pac_title'=>[
+    2=>'Small parcel',
+    10=>'Medium parcel',
+    30=>'Large parcel',
+    70=>'Extra Large parcel',
+    100=>'Monster parcel'
+  ]
 ];

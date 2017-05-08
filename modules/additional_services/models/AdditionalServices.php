@@ -93,9 +93,20 @@ class AdditionalServices extends \yii\db\ActiveRecord
     $st=AdditionalServices::getStatusList();
     return isset($st[$this->status_pay])?$st[$this->status_pay]:'-';
   }
+
   public function getTextType(){
     $st=AdditionalServices::getTypeList();
     return isset($st[$this->type])?$st[$this->type]:'-';
+  }
+
+  /**
+   * Получам название услуги
+   */
+  public function getTitle()
+  {
+    $title=AdditionalServicesList::find()->where(['id'=>$this->type])->one();
+    if(!$title)return 'error';
+    return $title->name;
   }
 
     /**

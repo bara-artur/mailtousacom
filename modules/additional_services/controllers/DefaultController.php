@@ -19,6 +19,16 @@ use app\modules\user\models\User;
  */
 class DefaultController extends Controller
 {
+
+  public function beforeAction($action)
+  {
+    if (Yii::$app->user->isGuest) {
+      $this->redirect(['/']);
+      return false;
+    }
+    return parent::beforeAction($action);
+  }
+
     /**
      * @inheritdoc
      */

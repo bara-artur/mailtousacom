@@ -74,7 +74,7 @@ class Order extends \yii\db\ActiveRecord
       }else{
         $el=NEW AdditionalServices;
         $el->type=$service;
-        $el->client_id=$this->user_id;
+        $el->client_id=$this->client_id;
         $el->user_id=Yii::$app->user->id;
         $el->parcel_id_lst=(string)$this->el_group;
         $el->price=$tpl->base_price;

@@ -452,66 +452,65 @@ class User extends ActiveRecord  implements IdentityInterface
       $doc = \yii\web\UploadedFile::getInstance($this, $row_name);
 
       if ($doc) {
-          $path = $this->getUserPath($this->id);// Путь для сохранения аватаров
-          if(!$oldImage) {
-            $oldImage = $this->$row_name;
-          }
-
-          $name = time() . '-' . $this->id; // Название файла
-          $exch = explode('.', $doc->name);
-          $exch = $exch[count($exch) - 1];
-          $name .= '.' . $exch;
-          $this->$row_name = $path . $name;   // Путь файла и название
-          if (!file_exists($path)) {
-              mkdir($path, 0777, true);   // Создаем директорию при отсутствии
-          }
-
-          $request = Yii::$app->request;
-          $post = $request->post();
-
-          $class = $this::className();
-          $class = str_replace('\\', '/', $class);
-          $class = explode('/', $class);
-          $class = $class[count($class) - 1];
-          $cropParam = array();
-
-          $img = (new Image($doc->tempName));
-          if (isset($post[$class])) {
-            $cropParam = explode('-', $post[$class][$row_name]);
-          }
-          if (count($cropParam) != 4) {
-            $cropParam = array(0, 0, 100, 100);
-          }else{
-            $imgWidth = $img->getWidth();
-            $imgHeight = $img->getHeight();
-
-
-            $cropParam[0] = (int)($cropParam[0] * $imgWidth / 100);
-            $cropParam[1] = (int)($cropParam[1] * $imgHeight / 100);
-            $cropParam[2] = (int)($cropParam[2] * $imgWidth / 100);
-            $cropParam[3] = (int)($cropParam[3] * $imgHeight / 100);
-
-            $img->crop($cropParam[0], $cropParam[1], $cropParam[2], $cropParam[3]);
-          }
-
-
-          $img->fitToWidth(900)
-             ->saveAs($this->$row_name);
-
-          if ($img) {
-              $this->removeImage($oldImage);   // удаляем старое изображение
-
-            if($db_update) {
-              $this::getDb()
-                ->createCommand()
-                ->update($this->tableName(), [$row_name => $this->$row_name], ['id' => $this->id])
-                ->execute();
-            }
-            return $this->$row_name;
-          }
-
-          return $oldImage;
+        $path = $this->getUserPath($this->id);// Путь для сохранения аватаров
+        if(!$oldImage) {
+          $oldImage = $this->$row_name;
         }
+
+        $name = time() . '-' . $this->id; // Название файла
+        $exch = explode('.', $doc->name);
+        $exch = $exch[count($exch) - 1];
+        $name .= '.' . $exch;
+        $this->$row_name = $path . $name;   // Путь файла и название
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);   // Создаем директорию при отсутствии
+        }
+
+        $request = Yii::$app->request;
+        $post = $request->post();
+
+        $class = $this::className();
+        $class = str_replace('\\', '/', $class);
+        $class = explode('/', $class);
+        $class = $class[count($class) - 1];
+        $cropParam = array();
+
+        $img = (new Image($doc->tempName));
+        if (isset($post[$class])) {
+          $cropParam = explode('-', $post[$class][$row_name]);
+        }
+        if (count($cropParam) != 4) {
+          $cropParam = array(0, 0, 100, 100);
+        }else{
+          $imgWidth = $img->getWidth();
+          $imgHeight = $img->getHeight();
+
+          $cropParam[0] = (int)($cropParam[0] * $imgWidth / 100);
+          $cropParam[1] = (int)($cropParam[1] * $imgHeight / 100);
+          $cropParam[2] = (int)($cropParam[2] * $imgWidth / 100);
+          $cropParam[3] = (int)($cropParam[3] * $imgHeight / 100);
+
+          $img->crop($cropParam[0], $cropParam[1], $cropParam[2], $cropParam[3]);
+        }
+
+
+        $img->fitToWidth(900)
+           ->saveAs($this->$row_name);
+
+        if ($img) {
+          $this->removeImage($oldImage);   // удаляем старое изображение
+
+          if($db_update) {
+            $this::getDb()
+              ->createCommand()
+              ->update($this->tableName(), [$row_name => $this->$row_name], ['id' => $this->id])
+              ->execute();
+          }
+          return $this->$row_name;
+        }
+
+        return $oldImage;
+      }
     }
 
     //получение налоговой ставки пользователя

@@ -232,7 +232,7 @@ if(count($usluga['many'])>0) {
                   $item_i+=1;
                   ?>
                     <tr>
-                      <td><?=Html::checkbox('ch_invoice_'.$parcel->id,true,[
+                      <td><?=Html::checkbox('ch_invoice_track_'.$parcel->id,true,[
                           'label' => '<span class="fa fa-check"></span>',
                           'class'=>'invoice_check'
                         ]);;?></td>

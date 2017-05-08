@@ -166,7 +166,7 @@ class OrderElement extends \yii\db\ActiveRecord
    * $show_track_invoice - выводить/нет данные о инвойсе трек номера
    */
   public function getAdditionalServiceList($show_track_invoice=true){
-    $els=AdditionalServices::find()->where(['parcel_id_lst'=>$this->id]);
+    $els=AdditionalServices::find()->where(['parcel_id_lst'=>$this->id,'group_id'=>0]);
     if(!$show_track_invoice){
       $els=$els->andWhere(['!=','type',1]);
     }
@@ -214,7 +214,7 @@ class OrderElement extends \yii\db\ActiveRecord
 
     $el=NEW AdditionalServices;
     $el->type=$service;
-    $el->client_id=$this->user_id;
+    $el->client_id=$this->client_id;
     $el->user_id=Yii::$app->user->id;
     $el->parcel_id_lst=(string)$this->id;
     $el->price=$tpl->base_price;
@@ -238,7 +238,7 @@ class OrderElement extends \yii\db\ActiveRecord
 
       $el=NEW AdditionalServices;
       $el->type=$service;
-      $el->client_id=$this->user_id;
+      $el->client_id=$this->client_id;
       $el->user_id=Yii::$app->user->id;
       $el->parcel_id_lst=(string)$this->id;
       $el->price=$tpl->base_price;
