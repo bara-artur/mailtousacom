@@ -315,8 +315,8 @@ class DefaultController extends Controller
     $user_id = null;
     $status = null;
     $flag = 0;
+    $flag_dif_clients = 0;
     foreach ($arr as $id) {
-      if ($flag == 0) {
         $parcel = OrderElement::findOne(['id' => $id]);
         if ($parcel) {
           if (($flag == 1) &&   //  если это уже не первая посылка из списка
@@ -325,13 +325,13 @@ class DefaultController extends Controller
                 (($status<=1) && ($parcel->status>1))  )) {           // несовпадение статусов
             return null;
           }
+          if (($user_id != $parcel->user_id)&&($flag == 1)) $flag_dif_clients = 1;
           $user_id = $parcel->user_id;
           $status = $parcel->status;
           $flag = 1;
         }else{
           return null; // нет посылки из списка
         }
-      }
     }
 
     if ($flag == 1) {  // посылки существуют
@@ -350,6 +350,7 @@ class DefaultController extends Controller
           $order->user_id = Yii::$app->user->id;
         }
         $order->client_id = $user_id;
+        if ($flag_dif_clients == 1) $order->client_id = 0;
         $order->save();
         return $order->id;
       }
