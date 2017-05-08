@@ -11,13 +11,35 @@ use app\modules\payment\models\PaymentsList;
 ?>
 
 <h1>Archive</h1>
+<div class="row">
+  <div class="col-md-12">
+    <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 margin-top-10 text-left">
+      <?php if ($dataProvider) { ?>
+        <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+      <?php } ?>
+      <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn2 btn-neutral-border ','data-toggle' => 'collapse']) ?>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 scrit">
+    <?= $this->render('elementFilterForm', ['model' => $filterForm, 'admin' => $admin]);?>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 scrit">
+    <?= $this->render('showParcelTableForm', ['model' => $showTable, 'admin' => $admin]);?>
+  </div>
+</div>
+
 
 <?= GridView::widget([
   'dataProvider' => $dataProvider,
   'summary'=>'',
   'columns' => [
     ['attribute'=> 'user_id',
-      'visible' => $admin,
+      'visible' => (($showTable->showID)&&($admin==1)),
       'content'=> function($data){
         if ($data->user!=null) {
           return $data->user->lineInfo;
@@ -31,7 +53,7 @@ use app\modules\payment\models\PaymentsList;
         //return $data::elementStatusText($data->status);
         return $data->getFullTextStatus();
       },
-      'visible' => 1,
+      'visible' => $showTable->showStatus,
     ],
     [
       'header'=> 'Parcel Items',
@@ -45,7 +67,7 @@ use app\modules\payment\models\PaymentsList;
         }
         return $itemString;
       },
-      'visible' => 1,
+      'visible' => $showTable->showItems,
     ],
     ['attribute'=> 'created_at',
       'options' => ['width' => '82'],
@@ -54,7 +76,7 @@ use app\modules\payment\models\PaymentsList;
         else return date(Yii::$app->config->get('data_time_format_php'),$data->created_at);
       },
       'format' => 'raw',
-      'visible' => 1,
+      'visible' => $showTable->showCreatedAt,
     ],
     ['attribute'=> 'payment_state',
       'label'=> 'Payment',
@@ -62,7 +84,7 @@ use app\modules\payment\models\PaymentsList;
       'content' => function($data){
         return PaymentsList::statusTextParcel($data->payment_state);
       },
-      'visible' => 1,
+      'visible' => $showTable->showPaymentState,
     ],
     [
       'attribute' => 'price',
@@ -71,7 +93,7 @@ use app\modules\payment\models\PaymentsList;
         else return number_format($data->price,2);
       },
       'format'=>['decimal',2],
-      'visible' => 1,
+      'visible' => $showTable->showPrice,
     ],
     [
       'attribute' => 'qst',
@@ -80,7 +102,7 @@ use app\modules\payment\models\PaymentsList;
         else return number_format($data->qst,2);
       },
       'format'=>['decimal',2],
-      'visible' => 1,
+      'visible' => $showTable->showQst,
     ],
     [
       'attribute' => 'gst',
@@ -90,7 +112,7 @@ use app\modules\payment\models\PaymentsList;
         else return number_format($data->gst,2);
       },
       'format'=>['decimal',2],
-      'visible' => 1,
+      'visible' => $showTable->showGst,
     ],
     [
       'attribute' => 'total',
@@ -99,7 +121,7 @@ use app\modules\payment\models\PaymentsList;
         else return number_format($data->gst+$data->qst+$data->price,2);
       },
       'format'=>['decimal',2],
-      'visible' => 1,
+      'visible' => $showTable->showTotal,
     ],
     [
       'attribute' => 'track_number',
@@ -107,7 +129,7 @@ use app\modules\payment\models\PaymentsList;
         if ($data->track_number == 0) return '-';
         else return $data->getTrackingNumberPostLink($data->GetShippingCarrier($data->track_number),$data->track_number);
       },
-      'visible' => 1,
+      'visible' => $showTable->showTrackNumber,
     ],
     // 'order_status',
     // 'created_at',
