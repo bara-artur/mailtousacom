@@ -171,13 +171,31 @@ $(document).ready(function() {
     return false;
   });
 
-  $('body').on('click','[role="modal-remote"]',function(){
-    if($(this).hasClass('big_model') ||$(this).hasClass('kv-file-zoom')) {
-      $('#ajaxCrudModal').addClass("modal-lg");
-    }else{
-      $('#ajaxCrudModal').removeClass("modal-lg");
+    $('body').on('click','[role="modal-remote"]',function(){
+        if($(this).hasClass('big_model') ||$(this).hasClass('kv-file-zoom')) {
+            $('#ajaxCrudModal').addClass("modal-lg");
+        }else{
+            $('#ajaxCrudModal').removeClass("modal-lg");
+        }
+    });
+
+    $('.invoice_check').on('change',function(){
+        pr_val=getCookie('invoice_check');
+        if(pr_val.length<2){
+            pr_val={};
+        }else{
+            pr_val=JSON.parse(pr_val);
+        };
+        pr_val[this.name]=this.checked;
+        setCookie('invoice_check',JSON.stringify(pr_val));
+    });
+    pr_val=getCookie('invoice_check');
+    if(pr_val.length>2) {
+        pr_val = JSON.parse(pr_val);
+        for (var item in pr_val) {
+            $('[name='+item+']')[0].checked = pr_val[item];
+        }
     }
-  })
 });
 
 function show_err(el,txt){
@@ -1048,3 +1066,10 @@ function init_superCheckbox_processing() {
 function init_scaner(){
 
 }
+
+$(function(){
+    $('#more').click(function(){
+        $(this).hide();
+        $('#more ~ li').fadeIn();
+    });
+});

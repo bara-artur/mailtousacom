@@ -30,6 +30,112 @@ $submitOption = [
 <form id="crud-datatable-pjax" class=""  method="post" >
     <h4 class="modernui-neutral2">Order payment</h4>
     <?php
+    if($order_service && count($order_service)>0) {
+        ?>
+        <h2>Услуги групповых посылок</h2>
+        <div class="table table-responsive">
+            <table class="table table-art" id="crud-datatable-pjax">
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Price</th>
+                    <th>PST</th>
+                    <th>GST/HST</th>
+                    <th>Total</th>
+                </tr>
+                <?php
+
+                $item_i = 0;
+                foreach ($order_service as $as) {
+                    $item_i += 1;
+                    ?>
+                    <tr>
+                        <td><?= $as->getName(); ?></td>
+                        <td><?= date(Yii::$app->config->get('data_time_format_php'), $as->create); ?></td>
+                        <td align="right"><?=number_format((float)$as->price, 2, '.', '')?></td>
+                        <td align="right"><?=number_format((float)$as->qst, 2, '.', '')?></td>
+                        <td align="right"><?=number_format((float)$as->gst, 2, '.', '')?></td>
+                        <td align="right"><?=number_format($as->price+$as->qst+$as->gst, 2, '.', '')?></td>
+
+                    </tr>
+                    <?php
+                    //получаем данные о уже осуществленных платежах
+                    $paySuccessful=$as->paySuccessful;
+                    if($paySuccessful AND count($paySuccessful)>0){
+                        ?>
+                        <tr>
+                            <td align="left" colspan="2"><b>Paid</b></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                        </tr>
+                        <?php
+                    };
+                }
+                ?>
+                <tr>
+                    <td align="left" colspan="2"><b><span class="trans_count">Total to Pay</span></b></td>
+                    <td align="right"><?=number_format($total['service_price'],2);?></td>
+                    <td align="right"><?=number_format($total['service_qst'],2);?></td>
+                    <td align="right"><?=number_format($total['service_gst'],2);?></td>
+                    <td align="right"><span class="trans_count"><?=number_format($total['service_sum'],2);?></span></td>
+                </tr>
+            </table>
+
+            <?php
+            if($total['service_price']==0){
+                ?>
+                <div class="col-md-12 padding-off-left padding-off-right" >
+                    <h6 class="bg-success text-center fg-white padding-6 margin-off-bottom">
+                        <span class="glyphicon glyphicon-ok-sign"></span> Parcel paid
+                    </h6>
+                    <!--<div class="paid_img"></div>-->
+                </div>
+
+                <?php
+                echo Html::hiddenInput('payment_type', -1, []);
+            }else{
+                if(Yii::$app->user->identity->isManager()){
+                    ?>
+
+                    <div class="col-md-12 padding-off-left padding-off-right" >
+                        <h6 class="bg-warning text-center fg-white padding-6 margin-off-bottom">
+                            <i class="icon-metro-warning"></i> Parcel isn't paid yet
+                        </h6>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 block_adm">
+                            <?= Html::checkbox('agree_service', false, [
+                              'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
+                              'class'=>"hidden_block_communication",
+                              'price'=>$total['service_price'],
+                              'sum'=>$total['service_sum'],
+                              'qst'=>$total['service_qst'],
+                              'gst'=>$total['service_gst'],
+                            ]);?>
+                            <div class="agree_service vertic" style="display: none;">
+                                <label>Please, enter the non-payment reason</label>
+                                <div class="row">
+                                    <div class="col-md-12 full_width">
+                                        <?= Html::textarea('text_not_agree_service', "",['class'=>'']); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="notpaid_img"></div>-->
+
+                    <?php
+                }
+            }
+            ?>
+        </div>
+        <?php
+    }
+    ?>
+    <?php
     foreach ($paces as $pac) {
     $tot_col=0;
     ?>
@@ -98,7 +204,7 @@ $submitOption = [
 
                 //получаем данные о инвойсах
                 $invoice=$pac->trackInvoice;
-                if(!$invoice->isNewRecord){
+                if($invoice && !$invoice->isNewRecord){
                     $tot_col++;
                     ?>
                     <tr>
@@ -132,6 +238,19 @@ $submitOption = [
                     };
                 }
 
+                $services=$pac->getAdditionalServiceList(false);
+                foreach ($services as $as){
+                    $tot_col++;
+                    ?>
+                    <tr>
+                        <td align="left"><b><?=$as->getName();?></b></td>
+                        <td align="right"><?=number_format($as->price,2);?></td>
+                        <td align="right"><?=number_format($as->qst,2);?></td>
+                        <td align="right"><?=number_format($as->gst,2);?></td>
+                        <td align="right"><?=number_format($as->price+$as->gst+$as->qst,2);?></td>
+                    </tr>
+                    <?php
+                }
                 if($tot_col>0){
                     ?>
                     <tr>
@@ -285,7 +404,7 @@ $submitOption = [
             </div>
             <?php
         }else{
-            if($user->month_pay==1){
+            if($user->month_pay==1 && Yii::$app->user->can("takeParcel")){
                 $pay_variant=[
                   3 => "Moth Payment",
                   4 => "Pay now"
@@ -319,9 +438,12 @@ $submitOption = [
             <hr>
             <div class="form-group">
                 <?=Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/'.$order_id], ['class' => 'btn btn-default pull-left']) ?>
+                <?=Html::a('Return to payment list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);?>
                 <?php
                 if(Yii::$app->user->identity->isManager()){
-                    echo Html::a('Return to orders list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);
+                    if (Yii::$app->user->can('trackInvoice')) {
+                        echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Create invoice', ['/invoice/create/' . $order_id], ['class' => 'btn btn-default pull-left']);
+                    }
                     if($total['price']>0){
                         //админ может принимать платеж и это необходимо сделать
                         if(Yii::$app->user->can("takePay") && $total['price']>0){

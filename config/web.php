@@ -78,6 +78,8 @@ $config = [
           '/logs/<action>/<action2>'=>'404',
           'additional_services/default/<action>'=>'404',
           'additional_services/default/<action>/<action2>'=>'404',
+          'invoice/default/<action>'=>'404',
+          'invoice/default/<action>/<action2>'=>'404',
 
           '/'=>'/site/index',
           //получение города по стране
@@ -105,7 +107,7 @@ $config = [
           'orderElement/group/<act:\w+>'=>'orderElement/default/group',
           'orderElement/<action:(file-upload|file-delete|files)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
           //Дополнить всеми ф-ями
-          'orderElement/<action:track-invoice|group-view|group-print-advanced|commercial_inv_print|group-print|group-update|group-delete>/<parcels_id:\d+>'=>'orderElement/default/<action>',
+          'orderElement/<action:group-view|group-print-advanced|commercial_inv_print|group-print|group-update|group-delete>/<parcels_id:\d+>'=>'orderElement/default/<action>',
 
           'receiving_points/<action>'=>'receiving_points/default/<action>',
 
@@ -115,18 +117,21 @@ $config = [
           'orderInclude/<action:group-remove>/<order_id:\d+>/<id:\d+>'=>'orderInclude/default/<action>/',
 
 
-          'payment/<action:order|track-invoice>/<id:\d+>'=>'payment/default/<action>/',
+          'payment/<action:order|invoice>/<id:\d+>'=>'payment/default/<action>/',
           'payment/<action>/<id:\d+>'=>'payment/default/<action>/',
           'payment/<action:finish>'=>'payment/default/<action>/',
           'payment/<action>'=>'payment/default/<action>/',
 
-          'additional_services/<action:transport-invoice>/<id:\d+>'=>'additional_services/default/<action>/',
+          'additional_services/<action:invoice>/<id:\d+>'=>'additional_services/default/<action>/',
           //'additional_services/<action:transport-invoice>/'=>'additional_services/default/<action>/',
 
           'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',
           'ebay/<action:callback>'=>'ebay/default/<action>/',
 
           'logs/<id:\d+>'=>'logs/default/index/',
+
+          'invoice/<action:create|update|pdf>/<id:\d+>'=>'invoice/default/<action>/',
+          'invoice/<action:add-service-to-parcel|add-service-to-all>/<id:\d+>/<service:\d+>'=>'invoice/default/<action>/',
         ],
     ],
     'config'=>array(
@@ -208,6 +213,9 @@ $config = [
     ],
     'config' => [
       'class' => 'app\modules\config\Module'
+    ],
+    'invoice' => [
+      'class' => 'app\modules\invoice\Module',
     ],
   ],
 ];

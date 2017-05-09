@@ -55,7 +55,7 @@ Email: sendmailtousa@gmail.com
         </td>
 
     <td align="right" style="padding:2px 6px;border-right:1px solid #878787;">
-      <?=date('d/m/Y');?>
+      <?=date('d/m/Y',$date);?>
     </td>
     <td align="right" style="padding:2px 6px;">
       <?=$data['contract_number'];?>
@@ -75,36 +75,31 @@ Email: sendmailtousa@gmail.com
           <th style="border-top:1px solid #878787;border-right:1px solid #878787;border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;">Price</th>
         </tr>
         <?php
-        foreach ($flat_rate as $k=>$item){
+        $k=1;
+        foreach ($pay_list as $k=>$item){
           ?>
             <tr>
-              <td colspan="2" style="border-left:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">Flat rate service fee - <?=date('F d');?></td>
-              <td align="right" style="border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;"><?=$item;?></td>
-              <td align="right" style="border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;">$<?=number_format($k,2,'.','');?></td>
-              <td align="right" style="border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;">$<?=number_format($k*$item,2,'.','');?></td>
+              <td colspan="2" style="border:1px solid #878787;border-top:0;padding:2px 6px;"><?=$item['title'];?></td>
+              <td align="right" style="border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;"><?=$item['quantity'];?></td>
+              <td align="right" style="border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;">$<?=$item['price'];?></td>
+              <td align="right" style="border-right:1px solid #878787;border-bottom:1px solid #878787;padding:2px 6px;">$<?=number_format($item['quantity']*$item['price'],2,'.','');?></td>
             </tr>
           <?php
+          $k++;
         }
-        $kurs=0;
-        foreach ($users_parcel as $parcel){
-          //ddd($parcel->trackInvoice);
-          $as=$parcel->trackInvoice;
-          $price_ext=(strlen($as->detail)>0)?json_decode($as->detail,true):['price_tk'=>0];
-          $kurs=$as['kurs'];
+        if($kurs) {
           ?>
           <tr>
-            <td colspan="2" style="border-bottom:1px solid #878787;border-top:1px solid #878787;border-left:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;"><?=$parcel->GetShippingCarrierName(true);?> shipping label <?=$parcel->track_number;?> - $<?=number_format($price_ext['price_tk'],2,'.','');?> USD</td>
-            <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">1</td>
-            <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">$<?=number_format($price_ext['price_tk']*$as['kurs'],2,'.','');?></td>
-            <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;">$<?=number_format($as['dop_price'],2,'.','');?></td>
+            <td
+              style="border-bottom:1px solid #878787;border-right:1px solid #878787;border-left:1px solid #878787;padding:2px 6px;">
+              USD/CAD Rate
+            </td>
+            <td align="right"
+                style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;"><?= $kurs; ?></td>
           </tr>
           <?php
-          }
+        }
         ?>
-         <tr>
-           <td style="border-bottom:1px solid #878787;border-right:1px solid #878787;border-left:1px solid #878787;padding:2px 6px;">USD/CAD Rate</td>
-           <td align="right" style="border-bottom:1px solid #878787;border-right:1px solid #878787;padding:2px 6px;"><?=$kurs;?></td>
-         </tr>
       </table>
 <br>
 <br>
@@ -113,7 +108,7 @@ Email: sendmailtousa@gmail.com
   <tr>
     <td></td>
     <td>Subtotal</td>
-    <td align="right">$<?=number_format($total['sub_total'],2,'.','');?></td>
+    <td align="right">$<?=number_format($total['price'],2,'.','');?></td>
   </tr>
   <tr>
     <td></td>
@@ -127,7 +122,7 @@ Email: sendmailtousa@gmail.com
     <td align="right">$<?=number_format($total['qst'],2,'.','');?></td>
   </tr>
   <tr>
-    <td><a href="<?=Url::to(['/payment/track-invoice/'.$order_id],true);?>"><?=Url::to(['/payment/track-invoice/'.$order_id],true);?></a> </td>
+    <td><a href="<?=Url::to(['/payment/invoice/'.$invoice_id],true);?>"><?=Url::to(['/payment/invoice/'.$invoice_id],true);?></a> </td>
     <td>Total</td>
     <td align="right">$<?=number_format($total['total'],2,'.','');?></td>
   </tr>
