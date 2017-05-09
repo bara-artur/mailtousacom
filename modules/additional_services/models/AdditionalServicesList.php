@@ -33,7 +33,7 @@ class AdditionalServicesList extends \yii\db\ActiveRecord
     ];
   }
 
-  public function connectionList()
+  static function connectionList()
   {
     return [
       0=>"none",

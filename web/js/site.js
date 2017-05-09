@@ -193,7 +193,10 @@ $(document).ready(function() {
   if(pr_val.length>2) {
     pr_val = JSON.parse(pr_val);
     for (var item in pr_val) {
-      $('[name='+item+']')[0].checked = pr_val[item];
+      el=$('[name='+item+']')
+      if(el.length>0){
+        el[0].checked = pr_val[item];
+      }
     }
   }
 });
