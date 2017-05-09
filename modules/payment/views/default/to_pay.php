@@ -438,10 +438,12 @@ $submitOption = [
             <hr>
             <div class="form-group">
                 <?=Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/'.$order_id], ['class' => 'btn btn-default pull-left']) ?>
-                <?=Html::a('Return to orders list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);?>
+                <?=Html::a('Return to payment list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);?>
                 <?php
                 if(Yii::$app->user->identity->isManager()){
-                    echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Create invoice', ['invoice/create/'.$order_id], ['class' => 'btn btn-default pull-left']);
+                    if (Yii::$app->user->can('trackInvoice')) {
+                        echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Create invoice', ['/invoice/create/' . $order_id], ['class' => 'btn btn-default pull-left']);
+                    }
                     if($total['price']>0){
                         //админ может принимать платеж и это необходимо сделать
                         if(Yii::$app->user->can("takePay") && $total['price']>0){
