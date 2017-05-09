@@ -193,7 +193,10 @@ $(document).ready(function() {
     if(pr_val.length>2) {
         pr_val = JSON.parse(pr_val);
         for (var item in pr_val) {
-            $('[name='+item+']')[0].checked = pr_val[item];
+            el=$('[name='+item+']')
+            if(el.length>0){
+                el[0].checked = pr_val[item];
+            }
         }
     }
 });
@@ -1073,3 +1076,31 @@ $(function(){
         $('#more ~ li').fadeIn();
     });
 });
+
+function init_invoice_save(order_id){
+  order=order_id;
+  $('input[type=text]').on('change',function(){
+    el=this;
+    post={
+      invoice:$('[name=invoice]').val(),
+      ref_code:$('[name=ref_code]').val(),
+      contract_number:$('[name=contract_number]').val(),
+      name:el.name,
+      value:el.value
+    };
+
+    tr=$(el).closest('tr');
+    if(tr.length>0){
+      inputs=tr.find('input[type=text]');
+      data={};
+      for(i=0;i<inputs.length;i++){
+        data[inputs[i].name]=inputs[i].value;
+      }
+      post['data']=data;
+    }
+
+    $.post('/invoice/update/'+order_id,post,function(date){
+      console.log(date);
+    },'JSON');
+  })
+}
