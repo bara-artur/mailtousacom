@@ -370,7 +370,6 @@ class Order extends \yii\db\ActiveRecord
 
       //получаем данные о инвойсах
       $invoices=$pac->getAdditionalServiceList(true);
-
       foreach($invoices as $invoice){
         //для инвойса  храним все в промежуточном массиве
         $invoice_total=array();
@@ -390,12 +389,12 @@ class Order extends \yii\db\ActiveRecord
           $invoice_total['gst']-=$paySuccessful[0]['gst'];
         };
 
-        $ch=$this->id||in_array($pac->id,$services_list)||$request->post('v_ch_invoice_'.$pac->id);
+        $ch=$this->id||in_array($invoice->id,$services_list)||$request->post('v_ch_invoice_'.$invoice->id);
         if($ch) {
           //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
           if ($invoice_total['price'] > 0) {
             $pay_array[] = [
-              'element_id' => $pac->id,
+              'element_id' => $invoice->id,
               'element_type' => 1,
               'status' => $save_to_pay ? 0 : -1,
               'comment' => $save_to_pay ? '' : $request->post('text_not_agree_' . $pac->id),
@@ -486,6 +485,7 @@ class Order extends \yii\db\ActiveRecord
 
     $total['pay_pal']=$total['sum']*(1+Yii::$app->config->get('paypal_commision_dolia')/100)+
       Yii::$app->config->get('paypal_commision_fixed');
+    //ddd($pay_array);
     return [
       'order_id'=>$this->id,
       'paces'=>$el_group,
@@ -493,6 +493,7 @@ class Order extends \yii\db\ActiveRecord
       'user'=>$user,
       'order_service'=>$order_service,
       'pay_array'=>$pay_array,
+      'pays_total'=>$pays_total,
       'is_admin'=>Yii::$app->user->identity->isManager(),
       'parcels_list'=>$parcels_list,
       'services_list'=>$services_list,

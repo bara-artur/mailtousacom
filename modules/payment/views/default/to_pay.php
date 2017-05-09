@@ -87,6 +87,11 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
+                            <?php
+                            if(!$order_id){
+                                echo '<td></td>';
+                            }
+                            ?>
                             <td align="left" colspan="2"><b>Paid</b></td>
                             <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
                             <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
@@ -349,6 +354,24 @@ $submitOption = [
                         <td align="right"><?=number_format($as->price+$as->gst+$as->qst,2);?></td>
                     </tr>
                     <?php
+                    //получаем данные о уже осуществленных платежах
+                    $paySuccessful=$as->paySuccessful;
+                    if($paySuccessful AND count($paySuccessful)>0){
+                        ?>
+                        <tr>
+                            <?php
+                            if(!$order_id){
+                                echo '<td></td>';
+                            }
+                            ?>
+                            <td align="left"><b>Paid</b></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                        </tr>
+                        <?php
+                    };
                 }
                 if($tot_col>0){
                     ?>

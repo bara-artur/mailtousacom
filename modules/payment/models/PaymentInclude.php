@@ -88,7 +88,7 @@ class PaymentInclude extends \yii\db\ActiveRecord
       //для ивойсов меняем статус оплаты на 2(оплачен)
       if ($this->element_type == 1) {
         $additional_services = AdditionalServices::find()
-          ->where(['type' => 1, 'parcel_id_lst' => $this->element_id])
+          ->where(['id' => $this->element_id])
           ->one();
         $additional_services->status_pay = 2;
         $additional_services->save();
