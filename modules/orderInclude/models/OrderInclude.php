@@ -104,6 +104,7 @@ class OrderInclude extends \yii\db\ActiveRecord
         $address_id = $address->id;
         $model = new Order();
         $model->user_id = $user_id;
+        $model->client_id = $user_id;
         $model->created_at = time();
         if ($model->save()) {
           //$log = new Log;
