@@ -462,8 +462,13 @@ $submitOption = [
                 "%+$".
                 Yii::$app->config->get('paypal_commision_fixed').
                 "= $".
+                "<span
+                    class=paypal_sum
+                    paypal_commision_dolia=".Yii::$app->config->get('paypal_commision_dolia')."
+                    paypal_commision_fixed=".Yii::$app->config->get('paypal_commision_fixed')."
+                >".
                 number_format($total['pay_pal'],2,"."," ").
-                ")",
+                "</span>)",
               2 => "I will pay at warehouse"
             ];
             if(Yii::$app->user->identity->month_pay==1){

@@ -235,6 +235,14 @@ $(document).ready(function() {
     $('.tot_gst').text(gst.toFixed(2));
     $('.tot_qst').text(qst.toFixed(2));
     $('.tot_sum').text(sum.toFixed(2));
+
+    paypal_sum=$('.paypal_sum')
+    if(paypal_sum.length>0){
+      val=sum;
+      val+=parseFloat(paypal_sum.attr('paypal_commision_fixed'));
+      val+=price*parseFloat(paypal_sum.attr('paypal_commision_dolia'))/100;
+      paypal_sum.text(val.toFixed(2));
+    }
   })
 });
 

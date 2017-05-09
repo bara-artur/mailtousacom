@@ -1136,10 +1136,10 @@ div.dan_pay {border: 2px solid #E51400;background-color:#ffffff;max-width:100%;}
 div.awa_pay{border: 2px solid #006AC1;background-color:#ffffff;max-width:100%;}
 .marg_but2
 {
-margin-right: 4px;
-display: inline;
-padding: 9px;
-font-size: 14px;
+    margin-right: 4px;
+    display: inline;
+    padding: 9px;
+    font-size: 14px;
 }
 
 :target{
@@ -1161,4 +1161,14 @@ font-size: 14px;
         box-shadow: #006ac1 0 0 3px 2px;
         background: #006ac1;
     }
+}
+
+.custom-radio label span.paypal_sum{
+    width: auto;
+    background: transparent;
+    border: none;
+    margin-left: 0;
+}
+.custom-radio label span.paypal_sum:before{
+    display: none;
 }
