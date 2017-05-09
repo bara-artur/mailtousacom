@@ -305,7 +305,7 @@ $this->title = 'Shipping to USA and Canada';
                           'role'=>'modal-remote',
                           'title'=> 'View payments',
                           'data' => ['toggle'=>"tooltip"],
-                          'class'=>'btn btn-sm btn-success show_modal marg_but',
+                          'class'=>'btn btn-sm btn-pay show_modal big_model marg_but',
                         ]
                       );
                     $button_print_pdf = Html::a('<i class="fa fa-print"></i>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-science-blue-border marg_but','title'=> 'Print cargo manifest',
