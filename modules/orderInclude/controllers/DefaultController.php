@@ -81,6 +81,7 @@ class DefaultController extends Controller
     if (!$order) { // первый заход на сайт обычного user
       $order = new Order();
       $order->user_id = Yii::$app->user->id;
+      $order->client_id = $order->user_id;
       $order->created_at = time();
       $order->el_group = '';
       $order->save();
