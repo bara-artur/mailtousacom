@@ -1048,10 +1048,3 @@ function init_superCheckbox_processing() {
 function init_scaner(){
 
 }
-
-$(function(){
-    $('#more').click(function(){
-        $(this).hide();
-        $('#more ~ li').fadeIn();
-    });
-});

@@ -457,6 +457,8 @@ input[type=checkbox]:checked+span::before {
     border: 1px solid #ccc;
     font-size: 16px;
     padding: 8px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
     background-color: #FFC800 ;
@@ -1146,24 +1148,49 @@ font-size: 14px;
 
 :target{
     animation-name: target-animation;
-    animation-duration: 2s;
-    animation-iteration-count: 3;
+    -webkit-animation-duration: 1s;
+    -o-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    animation-duration: 1s;
+
+    -webkit-animation-iteration-count: 10;
+    -moz-animation-iteration-count: 10;
+    -o-animation-iteration-count: 10;
+    animation-iteration-count: 10;
+
+}
+@keyframes target-animation {
+
+    0% {
+         outline: 4px dashed rgba(5, 56, 159, 1);
+         outline-offset: -4px;
+
+     }
+    25% {
+        outline: 4px dashed rgba(5, 56, 159, 0.5);
+        outline-offset: -4px;
+
+    }
+
+    50% {
+        outline: 4px dashed rgba(5, 56, 159, 0.2);
+        outline-offset: -4px;
+    }
+    75% {
+        outline: 4px dashed rgba(5, 56, 159, 0.5);
+        outline-offset: -4px;
+
+    }
+
+    100%
+    {
+        outline: 4px dashed rgba(5, 56, 159, 1);
+        outline-offset: -4px;
+
+    }
+
 }
 
-@keyframes target-animation {
-    0% {
-        box-shadow: #006ac1 0 0 3px 2px;
-        background: #006ac1;
-    }
-    70% {
-        box-shadow: #9bbdda 0 0 8px 4px;
-        background: #9bbdda;
-    }
-    100%{
-        box-shadow: #006ac1 0 0 3px 2px;
-        background: #006ac1;
-    }
-}
 .btn-pay {
     color: #1d1d1d;
     background-color: #ffc800;
@@ -1174,3 +1201,23 @@ font-size: 14px;
     color: #05389F;
     font-weight: bold;
 }
+.btn_path{padding:6px 10px;}
+.open_text
+{
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    padding-left: 6px;
+    color: #ffffff;
+    background: #e51400;
+}
+.dowloadTrackNumber
+{   display: block;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    padding-left: 6px;
+    color: #354346;
+    background: #EEEEEE;
+}
+ul.breadcrumb{display:none !important;}
