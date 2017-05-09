@@ -196,7 +196,6 @@ class DefaultController extends Controller
         $inv->price = $data['tr_gen_price_' . $id_inv];
       }
 
-      return $inv->client_id;
       $tax=User::find()->where(['id'=>$inv->client_id])->one()->getTax();
 
       if(!$tax){
@@ -223,7 +222,6 @@ class DefaultController extends Controller
           'track_company'=>$order_element->GetShippingCarrierName(true)
         ];
         $inv->detail=json_encode($detail);
-
       }
       $inv->save();
     }
