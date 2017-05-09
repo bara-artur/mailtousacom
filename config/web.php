@@ -118,7 +118,7 @@ $config = [
 
 
           'payment/<action:order|invoice>/<id:\d+>'=>'payment/default/<action>/',
-          'payment/<action>/<id:\d+>'=>'payment/default/<action>/',
+          //'payment/<action>/<id:\d+>'=>'payment/default/<action>/',
           'payment/<action:finish>'=>'payment/default/<action>/',
           'payment/<action>'=>'payment/default/<action>/',
 
