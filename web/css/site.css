@@ -457,6 +457,8 @@ input[type=checkbox]:checked+span::before {
     border: 1px solid #ccc;
     font-size: 16px;
     padding: 8px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
     background-color: #FFC800 ;
@@ -516,7 +518,7 @@ h5.deliv_address,h5.order_include
 .table>thead>tr>th.tar_big{line-height: 23px !important;vertical-align: middle !important;min-width: 200px;}
 .table>thead>tr>th span.tar_middle{line-height: 23px !important;vertical-align: middle !important;font-size:25px;}
 .tar_small{font-size:14px;font-weight:400;text-align:center;}
-td.td_wr_input,input.tr_input{text-align:center;}
+/*td.td_wr_input,input.tr_input{text-align:center;}*/
 a.gritter-close::after{font-weight:400;font-family: 'Tahoma',sans-serif !important;}
 .but_del {
     padding: 6px;
@@ -960,7 +962,7 @@ div.trans_count {
 .table-pod th{
     background-color: #ddd;
     color: #000;}
-.table.table-pod{margin-bottom: 0px !important;}
+.table.table-pod{margin-bottom: 0px !important;background-color: #ffffff;}
 .table-pod tr{cursor:auto;}
 .table-pod.table>tbody>tr>td, .table-pod.table>tbody>tr>th, .table-pod.table>tfoot>tr>td, .table-pod.table>tfoot>tr>th, .table-pod.table>thead>tr>td, .table-pod.table>thead>tr>th {
     vertical-align: middle;
@@ -1138,10 +1140,10 @@ div.dan_pay {border: 2px solid #E51400;background-color:#ffffff;max-width:100%;}
 div.awa_pay{border: 2px solid #006AC1;background-color:#ffffff;max-width:100%;}
 .marg_but2
 {
-    margin-right: 4px;
-    display: inline;
-    padding: 9px;
-    font-size: 14px;
+margin-right: 4px;
+display: inline;
+padding: 9px;
+font-size: 14px;
 }
 
 :target{
@@ -1218,14 +1220,24 @@ div.awa_pay{border: 2px solid #006AC1;background-color:#ffffff;max-width:100%;}
     color: #354346;
     background: #EEEEEE;
 }
-ul.breadcrumb{display:none !important;
-
+ul.breadcrumb{display:none !important;}
 .custom-radio label span.paypal_sum{
-  width: auto;
-  background: transparent;
-  border: none;
-  margin-left: 0;
+    width: auto;
+    background: transparent;
+    border: none;
+    margin-left: 0;
 }
 .custom-radio label span.paypal_sum:before{
-  display: none;
+    display: none;
 }
+.marg_but {
+    font-size: 14px;
+    padding: 9px 12px;}
+/*1005*/
+.btn_xs_path{
+    padding: 3px 8px;
+    font-size: 16px;
+}
+.path_table{border-bottom: 2px solid #4C648E;}
+/*.table-art hr{border-top:2px solid #CCCCCC}*/
+.push-down-tiny2{padding-top: 2px!important;}

@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
           [
             'attribute'=>'type',
             'format' => 'raw',
-            'filter'=> AdditionalServicesList::typeList(),
+            //'filter'=> AdditionalServicesList::typeList(),
             'value' => function ($model, $key, $index, $column) {
                 return $model->getTypeText();
             },
