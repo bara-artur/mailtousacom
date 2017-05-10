@@ -1118,8 +1118,7 @@ function init_superCheckbox_processing() {
 function init_scaner(){
 
 }
-<<<<<<<<< Temporary merge branch 1
-=========
+
 
 $(function(){
     $('#more').click(function(){
@@ -1155,4 +1154,3 @@ function init_invoice_save(order_id){
     },'JSON');
   })
 }
->>>>>>>>> Temporary merge branch 2
