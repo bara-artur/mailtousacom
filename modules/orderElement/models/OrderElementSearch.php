@@ -21,7 +21,7 @@ class OrderElementSearch extends OrderElement
     {
         return [
             [['id', 'status',
-              'payment_state'], 'integer'],
+              'payment_state','archive'], 'integer'],
             [['first_name', 'last_name', 'company_name', 'adress_1', 'adress_2',
                'city', 'zip', 'phone', 'state','created_at', 'transport_data',
                'transport_data_to','created_at_to','user_id','payment_state','price','price_end','track_number'], 'safe'],
@@ -74,6 +74,7 @@ class OrderElementSearch extends OrderElement
           'status' => $this->status,
           'payment_state' => $this->payment_state,
           'track_number' => $this->track_number,
+          'archive' => $this->archive,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])

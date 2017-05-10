@@ -51,46 +51,12 @@ $this->title = 'Shipping to USA and Canada';
               'disabled'=>true,
             ]); ?>
             <div class="btn-group">
-            <button type="button" class="btn btn-md btn-blue-gem dropdown-toggle InSystem_show Draft_show difUserIdHide difScanerHide" data-toggle="dropdown">
-                <span class="glyphicon glyphicon-print"></span> Print
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu pull-right">
-                <li>
-                  <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group/print'], [
-                    'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
-                    'id'=>'group-print',
-                    'disabled'=>true,
-                    'target' => '_blank',
-                  ]); ?>
-                </li>
-              <li>
-                <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest(for each)', ['/orderElement/group/print_for_each'], [
-                  'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print',
-                  'id'=>'group-print',
-                  'disabled'=>true,
-                  'target' => '_blank',
-                ]); ?>
-              </li>
-                <li>
-                  <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group/advanced_print'],
-                    [
-                      'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print-advanced',
-                      'id'=>'group-print-advanced',
-                      'disabled'=>true,
-                      'target' => '_blank',
-                    ]); ?>
-                </li>
-                <li>
-                  <?=Html::a('<i class="fa fa-list"></i> Commercial Invoice', ['/orderElement/group/commercial_inv_print'],
-                    [
-                      'class' => 'btn btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
-                      'id'=>'group-print-advanced',
-                      'disabled'=>true,
-                      'target' => '_blank',
-                    ]); ?>
-                </li>
-              </ul>
+              <?=Html::a('Print', ['/orderElement/group/print'],
+                [
+                  'role'=>'modal-remote',
+                  'class'=>'btn btn-info InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
+                ]
+              ); ?>
             </div>
             <?=Html::a('<i class="icon-metro-remove"></i> Delete',
                 ['/orderElement/group/delete'],

@@ -130,6 +130,7 @@ class SiteController extends Controller
         if (array_key_exists('OrderElementSearch', $query)) $query['OrderElementSearch'] += ['user_id' => Yii::$app->user->id];
         else $query['OrderElementSearch'] = ['user_id' => Yii::$app->user->id];
       }
+      $query['OrderElementSearch']['archive'] = 0; //  не выводим архивные посылки на главную
 
       $searchModel = new OrderElementSearch();
       $dataProvider = $searchModel->search($query,$time_to);
@@ -149,7 +150,57 @@ class SiteController extends Controller
       ]);
     }
 
-    /**
+    public function actionArchive()
+    {
+      if (Yii::$app->user->isGuest) {
+        return $this->render('index_login');
+      }
+      $admin = 0;
+      $user = User::find()->where(['id' => Yii::$app->user->id])->one();
+      if (($user!=null)&&($user->isManager())) $admin = 1;
+
+      $query['OrderElementSearch'] = Yii::$app->request->queryParams;
+      $time_to['created_at_to'] = null;
+      $time_to['transport_date_to'] = null;
+      // Загружаем фильтр из формы
+      $filterForm = new ElementFilterForm();
+      if(Yii::$app->request->post()) {
+        $filterForm = new ElementFilterForm(); // форма фильтра
+        $showTable = new ShowParcelTableForm(-1); // форма настройки столбцов таблицы
+        $showTable->load(Yii::$app->request->post());
+        if (($showTable->getAllFlags() != $user->parcelTableOptions)) {
+          $user->parcelTableOptions = $showTable->getAllFlags();
+
+          if ($user)$user->save();
+        }
+        $filterForm->load(Yii::$app->request->post());
+
+        $query['OrderElementSearch'] = $filterForm->toArray();
+        $time_to = ['created_at_to' => $filterForm->created_at_to];
+        $time_to += ['transport_date_to' => $filterForm->transport_data_to];
+        $time_to += ['price_end' => $filterForm->price_end];
+      }
+
+      //$query = Yii::$app->request->queryParams;
+      if ($admin==0) {
+        if (array_key_exists('OrderElementSearch', $query)) $query['OrderElementSearch'] += ['user_id' => Yii::$app->user->id];
+        else $query['OrderElementSearch'] = ['user_id' => Yii::$app->user->id];
+      }
+      $query['OrderElementSearch']['archive'] = 1; //  не выводим архивные посылки на главную
+
+      $showTable = new ShowParcelTableForm($user->parcelTableOptions);
+      $searchModel = new OrderElementSearch();
+      $dataProvider = $searchModel->search($query,$time_to);
+      return $this->render('archive',[
+        'admin' => $admin,
+        'dataProvider' => $dataProvider,
+        'showTable' => $showTable,
+        'filterForm' => $filterForm,
+
+      ]);
+    }
+
+  /**
      * Login action.
      *
      * @return string
