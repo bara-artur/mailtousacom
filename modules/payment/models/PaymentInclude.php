@@ -2,6 +2,7 @@
 
 namespace app\modules\payment\models;
 
+use app\modules\orderElement\models\OrderElement;
 use Yii;
 use app\modules\additional_services\models\AdditionalServices;
 
@@ -41,12 +42,6 @@ class PaymentInclude extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getElementTypeList(){
-      return [
-        "parcel",
-        "tracking number invoice"
-      ];
-    }
     /**
      * @inheritdoc
      */
@@ -70,10 +65,27 @@ class PaymentInclude extends \yii\db\ActiveRecord
       return PaymentsList::find()->where(['id'=>$this->payment_id])->one();
     }
 
-    public function generateTextStatus(){
-      $lst=PaymentInclude::getElementTypeList();
+    //Получаем услугу за которую платили
+    public function getUsluga(){
+      if($this->element_type==0){
+        return OrderElement::find()->where(['id'=>$this->element_id])->one();
+      }
+      if($this->element_type==1){
+        return AdditionalServices::find()->where(['id'=>$this->element_id])->one();
+      }
+    }
 
-      $txt='Payment for '.$lst[$this->element_type];
+    public function generateTextDescription(){
+
+      if($this->element_type==0){
+        $description="parcel";
+      }
+      if($this->element_type==1){
+        $usluga=$this->getUsluga();
+        $description=$usluga->getTitle();
+      }
+
+      $txt='Payment for '.$description;
 
       if($this->status==-1){
         $txt.="<span style='color:red;'> Refusal</span>";
@@ -88,7 +100,7 @@ class PaymentInclude extends \yii\db\ActiveRecord
       //для ивойсов меняем статус оплаты на 2(оплачен)
       if ($this->element_type == 1) {
         $additional_services = AdditionalServices::find()
-          ->where(['type' => 1, 'parcel_id_lst' => $this->element_id])
+          ->where(['id' => $this->element_id])
           ->one();
         $additional_services->status_pay = 2;
         $additional_services->save();
