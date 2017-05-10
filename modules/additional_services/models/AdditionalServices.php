@@ -79,7 +79,7 @@ class AdditionalServices extends \yii\db\ActiveRecord
       ])
       ->where([
         'element_type'=>1,
-        'element_id'=>$this->parcel_id_lst,
+        'element_id'=>$this->id,
         'status'=>1
       ])
       ->groupBy(['element_id'])

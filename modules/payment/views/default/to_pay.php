@@ -17,7 +17,7 @@ CrudAsset::register($this);
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Order payment';
+$this->title = $order_id?'Order payment':'Invoice payment';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -28,7 +28,7 @@ $submitOption = [
 ?>
 <?php Pjax::begin(); ?>
 <form id="crud-datatable-pjax" class=""  method="post" >
-    <h4 class="modernui-neutral2">Order payment</h4>
+    <h4 class="modernui-neutral2"><?=$this->title;?></h4>
     <?php
     if($order_service && count($order_service)>0) {
         ?>
@@ -36,6 +36,11 @@ $submitOption = [
         <div class="table table-responsive">
             <table class="table table-art" id="crud-datatable-pjax">
                 <tr>
+                    <?php
+                    if(!$order_id){
+                        echo '<th>To pay</th>';
+                    }
+                    ?>
                     <th>Name</th>
                     <th>Date</th>
                     <th>Price</th>
@@ -50,6 +55,24 @@ $submitOption = [
                     $item_i += 1;
                     ?>
                     <tr>
+                        <?php
+                        if(!$order_id){
+                            $ch=in_array($as->id,$services_list);
+                            ?>
+                            <td>
+                                <?=Html::checkbox('ch_invoice_'.$as->id,$ch,[
+                                  'label' => '<span class="fa fa-check"></span>',
+                                  'class'=>'invoice_check_to_pay',
+                                  'disabled'=>$ch||$is_admin,
+                                  'price'=>$as->price,
+                                  'sum'=>$as->price+$as->qst+$as->gst,
+                                  'qst'=>$as->qst,
+                                  'gst'=>$as->gst,
+                                ]);;?>
+                            </td>
+                            <?php
+                        }
+                        ?>
                         <td><?= $as->getName(); ?></td>
                         <td><?= date(Yii::$app->config->get('data_time_format_php'), $as->create); ?></td>
                         <td align="right"><?=number_format((float)$as->price, 2, '.', '')?></td>
@@ -64,6 +87,11 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
+                            <?php
+                            if(!$order_id){
+                                echo '<td></td>';
+                            }
+                            ?>
                             <td align="left" colspan="2"><b>Paid</b></td>
                             <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
                             <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
@@ -75,11 +103,16 @@ $submitOption = [
                 }
                 ?>
                 <tr>
+                    <?php
+                    if(!$order_id){
+                        echo '<td></td>';
+                    }
+                    ?>
                     <td align="left" colspan="2"><b><span class="trans_count">Total to Pay</span></b></td>
-                    <td align="right"><?=number_format($total['service_price'],2);?></td>
-                    <td align="right"><?=number_format($total['service_qst'],2);?></td>
-                    <td align="right"><?=number_format($total['service_gst'],2);?></td>
-                    <td align="right"><span class="trans_count"><?=number_format($total['service_sum'],2);?></span></td>
+                    <td align="right" class="sub_price"><?=number_format($total['service_price'],2);?></td>
+                    <td align="right" class="sub_qst"><?=number_format($total['service_qst'],2);?></td>
+                    <td align="right" class="sub_gst"><?=number_format($total['service_gst'],2);?></td>
+                    <td align="right"><span class="trans_count sub_sum"><?=number_format($total['service_sum'],2);?></span></td>
                 </tr>
             </table>
 
@@ -172,6 +205,13 @@ $submitOption = [
         <div class="table-responsive">
             <table class="table table-condensed table-bordered">
                 <tr>
+                    <?php
+                    if(!$order_id){
+                        ?>
+                        <th>To pay</th>
+                        <?php
+                    }
+                    ?>
                     <th class=""><b>&nbsp;</b></th>
                     <th class="text-right"><b>Price</b></th>
                     <th class="text-right"><b>PST</b></th>
@@ -180,6 +220,24 @@ $submitOption = [
                 </tr>
 
                 <tr>
+                    <?php
+                    if(!$order_id){
+                        $ch=in_array($pac->id,$parcels_list);
+                        ?>
+                        <td>
+                            <?=Html::checkbox('v_ch_parcel_'.$pac->id,$ch,[
+                              'label' => '<span class="fa fa-check"></span>',
+                              'class'=>'invoice_check_to_pay',
+                              'disabled'=>$ch||$is_admin,
+                              'price'=>$pac->price,
+                              'sum'=>$pac->price+$pac->qst+$pac->gst,
+                              'qst'=>$pac->qst,
+                              'gst'=>$pac->gst,
+                            ]);;?>
+                        </td>
+                        <?php
+                    }
+                    ?>
                     <td class=""><b>By tariff</b></td>
                     <td align="right"><?=number_format($pac->price,2);?></td>
                     <td align="right"><?=number_format($pac->qst,2);?></td>
@@ -193,6 +251,11 @@ $submitOption = [
                     $tot_col++;
                     ?>
                     <tr>
+                        <?php
+                        if(!$order_id){
+                            echo '<td></td>';
+                        }
+                        ?>
                         <td class=""><b>Paid</b></td>
                         <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
                         <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
@@ -208,6 +271,24 @@ $submitOption = [
                     $tot_col++;
                     ?>
                     <tr>
+                        <?php
+                        if(!$order_id){
+                            $ch=in_array($as->id,$services_list);
+                            ?>
+                            <td rowspan="2">
+                                <?=Html::checkbox('v_ch_invoice_'.$as->id,$ch,[
+                                  'label' => '<span class="fa fa-check"></span>',
+                                  'class'=>'invoice_check_to_pay',
+                                  'disabled'=>$ch||$is_admin,
+                                  'price'=>$as->price,
+                                  'sum'=>$as->price+$as->qst+$as->gst,
+                                  'qst'=>$as->qst,
+                                  'gst'=>$as->gst,
+                                ]);;?>
+                            </td>
+                            <?php
+                        }
+                        ?>
                         <td align="left"><b>Service fee</b></td>
                         <td align="right"><?=number_format($invoice->price,2);?></td>
                         <td align="right"><?=number_format($invoice->qst,2);?></td>
@@ -228,6 +309,11 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
+                            <?php
+                            if(!$order_id){
+                                echo '<td></td>';
+                            }
+                            ?>
                             <td align="left"><b>Paid</b></td>
                             <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
                             <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
@@ -243,6 +329,24 @@ $submitOption = [
                     $tot_col++;
                     ?>
                     <tr>
+                        <?php
+                        if(!$order_id){
+                            $ch=in_array($as->id,$services_list);
+                            ?>
+                            <td>
+                                <?=Html::checkbox('v_ch_invoice_'.$as->id,$ch,[
+                                  'label' => '<span class="fa fa-check"></span>',
+                                  'class'=>'invoice_check_to_pay',
+                                  'disabled'=>$ch||$is_admin,
+                                  'price'=>$as->price,
+                                  'sum'=>$as->price+$as->qst+$as->gst,
+                                  'qst'=>$as->qst,
+                                  'gst'=>$as->gst,
+                                ]);;?>
+                            </td>
+                            <?php
+                        }
+                        ?>
                         <td align="left"><b><?=$as->getName();?></b></td>
                         <td align="right"><?=number_format($as->price,2);?></td>
                         <td align="right"><?=number_format($as->qst,2);?></td>
@@ -250,15 +354,38 @@ $submitOption = [
                         <td align="right"><?=number_format($as->price+$as->gst+$as->qst,2);?></td>
                     </tr>
                     <?php
+                    //получаем данные о уже осуществленных платежах
+                    $paySuccessful=$as->paySuccessful;
+                    if($paySuccessful AND count($paySuccessful)>0){
+                        ?>
+                        <tr>
+                            <?php
+                            if(!$order_id){
+                                echo '<td></td>';
+                            }
+                            ?>
+                            <td align="left"><b>Paid</b></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
+                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                        </tr>
+                        <?php
+                    };
                 }
                 if($tot_col>0){
                     ?>
                     <tr>
+                        <?php
+                        if(!$order_id){
+                            echo '<td></td>';
+                        }
+                        ?>
                         <td align="left"><b><span class="trans_count">Total to Pay</span></b></td>
-                        <td align="right"><?=number_format($pac->sub_total['price'],2);?></td>
-                        <td align="right"><?=number_format($pac->sub_total['qst'],2);?></td>
-                        <td align="right"><?=number_format($pac->sub_total['gst'],2);?></td>
-                        <td align="right"><span class="trans_count"><?=number_format($pac->sub_total['sum'],2);?></span></td>
+                        <td align="right" class="sub_price"><?=number_format($pac->sub_total['price'],2);?></td>
+                        <td align="right" class="sub_qst"><?=number_format($pac->sub_total['qst'],2);?></td>
+                        <td align="right" class="sub_gst"><?=number_format($pac->sub_total['gst'],2);?></td>
+                        <td align="right"><span class="trans_count sub_sum"><?=number_format($pac->sub_total['sum'],2);?></span></td>
                     </tr>
                     <?php
                 }
@@ -358,8 +485,13 @@ $submitOption = [
                 "%+$".
                 Yii::$app->config->get('paypal_commision_fixed').
                 "= $".
+                "<span
+                    class=paypal_sum
+                    paypal_commision_dolia=".Yii::$app->config->get('paypal_commision_dolia')."
+                    paypal_commision_fixed=".Yii::$app->config->get('paypal_commision_fixed')."
+                >".
                 number_format($total['pay_pal'],2,"."," ").
-                ")",
+                "</span>)",
               2 => "I will pay at warehouse"
             ];
             if(Yii::$app->user->identity->month_pay==1){
@@ -441,8 +573,10 @@ $submitOption = [
                 <?=Html::a('Return to payment list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);?>
                 <?php
                 if(Yii::$app->user->identity->isManager()){
-                    if (Yii::$app->user->can('trackInvoice')) {
+                    if (Yii::$app->user->can('trackInvoice') && $order_id) {
                         echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Create invoice', ['/invoice/create/' . $order_id], ['class' => 'btn btn-default pull-left']);
+                    }else{
+                        //echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Edit invoice', ['/invoice/edit/' . $inv_id], ['class' => 'btn btn-default pull-left']);
                     }
                     if($total['price']>0){
                         //админ может принимать платеж и это необходимо сделать
@@ -450,7 +584,10 @@ $submitOption = [
                             //админ может принимать посылки
                             if(Yii::$app->user->can("takeParcel")){
                                 //принять посылку и оплату
-                                echo Html::submitButton('Customer paid order. Accept the order for the receiving point.', ['class' => 'btn btn-success pull-right']);
+                                echo Html::submitButton($order_id?
+                                  'Customer paid order. Accept the order for the receiving point.':
+                                  'Take pay for invoice'
+                                  , ['class' => 'btn btn-success pull-right']);
                             }else{
                                 //принять деньги. Посылка остается у клиента.
                                 echo Html::submitButton('Customer paid order.', ['class' => 'btn btn-success pull-right']);
