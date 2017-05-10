@@ -51,6 +51,12 @@ $this->title = 'Shipping to USA and Canada';
               'disabled'=>true,
             ]); ?>
             <div class="btn-group">
+              <?=Html::a('Print', ['/orderElement/group/print'],
+                [
+                  'role'=>'modal-remote',
+                  'class'=>'btn btn-neutral-border  show_modal',
+                ]
+              ); ?>
             <button type="button" class="btn btn-md btn-blue-gem dropdown-toggle InSystem_show Draft_show difUserIdHide difScanerHide" data-toggle="dropdown">
                 <span class="glyphicon glyphicon-print"></span> Print
                 <span class="caret"></span>

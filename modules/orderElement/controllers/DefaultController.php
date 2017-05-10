@@ -14,6 +14,7 @@ use \yii\web\Response;
 use yii\helpers\Html;
 use app\components\ParcelPrice;
 use yii\web\UploadedFile;
+use app\modules\user\models\User;
 
 /**
  * DefaultController implements the CRUD actions for OrderElement model.
@@ -376,18 +377,35 @@ class DefaultController extends Controller
   }
 
   public function actionGroupPrint($parcels_id=null,$for_each=false){
+    $request=Yii::$app->request;
+    if ($request->isAjax){
+      if($request->isGet){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = OrderElement::find()->one();
+        return [
+          'title'=> "Print",
+          'content'=>$this->renderAjax('print_form', [
+            'model' => $model
+          ]),
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+        ];
+      }else{
+        return var_dump(2222222);
+      }
+    }else {
       $order_id = $this->findOrCreateOrder($parcels_id);
       if ($order_id != null) {
-        if($for_each) {
+        if ($for_each) {
           $this->redirect(['/orderInclude/border-form-pdf-for-each/' . $order_id]);
-        }else {
+        } else {
           $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
         }
-        return "Create pdf for order " .  $order_id;
+        return "Create pdf for order " . $order_id;
       } else {
-        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter', 'value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
         return $this->redirect(['/']);
       }
+    }
   }
 
   //Выводим спсок файлов для посвлки
