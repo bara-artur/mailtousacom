@@ -54,7 +54,7 @@ $this->title = 'Shipping to USA and Canada';
               <?=Html::a('Print', ['/orderElement/group/print'],
                 [
                   'role'=>'modal-remote',
-                  'class'=>'btn btn-neutral-border  show_modal',
+                  'class'=>'btn btn-info InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
                 ]
               ); ?>
             </div>
