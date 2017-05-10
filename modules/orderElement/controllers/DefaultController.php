@@ -379,9 +379,10 @@ class DefaultController extends Controller
   public function actionGroupPrint($parcels_id=null,$for_each=false){
     $request=Yii::$app->request;
     if ($request->isAjax){
+      Yii::$app->response->format = Response::FORMAT_JSON;
       if($request->isGet){
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = OrderElement::find()->one();
+        $arr = explode(',', $parcels_id);
+        $model = OrderElement::find()->where(['id' => $arr[0]])->one();
         return [
           'title'=> "Print",
           'content'=>$this->renderAjax('print_form', [
@@ -390,7 +391,19 @@ class DefaultController extends Controller
           'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
         ];
       }else{
-        return var_dump(2222222);
+        if ($request->isPost){
+          $parcels_id = $_COOKIE['parcelCheckedId'];
+          $arr = explode(',', $parcels_id);
+          foreach ($arr as $id){
+            $model = OrderElement::find()->where(['id' => $id])->one();
+            if ($model) {
+              $model->transport_data = strtotime($_POST['transport_data']);
+              $model->save();
+            }
+          }
+          return strtotime($_POST['transport_data']);
+        }
+        return 0;
       }
     }else {
       $order_id = $this->findOrCreateOrder($parcels_id);
