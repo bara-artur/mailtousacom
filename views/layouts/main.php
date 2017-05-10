@@ -75,7 +75,10 @@ AppAsset::register($this);
                             . Html::a('Receiving points', ['/receiving_points/'], ['class' => 'profile-link'])
                         .'</li>'
                         .'<li>'
-                            . Html::a('System configuration', ['/config//'], ['class' => 'profile-link'])
+                            . Html::a('System configuration', ['/config/'], ['class' => 'profile-link'])
+                        .'</li>'
+                        .'<li>'
+                            . Html::a('Additional services', ['/additional_services/config'], ['class' => 'profile-link'])
                         .'</li>'
                     .'<li>'
                     . Html::a('My Profile', ['/profile/'], ['class' => 'profile-link'])

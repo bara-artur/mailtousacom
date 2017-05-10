@@ -22,7 +22,6 @@ $data=$dataProvider->getModels();
   if(Yii::$app->user->identity->isManager()) {
     ?>
     <p>Payment create by: <?=$payment->getUser()->getLineInfo();?></p>
-    <p>Order create by: <?=$payment->getClient()->getLineInfo();?></p>
     <?php
   }
   ?>
@@ -68,8 +67,7 @@ $data=$dataProvider->getModels();
     </tr>
   <?php
     foreach ($data as $k =>$item){
-      //d($item);
-      $description=$item->generateTextStatus();
+      $description=$item->generateTextDescription();
       if($routing == 'parcel' && $item->status==0) {
         $description.=" <span style='color:orange'>Not pay</span>";
       }

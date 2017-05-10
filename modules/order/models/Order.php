@@ -7,6 +7,9 @@ use app\modules\orderElement\models\OrderElement;
 use app\modules\user\models\User;
 use yii\db\Query;
 use app\modules\address\models\Address;
+use app\modules\additional_services\models\AdditionalServicesList;
+use app\modules\additional_services\models\AdditionalServices;
+use app\components\ParcelPrice;
 
 /**
  * This is the model class for table "order".
@@ -55,8 +58,58 @@ class Order extends \yii\db\ActiveRecord
         return OrderElement::find()->where(['id' =>explode(',',$this->el_group)])->all();
     }
 
+    public function addAdditionalService($service){
+      $tpl=AdditionalServicesList::find()->where(['id'=>$service,'active'=>1])->one();
 
-    /**
+      if($tpl->type==1){
+        $items=$this->getOrderElement();
+        foreach ($items as $pac){
+          $pac->addAdditionalService($service,false);
+        }
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'info',
+            'The service has been added to the selection of parcels in the sample.'
+          );
+      }else{
+        $el=NEW AdditionalServices;
+        $el->type=$service;
+        $el->client_id=$this->client_id;
+        $el->user_id=Yii::$app->user->id;
+        $el->parcel_id_lst=(string)$this->el_group;
+        $el->price=$tpl->base_price;
+        $el->group_id=1;
+        $el->kurs=Yii::$app->config->get('USD_CAD');
+        $el->create=time();
+        $el->save();
+
+        Yii::$app
+          ->getSession()
+          ->setFlash(
+            'info',
+            'The service is added to the parcel selection.'
+          );
+      }
+
+      return true;
+    }
+
+
+    public function getAdditionalService(){
+      $el=AdditionalServices::find();
+
+      $els=explode(',',$this->el_group);
+      foreach($els as $pac){
+        $el->orWhere(['parcel_id_lst'=>$pac]);
+        $el->orWhere(['like','parcel_id_lst','%,'.$pac.',%',false]);
+        $el->orWhere(['like','parcel_id_lst',$pac.',%',false]);
+        $el->orWhere(['like','parcel_id_lst','%,'.$pac,false]);
+      }
+      $el->andWhere(['group_id'=>1]);
+      $el=$el->all();
+      return $el;
+    }   /**
      * @inheritdoc
      */
     public function rules()
@@ -85,8 +138,13 @@ class Order extends \yii\db\ActiveRecord
         ];
     }
 
+    //Собираем сумарные даные по заказу (в основном для PDF)
   public function getSumData($id,$test_data=false){
     $order_elements = $this->getOrderElement();
+
+    if(Yii::$app->user->can('changeTariff')){
+      $test_data=false;
+    };
 
     $total=array(
       'price'=>0,
@@ -110,8 +168,10 @@ class Order extends \yii\db\ActiveRecord
         $max_time =
           time() +
           (24-Yii::$app->config->get($param_name)) * 60 * 60;
+        //d($pac->transport_data);
+        //ddd($max_time);
         if ($pac->transport_data < $max_time) {
-          $pac->transport_data = strtotime('+1 days');
+          $pac->transport_data = $max_time;
         }
       }
       $sub_total=0;
@@ -215,5 +275,234 @@ class Order extends \yii\db\ActiveRecord
       }
     }
     //$users=User::find()->where(['id' => $users])->all();
+  }
+
+  public function getPaymentData($services_list=false,$parcels_list=false){
+    $request = Yii::$app->request;
+    $pay_array=array(); //для сохранения данных об оплате
+
+    $el_group=$this->orderElement;
+
+    $user_id=$el_group[0]->user_id;
+
+    //Проверяем что б пользователю хватало прав на просмотр
+    if(!Yii::$app->user->identity->isManager() && $user_id!=Yii::$app->user->identity->id){
+      throw new NotFoundHttpException('You can pay only for your packages.');
+    }
+
+    if(Yii::$app->user->identity->isManager()){
+      $user=User::find()->where(['id'=>$user_id])->one();
+    }else{
+      $user=Yii::$app->user->identity;
+    }
+
+    //узнаем налог пользователя
+    $tax=$user->getTax();
+    if(!$tax){
+      Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
+      return $this->redirect(['/']);
+    }
+
+    $total=array(
+      'price'=>0,
+      'gst'=>0,
+      'qst'=>0,
+      'service_price'=>0,
+      'service_gst'=>0,
+      'service_qst'=>0,
+    );
+
+    $pays_total=array(
+      'price'=>0,
+      'gst'=>0,
+      'qst'=>0
+    );
+
+    //проверяем посылки на принадлежность пользователю и при необходимости делаем пересчет цены
+    foreach ($el_group as &$pac) {
+      $save_to_pay=!$request->post('agree_'.$pac->id);
+      $sub_total=array(
+        'price'=>0,
+        'gst'=>0,
+        'qst'=>0
+      );
+
+      //проверка принадлежности
+      if ($user_id != $pac->user_id) {
+        throw new NotFoundHttpException('You can not pay parcels for different users.');
+      }
+
+      //проверка необходимости пересчета
+      if($pac->status<2 || $pac->price==0){
+        $pac->price=(float)ParcelPrice::widget(['weight'=>$pac->weight,'user'=>$user_id]);
+        $pac->qst=round($pac->price*$tax['qst']/100,2);
+        $pac->gst=round($pac->price*$tax['gst']/100,2);
+        $pac->save();
+      };
+
+      $ch=$this->id||in_array($pac->id,$parcels_list)||$request->post('ch_parcel_'.$pac->id);
+
+      if($ch){
+        $sub_total['price']+=round($pac->price,2);
+        $sub_total['qst']+=round($pac->qst,2);
+        $sub_total['gst']+=round($pac->gst,2);
+
+        //получаем данные о уже осуществленных платежах
+        $paySuccessful=$pac->paySuccessful;
+        if($paySuccessful AND count($paySuccessful)>0){
+          $sub_total['price']-=round($paySuccessful[0]['price'],2);
+          $sub_total['qst']-=round($paySuccessful[0]['qst'],2);
+          $sub_total['gst']-=round($paySuccessful[0]['gst'],2);
+        };
+
+        //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
+        if($sub_total['price']>0) {
+          $pay_array[] = [
+            'element_id' => $pac->id,
+            'element_type' => 0,
+            'status' => $save_to_pay ? 0 : -1,
+            'comment' => $save_to_pay ? '' : $request->post('text_not_agree_' . $pac->id),
+            'price' => round($sub_total['price'], 2),
+            'qst' => round($sub_total['qst'], 2),
+            'gst' => round($sub_total['gst'], 2),
+          ];
+          if ($save_to_pay) {
+            $pays_total['price'] += $sub_total['price'];
+            $pays_total['qst'] += $sub_total['qst'];
+            $pays_total['gst'] += $sub_total['gst'];
+          }
+        }
+      }
+
+      //получаем данные о инвойсах
+      $invoices=$pac->getAdditionalServiceList(true);
+      foreach($invoices as $invoice){
+        //для инвойса  храним все в промежуточном массиве
+        $invoice_total=array();
+        $invoice_total['price']=$invoice->price;
+        $invoice_total['qst']=$invoice->qst;
+        $invoice_total['gst']=$invoice->gst;
+
+        $invoice_total['price']+=$invoice->dop_price;
+        $invoice_total['qst']+=$invoice->dop_qst;
+        $invoice_total['gst']+=$invoice->dop_gst;
+
+        //получаем данные о уже осуществленных платежах
+        $paySuccessful=$invoice->paySuccessful;
+        if($paySuccessful AND count($paySuccessful)>0){
+          $invoice_total['price']-=$paySuccessful[0]['price'];
+          $invoice_total['qst']-=$paySuccessful[0]['qst'];
+          $invoice_total['gst']-=$paySuccessful[0]['gst'];
+        };
+
+        $ch=$this->id||in_array($invoice->id,$services_list)||$request->post('v_ch_invoice_'.$invoice->id);
+        if($ch) {
+          //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
+          if ($invoice_total['price'] > 0) {
+            $pay_array[] = [
+              'element_id' => $invoice->id,
+              'element_type' => 1,
+              'status' => $save_to_pay ? 0 : -1,
+              'comment' => $save_to_pay ? '' : $request->post('text_not_agree_' . $pac->id),
+              'price' => $invoice_total['price'],
+              'qst' => $invoice_total['qst'],
+              'gst' => $invoice_total['gst'],
+            ];
+
+            if ($save_to_pay) {
+              $pays_total['price'] += $invoice_total['price'];
+              $pays_total['qst'] += $invoice_total['qst'];
+              $pays_total['gst'] += $invoice_total['gst'];
+            }
+          }
+
+          $sub_total['price'] += $invoice_total['price'];
+          $sub_total['qst'] += $invoice_total['qst'];
+          $sub_total['gst'] += $invoice_total['gst'];
+        }
+      }
+      $sub_total=[
+        'price'=>round($sub_total['price'],2),
+        'qst'=>round($sub_total['qst'],2),
+        'gst'=>round($sub_total['gst'],2),
+      ];
+
+      $sub_total['vat']=$sub_total['gst']+$sub_total['qst'];
+      $sub_total['sum']=$sub_total['price']+$sub_total['vat'];
+
+      $pac->sub_total=$sub_total;
+
+      $total['price']+=$sub_total['price'];
+      $total['qst']+=$sub_total['qst'];
+      $total['gst']+=$sub_total['gst'];
+    }
+
+    $save_to_pay=!$request->post('agree_service');
+    $order_service=$order_service=$this->getAdditionalService();
+    foreach ($order_service as $as) {
+
+      $ch=$this->id||in_array($as->id,$services_list)||$request->post('v_ch_invoice_'.$as->id);
+
+      if($ch) {
+        $service_price = $as['price'];
+        $service_qst = $as['qst'];
+        $service_gst = $as['gst'];
+        $paySuccessful = $as->paySuccessful;
+        if ($paySuccessful AND count($paySuccessful) > 0) {
+          $service_price -= $paySuccessful[0]['price'];
+          $service_qst -= $paySuccessful[0]['qst'];
+          $service_gst -= $paySuccessful[0]['gst'];
+        }
+
+        $total['service_price'] += $service_price;
+        $total['service_qst'] += $service_qst;
+        $total['service_gst'] += $service_gst;
+
+        //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
+        if ($service_price > 0) {
+          $pay_array[] = [
+            'element_id' => $as->id,
+            'element_type' => 1,
+            'status' => $save_to_pay ? 0 : -1,
+            'comment' => $save_to_pay ? '' : $request->post('text_not_agree_service'),
+            'price' => $service_price,
+            'qst' => $service_qst,
+            'gst' => $service_gst,
+          ];
+
+          if ($save_to_pay) {
+            $pays_total['price'] += $service_price;
+            $pays_total['qst'] += $service_qst;
+            $pays_total['gst'] += $service_gst;
+          }
+        }
+      }
+    }
+
+    $total['service_vat']=$total['service_qst']+$total['service_gst'];
+    $total['service_sum']=$total['service_price']+$total['service_vat'];
+
+    $total['price']+=$total['service_price'];
+    $total['qst']+=$total['service_qst'];
+    $total['gst']+=$total['service_gst'];
+
+    $total['vat']=$total['qst']+$total['gst'];
+    $total['sum']=$total['price']+$total['vat'];
+
+    $total['pay_pal']=$total['sum']*(1+Yii::$app->config->get('paypal_commision_dolia')/100)+
+      Yii::$app->config->get('paypal_commision_fixed');
+    //ddd($pay_array);
+    return [
+      'order_id'=>$this->id,
+      'paces'=>$el_group,
+      'total'=>$total,
+      'user'=>$user,
+      'order_service'=>$order_service,
+      'pay_array'=>$pay_array,
+      'pays_total'=>$pays_total,
+      'is_admin'=>Yii::$app->user->identity->isManager(),
+      'parcels_list'=>$parcels_list,
+      'services_list'=>$services_list,
+    ];
   }
 }

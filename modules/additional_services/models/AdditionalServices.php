@@ -23,6 +23,8 @@ use app\modules\payment\models\PaymentInclude;
  */
 class AdditionalServices extends \yii\db\ActiveRecord
 {
+
+  public $additionalInfo = false;
     /**
      * @inheritdoc
      */
@@ -77,7 +79,7 @@ class AdditionalServices extends \yii\db\ActiveRecord
       ])
       ->where([
         'element_type'=>1,
-        'element_id'=>$this->parcel_id_lst,
+        'element_id'=>$this->id,
         'status'=>1
       ])
       ->groupBy(['element_id'])
@@ -91,9 +93,20 @@ class AdditionalServices extends \yii\db\ActiveRecord
     $st=AdditionalServices::getStatusList();
     return isset($st[$this->status_pay])?$st[$this->status_pay]:'-';
   }
+
   public function getTextType(){
     $st=AdditionalServices::getTypeList();
     return isset($st[$this->type])?$st[$this->type]:'-';
+  }
+
+  /**
+   * Получам название услуги
+   */
+  public function getTitle()
+  {
+    $title=AdditionalServicesList::find()->where(['id'=>$this->type])->one();
+    if(!$title)return 'error';
+    return $title->name;
   }
 
     /**
@@ -115,5 +128,12 @@ class AdditionalServices extends \yii\db\ActiveRecord
             'gst' => 'Gst',
             'qst' => 'Qst',
         ];
+    }
+
+    public function getName(){
+      if(!$this->additionalInfo){
+        $this->additionalInfo=AdditionalServicesList::find()->where(['id'=>$this->type])->one();
+      }
+      return $this->additionalInfo->name;
     }
 }

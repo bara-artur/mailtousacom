@@ -22,6 +22,7 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use \yii\web\Response;
 use app\modules\additional_services\models\AdditionalServices;
+use app\modules\invoice\models\Invoice;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -75,7 +76,7 @@ class DefaultController extends Controller
 
     // ...set `$this->enableCsrfValidation` here based on some conditions...
     // call parent method that will check CSRF if such property is true.
-    if ($action->id === 'order') {
+    if ($action->id === 'order' || $action->id === 'invoice') {
       # code...
       $this->enableCsrfValidation = false;
     }
@@ -148,7 +149,6 @@ class DefaultController extends Controller
    */
   public function actionOrder($id){
 
-    $pay_array=array(); //для сохранения данных об оплате
     $request = Yii::$app->request;
 
     $order = Order::findOne($id);
@@ -159,163 +159,8 @@ class DefaultController extends Controller
       throw new NotFoundHttpException('There is no data for payment.');
     };
 
-    $el_group=$order->orderElement;
-    $user_id=$el_group[0]->user_id;
-
-    //Проверяем что б пользователю хватало прав на просмотр
-    if(!Yii::$app->user->identity->isManager() && $user_id!=Yii::$app->user->identity->id){
-      throw new NotFoundHttpException('You can pay only for your packages.');
-    }
-
-    if(Yii::$app->user->identity->isManager()){
-      $user=User::find()->where(['id'=>$user_id])->one();
-    }else{
-      $user=Yii::$app->user->identity;
-    }
-
-    //узнаем налог пользователя
-    $query = new Query;
-    $query->select('state')
-      ->from('new_address')
-      ->where(['user_id'=>$user_id]);
-    $row = $query->one();
-
-    if(!$row){
-      Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
-      return $this->redirect(['/']);
-    }
-    $user_state=$row['state'];
-
-    $query = new Query;
-    $query->select(['qst','gst'])
-      ->from('state')
-      ->where(['name'=>$user_state]);
-    $tax = $query->one();
-
-    $total=array(
-      'price'=>0,
-      'gst'=>0,
-      'qst'=>0
-    );
-
-    $pays_total=array(
-      'price'=>0,
-      'gst'=>0,
-      'qst'=>0
-    );
-
-    //проверяем посылки на принадлежность пользователю и при необходимости делаем пересчет цены
-    foreach ($el_group as &$pac) {
-      $save_to_pay=!$request->post('agree_'.$pac->id);
-      $sub_total=array(
-        'price'=>0,
-        'gst'=>0,
-        'qst'=>0
-      );
-
-      //проверка принадлежности
-      if ($user_id != $pac->user_id) {
-        throw new NotFoundHttpException('You can not pay parcels for different users.');
-      }
-
-      //проверка необходимости пересчета
-      if($pac->status<2 || $pac->price==0){
-        $pac->price=(float)ParcelPrice::widget(['weight'=>$pac->weight,'user'=>$user_id]);
-        $pac->qst=round($pac->price*$tax['qst']/100,2);
-        $pac->gst=round($pac->price*$tax['gst']/100,2);
-        $pac->save();
-      };
-
-      $sub_total['price']+=round($pac->price,2);
-      $sub_total['qst']+=round($pac->qst,2);
-      $sub_total['gst']+=round($pac->gst,2);
-
-      //получаем данные о уже осуществленных платежах
-      $paySuccessful=$pac->paySuccessful;
-      if($paySuccessful AND count($paySuccessful)>0){
-        $sub_total['price']-=round($paySuccessful[0]['price'],2);
-        $sub_total['qst']-=round($paySuccessful[0]['qst'],2);
-        $sub_total['gst']-=round($paySuccessful[0]['gst'],2);
-      };
-
-      //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
-      if($sub_total['price']>0){
-        $pay_array[]=[
-          'element_id'=>$pac->id,
-          'element_type'=>0,
-          'status'=>$save_to_pay?0:-1,
-          'comment'=>$save_to_pay?'':$request->post('text_not_agree_'.$pac->id),
-          'price'=>round($sub_total['price'],2),
-          'qst'=>round($sub_total['qst'],2),
-          'gst'=>round($sub_total['gst'],2),
-        ];
-        if($save_to_pay){
-          $pays_total['price']+=$sub_total['price'];
-          $pays_total['qst']+=$sub_total['qst'];
-          $pays_total['gst']+=$sub_total['gst'];
-        }
-      }
-
-      //получаем данные о инвойсах
-      $invoice=$pac->trackInvoice;
-      if(!$invoice->isNewRecord){
-        //для инвойса  храним все в промежуточном массиве
-        $invoice_total=array();
-        $invoice_total['price']=$invoice->price;
-        $invoice_total['qst']=$invoice->qst;
-        $invoice_total['gst']=$invoice->gst;
-
-        $invoice_total['price']+=$invoice->dop_price;
-        $invoice_total['qst']+=$invoice->dop_qst;
-        $invoice_total['gst']+=$invoice->dop_gst;
-
-        //получаем данные о уже осуществленных платежах
-        $paySuccessful=$invoice->paySuccessful;
-        if($paySuccessful AND count($paySuccessful)>0){
-          $invoice_total['price']-=$paySuccessful[0]['price'];
-          $invoice_total['qst']-=$paySuccessful[0]['qst'];
-          $invoice_total['gst']-=$paySuccessful[0]['gst'];
-        };
-
-        //усли есть сумма к оплате добовляем ее к глобальному массиву платежа
-        if($invoice_total['price']>0){
-          $pay_array[]=[
-            'element_id'=>$pac->id,
-            'element_type'=>1,
-            'status'=>$save_to_pay?0:-1,
-            'comment'=>$save_to_pay?'':$request->post('text_not_agree_'.$pac->id),
-            'price'=>$invoice_total['price'],
-            'qst'=>$invoice_total['qst'],
-            'gst'=>$invoice_total['gst'],
-          ];
-
-          if($save_to_pay){
-            $pays_total['price']+=$invoice_total['price'];
-            $pays_total['qst']+=$invoice_total['qst'];
-            $pays_total['gst']+=$invoice_total['gst'];
-          }
-        }
-
-        $sub_total['price']+=$invoice_total['price'];
-        $sub_total['qst']+=$invoice_total['qst'];
-        $sub_total['gst']+=$invoice_total['gst'];
-      }
-      $sub_total=[
-        'price'=>round($sub_total['price'],2),
-        'qst'=>round($sub_total['qst'],2),
-        'gst'=>round($sub_total['gst'],2),
-      ];
-      $sub_total['vat']=$sub_total['gst']+$sub_total['qst'];
-      $sub_total['sum']=$sub_total['price']+$sub_total['vat'];
-
-      $pac->sub_total=$sub_total;
-
-      $total['price']+=$sub_total['price'];
-      $total['qst']+=$sub_total['qst'];
-      $total['gst']+=$sub_total['gst'];
-    }
-    $total['vat']=$total['qst']+$total['gst'];
-    $total['sum']=$total['price']+$total['vat'];
+    $pay_data=$order->getPaymentData();
+    $user_id=$pay_data['user']->id;
 
     //если пост запрос
     if($request->isPost) {
@@ -333,18 +178,18 @@ class DefaultController extends Controller
         }
 
         //Проверяем оплачено ли все. Если принимать деньги не надо то редиректим на стротовую и выдаем сообщение
-        if($total['price']==0) {
+        if($pay_data['total']['price']==0) {
           \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
           return $this->redirect(['/']);
         }
 
         //проверяем возможность приема платежа при приеме. Если нет то перебрасываем на стртовую.
-        if(!Yii::$app->user->can("takePay") && $total['sum']>0) {
+        if(!Yii::$app->user->can("takePay") && $pay_data['total']['sum']>0) {
           return $this->redirect(['/']);
         };
 
         //если есть раздрешения и выбрали оплату за месяц
-        if($user->month_pay==1 && $request->post('payment_type')==3){
+        if($pay_data['user']->month_pay==1 && $request->post('payment_type')==3){
           $order->setData([
             'payment_state'=>3,
           ]);
@@ -360,14 +205,14 @@ class DefaultController extends Controller
           'type' => 3,
           'status' => 1,
           'pay_time' => time(),
-          'price' => $pays_total['price'],
-          'qst' => $pays_total['qst'],
-          'gst' => $pays_total['gst'],
+          'price' => $pay_data['pays_total']['price'],
+          'qst' => $pay_data['pays_total']['qst'],
+          'gst' => $pay_data['pays_total']['gst'],
         ]);
         $pays->save();
 
         //Сохраняем детали платежа
-        foreach ($pay_array as $item) {
+        foreach ($pay_data['pay_array'] as $item) {
           $pay_include = new PaymentInclude();
           $pay_include->attributes=$item;
 
@@ -391,7 +236,7 @@ class DefaultController extends Controller
         //для пользователя
 
         //если есть раздрешения и выбрали оплату за месяц
-        if($user->month_pay==1 && $request->post('payment_type')==3){
+        if($pay_data['user']->month_pay==1 && $request->post('payment_type')==3){
           $order->setData([
             'payment_state'=>3,
           ]);
@@ -419,14 +264,14 @@ class DefaultController extends Controller
             'type' => 3,
             'status' => 0,
             'pay_time' => time(),
-            'price' => $pays_total['price'],
-            'qst' => $pays_total['qst'],
-            'gst' => $pays_total['gst'],
+            'price' => $pay_data['pays_total']['price'],
+            'qst' => $pay_data['pays_total']['qst'],
+            'gst' => $pay_data['pays_total']['gst'],
           ]);
           $pays->save();
 
           //Сохраняем детали платежа
-          foreach ($pay_array as $item) {
+          foreach ($pay_data['pay_array'] as $item) {
             $pay_include = new PaymentInclude();
             $pay_include->attributes=$item;
             $pay_include->payment_id = $pays->id;
@@ -451,14 +296,176 @@ class DefaultController extends Controller
       }
 
     }
-    $total['pay_pal']=$total['sum']*(1+Yii::$app->config->get('paypal_commision_dolia')/100)+
-      Yii::$app->config->get('paypal_commision_fixed');
-    return $this->render('to_pay', [
-      'order_id'=>$id,
-      'paces'=>$el_group,
-      'total'=>$total,
-      'user'=>$user,
-    ]);
+
+    return $this->render('to_pay', $pay_data);
+  }
+
+  //платеж по инвойсу
+  public function actionInvoice($id){
+    $request = Yii::$app->request;
+    $session = Yii::$app->session;
+
+    $invoice=Invoice::find()->where(['id'=>$id])->one();
+
+    $sel_pac=[];
+
+    $services_list=explode(',',$invoice->services_list);
+    $parcels_list=explode(',',$invoice->parcels_list);
+
+    $orderElement=AdditionalServices::find()
+      ->where(['id'=>$services_list])
+      ->asArray()
+      ->all();
+
+    foreach ($orderElement as $pac){
+      $pacs_id=explode(',',$pac['parcel_id_lst']);
+      foreach ($pacs_id as $id){
+        if(!in_array($id,$sel_pac)){
+          $sel_pac[]=$id;
+        }
+      }
+    };
+
+    foreach ($parcels_list as $id){
+      if(!in_array($id,$sel_pac)){
+        $sel_pac[]=$id;
+      }
+    }
+
+    $order=new Order();
+    $order->el_group=implode(',',$sel_pac);
+    $order->user_id=Yii::$app->user->id;
+
+    $pay_data=$order->getPaymentData($services_list,$parcels_list);
+
+    $pay_data['inv_id']=$id;
+
+    //если пост запрос
+    if($request->isPost) {
+      if(Yii::$app->user->identity->isManager()){
+        //Для админа
+
+        //Проверяем оплачено ли все. Если принимать деньги не надо то редиректим на стротовую и выдаем сообщение
+        if($pay_data['total']['price']==0) {
+          \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
+          return $this->redirect(['/']);
+        }
+
+        //проверяем возможность приема платежа при приеме. Если нет то перебрасываем на стртовую.
+        if(!Yii::$app->user->can("takePay") && $pay_data['$total']['sum']>0) {
+          return $this->redirect(['/']);
+        };
+
+        //если есть раздрешения и выбрали оплату за месяц
+        if($pay_data['user']->month_pay==1 && $request->post('payment_type')==3){
+          $order->setData([
+            'payment_state'=>3,
+          ]);
+
+          \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and accepted to the warehouse and is waiting for dispatch.');
+          return $this->redirect(['/']);
+        }
+
+        //в остальных случаях создаем платеж и проводим его
+        //Генерируем новый платеж оплаты налом
+        $pays = PaymentsList::create([
+          'client_id' => $pay_data['user']->id,
+          'type' => 3,
+          'status' => 1,
+          'pay_time' => time(),
+          'price' => $pay_data['pays_total']['price'],
+          'qst' => $pay_data['pays_total']['qst'],
+          'gst' => $pay_data['pays_total']['gst'],
+        ]);
+        $pays->save();
+
+        //Сохраняем детали платежа
+        foreach ($pay_data['pay_array'] as $item) {
+          $pay_include = new PaymentInclude();
+          $pay_include->attributes=$item;
+
+          //если нет отказа от элемента то принимаем оплату
+          if($pay_include->status==0){
+            $pay_include->status=1;
+          }
+          $pay_include->payment_id = $pays->id;
+          $pay_include->save();
+
+        };
+
+        $order->setData([
+          'payment_state'=>2,
+        ]);
+
+        \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse.');
+        return $this->redirect(['/']);
+
+      }else{
+        //для пользователя
+
+        //если есть раздрешения и выбрали оплату за месяц
+        if($pay_data['user']->month_pay==1 && $request->post('payment_type')==3){
+          $order->setData([
+            'payment_state'=>3,
+          ]);
+
+          \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and successfully issued.');
+          return $this->redirect(['/']);
+        }
+
+        //Когда выбрали оплату на точке
+        if($request->post('payment_type')==2){
+          //помечаем посылки как ожидаемые к принятию
+          $order->setData(['status'=>1,'payment_state'=>1]);
+          \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
+          return $this->redirect(['/']);
+        };
+
+        //Когда выбрали оплату paypal
+        if($request->post('payment_type')==1){
+          //Создоем экземпляр для оплаты через PayPal
+          $pay = new DoPayment();
+
+          //Генерируем новый платеж оплаты налом
+          $pays = PaymentsList::create([
+            'client_id' => $pay_data['user']->id,
+            'type' => 3,
+            'status' => 0,
+            'pay_time' => time(),
+            'price' => $pay_data['pays_total']['price'],
+            'qst' => $pay_data['pays_total']['qst'],
+            'gst' => $pay_data['pays_total']['gst'],
+          ]);
+          $pays->save();
+
+          //Сохраняем детали платежа
+          foreach ($pay_data['pay_array'] as $item) {
+            $pay_include = new PaymentInclude();
+            $pay_include->attributes=$item;
+            $pay_include->payment_id = $pays->id;
+            $pay_include->save();
+            $item_ = [
+              'name' => 'Type '.$item['element_type'].' id#' . $item['element_id'],
+              'vat' => $item['gst']+ $item['qst'],
+              'price'=>$item['price']
+            ];
+            $pay->addItem($item_);
+          };
+
+          $payment = $pay->make_payment();
+          $pays->code=$payment->getId();
+          $pays->save();
+
+          $session->set('last_pays',$pays->id);
+          $approvalUrl = $payment->getApprovalLink();
+          return $this->redirect($approvalUrl);
+
+        }
+      }
+
+    }
+
+    return $this->render('to_pay', $pay_data);
   }
 
   public function actionFinish(){
@@ -496,7 +503,7 @@ class DefaultController extends Controller
     return $this->return_last_order('Try later or contact your administrator.');
   }
 
-  public function actionTrackInvoice($id){
+  /*public function actionTrackInvoice($id){
     $order = Order::findOne($id);
 
     $session = Yii::$app->session;
@@ -544,7 +551,7 @@ class DefaultController extends Controller
         //если есть сумма к оплате добовляем ее к глобальному массиву платежа
         if($invoice_total['price']>0) {
           $pay_array[] = [
-            'element_id' => $pac->id,
+            'element_id' => $invoice->id,
             'element_type' => 1,
             'status' => 0,
             'comment' => '',
@@ -600,7 +607,7 @@ class DefaultController extends Controller
     $session->set('last_pays',$pays->id);
     $approvalUrl = $payment->getApprovalLink();
     return $this->redirect($approvalUrl);
-  }
+  }*/
 
   /**
    * Finds the PaymentsList model based on its primary key value.

@@ -39,8 +39,8 @@ $this->title = 'Shipping to USA and Canada';
               ]); ?>
             <?php }?>
             <?php if ($show_view_button==true){ ?>
-                <?=Html::a('<i class="icon-metro-location-2"></i> Tracking', ['/orderElement/group/track_invoice'], [
-                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide',
+                <?=Html::a('<i class="fa fa-credit-card"></i> Invoice', ['/orderElement/group/invoice'], [
+                    'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide_',
                     'id'=>'group-admin-view',
                 ]); ?>
             <?php }?>
@@ -271,7 +271,7 @@ $this->title = 'Shipping to USA and Canada';
                           'role'=>'modal-remote',
                           'title'=> 'View payments',
                           'data' => ['toggle'=>"tooltip"],
-                          'class'=>'btn btn-sm btn-success show_modal marg_but',
+                          'class'=>'btn btn-sm btn-pay show_modal big_model marg_but',
                         ]
                       );
                     $button_print_pdf = Html::a('<i class="fa fa-print"></i>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-science-blue-border marg_but','title'=> 'Print cargo manifest',
