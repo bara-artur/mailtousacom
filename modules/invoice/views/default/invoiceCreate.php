@@ -13,10 +13,9 @@ $this->title = 'Invoice';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
 <?php Pjax::begin();?>
 <?php $form = ActiveForm::begin(); ?>
-
+<h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
 
 
 <div class="row">

@@ -89,28 +89,17 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
-                            <?php
-                            if(!$order_id){
-                                echo '<td></td>';
-                            }
-                            ?>
-                            <td align="left" colspan="2"><b>Paid</b></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                            <td class="right" colspan="<?=$order_id?5:6;?>">
+                                <b>Paid</b>
+                            </td>
+                            <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                         </tr>
                         <?php
                     };
                 }
                 ?>
                 <tr>
-                    <?php
-                    if(!$order_id){
-                        echo '<td></td>';
-                    }
-                    ?>
-                    <td align="left" colspan="2"><b><span class="trans_count">Total to Pay</span></b></td>
+                    <td align="left" colspan="<?=$order_id?2:3;?>"><b><span class="trans_count">Total to Pay</span></b></td>
                     <td align="right" class="sub_price"><?=number_format($total['service_price'],2);?></td>
                     <td align="right" class="sub_qst"><?=number_format($total['service_qst'],2);?></td>
                     <td align="right" class="sub_gst"><?=number_format($total['service_gst'],2);?></td>
@@ -254,16 +243,10 @@ $submitOption = [
                     $tot_col++;
                     ?>
                     <tr>
-                        <?php
-                        if(!$order_id){
-                            echo '<td></td>';
-                        }
-                        ?>
-                        <td class=""><b>Paid</b></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?>
+                        <td class="right" colspan="<?=$order_id?4:5;?>">
+                            <b>Paid</b>
+                        </td>
+                        <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                     </tr>
                     <?php
                 };
@@ -312,16 +295,10 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
-                            <?php
-                            if(!$order_id){
-                                echo '<td></td>';
-                            }
-                            ?>
-                            <td align="left"><b>Paid</b></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                            <td class="right" colspan="<?=$order_id?4:5;?>">
+                                <b>Paid</b>
+                            </td>
+                            <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                         </tr>
                         <?php
                     };
@@ -362,16 +339,10 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
-                            <?php
-                            if(!$order_id){
-                                echo '<td></td>';
-                            }
-                            ?>
-                            <td align="left"><b>Paid</b></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                            <td class="right" colspan="<?=$order_id?4:5;?>">
+                                <b>Paid</b>
+                            </td>
+                            <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                         </tr>
                         <?php
                     };
@@ -379,12 +350,7 @@ $submitOption = [
                 if($tot_col>0){
                     ?>
                     <tr>
-                        <?php
-                        if(!$order_id){
-                            echo '<td></td>';
-                        }
-                        ?>
-                        <td align="left"><b><span class="trans_count">Total to Pay</span></b></td>
+                        <td align="left" colspan="<?=$order_id?1:2;?>"><b><span class="trans_count">Total to Pay</span></b></td>
                         <td align="right" class="sub_price"><?=number_format($pac->sub_total['price'],2);?></td>
                         <td align="right" class="sub_qst"><?=number_format($pac->sub_total['qst'],2);?></td>
                         <td align="right" class="sub_gst"><?=number_format($pac->sub_total['gst'],2);?></td>

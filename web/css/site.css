@@ -459,6 +459,7 @@ input[type=checkbox]:checked+span::before {
     padding: 8px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    z-index: 9999999 !important;
 }
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
     background-color: #FFC800 ;
@@ -1139,10 +1140,10 @@ div.dan_pay {border: 2px solid #E51400;background-color:#ffffff;max-width:100%;}
 div.awa_pay{border: 2px solid #006AC1;background-color:#ffffff;max-width:100%;}
 .marg_but2
 {
-margin-right: 4px;
-display: inline;
-padding: 9px;
-font-size: 14px;
+    margin-right: 4px;
+    display: inline;
+    padding: 9px;
+    font-size: 14px;
 }
 
 :target{
@@ -1161,10 +1162,10 @@ font-size: 14px;
 @keyframes target-animation {
 
     0% {
-         outline: 4px dashed rgba(5, 56, 159, 1);
-         outline-offset: -4px;
+        outline: 4px dashed rgba(5, 56, 159, 1);
+        outline-offset: -4px;
 
-     }
+    }
     25% {
         outline: 4px dashed rgba(5, 56, 159, 0.5);
         outline-offset: -4px;

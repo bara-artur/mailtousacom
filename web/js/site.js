@@ -1154,3 +1154,4 @@ function init_invoice_save(order_id){
     },'JSON');
   })
 }
+
