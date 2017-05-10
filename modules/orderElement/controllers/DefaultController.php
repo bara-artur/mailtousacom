@@ -386,7 +386,8 @@ class DefaultController extends Controller
         return [
           'title'=> "Print",
           'content'=>$this->renderAjax('print_form', [
-            'model' => $model
+            'model' => $model,
+            'min_border' => Yii::$app->user->can('changeTariff'),
           ]),
           'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
         ];

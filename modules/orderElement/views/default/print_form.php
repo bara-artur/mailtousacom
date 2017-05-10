@@ -8,6 +8,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
+
+$param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
+$day_delta=24-Yii::$app->config->get($param_name);
 ?>
 
       <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group/print'], [
@@ -26,8 +29,8 @@ use kartik\widgets\DatePicker;
       'options' => ['placeholder' => date('d-M-Y')],
       'pluginOptions' => [
         'class' => 'qwerty',
-        'startDate' => date(\Yii::$app->config->get('data_format_php')),
-        'format' => \Yii::$app->config->get('data_format_js'),
+        'startDate' => (($min_border)?(0):(date(Yii::$app->config->get('data_format_php'),strtotime('+'.$day_delta.' hours')))),
+        'format' => Yii::$app->config->get('data_format_js'),
         'todayHighlight' => true,
         'autoclose'=>true,
       ]
