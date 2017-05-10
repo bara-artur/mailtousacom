@@ -503,7 +503,7 @@ class DefaultController extends Controller
     return $this->return_last_order('Try later or contact your administrator.');
   }
 
-  public function actionTrackInvoice($id){
+  /*public function actionTrackInvoice($id){
     $order = Order::findOne($id);
 
     $session = Yii::$app->session;
@@ -607,7 +607,7 @@ class DefaultController extends Controller
     $session->set('last_pays',$pays->id);
     $approvalUrl = $payment->getApprovalLink();
     return $this->redirect($approvalUrl);
-  }
+  }*/
 
   /**
    * Finds the PaymentsList model based on its primary key value.
