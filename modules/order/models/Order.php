@@ -142,6 +142,10 @@ class Order extends \yii\db\ActiveRecord
   public function getSumData($id,$test_data=false){
     $order_elements = $this->getOrderElement();
 
+    if(Yii::$app->user->can('changeTariff')){
+      $test_data=false;
+    };
+
     $total=array(
       'price'=>0,
       'weight'=>0,
@@ -164,8 +168,10 @@ class Order extends \yii\db\ActiveRecord
         $max_time =
           time() +
           (24-Yii::$app->config->get($param_name)) * 60 * 60;
+        //d($pac->transport_data);
+        //ddd($max_time);
         if ($pac->transport_data < $max_time) {
-          $pac->transport_data = strtotime('+1 days');
+          $pac->transport_data = $max_time;
         }
       }
       $sub_total=0;
