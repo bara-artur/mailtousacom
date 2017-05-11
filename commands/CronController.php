@@ -9,6 +9,7 @@ namespace app\commands;
 
 use Yii;
 use yii\console\Controller;
+use app\modules\order\models\Order;
 use app\modules\orderElement\models\OrderElement;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
 use app\modules\config\components\DConfig;
@@ -114,9 +115,12 @@ class CronController extends Controller
   public function actionMonthInvoice(){
 
   }
-  public function actionClearOrder(){
 
+  public function actionClearOrder(){
+    $two_month = 60*24*60*60;
+    Order::deleteAll('created_at < '.(time()-$two_month));  // удаление Заказов старее двух месяцев
   }
+
   public function actionMoveToArhiv(){
 
   }

@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\order\models\Order;
 use app\modules\orderElement\models\OrderElementSearch;
 use app\modules\user\models\User;
 use app\modules\orderElement\models\ElementFilterForm;

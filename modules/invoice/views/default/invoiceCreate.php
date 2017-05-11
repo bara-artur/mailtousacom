@@ -295,21 +295,22 @@ if(count($usluga['many'])>0) {
 
 
 <hr>
-  <div class="form-group">
-    <?= Html::a('To order edit/view',
-      ['/orderInclude/create-order/'.$order_id],
-      [
-        'class' => 'btn btn-danger'
-      ]); ?>
-    <?= Html::a('To pay order',
-      ['/payment/order/'.$order_id],
-      [
-        'class' => 'btn btn-danger'
-      ]); ?>
-    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
-  </div>
 <?php ActiveForm::end(); ?>
 <?php Pjax::end();;?>
+
+<div class="form-group">
+  <?= Html::a('To order edit/view',
+    ['/orderInclude/create-order/'.$order_id],
+    [
+      'class' => 'btn btn-danger'
+    ]); ?>
+  <?= Html::a('To pay order',
+    ['/payment/order/'.$order_id],
+    [
+      'class' => 'btn btn-danger'
+    ]); ?>
+  <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
+</div>
 
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",

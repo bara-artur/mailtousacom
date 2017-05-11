@@ -24,9 +24,10 @@ use yii\bootstrap\Collapse;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+CrudAsset::register($this);
 $this->title = 'Order';
 $this->params['breadcrumbs'][] = $this->title;
-CrudAsset::register($this);
+
 $submitOption = [
   'class' => 'btn btn-lg btn-success'
 ];
@@ -85,7 +86,6 @@ $submitOption = [
 <?php } ?>
 
   <div id=crud-datatable-pjax>
-
     <?php
     Pjax::begin();
     if($order_elements){
