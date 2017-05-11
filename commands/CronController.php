@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use app\modules\logs\models\Log;
 use Yii;
 use yii\console\Controller;
 use app\modules\order\models\Order;
@@ -122,6 +123,24 @@ class CronController extends Controller
   }
 
   public function actionMoveToArhiv(){
-
+    $one_month = 30*24*60*60;
+    $parcels = OrderElement::find()
+      ->where(['created_at' < (time()-$one_month)])  // берем все посылки старше 1 месяца
+      ->where(['status' >= 2])
+      ->all(); // все посылки старше месяца со статусом 2
+    if ($parcels){
+      foreach ($parcels as $parcel){
+        $old_parcel_log = Log::find()
+          ->where(['order_id' => $parcel->id])
+          ->where(['description' => 'Change status'])   //  берем запись с изменением статуса
+          ->where(['status_id'>=2])                     // берем статус больше либо равным 2
+          ->orderBy('created_at DESC')                // сортируем по убыванию даты
+          ->one();                                      // берем первую запись
+        if ($old_parcel_log->created_at < (time()-$one_month)) {
+          $model = OrderElement::findOne($parcel->id);
+          $model->archive = 1;
+        }
+      }
+    }
   }
 }
