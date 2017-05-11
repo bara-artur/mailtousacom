@@ -130,9 +130,9 @@ class DefaultController extends Controller
                   }else{
                     $oldModel->save();
                     if (OrderElement::GetShippingCarrier($_POST['track_number'])==null) {
-                      return "Undefined track number. We can't recognize shipping company.";
+                      return json_encode(['type'=>0,'mes'=>"Undefined track number. We can't recognize shipping company."]);
                     }else{
-                      return "Bad number. ".$_POST['track_number']." already exist in our system";
+                      return json_encode(['type'=>0,'mes'=>"Bad number. ".$_POST['track_number']." already exist in our system"]);
                     }
                   }
                 }
@@ -146,7 +146,7 @@ class DefaultController extends Controller
             }
         }
        // $model = OrderElement::find()->where(['order_id'=>$id])->all();
-        return $ParcelPrice;
+        return json_encode(['type'=>1,'mes'=>$ParcelPrice]);
     }
 
     public function actionCreate($id)

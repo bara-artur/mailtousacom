@@ -627,7 +627,9 @@ if($createNewAddress){
        }
      //}else{
        if ((event.keyCode || event.charCode) == 13) {
-         if ($('.scaner_data').length>0) scaner_enter_button();
+         if ($('.scaner_data').is( ":focus" )) {
+           scaner_enter_button();
+         }
        }
       //}
     });
