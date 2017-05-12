@@ -557,15 +557,20 @@ class DefaultController extends Controller
       }
   }
 
-  public function actionGroupDelete($parcels_id=null){
+  public function actionGroupDelete($parcels_id=null, $to_archive = 0){
     $arr = explode(',', $parcels_id);
     asort($arr);
     foreach ($arr as $parcel_id) {
       $parcel = OrderElement::findOne(['id' => $parcel_id]);
       if ($parcel){
         if ($parcel->payment_state==0) {
-          OrderInclude::deleteAll(['order_id' => $parcel_id]);
-          OrderElement::deleteAll(['id' => $parcel_id]);
+          if ($to_archive == 0) {
+            OrderInclude::deleteAll(['order_id' => $parcel_id]);
+            OrderElement::deleteAll(['id' => $parcel_id]);
+          }else{
+            $parcel->archive = 1;
+            $parcel->save();
+          }
         }
       }
     }
@@ -586,6 +591,7 @@ class DefaultController extends Controller
         case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
         case 'commercial_inv_print':    {return $this->actionCommercial_inv_print($parcels_id);break;}
         case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
+        case 'archive':  {return $this->actionGroupDelete($parcels_id,1);break;}
         case 'view':    {return $this->actionGroupView($parcels_id);break;}
         case 'invoice':    {return $this->actionInvoice($parcels_id);break;}
       }
