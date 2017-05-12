@@ -21,7 +21,10 @@ $day_delta=24-Yii::$app->config->get($param_name);
   'options' => ['placeholder' => date('d-M-Y')],
   'pluginOptions' => [
     'class' => 'qwerty',
-    'startDate' => (($min_border)?(0):(date(Yii::$app->config->get('data_format_php'),strtotime('+'.$day_delta.' hours')))),
+    'startDate' =>
+        date(
+          "d-M-Y",
+            ($min_border?(strtotime("-1 year")):strtotime('+'.$day_delta.' hours'))),
     'format' => Yii::$app->config->get('data_format_js'),
     'todayHighlight' => true,
     'autoclose'=>true,

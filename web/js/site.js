@@ -179,74 +179,74 @@ $(document).ready(function() {
     }
   });
 
-  $('.invoice_check').on('change',function(){
+    $('.invoice_check').on('change',function(){
+        pr_val=getCookie('invoice_check');
+        if(pr_val.length<2){
+            pr_val={};
+        }else{
+            pr_val=JSON.parse(pr_val);
+        };
+        pr_val[this.name]=this.checked;
+        setCookie('invoice_check',JSON.stringify(pr_val));
+    });
     pr_val=getCookie('invoice_check');
-    if(pr_val.length<2){
-      pr_val={};
-    }else{
-      pr_val=JSON.parse(pr_val);
-    };
-    pr_val[this.name]=this.checked;
-    setCookie('invoice_check',JSON.stringify(pr_val));
-  });
-  pr_val=getCookie('invoice_check');
-  if(pr_val.length>2) {
-    pr_val = JSON.parse(pr_val);
-    for (var item in pr_val) {
-      el=$('[name='+item+']')
-      if(el.length>0){
-        el[0].checked = pr_val[item];
-      }
+    if(pr_val.length>2) {
+        pr_val = JSON.parse(pr_val);
+        for (var item in pr_val) {
+            el=$('[name='+item+']')
+            if(el.length>0){
+                el[0].checked = pr_val[item];
+            }
+        }
     }
-  }
 
-  $('input.invoice_check_to_pay').on('change',function(){
-    $this=$(this);
-    table=$this.closest('table');
-    ch_this=table.find('.invoice_check_to_pay:checked');
-    price=0;
-    gst=0;
-    qst=0;
-    sum=0;
-    for(var i=0;i<ch_this.length;i++){
-      el=ch_this.eq(i);
-      price+=parseFloat(el.attr('price'));
-      gst+=parseFloat(el.attr('gst'));
-      qst+=parseFloat(el.attr('qst'));
-      sum+=parseFloat(el.attr('sum'));
-    }
-    table.find('.sub_price').text(price.toFixed(2));
-    table.find('.sub_gst').text(gst.toFixed(2));
-    table.find('.sub_qst').text(qst.toFixed(2));
-    table.find('.sub_sum').text(sum.toFixed(2));
+    $('input.invoice_check_to_pay').on('change',function(){
+        $this=$(this);
+        table=$this.closest('table');
+        ch_this=table.find('.invoice_check_to_pay:checked');
+        price=0;
+        gst=0;
+        qst=0;
+        sum=0;
+        for(var i=0;i<ch_this.length;i++){
+            el=ch_this.eq(i);
+            price+=parseFloat(el.attr('price'));
+            gst+=parseFloat(el.attr('gst'));
+            qst+=parseFloat(el.attr('qst'));
+            sum+=parseFloat(el.attr('sum'));
+        }
+        table.find('.sub_price').text(price.toFixed(2));
+        table.find('.sub_gst').text(gst.toFixed(2));
+        table.find('.sub_qst').text(qst.toFixed(2));
+        table.find('.sub_sum').text(sum.toFixed(2));
 
-    price=0;
-    gst=0;
-    qst=0;
-    sum=0;
-    sub_price=$('.sub_price');
-    sub_gst=$('.sub_gst');
-    sub_qst=$('.sub_qst');
-    sub_sum=$('.sub_sum');
-    for(var i=0;i<sub_price.length;i++){
-      price+=parseFloat(sub_price.eq(i).text());
-      gst+=parseFloat(sub_gst.eq(i).text());
-      qst+=parseFloat(sub_qst.eq(i).text());
-      sum+=parseFloat(sub_sum.eq(i).text());
-    }
-    $('.tot_price').text(price.toFixed(2));
-    $('.tot_gst').text(gst.toFixed(2));
-    $('.tot_qst').text(qst.toFixed(2));
-    $('.tot_sum').text(sum.toFixed(2));
+        price=0;
+        gst=0;
+        qst=0;
+        sum=0;
+        sub_price=$('.sub_price');
+        sub_gst=$('.sub_gst');
+        sub_qst=$('.sub_qst');
+        sub_sum=$('.sub_sum');
+        for(var i=0;i<sub_price.length;i++){
+            price+=parseFloat(sub_price.eq(i).text());
+            gst+=parseFloat(sub_gst.eq(i).text());
+            qst+=parseFloat(sub_qst.eq(i).text());
+            sum+=parseFloat(sub_sum.eq(i).text());
+        }
+        $('.tot_price').text(price.toFixed(2));
+        $('.tot_gst').text(gst.toFixed(2));
+        $('.tot_qst').text(qst.toFixed(2));
+        $('.tot_sum').text(sum.toFixed(2));
 
-    paypal_sum=$('.paypal_sum')
-    if(paypal_sum.length>0){
-      val=sum;
-      val+=parseFloat(paypal_sum.attr('paypal_commision_fixed'));
-      val+=price*parseFloat(paypal_sum.attr('paypal_commision_dolia'))/100;
-      paypal_sum.text(val.toFixed(2));
-    }
-  })
+        paypal_sum=$('.paypal_sum')
+        if(paypal_sum.length>0){
+            val=sum;
+            val+=parseFloat(paypal_sum.attr('paypal_commision_fixed'));
+            val+=price*parseFloat(paypal_sum.attr('paypal_commision_dolia'))/100;
+            paypal_sum.text(val.toFixed(2));
+        }
+    })
 });
 
 function show_err(el,txt){
@@ -1123,6 +1123,7 @@ function init_scaner(){
 
 }
 
+
 $(function(){
     $('#more').click(function(){
         $(this).hide();
@@ -1157,3 +1158,4 @@ function init_invoice_save(order_id){
     },'JSON');
   })
 }
+

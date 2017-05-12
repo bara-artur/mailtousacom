@@ -13,61 +13,13 @@ $this->title = 'Invoice';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
 <?php Pjax::begin();?>
 <?php $form = ActiveForm::begin(); ?>
+<h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
 
-<?php
-if(count($usluga['parcel'])>0) {
-  ?>
-  <ul>
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-         aria-expanded="false">
-        Add service to each parcel<span class="caret"></span></a>
-      <ul class="dropdown-menu">
-        <?php
-        foreach ($usluga['parcel'] as $item){
-          ?>
-          <li>
-            <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'];?>"><?=$item['name'];?></a>
-          </li>
-          <?php
-        }
-        ?>
-      </ul>
-    </li>
-  </ul>
-  <?php
-}
-?>
-<?php
-if(count($usluga['many'])>0) {
-  ?>
-  <ul>
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-         aria-expanded="false">
-        Add service to order<span class="caret"></span></a>
-      <ul class="dropdown-menu">
-        <?php
-          foreach ($usluga['many'] as $item){
-            ?>
-              <li>
-                <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'];?>"><?=$item['name'];?></a>
-              </li>
-            <?php
-          }
-        ?>
-      </ul>
-    </li>
-  </ul>
-  <?php
-}
-?>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
   <p>
     Invoice number
     <?=Html::input('text', 'invoice', $session['invoice_'.$order_id], [
@@ -75,7 +27,7 @@ if(count($usluga['many'])>0) {
     ]);?>
   </p>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
   <p>
     Referring code
     <?=Html::input('text', 'ref_code', $session['ref_code_'.$order_id], [
@@ -83,7 +35,7 @@ if(count($usluga['many'])>0) {
     ]);?>
   </p>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
   <p>
     Contract number
     <?=Html::input('text', 'contract_number', $session['contract_number_'.$order_id], [
@@ -91,22 +43,73 @@ if(count($usluga['many'])>0) {
     ]);?>
   </p>
     </div>
+
+
+    <div class="col-md-3">
+    <div class="col-md-4 padding-off-right padding-off-left push-down-tiny2"><p>Add service</p></div>
+    <div class="col-md-8 padding-off-left padding-off-right">
+    <?php
+    if(count($usluga['parcel'])>0) {
+        ?>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-success btn-xs btn_xs_path dropdown-toggle" data-toggle="dropdown">To parcel <span class="caret"></span></button>
+            <ul class="dropdown-menu  text-left" role="menu">
+                <?php
+                foreach ($usluga['parcel'] as $item){
+                    ?>
+                    <li>
+                        <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'];?>"><?=$item['name'];?></a>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ul>
+
+        </div>
+        <?php
+    }
+    ?>
+    <?php
+    if(count($usluga['many'])>0) {
+        ?>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-success btn-xs btn_xs_path dropdown-toggle" data-toggle="dropdown">To order <span class="caret"></span></button>
+            <ul class="dropdown-menu  text-left" role="menu">
+                <?php
+                foreach ($usluga['many'] as $item){
+                    ?>
+                    <li>
+                        <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'];?>"><?=$item['name'];?></a>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ul>
+
+        </div>
+        <?php
+    }
+    ?>
+    </div>
+
+    </div>
 </div>
 <hr>
 <?php
   if($order_service && count($order_service)>0) {
     ?>
-    <h2>Услуги групповых посылок</h2>
+<h4 class="modernui-neutral2">Services of group parcels  </h4>
     <div class="table table-responsive">
-      <table class="table table-art" id="crud-datatable-pjax">
+      <table class="table table-art check_hide" id="crud-datatable-pjax">
         <tr>
           <th>Print</th>
           <th>#</th>
           <th>Name</th>
           <th>Date</th>
           <th>Status</th>
-          <th>Price</th>
-          <th></th>
+          <th>Price, USD</th>
         </tr>
         <?php
 
@@ -128,7 +131,6 @@ if(count($usluga['many'])>0) {
                 'class' => 'tr_input'
               ]); ?>
             </td>
-            <td></td>
           </tr>
           <?php
         }
@@ -138,8 +140,8 @@ if(count($usluga['many'])>0) {
     <?php
   }
 ?>
-<h2>Услуги для отдельных посылок</h2>
-<div class="table table-responsive">
+<h4 class="modernui-neutral2">Services for separate parcels </h4>
+<div class="table table-responsive check_hide">
   <table class="table table-art" id="crud-datatable-pjax">
     <tr>
       <th>#</th>
@@ -162,24 +164,24 @@ if(count($usluga['many'])>0) {
               <?php
               if(count($usluga['parcel'])>0) {
                 ?>
-                <ul>
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">
-                      Add service to parcel<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <?php
-                      foreach ($usluga['parcel'] as $item){
-                        ?>
-                        <li>
-                          <a href="/invoice/add-service-to-parcel/<?=$parcel->id;?>/<?=$item['id'];?>?order=<?=$order_id;?>"><?=$item['name'];?></a>
-                        </li>
-                        <?php
-                      }
-                      ?>
-                    </ul>
-                  </li>
-                </ul>
+
+
+                  <div class="btn-group">
+                      <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Add service to parcel <span class="caret"></span></button>
+                      <ul class="dropdown-menu  text-left" role="menu">
+                          <?php
+                          foreach ($usluga['parcel'] as $item){
+                              ?>
+                              <li>
+                                  <a href="/invoice/add-service-to-parcel/<?=$parcel->id;?>/<?=$item['id'];?>?order=<?=$order_id;?>"><?=$item['name'];?></a>
+                              </li>
+                              <?php
+                          }
+                          ?>
+                      </ul>
+
+                  </div>
+
                 <?php
               }
               ?>
@@ -200,8 +202,8 @@ if(count($usluga['many'])>0) {
           <?php }; ?>
         </tr>
         <tr>
-          <td class="padding-off-top" colspan="<?=count($users_parcel) > 1?5:4;?>">
-            <table class="table table-pod">
+          <td class="padding-off" colspan="<?=count($users_parcel) > 1?5:4;?>">
+            <table class="table table-pod path_table">
               <tr>
                 <th>Print</th>
                 <th>#</th>
@@ -299,16 +301,17 @@ if(count($usluga['many'])>0) {
 <?php Pjax::end();;?>
 
 <div class="form-group">
-  <?= Html::a('To order edit/view',
-    ['/orderInclude/create-order/'.$order_id],
-    [
-      'class' => 'btn btn-danger'
-    ]); ?>
-  <?= Html::a('To pay order',
-    ['/payment/order/'.$order_id],
-    [
-      'class' => 'btn btn-danger'
-    ]); ?>
+    <?= Html::a('Order edit/view',
+      ['/orderInclude/create-order/'.$order_id],
+      [
+        'class' => 'btn btn-science-blue'
+      ]); ?>
+    <?= Html::a('To pay order',
+      ['/payment/order/'.$order_id],
+      [
+        'class' => 'btn btn-info'
+      ]); ?>
+    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
   <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
 </div>
 

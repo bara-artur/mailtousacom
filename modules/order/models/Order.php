@@ -142,7 +142,7 @@ class Order extends \yii\db\ActiveRecord
   public function getSumData($id,$test_data=false){
     $order_elements = $this->getOrderElement();
 
-    if(Yii::$app->user->can('changeTariff')){
+    if(!Yii::$app->user->isGuest && Yii::$app->user->can('changeTariff')){
       $test_data=false;
     };
 
