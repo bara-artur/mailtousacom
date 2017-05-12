@@ -133,14 +133,14 @@ class CronController extends Controller
     $one_month = 30*24*60*60;
     $parcels = OrderElement::find()
       ->where(['created_at' < (time()-$one_month)])  // берем все посылки старше 1 месяца
-      ->where(['status' >= 2])
+      ->where(['status' >= 6])
       ->all(); // все посылки старше месяца со статусом 2
     if ($parcels){
       foreach ($parcels as $parcel){
         $old_parcel_log = Log::find()
           ->where(['order_id' => $parcel->id])
           ->where(['description' => 'Change status'])   //  берем запись с изменением статуса
-          ->where(['status_id'>=2])                     // берем статус больше либо равным 2
+          ->where(['status_id'>=6])                     // берем статус больше либо равным 2
           ->orderBy('created_at DESC')                // сортируем по убыванию даты
           ->one();                                      // берем первую запись
         if ($old_parcel_log->created_at < (time()-$one_month)) {
