@@ -70,7 +70,6 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
-      var_dump(date('Y-m-01'));
       $gritter = Yii::$app->request->cookies['showTheGritter'];
       Yii::$app->response->cookies->remove('showTheGritter');
 

@@ -8,10 +8,13 @@
 namespace app\commands;
 
 use app\modules\logs\models\Log;
+use app\modules\payment\models\PaymentInclude;
 use Yii;
 use yii\console\Controller;
 use app\modules\order\models\Order;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\orderElement\controllers\DefaultController as OrderElementController;
+use app\modules\invoice\controllers\DefaultController as InvoiceController;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
 use app\modules\config\components\DConfig;
 use yii\helpers\Console;
@@ -115,9 +118,35 @@ class CronController extends Controller
 
   public function actionMonthInvoice($user=null){
     if ($user){
-      
-      $parcels = OrderElement::find()->where(['user_id' => $user])->where(['status'=> 2])->where([])->all();
-
+      $this_month_begin = strtotime(date('Y-m-01'));
+      $parcels_for_email = [];
+      $services_for_email = [];
+      $parcels = OrderElement::find()
+        ->where(['user_id' => $user])
+        ->where(['month_pay' => 1])         // работа с пользователями с месячным типом оплаты
+        ->where(['status'=> 2])             // берем посылки со статусом 2
+        ->where(['created_at' > $this_month_begin])   // посылки созданные после начала текущего месяца
+        ->all();
+      if ($parcels){
+        foreach ($parcels as $parcel){
+          $payment = PaymentInclude::find()
+            ->where(['element_id' => $parcel->id])
+            ->where(['element_type' => 0])   // тип платежа - за посылку
+            ->where(['status' => 0])    //  поиск посылок ожидающих оплаты
+            ->one();
+          if ($payment){
+            $parcels_for_email[] = $parcel->id;
+          }
+        }
+      }
+      if ($parcels_for_email){
+        $order_id = OrderElementController::findOrCreateOrder(implode(',',$parcels_for_email),1);
+        if ($order_id){
+          InvoiceController::create($order_id, 1);  //  создаём invoice для текущего набора посылок
+        }else{
+          echo "Can't create order with parcels ".implode(',',$parcels_for_email);
+        }
+      }
     } else{
       echo "Undefined User ID";
     }

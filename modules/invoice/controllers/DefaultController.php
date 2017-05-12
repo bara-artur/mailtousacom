@@ -32,7 +32,7 @@ class DefaultController extends Controller
    * Renders the index view for the module
    * @return string
    */
-  public function actionCreate($id)
+  public function actionCreate($id, $cron = 0)
   {
     if (!Yii::$app->user->can('trackInvoice')){
       throw new NotFoundHttpException('Access is denied.');
@@ -52,31 +52,31 @@ class DefaultController extends Controller
     ];
 
     $request = Yii::$app->request;
-    if($request->isPost) {
+    if (($request->isPost)||($cron == 1)) {
       $order_service=$order->getAdditionalService();
 
       $invoice=[];
       $parcel=[];
 
       foreach ($order_service as $as) {
-        if($request->post('ch_invoice_'.$as->id)==1){
+        if(($cron == 1)||($request->post('ch_invoice_'.$as->id)==1)){
           $invoice[]=$as->id;
         }
       }
 
       foreach ($model as $pac) {
-        if($request->post('ch_parcel_'.$pac->id)==1){
+        if (($cron == 1)||($request->post('ch_parcel_'.$pac->id)==1)){
           $parcel[]=$pac->id;
         }
         $as = $pac->trackInvoice;
-        if($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1){
+        if(($cron == 1)||($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1)){
           $invoice[]=$as->id;
         }
 
         $services=$pac->getAdditionalServiceList(false);
 
         foreach ($services as $as){
-          if($request->post('ch_invoice_'.$as->id)==1){
+          if(($cron == 1)||($request->post('ch_invoice_'.$as->id)==1)){
             $invoice[]=$as->id;
           }
         }
@@ -94,6 +94,7 @@ class DefaultController extends Controller
         $inv->parcels_list=$parcel;
         $inv->services_list=$invoice;
         $inv->create=time();
+        $inv->detail=$cron;
       }
 
       $session = Yii::$app->session;
@@ -102,10 +103,14 @@ class DefaultController extends Controller
         'invoice'=>$session['invoice_'.$id],
         'ref_code'=>$session['ref_code_'.$id],
         'contract_number'=>$session['contract_number_'.$id],
+        'cron'=> $cron,
       ]);
       $inv->save();
-
-      return $this->redirect(['/invoice/pdf/'.$inv->id]);
+      if ($cron == 1) {
+        return $inv->id;
+      } else {
+        return $this->redirect(['/invoice/pdf/' . $inv->id]);
+      }
     }
 
     $usluga=[

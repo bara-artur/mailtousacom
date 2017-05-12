@@ -297,6 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <hr>
+<?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
 <?php ActiveForm::end(); ?>
 <?php Pjax::end();;?>
 
@@ -311,8 +312,6 @@ $this->params['breadcrumbs'][] = $this->title;
       [
         'class' => 'btn btn-info'
       ]); ?>
-    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
-  <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
 </div>
 
 <?php Modal::begin([
