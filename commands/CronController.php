@@ -113,7 +113,14 @@ class CronController extends Controller
     //Yii::$app->config->set('USD_CAD',$rate);
   }
 
-  public function actionMonthInvoice(){
+  public function actionMonthInvoice($user=null){
+    if ($user){
+      
+      $parcels = OrderElement::find()->where(['user_id' => $user])->where(['status'=> 2])->where([])->all();
+
+    } else{
+      echo "Undefined User ID";
+    }
 
   }
 
