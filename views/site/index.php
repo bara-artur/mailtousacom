@@ -26,6 +26,7 @@ $this->title = 'Shipping to USA and Canada';
               <?php } ?>
               <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn2 btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
+              <?=Html::a('<i class="icon-metro-remove"></i>View archive', ['/archive'],['class'=>'btn btn-neutral-border',])?>
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
 
