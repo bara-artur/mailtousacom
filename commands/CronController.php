@@ -12,6 +12,7 @@ use app\modules\payment\models\PaymentInclude;
 use Yii;
 use yii\console\Controller;
 use app\modules\order\models\Order;
+use app\modules\user\models\User;
 use app\modules\orderElement\models\OrderElement;
 use app\modules\orderElement\controllers\DefaultController as OrderElementController;
 use app\modules\invoice\controllers\DefaultController as InvoiceController;
@@ -116,8 +117,9 @@ class CronController extends Controller
     //Yii::$app->config->set('USD_CAD',$rate);
   }
 
-  public function actionMonthInvoice($user=null){
-    if ($user){
+  public function actionMonthInvoice(){
+    $users = User::find()->all();
+    foreach ($users as $user){
       $this_month_begin = strtotime(date('Y-m-01'));
       $parcels_for_email = [];
       $services_for_email = [];
@@ -125,7 +127,7 @@ class CronController extends Controller
         ->where(['user_id' => $user])
         ->where(['month_pay' => 1])         // работа с пользователями с месячным типом оплаты
         ->where(['status'=> 2])             // берем посылки со статусом 2
-        ->where(['created_at' > $this_month_begin])   // посылки созданные после начала текущего месяца
+        ->where(['>=', 'created_at', $this_month_begin])   // посылки созданные после начала текущего месяца
         ->all();
       if ($parcels){
         foreach ($parcels as $parcel){
@@ -147,10 +149,7 @@ class CronController extends Controller
           echo "Can't create order with parcels ".implode(',',$parcels_for_email);
         }
       }
-    } else{
-      echo "Undefined User ID";
     }
-
   }
 
   public function actionClearOrder(){
@@ -162,14 +161,14 @@ class CronController extends Controller
     $one_month = 30*24*60*60;
     $parcels = OrderElement::find()
       ->where(['created_at' < (time()-$one_month)])  // берем все посылки старше 1 месяца
-      ->where(['status' >= 6])
+      ->where(['>=', 'status', 6])
       ->all(); // все посылки старше месяца со статусом 2
     if ($parcels){
       foreach ($parcels as $parcel){
         $old_parcel_log = Log::find()
           ->where(['order_id' => $parcel->id])
           ->where(['description' => 'Change status'])   //  берем запись с изменением статуса
-          ->where(['status_id'>=6])                     // берем статус больше либо равным 2
+          ->where(['>=', 'status_id', 6])                     // берем статус больше либо равным 2
           ->orderBy('created_at DESC')                // сортируем по убыванию даты
           ->one();                                      // берем первую запись
         if ($old_parcel_log->created_at < (time()-$one_month)) {
