@@ -14,6 +14,7 @@ use \yii\web\Response;
 use yii\helpers\Html;
 use app\components\ParcelPrice;
 use yii\web\UploadedFile;
+use app\modules\user\models\User;
 
 /**
  * DefaultController implements the CRUD actions for OrderElement model.
@@ -127,6 +128,7 @@ class DefaultController extends Controller
                       (OrderElement::GetShippingCarrier($_POST['track_number'])!=null)){
                     $oldModel->track_number = $_POST['track_number'];
                   }else{
+                    $oldModel->save();
                     if (OrderElement::GetShippingCarrier($_POST['track_number'])==null) {
                       return "Undefined track number. We can't recognize shipping company.";
                     }else{
@@ -164,6 +166,7 @@ class DefaultController extends Controller
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
+                      'skipIntegration' => 0,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
@@ -197,6 +200,7 @@ class DefaultController extends Controller
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
+                      'skipIntegration' => 1,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                       Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
@@ -209,6 +213,7 @@ class DefaultController extends Controller
                     'content'=>$this->renderAjax('create', [
                       'model' => $model,
                       'order_id'=>$id,
+                      'skipIntegration' => 0,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-success','type'=>"submit"])
@@ -372,18 +377,49 @@ class DefaultController extends Controller
   }
 
   public function actionGroupPrint($parcels_id=null,$for_each=false){
+    $request=Yii::$app->request;
+    if ($request->isAjax){
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if($request->isGet){
+        $arr = explode(',', $parcels_id);
+        $model = OrderElement::find()->where(['id' => $arr[0]])->one();
+        return [
+          'title'=> "Print",
+          'content'=>$this->renderAjax('print_form', [
+            'model' => $model,
+            'min_border' => Yii::$app->user->can('changeTariff'),
+          ]),
+          'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+        ];
+      }else{
+        if ($request->isPost){
+          $parcels_id = $_COOKIE['parcelCheckedId'];
+          $arr = explode(',', $parcels_id);
+          foreach ($arr as $id){
+            $model = OrderElement::find()->where(['id' => $id])->one();
+            if ($model) {
+              $model->transport_data = strtotime($_POST['transport_data']);
+              $model->save();
+            }
+          }
+          return strtotime($_POST['transport_data']);
+        }
+        return 0;
+      }
+    }else {
       $order_id = $this->findOrCreateOrder($parcels_id);
       if ($order_id != null) {
-        if($for_each) {
+        if ($for_each) {
           $this->redirect(['/orderInclude/border-form-pdf-for-each/' . $order_id]);
-        }else {
+        } else {
           $this->redirect(['/orderInclude/border-form-pdf/' . $order_id]);
         }
-        return "Create pdf for order " .  $order_id;
+        return "Create pdf for order " . $order_id;
       } else {
-        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
+        Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter', 'value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
         return $this->redirect(['/']);
       }
+    }
   }
 
   //Выводим спсок файлов для посвлки

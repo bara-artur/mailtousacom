@@ -110,4 +110,14 @@ class CronController extends Controller
     $a->set('USD_CAD',$rate);
     //Yii::$app->config->set('USD_CAD',$rate);
   }
+
+  public function actionMonthInvoice(){
+
+  }
+  public function actionClearOrder(){
+
+  }
+  public function actionMoveToArhiv(){
+
+  }
 }

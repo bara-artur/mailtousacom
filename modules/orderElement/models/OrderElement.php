@@ -214,7 +214,7 @@ class OrderElement extends \yii\db\ActiveRecord
 
     $el=NEW AdditionalServices;
     $el->type=$service;
-    $el->client_id=$this->client_id;
+    $el->client_id=$this->user_id;
     $el->user_id=Yii::$app->user->id;
     $el->parcel_id_lst=(string)$this->id;
     $el->price=$tpl->base_price;
@@ -238,7 +238,7 @@ class OrderElement extends \yii\db\ActiveRecord
 
       $el=NEW AdditionalServices;
       $el->type=$service;
-      $el->client_id=$this->client_id;
+      $el->client_id=$this->user_id;
       $el->user_id=Yii::$app->user->id;
       $el->parcel_id_lst=(string)$this->id;
       $el->price=$tpl->base_price;
@@ -493,7 +493,7 @@ class OrderElement extends \yii\db\ActiveRecord
     if (isset($TrackingNumber)) {
       if ($TrackingNumber != "") {
         if ($ShippingCarrierURL != "") {
-          $TrackingNumberPostLink = "<a href='$ShippingCarrierURL$TrackingNumber' target='_blank' style='color:dodgerblue;font-weight:bold;text-decoration:none'>".$TrackingNumber."</a>";
+          $TrackingNumberPostLink = "<a href='$ShippingCarrierURL$TrackingNumber' target='_blank' class='link_tracking'>".$TrackingNumber."</a>";
         } else {
           $TrackingNumberPostLink = $TrackingNumber;
         }

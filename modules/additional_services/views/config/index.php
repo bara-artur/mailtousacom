@@ -13,11 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="additional-services-list-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Additional Services List', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Additional Services List', ['create'], ['class' => 'btn btn-success pull-right margin-bottom-10']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
           [
             'attribute'=>'type',
             'format' => 'raw',
-            'filter'=> AdditionalServicesList::typeList(),
+            //'filter'=> AdditionalServicesList::typeList(),
             'value' => function ($model, $key, $index, $column) {
                 return $model->getTypeText();
             },

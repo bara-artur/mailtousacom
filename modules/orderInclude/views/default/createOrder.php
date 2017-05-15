@@ -32,7 +32,7 @@ $submitOption = [
 ];
 ?>
   <div class="row">
-      <div class="col-md-2 col-sm-12">
+      <div class="col-md-4 col-sm-12">
           <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],
             [
               'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
@@ -43,25 +43,30 @@ $submitOption = [
               'data-forscanercookie'=> $scaner_data_list,
             ])?>
       </div>
-      <?php if ($admin){ ?>
-        <div class="col-md-8 col-sm-12 text-center">
-          <div class="scaner_buttons">
-            <input type="button" class="show_scaner_button  btn btn-info btn-xs2" value="Show scaner">
-          </div>
-          <p class="hide_scaner"><b>Scaner data:</b><br>
-            <input type="text" class="scaner_data hide_scaner" size="32">
-            <input type="button" value="Find" class="scaner_find hide_scaner  btn btn-warning btn-xs2" size="32">
-            <span class="dowloadTrackNumber"> Processing... </span>
-          </p>
-        </div>
-      <?php } ?>
-      <div class="col-md-8 col-sm-12 text-center">
+      <div class="col-md-4 col-sm-12 text-center">
           <h4 class="order_id" order-id=<?=$order_id?> >Order #<?=$order_id?> for Transportation</br>
           <?php if (!$edit_not_prohibited) {?>
               <span class="prohibit_editing text-danger"><span class="glyphicon glyphicon-ban-circle"></span> <?=$message_for_edit_prohibited_order?></span>
           <?php } ?>
           </h4>
       </div>
+      <?php if ($admin){ ?>
+          <div class="col-md-4 col-sm-12 text-right">
+              <div class="scaner_buttons">
+                  <input type="button" class="show_scaner_button  btn btn-info btn-md" value="Show scaner">
+              </div>
+            <!--  <p class="hide_scaner"><b>Scaner data:</b><br>-->
+              <div class="hide_scaner input-group form-control-color push-down-margin-tiny search">
+                  <input type="text" class="scaner_data form-control" placeholder="Enter Track Number for Search or Addition parcel" size="32">
+                  <!--<input type="button" value="Find" class="scaner_find hide_scaner  btn btn-warning btn-sm" size="32">-->
+                  <span class="input-group-btn">
+                      <button class="scaner_find btn btn-sm btn-info btn_path"  type="button"><i class="fa fa-search"></i></button>
+                    </span>
+              </div>
+                  <div class="dowloadTrackNumber">Processing... </div>
+              <div class="open_text" style="display: none;" >Track Number missing</div>
+          </div>
+      <?php } ?>
   </div>
 <hr class="bottom_line2">
 
@@ -590,9 +595,9 @@ if($createNewAddress){
            // window.location.hash="last_parcel_anchor";
          },
          error: function (xhr, str) {
-           $('.order_id').css("color", "red");
+           $('.open_text').css("display", "block");
            $(".dowloadTrackNumber").hide();
-         }
+             }
        });
      }else{
        gritterAdd('Error','Track number length validation failed','gritter-danger');
@@ -603,19 +608,19 @@ if($createNewAddress){
    $(".show_scaner_button").on("click",function(){
      if ($(".show_scaner_button").val()=="Show scaner") {
        $(".show_scaner_button").val('Hide scaner');
-       $('.hide_scaner').show(500);
+       $('.hide_scaner').fadeIn("slow");
        $('.scaner_data').focus();
        $('.scaner_data').val('');
      }
      else {
        $(".show_scaner_button").val('Show scaner');
-       $('.hide_scaner').hide(500);
+       $('.hide_scaner').fadeOut("slow");
      }
    });
    $("body").on('keydown', function(){
      //if ($('.scaner_data').is(':hidden')) {
        if ((event.keyCode || event.charCode) == 118) {  // f7
-         $('.hide_scaner').show(500);
+         $('.hide_scaner').fadeIn("slow");
          $('.scaner_data').focus();
          $('.scaner_data').val('');
          $(".show_scaner_button").val('Hide scaner');

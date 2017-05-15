@@ -6,7 +6,7 @@
     $total_sum=$pac->sub_total;
     $shipping_data=$pac->getTrackInvoice();
     $shipping_price=false;
-    if(!$shipping_data->isNewRecord){
+    if($shipping_data && !$shipping_data->isNewRecord){
       $shipping_price=$shipping_data->dop_price;
       $total_sum+=$shipping_price;
       $shipping_price='$'.number_format($shipping_price,2,".","");

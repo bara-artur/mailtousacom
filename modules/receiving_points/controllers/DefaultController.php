@@ -18,13 +18,14 @@ use yii\helpers\Html;
 class DefaultController extends Controller
 {
 
-  function beforeAction($action)
+  public function beforeAction($action)
   {
-    if (Yii::$app->user->isGuest || !Yii::$app->user->can('admin_reference')) {
-      throw new \yii\web\ForbiddenHttpException('You are not allowed to perform this action.');
+    if (!Yii::$app->user->can("takeParcel")){
+      Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','You can\'t access the Recieving points controller','gritter-danger')",]));
+      $this->redirect(['/']);
       return false;
     }
-    return true;
+    return parent::beforeAction($action);
   }
     /**
      * @inheritdoc
@@ -64,7 +65,6 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
-      if (Yii::$app->user->can("takeParcel")) {
         $model = new ReceivingPoints();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
           return $this->redirect(['/receiving_points']);
@@ -73,9 +73,7 @@ class DefaultController extends Controller
             'model' => $model,
           ]);
         }
-      }else{
-        $this->redirect("/");
-      }
+
     }
 
     /**
@@ -86,7 +84,6 @@ class DefaultController extends Controller
      */
     public function actionUpdate($id)
     {
-      if (Yii::$app->user->can("takeParcel")) {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -96,9 +93,6 @@ class DefaultController extends Controller
             'model' => $model,
           ]);
         }
-      }else{
-        $this->redirect("/");
-      }
     }
 
     /**
@@ -109,10 +103,7 @@ class DefaultController extends Controller
      */
     public function actionDelete($id)
     {
-      if (Yii::$app->user->can("takeParcel")) {
         $this->findModel($id)->delete();
-      }
-      return $this->redirect(['index']);
     }
 
   public function actionChoose() // Выбор receiving Point

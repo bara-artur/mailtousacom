@@ -33,7 +33,7 @@ class AdditionalServicesList extends \yii\db\ActiveRecord
     ];
   }
 
-  public function connectionList()
+  static function connectionList()
   {
     return [
       0=>"none",
@@ -62,7 +62,7 @@ class AdditionalServicesList extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'type' => 'Type',
-            'base_price' => 'Base Price',
+            'base_price' => 'Base Price,USD',
             'dop_connection' => 'Additional communication',
             'only_one' => 'Count in one parcel',
             'active' => 'Active',

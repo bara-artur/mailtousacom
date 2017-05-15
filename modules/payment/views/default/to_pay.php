@@ -32,8 +32,10 @@ $submitOption = [
     <?php
     if($order_service && count($order_service)>0) {
         ?>
-        <h2>Услуги групповых посылок</h2>
-        <div class="table table-responsive">
+    <div class="col-md-offset-1 col-md-10 mac">
+        <h5 class="modernui-neutral2">Services of group parcels</h5>
+
+        <div class="table-responsive">
             <table class="table table-art" id="crud-datatable-pjax">
                 <tr>
                     <?php
@@ -87,28 +89,17 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
-                            <?php
-                            if(!$order_id){
-                                echo '<td></td>';
-                            }
-                            ?>
-                            <td align="left" colspan="2"><b>Paid</b></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                            <td class="right" colspan="<?=$order_id?5:6;?>">
+                                <b>Paid</b>
+                            </td>
+                            <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                         </tr>
                         <?php
                     };
                 }
                 ?>
                 <tr>
-                    <?php
-                    if(!$order_id){
-                        echo '<td></td>';
-                    }
-                    ?>
-                    <td align="left" colspan="2"><b><span class="trans_count">Total to Pay</span></b></td>
+                    <td align="left" colspan="<?=$order_id?2:3;?>"><b><span class="trans_count">Total to Pay</span></b></td>
                     <td align="right" class="sub_price"><?=number_format($total['service_price'],2);?></td>
                     <td align="right" class="sub_qst"><?=number_format($total['service_qst'],2);?></td>
                     <td align="right" class="sub_gst"><?=number_format($total['service_gst'],2);?></td>
@@ -119,7 +110,7 @@ $submitOption = [
             <?php
             if($total['service_price']==0){
                 ?>
-                <div class="col-md-12 padding-off-left padding-off-right" >
+                <div class="col-md-2 padding-off-left padding-off-right" >
                     <h6 class="bg-success text-center fg-white padding-6 margin-off-bottom">
                         <span class="glyphicon glyphicon-ok-sign"></span> Parcel paid
                     </h6>
@@ -132,14 +123,15 @@ $submitOption = [
                 if(Yii::$app->user->identity->isManager()){
                     ?>
 
-                    <div class="col-md-12 padding-off-left padding-off-right" >
+
+                    <div class="col-md-2 padding-off-left padding-off-right " >
                         <h6 class="bg-warning text-center fg-white padding-6 margin-off-bottom">
                             <i class="icon-metro-warning"></i> Parcel isn't paid yet
                         </h6>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12 block_adm">
+
+                        <div class="col-md-8 block_adm">
                             <?= Html::checkbox('agree_service', false, [
                               'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
                               'class'=>"hidden_block_communication",
@@ -157,8 +149,7 @@ $submitOption = [
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--<div class="notpaid_img"></div>-->
+
 
                     <?php
                 }
@@ -172,6 +163,7 @@ $submitOption = [
     foreach ($paces as $pac) {
     $tot_col=0;
     ?>
+</div>
     <div class="col-md-offset-1 col-md-10 mac">
         <div class="row padding-bottom-10 ">
             <div class="col-md-4 pay_list5">
@@ -251,16 +243,10 @@ $submitOption = [
                     $tot_col++;
                     ?>
                     <tr>
-                        <?php
-                        if(!$order_id){
-                            echo '<td></td>';
-                        }
-                        ?>
-                        <td class=""><b>Paid</b></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                        <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?>
+                        <td class="right" colspan="<?=$order_id?4:5;?>">
+                            <b>Paid</b>
+                        </td>
+                        <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                     </tr>
                     <?php
                 };
@@ -309,16 +295,10 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
-                            <?php
-                            if(!$order_id){
-                                echo '<td></td>';
-                            }
-                            ?>
-                            <td align="left"><b>Paid</b></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                            <td class="right" colspan="<?=$order_id?4:5;?>">
+                                <b>Paid</b>
+                            </td>
+                            <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                         </tr>
                         <?php
                     };
@@ -359,16 +339,10 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
-                            <?php
-                            if(!$order_id){
-                                echo '<td></td>';
-                            }
-                            ?>
-                            <td align="left"><b>Paid</b></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['price'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['qst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['gst'],2);?></td>
-                            <td align="right"><?=number_format($paySuccessful[0]['sum'],2);?></td>
+                            <td class="right" colspan="<?=$order_id?4:5;?>">
+                                <b>Paid</b>
+                            </td>
+                            <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
                         </tr>
                         <?php
                     };
@@ -376,12 +350,7 @@ $submitOption = [
                 if($tot_col>0){
                     ?>
                     <tr>
-                        <?php
-                        if(!$order_id){
-                            echo '<td></td>';
-                        }
-                        ?>
-                        <td align="left"><b><span class="trans_count">Total to Pay</span></b></td>
+                        <td align="left" colspan="<?=$order_id?1:2;?>"><b><span class="trans_count">Total to Pay</span></b></td>
                         <td align="right" class="sub_price"><?=number_format($pac->sub_total['price'],2);?></td>
                         <td align="right" class="sub_qst"><?=number_format($pac->sub_total['qst'],2);?></td>
                         <td align="right" class="sub_gst"><?=number_format($pac->sub_total['gst'],2);?></td>
@@ -396,7 +365,7 @@ $submitOption = [
         <?php
             if($pac->sub_total['price']==0){
                 ?>
-                <div class="col-md-12 padding-off-left padding-off-right" >
+                <div class="col-md-2 padding-off-left padding-off-right" >
                     <h6 class="bg-success text-center fg-white padding-6 margin-off-bottom">
                         <span class="glyphicon glyphicon-ok-sign"></span> Parcel paid
                     </h6>
@@ -409,14 +378,14 @@ $submitOption = [
                 if(Yii::$app->user->identity->isManager()){
                     ?>
 
-                <div class="col-md-12 padding-off-left padding-off-right" >
+                <div class="col-md-2 padding-off-left padding-off-right" >
                     <h6 class="bg-warning text-center fg-white padding-6 margin-off-bottom">
                         <i class="icon-metro-warning"></i> Parcel isn't paid yet
                     </h6>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12 block_adm">
+
+                    <div class="col-md-10 block_adm">
                         <?= Html::checkbox('agree_'.$pac->id, false, [
                             'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
                             'class'=>"hidden_block_communication",
@@ -434,44 +403,44 @@ $submitOption = [
                             </div>
                         </div>
                     </div>
-                </div>
+
                 <!--<div class="notpaid_img"></div>-->
 
                     <?php
                 }
             }
         ?>
-    </div>
+
     <?php
     }
     ?>
 
-
+    </div>
         <?php
         if(count($paces)>1){
             ?>
             <div class="col-md-12 padding-off-left padding-off-right">
                 <hr class="podes">
             </div>
-            <div class="col-md-offset-7 col-md-3 margin-bottom-10 padding-bottom-10 padding-off-right" id="total_to_pay">
+            <div class="col-md-offset-7 col-md-4 margin-bottom-10 padding-bottom-10 padding-off-right" id="total_to_pay">
                 <div class="pay_title">
                     <b>TOTAL TO PAY</b>
                 </div>
                 <div class="pay_list2">
                     <b>Price : </b>
-                    <span class="pull-right tot_price"><?=number_format($total['price'],2,"."," ");?></span>
+                    <span class="pull-right padding-right-20 tot_price"><?=number_format($total['price'],2,"."," ");?></span>
                 </div>
                 <div class="pay_list2">
                     <b>PST : </b>
-                    <span class="pull-right tot_qst"><?=number_format($total['qst'],2,"."," ");?></span>
+                    <span class="pull-right padding-right-20 tot_qst"><?=number_format($total['qst'],2,"."," ");?></span>
                 </div>
                 <div class="pay_list2">
                     <b>GST/HST : </b>
-                    <span class="pull-right tot_gst"><?=number_format($total['gst'],2,"."," ");?></span>
+                    <span class="pull-right padding-right-20 tot_gst"><?=number_format($total['gst'],2,"."," ");?></span>
                 </div>
                 <div class="pay_list4">
                     <b><span class="trans_count">TOTAL :</span></b>
-                    <span class="pull-right trans_count tot_sum" ><?=number_format($total['sum'],2,"."," ");?></span>
+                    <span class="pull-right padding-right-20 trans_count tot_sum" ><?=number_format($total['sum'],2,"."," ");?></span>
                 </div>
             </div>
             <?php
@@ -498,7 +467,7 @@ $submitOption = [
               $pay_variant[3]='Moth payment';
             }
             ?>
-            <div class="col-md-offset-4 col-md-6 trans_text custom-radio margin-top-10">
+            <div class="col-md-offset-7 col-md-4 trans_text custom-radio margin-top-10 padding-off-right">
                 <b>Choose a payment method</b>
                     <hr class="margin-off-top margin-bottom-10">
                 <?= Html::radioList('payment_type',null,
@@ -542,7 +511,7 @@ $submitOption = [
                   4 => "Pay now"
                 ];
                 ?>
-                <div class="col-md-offset-4 col-md-6 trans_text custom-radio margin-top-10">
+                <div class="col-md-offset-7 col-md-4 trans_text custom-radio margin-top-10 padding-off-right">
                     <b>Choose a payment method</b>
                     <hr class="margin-off-top margin-bottom-10">
                     <?= Html::radioList('payment_type',3,
@@ -574,7 +543,7 @@ $submitOption = [
                 <?php
                 if(Yii::$app->user->identity->isManager()){
                     if (Yii::$app->user->can('trackInvoice') && $order_id) {
-                        echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Create invoice', ['/invoice/create/' . $order_id], ['class' => 'btn btn-default pull-left']);
+                        echo Html::a('Create invoice', ['/invoice/create/' . $order_id], ['class' => 'btn btn-info pull-left margin-left-10']);
                     }else{
                         //echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Edit invoice', ['/invoice/edit/' . $inv_id], ['class' => 'btn btn-default pull-left']);
                     }
