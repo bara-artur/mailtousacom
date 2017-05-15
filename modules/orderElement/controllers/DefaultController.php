@@ -372,7 +372,7 @@ class DefaultController extends Controller
         return $this->redirect(['/orderInclude/create-order/' . $order_id]);
       } else {
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Update error. Bad parcel IDs','gritter-danger')",]));
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
   }
 
@@ -417,7 +417,7 @@ class DefaultController extends Controller
         return "Create pdf for order " . $order_id;
       } else {
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter', 'value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
     }
   }
@@ -432,7 +432,7 @@ class DefaultController extends Controller
           'error',
           'Document not found'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
 
     $pac=OrderElement::findOne($parcels_id);
@@ -443,7 +443,7 @@ class DefaultController extends Controller
           'error',
           'Not enough access rights'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     };
 
     if($pac->getDocsCount()==0){
@@ -453,7 +453,7 @@ class DefaultController extends Controller
           'error',
           'The package does not have any attached documents'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
 
     Yii::$app->response->format = Response::FORMAT_JSON;
@@ -475,7 +475,7 @@ class DefaultController extends Controller
           'error',
           'Document not found'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
     $pac=OrderElement::findOne([$parcels_id]);
     if($pac->user_id!=Yii::$app->user->getId() && !Yii::$app->user->identity->isManager()){
@@ -485,7 +485,7 @@ class DefaultController extends Controller
           'error',
           'Not enough access rights'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     };
     $files=UploadedFile::getInstances($pac, 'files');
     return $pac->loadDoc($files);
@@ -500,7 +500,7 @@ class DefaultController extends Controller
           'error',
           'Document not found'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
     $pac=OrderElement::findOne([$parcels_id]);
     if($pac->user_id!=Yii::$app->user->getId() && !Yii::$app->user->identity->isManager()){
@@ -510,7 +510,7 @@ class DefaultController extends Controller
           'error',
           'Not enough access rights'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     };
 
     $pac->delFile($request->post('key'));
@@ -541,7 +541,7 @@ class DefaultController extends Controller
         return "Create pdf for order " .  $order_id;
       } else {
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Print error. Bad parcel IDs','gritter-danger')",]));
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
   }
 
@@ -553,7 +553,7 @@ class DefaultController extends Controller
         return "Create pdf for order " .  $order_id;
       } else {
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Update error. Bad parcel IDs','gritter-danger')",]));
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
   }
 
@@ -572,7 +572,7 @@ class DefaultController extends Controller
     $cookies = Yii::$app->response->cookies;
     $cookies->remove('parcelCheckedId');
     $cookies->remove('parcelCheckedUser');
-    $this->redirect(['/'],200);
+    $this->redirect(['/parcels'],200);
     return "Parcels delete complete successfully";
   }
 
@@ -591,7 +591,7 @@ class DefaultController extends Controller
       }
     }
     Yii::$app->getSession()->setFlash('error', 'Action not found.');
-    return $this->redirect(['/']);
+    return $this->redirect(['/parcels']);
   }
 
     public function actionInvoice($parcels_id){
@@ -602,7 +602,7 @@ class DefaultController extends Controller
         return $order_id;
       } else {
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Invoice error. Bad parcel IDs','gritter-danger')",]));
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
     }
 
@@ -616,7 +616,7 @@ class DefaultController extends Controller
           return $order_id;
         } else {
           Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','View error. Bad parcel IDs','gritter-danger')",]));
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
     }
     /**

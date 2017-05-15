@@ -22,7 +22,7 @@ class DefaultController extends Controller
   {
     if (!Yii::$app->user->can("takeParcel")){
       Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','You can\'t access the Recieving points controller','gritter-danger')",]));
-      $this->redirect(['/']);
+      $this->redirect(['/parcels']);
       return false;
     }
     return parent::beforeAction($action);
@@ -152,8 +152,8 @@ class DefaultController extends Controller
            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
          ];
       }else{
-        $this->redirect(['/']);
-        return $this->redirect(['/'],200);
+        $this->redirect(['/parcels']);
+        return $this->redirect(['/parcels'],200);
       }
     }else{
 

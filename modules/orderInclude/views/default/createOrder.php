@@ -33,7 +33,7 @@ $submitOption = [
 ?>
   <div class="row">
       <div class="col-md-4 col-sm-12">
-          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],
+          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
             [
               'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
               'id' => 'updateParcelsIdCookie',

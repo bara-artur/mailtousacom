@@ -300,7 +300,7 @@ class Order extends \yii\db\ActiveRecord
     $tax=$user->getTax();
     if(!$tax){
       Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
 
     $total=array(
