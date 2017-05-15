@@ -4,6 +4,7 @@ namespace app\modules\invoice\controllers;
 
 use app\modules\additional_services\models\AdditionalServices;
 use app\modules\invoice\models\Invoice;
+use app\modules\invoice\models\SearchInvoice;
 use app\modules\orderElement\models\OrderElement;
 use yii\web\Controller;
 use Yii;
@@ -44,12 +45,7 @@ class DefaultController extends Controller
       throw new NotFoundHttpException('There is no data.');
     };
 
-    $model = $order->getOrderElement();
-    $data=[
-      'invoice'=>'',
-      'ref_code'=>'',
-      'contract_number'=>'',
-    ];
+    $invoice_data=$order->getInvoiceData();
 
     $request = Yii::$app->request;
     if($request->isPost) {
@@ -64,7 +60,7 @@ class DefaultController extends Controller
         }
       }
 
-      foreach ($model as $pac) {
+      foreach ($invoice_data['users_parcel'] as $pac) {
         if($request->post('ch_parcel_'.$pac->id)==1){
           $parcel[]=$pac->id;
         }
@@ -108,34 +104,64 @@ class DefaultController extends Controller
       return $this->redirect(['/invoice/pdf/'.$inv->id]);
     }
 
-    $usluga=[
-      'parcel'=>[],
-      'many'=>[],
-    ];
-    $uslugaList=AdditionalServicesList::find()
-      ->where(['active'=>1])
-      //->andWhere(['!=', 'id', 1])
+    return $this->render('invoiceCreate', $invoice_data);
+  }
+
+  /**
+   * Lists all Config models.
+   * @return mixed
+   */
+  public function actionIndex()
+  {
+    $searchModel = new SearchInvoice();
+    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+    return $this->render('index', [
+      'searchModel' => $searchModel,
+      'dataProvider' => $dataProvider,
+    ]);
+  }
+
+  public function actionEdit($id)
+  {
+    if (!Yii::$app->user->can('trackInvoice')){
+      throw new NotFoundHttpException('Access is denied.');
+    }
+
+    $invoice=Invoice::find()->where(['id'=>$id])->one();
+
+    $sel_pac=[];
+
+    $services_list=explode(',',$invoice->services_list);
+    $parcels_list=explode(',',$invoice->parcels_list);
+
+    $orderElement=AdditionalServices::find()
+      ->where(['id'=>$services_list])
       ->asArray()
       ->all();
-    foreach ($uslugaList as $item){
-      if($item['id']==1){
-        continue;
-      }
-      if($item['type']==1){
-        $usluga['parcel'][]=$item;
-      }else{
-        $usluga['many'][]=$item;
+
+    foreach ($orderElement as $pac){
+      $pacs_id=explode(',',$pac['parcel_id_lst']);
+      foreach ($pacs_id as $id){
+        if(!in_array($id,$sel_pac)){
+          $sel_pac[]=$id;
+        }
       }
     };
 
-    return $this->render('invoiceCreate', [
-      'users_parcel'=>$model,
-      'order_id'=>$id,
-      'data'=>$data,
-      'usluga'=>$usluga,
-      'order_service'=>$order->getAdditionalService(),
-      'session'=>Yii::$app->session,
-    ]);
+    foreach ($parcels_list as $id){
+      if(!in_array($id,$sel_pac)){
+        $sel_pac[]=$id;
+      }
+    }
+
+    $order=new Order();
+    $order->el_group=implode(',',$sel_pac);
+    $order->user_id=Yii::$app->user->id;
+
+    $invoice_data=$order->getInvoiceData();
+
+    return $this->render('invoiceCreate', $invoice_data);
   }
 
   /**

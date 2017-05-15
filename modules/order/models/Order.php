@@ -499,4 +499,44 @@ class Order extends \yii\db\ActiveRecord
       'services_list'=>$services_list,
     ];
   }
+
+  public function getInvoiceData(){
+    $model = $this->getOrderElement();
+    $data=[
+      'invoice'=>'',
+      'ref_code'=>'',
+      'contract_number'=>'',
+    ];
+
+
+
+    $usluga=[
+      'parcel'=>[],
+      'many'=>[],
+    ];
+    $uslugaList=AdditionalServicesList::find()
+      ->where(['active'=>1])
+      //->andWhere(['!=', 'id', 1])
+      ->asArray()
+      ->all();
+    foreach ($uslugaList as $item){
+      if($item['id']==1){
+        continue;
+      }
+      if($item['type']==1){
+        $usluga['parcel'][]=$item;
+      }else{
+        $usluga['many'][]=$item;
+      }
+    };
+
+    return [
+      'users_parcel'=>$model,
+      'order_id'=>$this->id,
+      'data'=>$data,
+      'usluga'=>$usluga,
+      'order_service'=>$this->getAdditionalService(),
+      'session'=>Yii::$app->session,
+    ];
+  }
 }

@@ -183,7 +183,7 @@ if(count($usluga['many'])>0) {
                 <?php
               }
               ?>
-              <?=Html::a('Remove from order',
+              <?=isset($order_id)?Html::a('Remove from order',
                 ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
                 [
                   'class' => 'btn btn-danger btn-sm',
@@ -195,7 +195,7 @@ if(count($usluga['many'])>0) {
                     'request-method'=>"post",
                   ],
                   'role'=>"modal-remote",
-                ]); ?>
+                ]):''; ?>
             </td>
           <?php }; ?>
         </tr>
@@ -296,16 +296,22 @@ if(count($usluga['many'])>0) {
 
 <hr>
   <div class="form-group">
-    <?= Html::a('To order edit/view',
-      ['/orderInclude/create-order/'.$order_id],
-      [
-        'class' => 'btn btn-danger'
-      ]); ?>
-    <?= Html::a('To pay order',
-      ['/payment/order/'.$order_id],
-      [
-        'class' => 'btn btn-danger'
-      ]); ?>
+    <?php
+      if(isset($order_id)){
+      ?>
+      <?= Html::a('To order edit/view',
+        ['/orderInclude/create-order/'.$order_id],
+        [
+          'class' => 'btn btn-danger'
+        ]); ?>
+      <?= Html::a('To pay order',
+        ['/payment/order/'.$order_id],
+        [
+          'class' => 'btn btn-danger'
+        ]); ?>
+    <?php
+    }
+    ?>
     <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
   </div>
 <?php ActiveForm::end(); ?>
