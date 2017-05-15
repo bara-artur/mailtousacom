@@ -314,7 +314,7 @@ class DefaultController extends Controller
 
     }
 
-  public function findOrCreateOrder($parcels_id, $admin = 0){
+  public function findOrCreateOrder($parcels_id, $admin = 0, $cron = 0){
     $arr = explode(',', $parcels_id);
     asort($arr);
     $user_id = null;
@@ -352,7 +352,11 @@ class DefaultController extends Controller
         if ($admin==0){
           $order->user_id = $user_id;
         }else{
-          $order->user_id = Yii::$app->user->id;
+          if ($cron==0) {
+            $order->user_id = Yii::$app->user->id;
+          } else{
+            $order->user_id = 0;
+          }
         }
         $order->client_id = $user_id;
         if ($flag_dif_clients == 1) $order->client_id = 0;

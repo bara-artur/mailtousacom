@@ -142,9 +142,11 @@ class CronController extends Controller
         }
       }
       if ($parcels_for_email){
-        $order_id = OrderElementController::findOrCreateOrder(implode(',',$parcels_for_email),1);
+        $order_id = OrderElementController::findOrCreateOrder(implode(',',$parcels_for_email),1,1);
         if ($order_id){
-          InvoiceController::create($order_id, 1);  //  создаём invoice для текущего набора посылок
+          echo 1112221111;
+          InvoiceController::actionCreate($order_id, 1);  //  создаём invoice для текущего набора посылок
+          echo 22222222;
         }else{
           echo "Can't create order with parcels ".implode(',',$parcels_for_email);
         }
