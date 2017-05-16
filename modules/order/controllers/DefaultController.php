@@ -63,7 +63,7 @@ class DefaultController extends Controller
           'error',
           'There is not enough user access.'
         );
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     };
 
     $model= new User;
@@ -99,7 +99,7 @@ class DefaultController extends Controller
           ])
       ];
     }
-    return $this->redirect(['/']);
+    return $this->redirect(['/parcels']);
   }
 
     public function actionUpdate()
@@ -188,7 +188,7 @@ class DefaultController extends Controller
         }
         return $success;
       }
-    //  return $this->redirect(['/']);
+    //  return $this->redirect(['/parcels']);
     }
 
     public function actionSelect($order_id)
@@ -212,9 +212,9 @@ class DefaultController extends Controller
             'name' => 'parcelCheckedUser',
             'value' => $str
           ]));
-        return $this->redirect('/');
+        return $this->redirect('/parcels');
       }
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
     /**
      * Lists all Order models.

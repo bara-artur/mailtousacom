@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\modules\user\models\User;
 
 /**
  * LoginForm is the model behind the login form.
@@ -13,11 +14,11 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
-    public $username;
-    public $password;
-    public $rememberMe = true;
+  public $email;              // Электронная почта
+  public $password;           // Пароль
+  public $rememberMe = true;  // Запомнить меня
+  private $_user = false;
 
-    private $_user = false;
 
 
     /**
@@ -72,10 +73,9 @@ class LoginForm extends Model
      */
     public function getUser()
     {
-        if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
-        }
-
-        return $this->_user;
+      if ($this->_user === false) {
+        $this->_user = User::findOne(['email' => $this->email]);
+      }
+      return $this->_user;
     }
 }

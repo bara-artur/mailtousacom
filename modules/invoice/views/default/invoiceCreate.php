@@ -164,7 +164,9 @@ $this->params['breadcrumbs'][] = $this->title;
               <?php
               if(count($usluga['parcel'])>0) {
                 ?>
-                 <div class="btn-group">
+
+
+                  <div class="btn-group">
                       <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Add service to parcel <span class="caret"></span></button>
                       <ul class="dropdown-menu  text-left" role="menu">
                           <?php

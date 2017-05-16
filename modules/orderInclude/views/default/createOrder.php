@@ -24,16 +24,17 @@ use yii\bootstrap\Collapse;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+CrudAsset::register($this);
 $this->title = 'Order';
 $this->params['breadcrumbs'][] = $this->title;
-CrudAsset::register($this);
+
 $submitOption = [
   'class' => 'btn btn-lg btn-success'
 ];
 ?>
   <div class="row">
       <div class="col-md-4 col-sm-12">
-          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],
+          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
             [
               'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
               'id' => 'updateParcelsIdCookie',
@@ -85,7 +86,6 @@ $submitOption = [
 <?php } ?>
 
   <div id=crud-datatable-pjax>
-
     <?php
     Pjax::begin();
     if($order_elements){
@@ -627,7 +627,9 @@ if($createNewAddress){
        }
      //}else{
        if ((event.keyCode || event.charCode) == 13) {
-         if ($('.scaner_data').length>0) scaner_enter_button();
+         if ($('.scaner_data').is( ":focus" )) {
+           scaner_enter_button();
+         }
        }
       //}
     });

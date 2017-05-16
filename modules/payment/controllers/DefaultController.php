@@ -180,12 +180,12 @@ class DefaultController extends Controller
         //Проверяем оплачено ли все. Если принимать деньги не надо то редиректим на стротовую и выдаем сообщение
         if($pay_data['total']['price']==0) {
           \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //проверяем возможность приема платежа при приеме. Если нет то перебрасываем на стртовую.
         if(!Yii::$app->user->can("takePay") && $pay_data['total']['sum']>0) {
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         };
 
         //если есть раздрешения и выбрали оплату за месяц
@@ -195,7 +195,7 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //в остальных случаях создаем платеж и проводим его
@@ -230,7 +230,7 @@ class DefaultController extends Controller
         ]);
 
         \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse.');
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
 
       }else{
         //для пользователя
@@ -242,7 +242,7 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and successfully issued.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //Когда выбрали оплату на точке
@@ -250,7 +250,7 @@ class DefaultController extends Controller
           //помечаем посылки как ожидаемые к принятию
           $order->setData(['status'=>1,'payment_state'=>1]);
           \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         };
 
         //Когда выбрали оплату paypal
@@ -327,12 +327,12 @@ class DefaultController extends Controller
         //Проверяем оплачено ли все. Если принимать деньги не надо то редиректим на стротовую и выдаем сообщение
         if($pay_data['total']['price']==0) {
           \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //проверяем возможность приема платежа при приеме. Если нет то перебрасываем на стртовую.
         if(!Yii::$app->user->can("takePay") && $pay_data['$total']['sum']>0) {
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         };
 
         //если есть раздрешения и выбрали оплату за месяц
@@ -342,7 +342,7 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //в остальных случаях создаем платеж и проводим его
@@ -377,7 +377,7 @@ class DefaultController extends Controller
         ]);
 
         \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse.');
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
 
       }else{
         //для пользователя
@@ -389,7 +389,7 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and successfully issued.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //Когда выбрали оплату на точке
@@ -397,7 +397,7 @@ class DefaultController extends Controller
           //помечаем посылки как ожидаемые к принятию
           $order->setData(['status'=>1,'payment_state'=>1]);
           \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         };
 
         //Когда выбрали оплату paypal
@@ -477,7 +477,7 @@ class DefaultController extends Controller
       };
 
       \Yii::$app->getSession()->setFlash('success', 'Payment for your order was successful.');
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
     return $this->return_last_order('Try later or contact your administrator.');
   }
@@ -612,7 +612,7 @@ class DefaultController extends Controller
     $session = Yii::$app->session;
     $last_order=$session->get('last_order');
     if(!$last_order){
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }else{
       $last_pays=$session->get('last_pays');
       $pay=PaymentsList::findOne($last_pays);

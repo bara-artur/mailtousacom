@@ -22,7 +22,7 @@ class DefaultController extends Controller
   public function beforeAction($action)
   {
     if (Yii::$app->user->isGuest) {
-      $this->redirect(['/']);
+      $this->redirect(['/parcels']);
       return false;
     }
     return parent::beforeAction($action);
@@ -33,9 +33,9 @@ class DefaultController extends Controller
    * Renders the index view for the module
    * @return string
    */
-  public function actionCreate($id)
+  public function actionCreate($id, $cron = 0)
   {
-    if (!Yii::$app->user->can('trackInvoice')){
+    if (($cron == 0) && (!Yii::$app->user->can('trackInvoice'))){
       throw new NotFoundHttpException('Access is denied.');
     }
 
@@ -48,31 +48,31 @@ class DefaultController extends Controller
     $invoice_data=$order->getInvoiceData();
 
     $request = Yii::$app->request;
-    if($request->isPost) {
+    if (($cron == 1) || ($request->isPost)) {
       $order_service=$order->getAdditionalService();
 
       $invoice=[];
       $parcel=[];
 
       foreach ($order_service as $as) {
-        if($request->post('ch_invoice_'.$as->id)==1){
+        if(($cron == 1)||($request->post('ch_invoice_'.$as->id)==1)){
           $invoice[]=$as->id;
         }
       }
 
-      foreach ($invoice_data['users_parcel'] as $pac) {
-        if($request->post('ch_parcel_'.$pac->id)==1){
+      foreach ($model as $pac) {
+        if (($cron == 1)||($request->post('ch_parcel_'.$pac->id)==1)){
           $parcel[]=$pac->id;
         }
         $as = $pac->trackInvoice;
-        if($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1){
+        if((($cron == 1) && $as && !$as->isNewRecord)||($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1)){
           $invoice[]=$as->id;
         }
 
         $services=$pac->getAdditionalServiceList(false);
 
         foreach ($services as $as){
-          if($request->post('ch_invoice_'.$as->id)==1){
+          if(($cron == 1)||($request->post('ch_invoice_'.$as->id)==1)){
             $invoice[]=$as->id;
           }
         }
@@ -90,18 +90,28 @@ class DefaultController extends Controller
         $inv->parcels_list=$parcel;
         $inv->services_list=$invoice;
         $inv->create=time();
+        $inv->detail=$cron;
       }
+      if ($cron){
 
-      $session = Yii::$app->session;
+        $inv->detail = json_encode([
+          'cron' => $cron,
+        ]);
+      }else {
+        $session = Yii::$app->session;
 
-      $inv->detail=json_encode([
-        'invoice'=>$session['invoice_'.$id],
-        'ref_code'=>$session['ref_code_'.$id],
-        'contract_number'=>$session['contract_number_'.$id],
-      ]);
+        $inv->detail = json_encode([
+          'invoice' => $session['invoice_' . $id],
+          'ref_code' => $session['ref_code_' . $id],
+          'contract_number' => $session['contract_number_' . $id],
+        ]);
+      }
       $inv->save();
-
-      return $this->redirect(['/invoice/pdf/'.$inv->id]);
+      if ($cron == 1) {
+        return $inv->id;
+      } else {
+        return $this->redirect(['/invoice/pdf/' . $inv->id]);
+      }
     }
 
     return $this->render('invoiceCreate', $invoice_data);
@@ -209,7 +219,7 @@ class DefaultController extends Controller
 
       if(!$tax){
         Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
 
       $inv->qst=round($inv->price*$tax['qst']/100,2);
@@ -237,6 +247,7 @@ class DefaultController extends Controller
 
     return $id;
   }
+
 
   /*
    * Печать PDF с инвойсом
