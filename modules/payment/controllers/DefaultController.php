@@ -307,35 +307,14 @@ class DefaultController extends Controller
 
     $invoice=Invoice::find()->where(['id'=>$id])->one();
 
-    $sel_pac=[];
-
-    $services_list=explode(',',$invoice->services_list);
-    $parcels_list=explode(',',$invoice->parcels_list);
-
-    $orderElement=AdditionalServices::find()
-      ->where(['id'=>$services_list])
-      ->asArray()
-      ->all();
-
-    foreach ($orderElement as $pac){
-      $pacs_id=explode(',',$pac['parcel_id_lst']);
-      foreach ($pacs_id as $id){
-        if(!in_array($id,$sel_pac)){
-          $sel_pac[]=$id;
-        }
-      }
-    };
-
-    foreach ($parcels_list as $id){
-      if(!in_array($id,$sel_pac)){
-        $sel_pac[]=$id;
-      }
-    }
+    $sel_pac=$invoice->getParcelList();
 
     $order=new Order();
     $order->el_group=implode(',',$sel_pac);
     $order->user_id=Yii::$app->user->id;
 
+    $services_list=explode(',',$invoice->services_list);
+    $parcels_list=explode(',',$invoice->parcels_list);
     $pay_data=$order->getPaymentData($services_list,$parcels_list);
 
     $pay_data['inv_id']=$id;

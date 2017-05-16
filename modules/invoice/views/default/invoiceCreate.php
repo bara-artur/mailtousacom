@@ -164,16 +164,14 @@ $this->params['breadcrumbs'][] = $this->title;
               <?php
               if(count($usluga['parcel'])>0) {
                 ?>
-
-
-                  <div class="btn-group">
+                 <div class="btn-group">
                       <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Add service to parcel <span class="caret"></span></button>
                       <ul class="dropdown-menu  text-left" role="menu">
                           <?php
                           foreach ($usluga['parcel'] as $item){
                               ?>
                               <li>
-                                  <a href="/invoice/add-service-to-parcel/<?=$parcel->id;?>/<?=$item['id'];?>?order=<?=$order_id;?>"><?=$item['name'];?></a>
+                                  <a href="/invoice/add-service-to-parcel/<?=$parcel->id;?>/<?=$item['id'].(isset($order_id)?'?order='.$order_id:'?invoice='.$invoice_id);?>"><?=$item['name'];?></a>
                               </li>
                               <?php
                           }
@@ -185,7 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php
               }
               ?>
-              <?=isset($order_id)?Html::a('Remove from order',
+              <?=!isset($invoice_id)?Html::a('Remove from order',
                 ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
                 [
                   'class' => 'btn btn-danger btn-sm',

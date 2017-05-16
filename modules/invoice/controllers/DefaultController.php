@@ -130,37 +130,20 @@ class DefaultController extends Controller
 
     $invoice=Invoice::find()->where(['id'=>$id])->one();
 
-    $sel_pac=[];
+    $sel_pac=$invoice->getParcelList();
 
-    $services_list=explode(',',$invoice->services_list);
-    $parcels_list=explode(',',$invoice->parcels_list);
+    $order=Order::find()->where(['el_group'=>implode(',',$sel_pac)])->one();
 
-    $orderElement=AdditionalServices::find()
-      ->where(['id'=>$services_list])
-      ->asArray()
-      ->all();
-
-    foreach ($orderElement as $pac){
-      $pacs_id=explode(',',$pac['parcel_id_lst']);
-      foreach ($pacs_id as $id){
-        if(!in_array($id,$sel_pac)){
-          $sel_pac[]=$id;
-        }
-      }
-    };
-
-    foreach ($parcels_list as $id){
-      if(!in_array($id,$sel_pac)){
-        $sel_pac[]=$id;
-      }
+    if(!$order) {
+      $order = new Order();
+      $order->el_group = implode(',', $sel_pac);
+      $order->user_id = Yii::$app->user->id;
+      $order->save();
     }
-
-    $order=new Order();
-    $order->el_group=implode(',',$sel_pac);
-    $order->user_id=Yii::$app->user->id;
 
     $invoice_data=$order->getInvoiceData();
 
+    $invoice_data['invoice_id']=$id;
     return $this->render('invoiceCreate', $invoice_data);
   }
 
@@ -255,7 +238,6 @@ class DefaultController extends Controller
     return $id;
   }
 
-
   /*
    * Печать PDF с инвойсом
    */
@@ -308,10 +290,14 @@ class DefaultController extends Controller
     }
 
     $pac=OrderElement::find()->where(['id'=>$id])->one();
-    $this_service=$pac->addAdditionalService($service,true);
+    //$this_service=$pac->addAdditionalService($service,true);
 
     $request = Yii::$app->request;
-    return $this->redirect(['/invoice/create/'.$request->get('order')]);
+    if($request->get('order')) {
+      return $this->redirect(['/invoice/create/' . $request->get('order')]);
+    }else{
+      return $this->redirect(['/invoice/edit/' . $request->get('invoice')]);
+    }
   }
 
   //добавление услуги к заказу/всем посылкам в заказе

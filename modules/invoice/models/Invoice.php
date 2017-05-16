@@ -178,4 +178,33 @@ class Invoice extends \yii\db\ActiveRecord
         'date'=>$this->create,
       ];
     }
+
+    public function getParcelList(){
+      $sel_pac=[];
+
+      $services_list=explode(',',$this->services_list);
+      $parcels_list=explode(',',$this->parcels_list);
+
+      $orderElement=AdditionalServices::find()
+        ->where(['id'=>$services_list])
+        ->asArray()
+        ->all();
+
+      foreach ($orderElement as $pac){
+        $pacs_id=explode(',',$pac['parcel_id_lst']);
+        foreach ($pacs_id as $id){
+          if(!in_array($id,$sel_pac)){
+            $sel_pac[]=$id;
+          }
+        }
+      };
+
+      foreach ($parcels_list as $id){
+        if(!in_array($id,$sel_pac)){
+          $sel_pac[]=$id;
+        }
+      }
+
+      return $sel_pac;
+    }
 }
