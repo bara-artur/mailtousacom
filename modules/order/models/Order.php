@@ -508,7 +508,7 @@ class Order extends \yii\db\ActiveRecord
 
   public function beforeSave($insert)
   {
-    $arr = explode(',', $this->parcels_id);
+    $arr = explode(',', $this->el_group);
     asort($arr);
     $admin = 1;
     if (!Yii::$app->user->identity->isManager()){
@@ -537,7 +537,7 @@ class Order extends \yii\db\ActiveRecord
       }
     }
 
-    if (flag == 0) { // заказы без посылок не сохраняем
+    if ($flag == 0) { // заказы без посылок не сохраняем
       return false;
     }
     if ($admin == 0) {

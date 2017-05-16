@@ -60,6 +60,7 @@ class DefaultController extends Controller
         }
       }
 
+      $model=$order->getOrderElement();
       foreach ($model as $pac) {
         if (($cron == 1)||($request->post('ch_parcel_'.$pac->id)==1)){
           $parcel[]=$pac->id;
