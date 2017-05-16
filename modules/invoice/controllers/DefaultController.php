@@ -65,32 +65,25 @@ class DefaultController extends Controller
       }
 
       foreach ($model as $pac) {
-        echo 11111;
         if (($cron == 1)||($request->post('ch_parcel_'.$pac->id)==1)){
           $parcel[]=$pac->id;
         }
-        echo 2222;
         $as = $pac->trackInvoice;
-        echo 3333;
         if((($cron == 1) && $as && !$as->isNewRecord)||($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1)){
           $invoice[]=$as->id;
         }
-        echo 5555;
         $services=$pac->getAdditionalServiceList(false);
-        echo 9999;
         foreach ($services as $as){
           if(($cron == 1)||($request->post('ch_invoice_'.$as->id)==1)){
             $invoice[]=$as->id;
           }
         }
       }
-echo 7777;
       sort($parcel);
       sort($invoice);
 
       $parcel=implode(',',$parcel);
       $invoice=implode(',',$invoice);
-      echo 8888;
       $inv=Invoice::find()->where(['parcels_list'=>$parcel,'services_list'=>$invoice])->one();
       if(!$inv){
         $inv=new Invoice;
@@ -99,7 +92,6 @@ echo 7777;
         $inv->create=time();
         $inv->detail=$cron;
       }
-      echo 0000;
       if ($cron){
 
         $inv->detail = json_encode([
