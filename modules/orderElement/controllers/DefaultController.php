@@ -315,56 +315,18 @@ class DefaultController extends Controller
     }
 
   public function findOrCreateOrder($parcels_id, $admin = 0, $cron = 0){
-    $arr = explode(',', $parcels_id);
-    asort($arr);
-    $user_id = null;
-    $status = null;
-    $flag = 0;
-    $flag_dif_clients = 0;
-    foreach ($arr as $id) {
-        $parcel = OrderElement::findOne(['id' => $id]);
-        if ($parcel) {
-          if (($flag == 1) &&   //  если это уже не первая посылка из списка
-              ((($user_id != $parcel->user_id) && ($admin == 0)) ||    // несовпадение юзерров у неАдмина
-               (($status>1) && ($parcel->status<=1)) ||
-                (($status<=1) && ($parcel->status>1))  )) {           // несовпадение статусов
-            return null;
-          }
-          if (($user_id != $parcel->user_id)&&($flag == 1)) $flag_dif_clients = 1;
-          $user_id = $parcel->user_id;
-          $status = $parcel->status;
-          $flag = 1;
-        }else{
-          return null; // нет посылки из списка
-        }
-    }
-
-    if ($flag == 1) {  // посылки существуют
-      $parcels_id = implode(',', $arr);
-
-      $order = Order::find()->where(["el_group" => $parcels_id])->one();
-      if ($order) {
+    $order = Order::find()->where(["el_group" => $parcels_id])->one();
+    if ($order) {
+      return $order->id;
+    }else {
+      $order = new Order();
+      $order->el_group = $parcels_id;
+      if ($order->save()) {
         return $order->id;
-      }else {
-        $order = new Order();
-        $order->el_group = $parcels_id;
-        $order->created_at = time();
-        if ($admin==0){
-          $order->user_id = $user_id;
-        }else{
-          if ($cron==0) {
-            $order->user_id = Yii::$app->user->id;
-          } else{
-            $order->user_id = 0;
-          }
-        }
-        $order->client_id = $user_id;
-        if ($flag_dif_clients == 1) $order->client_id = 0;
-        $order->save();
-        return $order->id;
+      } else {
+        return null;
       }
     }
-    else return null;
   }
 
   public function actionGroupUpdate($parcels_id = null){
