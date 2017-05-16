@@ -94,7 +94,6 @@ class DefaultController extends Controller
         $inv->detail=$cron;
       }
       if ($cron){
-
         $inv->detail = json_encode([
           'cron' => $cron,
         ]);
@@ -153,8 +152,10 @@ class DefaultController extends Controller
     }
 
     $invoice_data=$order->getInvoiceData();
+    $invoice_data['data']=json_decode($invoice->detail,true);
 
     $invoice_data['invoice_id']=$id;
+    //ddd($invoice_data);
     return $this->render('invoiceCreate', $invoice_data);
   }
 
@@ -321,7 +322,12 @@ class DefaultController extends Controller
     $order=Order::find()->where(['id'=>$id])->one();
     $order->addAdditionalService($service);
 
-    return $this->redirect(['/invoice/create/'.$id]);
+    $request = Yii::$app->request;
+    if($request->get('invoice')) {
+      return $this->redirect(['/invoice/edit/' . $request->get('invoice')]);
+    }else{
+      return $this->redirect(['/invoice/create/'.$id]);
+    }
   }
 
 }
