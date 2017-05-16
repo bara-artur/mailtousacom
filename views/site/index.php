@@ -26,6 +26,7 @@ $this->title = 'Shipping to USA and Canada';
               <?php } ?>
               <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn2 btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
+              <?=Html::a('<i class="icon-metro-remove"></i>View archive', ['/archive'],['class'=>'btn btn-neutral-border',])?>
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
 
@@ -66,6 +67,21 @@ $this->title = 'Shipping to USA and Canada';
                     'data' => [
                         'confirm-message' => 'Are you sure to delete this item?',
                         'confirm-title'=>"Delete",
+                        'pjax'=>'false',
+                        'toggle'=>"tooltip",
+                        'request-method'=>"post",
+                    ],
+                    'disabled'=>true,
+                    'role'=>"modal-remote",
+                ]); ?>
+            <?=Html::a('<i class="icon-metro-remove"></i> To arhive',
+                ['/orderElement/group/archive'],
+                [
+                    'id'=>'group-delete',
+                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide group-delete',
+                    'data' => [
+                        'confirm-message' => 'Shall we move this items to archive?',
+                        'confirm-title'=>"Move to archive",
                         'pjax'=>'false',
                         'toggle'=>"tooltip",
                         'request-method'=>"post",
@@ -290,11 +306,26 @@ $this->title = 'Shipping to USA and Canada';
                             ],
                             'role'=>"modal-remote",
                         ]);
+                    $button_move_to_archive = Html::a('<i class="icon-metro-remove"></i>A',
+                      ['/orderElement/group-delete/' . $data->id.'/'.'1'],
+                      [
+                        'class' => 'btn btn-danger btn-sm marg_but',
+                        'title'=> 'Move to archive',
+                        'data' => [
+                          'confirm-message' => 'Shall we move this parcel to archive?',
+                          'confirm-title'=>"Move to archive",
+                          'pjax'=>'false',
+                          'toggle'=>"tooltip",
+                          'request-method'=>"post",
+                        ],
+                        'role'=>"modal-remote",
+                      ]);
                     return  (($data->status>2)?($button_payments):("")).                       // история платежей
                             (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
                             ($filesCount>0?$button_files:"").                                    //документы на печать
                             ((strcasecmp($data->first_name,'[default]')!=0)?($button_print_pdf):("")).                                                // печать PDF
-                            (($data->payment_state==0)?($button_delete_parcel):(""));         // удаление посылок
+                            (($data->payment_state==0)?($button_delete_parcel):("")).         // удаление посылок
+                            $button_move_to_archive;                                          // удаление в архив
                 }],
             ],
         ]); ?>

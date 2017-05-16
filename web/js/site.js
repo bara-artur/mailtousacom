@@ -625,13 +625,17 @@ function ajax_send_lb_oz_tn(elemForm) {
     index = Math.floor($('.lb-oz-tn-onChange').index(elemForm) /4); // высчитываем номер посылки, которая вызвала данное событие
     if(!valid_order_create(elemForm))return false;
     var msg   = $(elemForm).parents('form:first').serialize();
-
     $.ajax({
       type: 'POST',
       url: 'orderElement/create-order',
       data: msg,
       success: function(data) {
-        $('.resInd'+index).html(data).css( "color", "blue");
+        arr_data=JSON.parse(data);
+        if (arr_data["type"]==1) {
+          $('.resInd' + index).html(arr_data["mes"]).css("color", "blue");
+        }else{
+          gritterAdd(arr_data["mes"],'','gritter-warning');
+        }
       },
       error:  function(xhr, str){
         gritterAdd('Error','Error: '+xhr.responseCode,'gritter-danger');

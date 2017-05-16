@@ -239,7 +239,11 @@ class OrderElement extends \yii\db\ActiveRecord
       $el=NEW AdditionalServices;
       $el->type=$service;
       $el->client_id=$this->user_id;
-      $el->user_id=Yii::$app->user->id;
+      if (isset(Yii::$app->user)) {
+        $el->user_id=Yii::$app->user->id;
+      } else {
+        $el->user_id = 0;
+      }
       $el->parcel_id_lst=(string)$this->id;
       $el->price=$tpl->base_price;
       $el->kurs=Yii::$app->config->get('USD_CAD');

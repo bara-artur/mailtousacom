@@ -297,7 +297,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <hr>
-  <div class="form-group">
+<?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
+<?php ActiveForm::end(); ?>
+<?php Pjax::end();;?>
+
+<div class="form-group">
     <?= Html::a('Order edit/view',
       ['/orderInclude/create-order/'.$order_id],
       [
@@ -308,10 +312,7 @@ $this->params['breadcrumbs'][] = $this->title;
       [
         'class' => 'btn btn-info'
       ]); ?>
-    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
-  </div>
-<?php ActiveForm::end(); ?>
-<?php Pjax::end();;?>
+</div>
 
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",

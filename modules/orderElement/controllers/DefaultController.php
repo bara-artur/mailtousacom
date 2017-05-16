@@ -130,9 +130,9 @@ class DefaultController extends Controller
                   }else{
                     $oldModel->save();
                     if (OrderElement::GetShippingCarrier($_POST['track_number'])==null) {
-                      return "Undefined track number. We can't recognize shipping company.";
+                      return json_encode(['type'=>0,'mes'=>"Undefined track number. We can't recognize shipping company."]);
                     }else{
-                      return "Bad number. ".$_POST['track_number']." already exist in our system";
+                      return json_encode(['type'=>0,'mes'=>"Bad number. ".$_POST['track_number']." already exist in our system"]);
                     }
                   }
                 }
@@ -146,7 +146,7 @@ class DefaultController extends Controller
             }
         }
        // $model = OrderElement::find()->where(['order_id'=>$id])->all();
-        return $ParcelPrice;
+        return json_encode(['type'=>1,'mes'=>$ParcelPrice]);
     }
 
     public function actionCreate($id)
@@ -314,53 +314,19 @@ class DefaultController extends Controller
 
     }
 
-  public function findOrCreateOrder($parcels_id, $admin = 0){
-    $arr = explode(',', $parcels_id);
-    asort($arr);
-    $user_id = null;
-    $status = null;
-    $flag = 0;
-    $flag_dif_clients = 0;
-    foreach ($arr as $id) {
-        $parcel = OrderElement::findOne(['id' => $id]);
-        if ($parcel) {
-          if (($flag == 1) &&   //  если это уже не первая посылка из списка
-              ((($user_id != $parcel->user_id) && ($admin == 0)) ||    // несовпадение юзерров у неАдмина
-               (($status>1) && ($parcel->status<=1)) ||
-                (($status<=1) && ($parcel->status>1))  )) {           // несовпадение статусов
-            return null;
-          }
-          if (($user_id != $parcel->user_id)&&($flag == 1)) $flag_dif_clients = 1;
-          $user_id = $parcel->user_id;
-          $status = $parcel->status;
-          $flag = 1;
-        }else{
-          return null; // нет посылки из списка
-        }
-    }
-
-    if ($flag == 1) {  // посылки существуют
-      $parcels_id = implode(',', $arr);
-
-      $order = Order::find()->where(["el_group" => $parcels_id])->one();
-      if ($order) {
+  public function findOrCreateOrder($parcels_id, $admin = 0, $cron = 0){
+    $order = Order::find()->where(["el_group" => $parcels_id])->one();
+    if ($order) {
+      return $order->id;
+    }else {
+      $order = new Order();
+      $order->el_group = $parcels_id;
+      if ($order->save()) {
         return $order->id;
-      }else {
-        $order = new Order();
-        $order->el_group = $parcels_id;
-        $order->created_at = time();
-        if ($admin==0){
-          $order->user_id = $user_id;
-        }else{
-          $order->user_id = Yii::$app->user->id;
-        }
-        $order->client_id = $user_id;
-        if ($flag_dif_clients == 1) $order->client_id = 0;
-        $order->save();
-        return $order->id;
+      } else {
+        return null;
       }
     }
-    else return null;
   }
 
   public function actionGroupUpdate($parcels_id = null){
@@ -557,15 +523,20 @@ class DefaultController extends Controller
       }
   }
 
-  public function actionGroupDelete($parcels_id=null){
+  public function actionGroupDelete($parcels_id=null, $to_archive = 0){
     $arr = explode(',', $parcels_id);
     asort($arr);
     foreach ($arr as $parcel_id) {
       $parcel = OrderElement::findOne(['id' => $parcel_id]);
       if ($parcel){
         if ($parcel->payment_state==0) {
-          OrderInclude::deleteAll(['order_id' => $parcel_id]);
-          OrderElement::deleteAll(['id' => $parcel_id]);
+          if ($to_archive == 0) {
+            OrderInclude::deleteAll(['order_id' => $parcel_id]);
+            OrderElement::deleteAll(['id' => $parcel_id]);
+          }else{
+            $parcel->archive = 1;
+            $parcel->save();
+          }
         }
       }
     }
@@ -586,6 +557,7 @@ class DefaultController extends Controller
         case 'advanced_print':  {return $this->actionGroupPrintAdvanced($parcels_id);break;}
         case 'commercial_inv_print':    {return $this->actionCommercial_inv_print($parcels_id);break;}
         case 'delete':  {return $this->actionGroupDelete($parcels_id);break;}
+        case 'archive':  {return $this->actionGroupDelete($parcels_id,1);break;}
         case 'view':    {return $this->actionGroupView($parcels_id);break;}
         case 'invoice':    {return $this->actionInvoice($parcels_id);break;}
       }

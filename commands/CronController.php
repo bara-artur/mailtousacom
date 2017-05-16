@@ -7,9 +7,15 @@
 
 namespace app\commands;
 
+use app\modules\logs\models\Log;
+use app\modules\payment\models\PaymentInclude;
 use Yii;
 use yii\console\Controller;
+use app\modules\order\models\Order;
+use app\modules\user\models\User;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\orderElement\controllers\DefaultController as OrderElementController;
+use app\modules\invoice\controllers\DefaultController as InvoiceController;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
 use app\modules\config\components\DConfig;
 use yii\helpers\Console;
@@ -112,12 +118,66 @@ class CronController extends Controller
   }
 
   public function actionMonthInvoice(){
-
+    $users = User::find()->all();
+    foreach ($users as $user){
+      $this_month_begin = strtotime(date('Y-m-01'));
+      $parcels_for_email = [];
+      $services_for_email = [];
+      $parcels = OrderElement::find()
+        ->where(['user_id' => $user])
+        ->where(['month_pay' => 1])         // работа с пользователями с месячным типом оплаты
+        ->where(['status'=> 2])             // берем посылки со статусом 2
+        ->where(['>=', 'created_at', $this_month_begin])   // посылки созданные после начала текущего месяца
+        ->all();
+      if ($parcels){
+        foreach ($parcels as $parcel){
+          $payment = PaymentInclude::find()
+            ->where(['element_id' => $parcel->id])
+            ->where(['element_type' => 0])   // тип платежа - за посылку
+            ->where(['status' => 0])    //  поиск посылок ожидающих оплаты
+            ->one();
+          if ($payment){
+            $parcels_for_email[] = $parcel->id;
+          }
+        }
+      }
+      if ($parcels_for_email){
+        $order_id = OrderElementController::findOrCreateOrder(implode(',',$parcels_for_email),1,1);
+        if ($order_id){
+          echo 1112221111;
+          InvoiceController::actionCreate($order_id, 1);  //  создаём invoice для текущего набора посылок
+          echo 22222222;
+        }else{
+          echo "Can't create order with parcels ".implode(',',$parcels_for_email);
+        }
+      }
+    }
   }
+
   public function actionClearOrder(){
-
+    $two_month = 60*24*60*60;
+    Order::deleteAll('created_at < '.(time()-$two_month));  // удаление Заказов старее двух месяцев
   }
-  public function actionMoveToArhiv(){
 
+  public function actionMoveToArhiv(){
+    $one_month = 30*24*60*60;
+    $parcels = OrderElement::find()
+      ->where(['created_at' < (time()-$one_month)])  // берем все посылки старше 1 месяца
+      ->where(['>=', 'status', 6])
+      ->all(); // все посылки старше месяца со статусом 2
+    if ($parcels){
+      foreach ($parcels as $parcel){
+        $old_parcel_log = Log::find()
+          ->where(['order_id' => $parcel->id])
+          ->where(['description' => 'Change status'])   //  берем запись с изменением статуса
+          ->where(['>=', 'status_id', 6])                     // берем статус больше либо равным 2
+          ->orderBy('created_at DESC')                // сортируем по убыванию даты
+          ->one();                                      // берем первую запись
+        if ($old_parcel_log->created_at < (time()-$one_month)) {
+          $model = OrderElement::findOne($parcel->id);
+          $model->archive = 1;
+        }
+      }
+    }
   }
 }
