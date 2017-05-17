@@ -17,6 +17,7 @@ use app\modules\orderElement\models\ElementFilterForm;
 use app\modules\user\models\ShowParcelTableForm;
 use app\modules\address\models\Address;
 use app\modules\receiving_points\models\ReceivingPoints;
+use easypost\EasyPost;
 
 class SiteController extends Controller
 {
@@ -70,6 +71,19 @@ class SiteController extends Controller
     public $show = 0;
     public function actionIndex()
     {
+      \EasyPost\EasyPost::setApiKey('QSRDbtnsUmLO27Xsa7RaxA');
+      echo \EasyPost\Address::create_and_verify(
+        array(
+          "name"    => "Dr. Steve Brule",
+          "street1" => "179 N Harbor Dr.",
+          "city"    => "",
+          "state"   => "CA",
+          "zip"     => "90277",
+          "phone"   => "310-808-5243"
+        )
+      );
+
+
       $gritter = Yii::$app->request->cookies['showTheGritter'];
       Yii::$app->response->cookies->remove('showTheGritter');
 
