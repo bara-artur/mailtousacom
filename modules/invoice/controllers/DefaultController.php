@@ -139,10 +139,9 @@ class DefaultController extends Controller
     }
 
     $invoice=Invoice::find()->where(['id'=>$id])->one();
-
     $sel_pac=$invoice->getParcelList();
-
     $order=Order::find()->where(['el_group'=>implode(',',$sel_pac)])->one();
+
 
     if(!$order) {
       $order = new Order();
@@ -151,10 +150,8 @@ class DefaultController extends Controller
       $order->save();
     }
 
-    $invoice_data=$order->getInvoiceData();
-    $invoice_data['data']=json_decode($invoice->detail,true);
+    $invoice_data=$order->getInvoiceData($invoice);
 
-    $invoice_data['invoice_id']=$id;
     //ddd($invoice_data);
     return $this->render('invoiceCreate', $invoice_data);
   }

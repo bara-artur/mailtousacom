@@ -75,6 +75,13 @@ class DefaultController extends Controller
     $admin = Yii::$app->user->identity->isManager();
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
+
+    $request = Yii::$app->request;
+    $session = Yii::$app->session;
+    if($request->get('invoice')) {
+      $session->set('CreateOrder' . $id,$request->get('invoice'));
+      return $this->redirect(['/orderInclude/create-order/' . $id]);
+    }
     $model = new OrderElement();
     $hideNext =0 ;
     $order = Order::find()->where(['id'=>$id])->one();
@@ -145,6 +152,7 @@ class DefaultController extends Controller
       'scaner_data_list' => $scaner_data_list,
       'last' => $last,
       'admin' => $admin,
+      'invoice_id'=>$session['CreateOrder' . $id]
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/

@@ -503,6 +503,22 @@ Parcel will be moved back to the list of parcels.',
 ])?>
 <?php Modal::end(); ?>
 
+<?php
+if(isset($invoice_id)) {
+  ?>
+  <?= Html::a('To edit invoice',
+    ['/invoice/edit/' . $invoice_id],
+    [
+      'class' => 'btn btn-info'
+    ]); ?>
+  <?php
+}
+?>
+<?= Html::a('Create new invoice',
+  ['/invoice/create/' . $order_id],
+  [
+    'class' => 'btn btn-info'
+  ]); ?>
 
 <?php if ($edit_not_prohibited) {?>
   <?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
