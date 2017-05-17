@@ -320,6 +320,7 @@ class DefaultController extends Controller
       return $order->id;
     }else {
       $order = new Order();
+      $order->user_id = 0;
       $order->el_group = $parcels_id;
       if ($order->save()) {
         return $order->id;

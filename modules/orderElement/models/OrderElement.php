@@ -617,13 +617,13 @@ class OrderElement extends \yii\db\ActiveRecord
     if($this->first_name!='[default]') {
       try {
         \EasyPost\EasyPost::setApiKey('QSRDbtnsUmLO27Xsa7RaxA');
-        echo \EasyPost\Address::create_and_verify(
+        \EasyPost\Address::create_and_verify(
           array(
             "name" => $this->first_name . ' ' . $this->last_name,
             "street1" => $this->adress_1,
             "street2" => $this->adress_2,
             "city" => $this->city,
-            "state" => $this->state,
+            "state" => $this->getStateText(),
             "zip" => $this->zip,
             "phone" => $this->phone
           )
