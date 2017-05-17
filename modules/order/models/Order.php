@@ -537,9 +537,6 @@ class Order extends \yii\db\ActiveRecord
       }
     }
 
-    if ($flag == 0) { // заказы без посылок не сохраняем
-      return false;
-    }
     if ($admin == 0) {
       $this->user_id = $user_id;
     }else{
