@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use app\modules\receiving_points\models\ReceivingPointsSearch;
+use EasyPost\Error;
 use Yii;
+use yii\base\ErrorException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -69,21 +71,15 @@ class SiteController extends Controller
      * @return string
      */
     public $show = 0;
-    public function actionIndex()
+
+  public function exception_error_handler() {
+
+    throw new ErrorException('hello');
+    return 1;
+  }
+
+  public function actionIndex()
     {
-      \EasyPost\EasyPost::setApiKey('QSRDbtnsUmLO27Xsa7RaxA');
-      echo \EasyPost\Address::create_and_verify(
-        array(
-          "name"    => "Dr. Steve Brule",
-          "street1" => "179 N Harbor Dr.",
-          "city"    => "",
-          "state"   => "CA",
-          "zip"     => "90277",
-          "phone"   => "310-808-5243"
-        )
-      );
-
-
       $gritter = Yii::$app->request->cookies['showTheGritter'];
       Yii::$app->response->cookies->remove('showTheGritter');
 
