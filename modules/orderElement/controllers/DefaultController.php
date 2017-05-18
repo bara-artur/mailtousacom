@@ -100,11 +100,12 @@ class DefaultController extends Controller
      */
     public function actionCreateOrder(){
         //получаем посылки в заказе
-        $percel_id = $_POST['percel_id'];
-        $order_id = $_POST['order_id'];
+      $request = Yii::$app->request;
 
-        $request = Yii::$app->request;
-        if($request->isAjax) {
+      $percel_id = $request ->post('percel_id');
+      //$order_id = $request ->post('order_id');
+
+      if($request->isAjax) {
             $oldModel = OrderElement::find()->andWhere(['id' => $percel_id])->one();
             $user_id = $oldModel->user_id;
             if ($oldModel) {
@@ -117,6 +118,20 @@ class DefaultController extends Controller
                 }
 
                 $oldModel->weight = $weight;
+
+                $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
+                if($ParcelPrice!=false){
+                  $oldModel->price=(float)$ParcelPrice;
+                  $user=User::findOne($user_id);
+                  $tax=$user->getTax();
+                  $oldModel->gst=round($ParcelPrice*$tax['gst']/100,2);
+                  $oldModel->qst=round($ParcelPrice*$tax['qst']/100,2);
+
+                  $ParcelPrice.=' $ (without tax)';
+                }else{
+                  $ParcelPrice='<b style="color: red;">Exceeded weight of a parcel.</b>';
+                }
+
                 // $weight = $_POST['lb'] + $oz;
                 if (isset($_POST['track_number_type']))
                   $oldModel->track_number_type = 1;
@@ -124,25 +139,21 @@ class DefaultController extends Controller
                   $oldModel->track_number_type = 0;
 
                 if (($_POST['track_number'] != null)&&($oldModel->track_number_type==0)) {
-                  if ((OrderElement::find()->andWhere(['not in','id',$percel_id])->andWhere(['track_number'=> $_POST['track_number']])->one() ==null)&&
-                      (OrderElement::GetShippingCarrier($_POST['track_number'])!=null)){
+                  if ((OrderElement::find()->andWhere(['not in', 'id', $percel_id])->andWhere(['track_number' => $_POST['track_number']])->one() == null) &&
+                    (OrderElement::GetShippingCarrier($_POST['track_number']) != null)
+                  ) {
                     $oldModel->track_number = $_POST['track_number'];
-                  }else{
+                  } else {
                     $oldModel->save();
-                    if (OrderElement::GetShippingCarrier($_POST['track_number'])==null) {
-                      return json_encode(['type'=>0,'mes'=>"Undefined track number. We can't recognize shipping company."]);
-                    }else{
-                      return json_encode(['type'=>0,'mes'=>"Bad number. ".$_POST['track_number']." already exist in our system"]);
+                    if (OrderElement::GetShippingCarrier($_POST['track_number']) == null) {
+                      return json_encode(['type' => 0, 'mes' => "Undefined track number. We can't recognize shipping company."]);
+                    } else {
+                      return json_encode(['type' => 0, 'mes' => "Bad number. " . $_POST['track_number'] . " already exist in our system"]);
                     }
                   }
                 }
                 $oldModel->save();
-            }
-            $ParcelPrice=ParcelPrice::widget(['weight'=>$weight,'user'=>$user_id]);
-            if($ParcelPrice!=false){
-                $ParcelPrice.=' $ (without tax)';
-            }else{
-                $ParcelPrice='<b style="color: red;">Exceeded weight of a parcel.</b>';
+              var_dump($oldModel);
             }
         }
        // $model = OrderElement::find()->where(['order_id'=>$id])->all();
