@@ -518,7 +518,7 @@ class Order extends \yii\db\ActiveRecord
         $flag = 0;
         $flag_dif_clients = 0;
 
-        foreach ($arr as $id) {
+        foreach ($arr as $id) {   // перебор посылок в заказе
           $parcel = OrderElement::findOne(['id' => $id]);
           if ($parcel) {
             if (($flag == 1) &&   //  если это уже не первая посылка из списка
@@ -538,12 +538,9 @@ class Order extends \yii\db\ActiveRecord
         }
 
         $this->client_id = $user_id;
-        if ($flag_dif_clients == 1) $this->client_id = 0;
-      }
-      if(!$this->user_id) {
-        if ($admin == 0) {
-          $this->user_id = $user_id;
-        } else {
+        $this->user_id = $user_id;
+        if ($flag_dif_clients == 1) {
+          $this->client_id = 0;
           $this->user_id = Yii::$app->user->id;
         }
       }
