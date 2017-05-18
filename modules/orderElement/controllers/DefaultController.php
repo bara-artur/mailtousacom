@@ -153,7 +153,6 @@ class DefaultController extends Controller
                   }
                 }
                 $oldModel->save();
-              var_dump($oldModel);
             }
         }
        // $model = OrderElement::find()->where(['order_id'=>$id])->all();
