@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-3">
   <p>
     Invoice number
-    <?=Html::input('text', 'invoice', !isset($invoice_id)?$session['invoice_'.$order_id]:$data['invoice'], [
+    <?=Html::input('text', 'invoice', !$invoice_id?$session['invoice_'.$order_id]:$data['invoice'], [
       'class' => '',
     ]);?>
   </p>
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-3">
   <p>
     Referring code
-    <?=Html::input('text', 'ref_code', !isset($invoice_id)?$session['ref_code_'.$order_id]:$data['ref_code'], [
+    <?=Html::input('text', 'ref_code', !$invoice_id?$session['ref_code_'.$order_id]:$data['ref_code'], [
       'class' => ''
     ]);?>
   </p>
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-3">
   <p>
     Contract number
-    <?=Html::input('text', 'contract_number', !isset($invoice_id)?$session['contract_number_'.$order_id]:$data['contract_number'], [
+    <?=Html::input('text', 'contract_number', !$invoice_id?$session['contract_number_'.$order_id]:$data['contract_number'], [
       'class' => ''
     ]);?>
   </p>
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($usluga['parcel'] as $item){
                     ?>
                     <li>
-                        <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'].(!isset($invoice_id)?'':'?invoice='.$invoice_id);?>"><?=$item['name'];?></a>
+                        <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'].(!$invoice_id?'':'?invoice='.$invoice_id);?>"><?=$item['name'];?></a>
                     </li>
                     <?php
                 }
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($usluga['many'] as $item){
                     ?>
                     <li>
-                        <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'].(!isset($invoice_id)?'':'?invoice='.$invoice_id);?>"><?=$item['name'];?></a>
+                        <a href="/invoice/add-service-to-all/<?=$order_id;?>/<?=$item['id'].(!$invoice_id?'':'?invoice='.$invoice_id);?>"><?=$item['name'];?></a>
                     </li>
                     <?php
                 }
@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                           foreach ($usluga['parcel'] as $item){
                               ?>
                               <li>
-                                  <a href="/invoice/add-service-to-parcel/<?=$parcel->id;?>/<?=$item['id'].(!isset($invoice_id)?'?order='.$order_id:'?invoice='.$invoice_id);?>"><?=$item['name'];?></a>
+                                  <a href="/invoice/add-service-to-parcel/<?=$parcel->id;?>/<?=$item['id'].(!$invoice_id?'?order='.$order_id:'?invoice='.$invoice_id);?>"><?=$item['name'];?></a>
                               </li>
                               <?php
                           }
@@ -185,7 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php
               }
               ?>
-              <?=!isset($invoice_id)?Html::a('Remove from order',
+              <?=!$invoice_id?Html::a('Remove from order',
                 ['/orderInclude/group-remove/'.$order_id."/".$parcel->id],
                 [
                   'class' => 'btn btn-danger btn-sm',
@@ -304,13 +304,13 @@ $this->params['breadcrumbs'][] = $this->title;
       if(isset($order_id)) {
         ?>
         <?= Html::a('Order edit/view',
-          ['/orderInclude/create-order/' . $order_id.(!isset($invoice_id)?'':'?invoice='.$invoice_id)],
+          ['/orderInclude/create-order/' . $order_id.(!$invoice_id?'':'?invoice='.$invoice_id)],
           [
             'class' => 'btn btn-science-blue',
           ]); ?>
         <?php
       }
-      if(!isset($invoice_id)) {
+      if(!$invoice_id) {
         ?>
         <?= Html::a('To pay order',
           ['/payment/order/' . $order_id],
@@ -322,7 +322,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
       }
       ?>
-    <?= Html::submitButton('Generate invoice', ['class' => 'btn btn-success pull-right']) ?>
+    <?= Html::submitButton('Generate invoice(PDF)', ['name'=>'submit','value'=>'pdf','class' => 'btn btn-success pull-right']) ?>
+    <?= Html::submitButton('Generate invoice(to pay)', ['name'=>'submit','value'=>'pay','class' => 'btn btn-success pull-right']) ?>
   </div>
 <?php ActiveForm::end(); ?>
 <?php Pjax::end();;?>

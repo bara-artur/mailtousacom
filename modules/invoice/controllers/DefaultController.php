@@ -152,6 +152,55 @@ class DefaultController extends Controller
 
     $invoice_data=$order->getInvoiceData($invoice);
 
+    $request = Yii::$app->request;
+    if($request->isPost){
+      $order_service=$order->getAdditionalService();
+
+      $inv=[];
+      $parcel=[];
+
+      foreach ($order_service as $as) {
+        if(($request->post('ch_invoice_'.$as->id)==1)){
+          $inv[]=$as->id;
+        }
+      }
+
+      $model=$order->getOrderElement();
+      foreach ($model as $pac) {
+        if ($request->post('ch_parcel_'.$pac->id)==1){
+          $parcel[]=$pac->id;
+        }
+        $as = $pac->trackInvoice;
+        if($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1){
+          $inv[]=$as->id;
+        }
+
+        $services=$pac->getAdditionalServiceList(false);
+
+        foreach ($services as $as){
+          if($request->post('ch_invoice_'.$as->id)==1){
+            $inv[]=$as->id;
+          }
+        }
+      }
+
+      sort($parcel);
+      sort($inv);
+
+      $parcel=implode(',',$parcel);
+      $inv=implode(',',$inv);
+
+      $invoice->parcels_list=$parcel;
+      $invoice->services_list=$invoice;
+
+      if($request->post('submit')=='pdf'){
+        return $this->redirect(['/invoice/pdf/' . $invoice->id]);
+      }
+      if($request->post('submit')=='pay'){
+        return $this->redirect(['/payment/invoice/' . $invoice->id]);
+      }
+      ddd($request->post());
+    }
     //ddd($invoice_data);
     return $this->render('invoiceCreate', $invoice_data);
   }
@@ -246,7 +295,6 @@ class DefaultController extends Controller
 
     return $id;
   }
-
 
   /*
    * Печать PDF с инвойсом
