@@ -320,7 +320,7 @@ class DefaultController extends Controller
     $pay_data['inv_id']=$id;
 
     //если пост запрос
-    if($request->isPost) {
+    if($request->isPost || !Yii::$app->user->identity->isManager()) {
       if(Yii::$app->user->identity->isManager()){
         //Для админа
 
@@ -392,16 +392,9 @@ class DefaultController extends Controller
           return $this->redirect(['/parcels']);
         }
 
-        //Когда выбрали оплату на точке
-        if($request->post('payment_type')==2){
-          //помечаем посылки как ожидаемые к принятию
-          $order->setData(['status'=>1,'payment_state'=>1]);
-          \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
-          return $this->redirect(['/parcels']);
-        };
 
         //Когда выбрали оплату paypal
-        if($request->post('payment_type')==1){
+        //if($request->post('payment_type')==1){
           //Создоем экземпляр для оплаты через PayPal
           $pay = new DoPayment();
 
@@ -439,7 +432,7 @@ class DefaultController extends Controller
           $approvalUrl = $payment->getApprovalLink();
           return $this->redirect($approvalUrl);
 
-        }
+        //}
       }
 
     }
