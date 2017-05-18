@@ -48,7 +48,7 @@ class CronController extends Controller
   {
     $tot_time=time();
     $data=OrderElement::find()
-      ->where(['status'=>[4,5]])
+      ->andWhere(['status'=>[4,5]])
       ->orderBy(['cron_refresh' => SORT_ASC])
       ->limit(Yii::$app->config->get('track_refresh_count'))// берем 10 посылок (надо будет исключить доставленные)
       ->all();
@@ -124,17 +124,17 @@ class CronController extends Controller
       $parcels_for_email = [];
       $services_for_email = [];
       $parcels = OrderElement::find()
-        ->where(['user_id' => $user])
-        ->where(['month_pay' => 1])         // работа с пользователями с месячным типом оплаты
-        ->where(['status'=> 2])             // берем посылки со статусом 2
-        ->where(['>=', 'created_at', $this_month_begin])   // посылки созданные после начала текущего месяца
+        ->andWhere(['user_id' => $user])
+        ->andWhere(['month_pay' => 1])         // работа с пользователями с месячным типом оплаты
+        ->andWhere(['status'=> 2])             // берем посылки со статусом 2
+        ->andWhere(['>=', 'created_at', $this_month_begin])   // посылки созданные после начала текущего месяца
         ->all();
       if ($parcels){
         foreach ($parcels as $parcel){
           $payment = PaymentInclude::find()
-            ->where(['element_id' => $parcel->id])
-            ->where(['element_type' => 0])   // тип платежа - за посылку
-            ->where(['status' => 0])    //  поиск посылок ожидающих оплаты
+            ->andWhere(['element_id' => $parcel->id])
+            ->andWhere(['element_type' => 0])   // тип платежа - за посылку
+            ->andWhere(['status' => 0])    //  поиск посылок ожидающих оплаты
             ->one();
           if ($payment){
             $parcels_for_email[] = $parcel->id;
@@ -162,15 +162,15 @@ class CronController extends Controller
   public function actionMoveToArhiv(){
     $one_month = 30*24*60*60;
     $parcels = OrderElement::find()
-      ->where(['created_at' < (time()-$one_month)])  // берем все посылки старше 1 месяца
-      ->where(['>=', 'status', 6])
+      ->andWhere(['created_at' < (time()-$one_month)])  // берем все посылки старше 1 месяца
+      ->andWhere(['>=', 'status', 6])
       ->all(); // все посылки старше месяца со статусом 2
     if ($parcels){
       foreach ($parcels as $parcel){
         $old_parcel_log = Log::find()
-          ->where(['order_id' => $parcel->id])
-          ->where(['description' => 'Change status'])   //  берем запись с изменением статуса
-          ->where(['>=', 'status_id', 6])                     // берем статус больше либо равным 2
+          ->andWhere(['order_id' => $parcel->id])
+          ->andWhere(['description' => 'Change status'])   //  берем запись с изменением статуса
+          ->andWhere(['>=', 'status_id', 6])                     // берем статус больше либо равным 2
           ->orderBy('created_at DESC')                // сортируем по убыванию даты
           ->one();                                      // берем первую запись
         if ($old_parcel_log->created_at < (time()-$one_month)) {

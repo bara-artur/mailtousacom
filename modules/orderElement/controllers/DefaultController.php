@@ -315,11 +315,16 @@ class DefaultController extends Controller
     }
 
   public function findOrCreateOrder($parcels_id, $admin = 0, $cron = 0){
-    $order = Order::find()->where(["el_group" => $parcels_id])->one();
+    if ($admin == 1) {
+      $order = Order::find()->where(["el_group" => $parcels_id])->one();
+    }else{
+      $order = Order::find()->where(["el_group" => $parcels_id])->andWhere(["user_id" => Yii::$app->user->id])->one();
+    }
     if ($order) {
       return $order->id;
     }else {
       $order = new Order();
+      $order->user_id = 0;
       $order->el_group = $parcels_id;
       if ($order->save()) {
         return $order->id;

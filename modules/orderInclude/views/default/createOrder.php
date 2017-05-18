@@ -121,6 +121,17 @@ $submitOption = [
                   'id' => 'open_add_order_address',
                 ])?>
             <?php } ?>
+            <label>
+              <?php if ($percel->address_verification == 0) {
+                      echo 'Verification failed';
+                    }else{
+                      if ($percel->address_verification == 1){
+                        echo 'Verification success';
+                      }else{
+                        echo 'Parcel from scanner';
+                      }
+                    }  ?>
+            </label>
           </div>
 
           <div class="order-include-index col-md-9 border_left">

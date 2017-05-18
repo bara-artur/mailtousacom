@@ -104,18 +104,20 @@ class OrderInclude extends \yii\db\ActiveRecord
         $address_id = $address->id;
         $model = new Order();
         $model->user_id = $user_id;
+        $model->el_group = '';
         $model->client_id = $user_id;
         $model->created_at = time();
         if ($model->save()) {
           //$log = new Log;
           //$log->createLog($model->user_id, $model->id, "Draft");
-
           if ($request->isAjax) {
             $this_->redirect('/orderInclude/create-order/' . $model->id);
             return "Redirecting to create an order";
           } else {
             return $this_->redirect('/orderInclude/create-order/' . $model->id);
           }
+        }else {
+          return ['title'=> 'Order save error'];
         }
       }
       //return ddd($model);
