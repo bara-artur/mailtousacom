@@ -83,6 +83,7 @@ class OrderInclude extends \yii\db\ActiveRecord
         //$last_order = Order::find()->where('user_id = :id', [':id' => $user_id])->orderBy('created_at DESC')->one();
         //$address_id = $address->id;
         $model = new Order();
+        $model->user_id = $user_id;
         $model->client_id = $user_id;
 
         if ($model->save()) {

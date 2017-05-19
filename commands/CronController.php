@@ -14,8 +14,7 @@ use yii\console\Controller;
 use app\modules\order\models\Order;
 use app\modules\user\models\User;
 use app\modules\orderElement\models\OrderElement;
-use app\modules\orderElement\controllers\DefaultController as OrderElementController;
-use app\modules\invoice\controllers\DefaultController as InvoiceController;
+use app\modules\invoice\models\Invoice;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
 use app\modules\config\components\DConfig;
 use yii\helpers\Console;
@@ -120,12 +119,13 @@ class CronController extends Controller
   public function actionMonthInvoice(){
     $users = User::find()->all();
     foreach ($users as $user){
+      var_dump("User ID -".$user->id);
       $this_month_begin = strtotime(date('Y-m-01'));
       $parcels_for_email = [];
       $services_for_email = [];
       $parcels = OrderElement::find()
-        ->andWhere(['user_id' => $user])
-        ->andWhere(['month_pay' => 1])         // работа с пользователями с месячным типом оплаты
+        ->andWhere(['user_id' => $user->id])
+        ->andWhere(['payment_state' => 3])         // работа с пользователями с месячным типом оплаты
         ->andWhere(['status'=> 2])             // берем посылки со статусом 2
         ->andWhere(['>=', 'created_at', $this_month_begin])   // посылки созданные после начала текущего месяца
         ->all();
@@ -140,16 +140,18 @@ class CronController extends Controller
             $parcels_for_email[] = $parcel->id;
           }
         }
+      }else{
+        var_dump("No parcels");
       }
       if ($parcels_for_email){
-        $order_id = OrderElementController::findOrCreateOrder(implode(',',$parcels_for_email),1,1);
-        if ($order_id){
-          echo 1112221111;
-          InvoiceController::actionCreate($order_id, 1);  //  создаём invoice для текущего набора посылок
-          echo 22222222;
-        }else{
-          echo "Can't create order with parcels ".implode(',',$parcels_for_email);
-        }
+          $inv = new Invoice();
+          $inv->create = time();
+          $inv->parcels_list = implode(',',$parcels_for_email);
+          $inv->services_list = '';
+          $inv->detail = json_encode(['cron' => 1]);
+          $inv->save();
+      } else{
+        echo 'empty';
       }
     }
   }
