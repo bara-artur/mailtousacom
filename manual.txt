@@ -60,6 +60,19 @@ status_pay - статус
   //Created, Sent to customer, Paid, Refunded, Cancelled
 Цена идет за единицу
 
+
+///////////////////////////
+#invoices - групировка услуг и в посылки для формирования счета
+parcels_list - список посылок через запятую
+services_list  - список услуг через запятую
+pay_status - стутус
+  0 - создан-Created
+  1 - оправлен клиенту-Sent to customer
+  2 - оплачен-Paid
+  3 - Возвращено-Refunded
+  4 - Отменено-Cancelled
+
+
 /////////////////////////
 #user - данные пльзователя
 month_pay - разрешение на оплату раз в месяц
