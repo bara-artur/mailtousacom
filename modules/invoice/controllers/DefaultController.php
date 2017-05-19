@@ -33,9 +33,9 @@ class DefaultController extends Controller
    * Renders the index view for the module
    * @return string
    */
-  public function actionCreate($id, $cron = 0)
+  public function actionCreate($id)
   {
-    if (($cron == 0) && (!Yii::$app->user->can('trackInvoice'))){
+    if (!Yii::$app->user->can('trackInvoice')){
       throw new NotFoundHttpException('Access is denied.');
     }
 
@@ -48,32 +48,32 @@ class DefaultController extends Controller
     $invoice_data=$order->getInvoiceData();
 
     $request = Yii::$app->request;
-    if (($cron == 1) || ($request->isPost)) {
+    if ($request->isPost) {
       $order_service=$order->getAdditionalService();
 
       $invoice=[];
       $parcel=[];
 
       foreach ($order_service as $as) {
-        if(($cron == 1)||($request->post('ch_invoice_'.$as->id)==1)){
+        if ($request->post('ch_invoice_'.$as->id)==1){
           $invoice[]=$as->id;
         }
       }
 
       $model=$order->getOrderElement();
       foreach ($model as $pac) {
-        if (($cron == 1)||($request->post('ch_parcel_'.$pac->id)==1)){
+        if ($request->post('ch_parcel_'.$pac->id)==1){
           $parcel[]=$pac->id;
         }
         $as = $pac->trackInvoice;
-        if((($cron == 1) && $as && !$as->isNewRecord)||($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1)){
+        if(($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1)){
           $invoice[]=$as->id;
         }
 
         $services=$pac->getAdditionalServiceList(false);
 
         foreach ($services as $as){
-          if(($cron == 1)||($request->post('ch_invoice_'.$as->id)==1)){
+          if($request->post('ch_invoice_'.$as->id)==1){
             $invoice[]=$as->id;
           }
         }
@@ -91,13 +91,7 @@ class DefaultController extends Controller
         $inv->parcels_list=$parcel;
         $inv->services_list=$invoice;
         $inv->create=time();
-        $inv->detail=$cron;
       }
-      if ($cron){
-        $inv->detail = json_encode([
-          'cron' => $cron,
-        ]);
-      }else {
         $session = Yii::$app->session;
 
         $inv->detail = json_encode([
@@ -105,13 +99,9 @@ class DefaultController extends Controller
           'ref_code' => $session['ref_code_' . $id],
           'contract_number' => $session['contract_number_' . $id],
         ]);
-      }
       $inv->save();
-      if ($cron == 1) {
-        return $inv->id;
-      } else {
-        return $this->redirect(['/invoice/pdf/' . $inv->id]);
-      }
+      return $this->redirect(['/invoice/pdf/' . $inv->id]);
+
     }
 
     return $this->render('invoiceCreate', $invoice_data);
