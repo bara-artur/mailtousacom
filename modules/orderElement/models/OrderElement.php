@@ -615,22 +615,26 @@ class OrderElement extends \yii\db\ActiveRecord
   public function beforeSave($insert)
   {
     if($this->first_name!='[default]') {
-      try {
-        \EasyPost\EasyPost::setApiKey('QSRDbtnsUmLO27Xsa7RaxA');
-        \EasyPost\Address::create_and_verify(
-          array(
-            "name" => $this->first_name . ' ' . $this->last_name,
-            "street1" => $this->adress_1,
-            "street2" => $this->adress_2,
-            "city" => $this->city,
-            "state" => $this->getStateText(),
-            "zip" => $this->zip,
-            "phone" => $this->phone
-          )
-        );
-        $this->address_verification = 1;   // адрес  прошел верификацию
-      } catch (\EasyPost\Error  $e) {
-        $this->address_verification = 0;   // адрес не прошел верификацию
+      if (($this->adress_1)||($this->adress_2)) {
+        try {
+          \EasyPost\EasyPost::setApiKey('QSRDbtnsUmLO27Xsa7RaxA');
+          \EasyPost\Address::create_and_verify(
+            array(
+              "name" => $this->first_name . ' ' . $this->last_name,
+              "street1" => $this->adress_1,
+              "street2" => $this->adress_2,
+              "city" => $this->city,
+              "state" => $this->getStateText(),
+              "zip" => $this->zip,
+              "phone" => $this->phone
+            )
+          );
+          $this->address_verification = 1;   // адрес  прошел верификацию
+        } catch (\EasyPost\Error  $e) {
+          $this->address_verification = 0;   // адрес не прошел верификацию
+        }
+      }else {
+        $this->address_verification = 0;
       }
     }else{
       $this->address_verification = 2; // адрес со сканера не нуждается в верификации
