@@ -28,13 +28,23 @@ class Invoice extends \yii\db\ActiveRecord
         return 'invoices';
     }
 
+    static function statusList(){
+      return [
+        0=>"Created",
+        1=>"Sent to customer",
+        2=>"Paid",
+        3=>"Refunded",
+        4=>"Cancelled"
+      ];
+    }
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['pay_status', 'create'], 'integer'],
+            [['pay_status', 'create','user_id'], 'integer'],
+            [['price'], 'number'],
             [['parcels_list', 'services_list','detail'], 'string', 'max' => 500],
         ];
     }
@@ -53,164 +63,172 @@ class Invoice extends \yii\db\ActiveRecord
         ];
     }
 
-    /*
-     * Вывод общих данных с платежами по инвойсу
-     */
-    public function getTable(){
-      $orders=OrderElement::find()->where(['id'=>explode(',',$this->parcels_list)])->asArray()->all();
+  public function getUser(){
+    return User::find()->where(['id'=>$this->user_id])->one();
+  }
 
-      $total=[
-        'price'=>0,
-        'qst'=>0,
-        'gst'=>0,
-      ];
+  /*
+   * Вывод общих данных с платежами по инвойсу
+   */
+  public function getTable(){
+    $orders=OrderElement::find()->where(['id'=>explode(',',$this->parcels_list)])->asArray()->all();
 
-      $user=false;
+    $total=[
+      'price'=>0,
+      'qst'=>0,
+      'gst'=>0,
+    ];
 
-      $payments_list_pac=[];
-      foreach ($orders as $pac){
-        if(!$user){
-          $user=$pac['user_id'];
-        }
+    $user=false;
 
-        $key=$pac['price'];
-        if(isset($payments_list_pac[$key])){
-          $payments_list_pac[$key]['quantity']+=1;
-        }else{
-          foreach (Yii::$app->params['pac_title'] as $k=>$title){
-            if($k>=$pac['weight'])break;
-          };
-          $item=[
-            'title'=>$title,
-            'quantity'=>1,
-            'price'=>number_format($pac['price'],2,'.',''),
-            'qst'=>number_format($pac['qst'],2,'.',''),
-            'gst'=>number_format($pac['gst'],2,'.',''),
-          ];
-          $payments_list_pac[$key]=$item;
-        }
-
-        $total['price']+=$pac['price'];
-        $total['qst']+=$pac['qst'];
-        $total['gst']+=$pac['gst'];
+    $payments_list_pac=[];
+    foreach ($orders as $pac){
+      if(!$user){
+        $user=$pac['user_id'];
       }
 
-      $kurs=false;
-      $payments_list=[];
-      $invoices=AdditionalServices::find()->where(['id'=>explode(',',$this->services_list)])->all();
-      foreach ($invoices as $invoice){
-        if(!$user){
-          $user=$invoice->client_id;
-        };
-
-        if(!$kurs){
-          $kurs=$invoice->kurs;
-        };
-        if($invoice->type==1){
-          $dop=json_decode($invoice->detail,true);
-          $title=$dop['track_company'].
-            ' shipping label '.
-            $dop['track_number'].
-            ' - $'.
-            number_format($dop['price_tk'],2,'.','').
-            ' USD ';
-          $item=[
-            'title'=>$title,
-            'quantity'=>1,
-            'price'=>number_format($invoice['dop_price'],2,'.',''),
-            'qst'=>number_format($invoice['dop_qst'],2,'.',''),
-            'gst'=>number_format($invoice['dop_gst'],2,'.',''),
-          ];
-
-          $total['price']+=$invoice['dop_price'];
-          $total['qst']+=$invoice['dop_qst'];
-          $total['gst']+=$invoice['dop_gst'];
-          $payments_list[]=$item;
-
-          $title='Flat rate service fee';
-        }else{
-          $title=$invoice->getTitle();
-        }
-
-        $key=$invoice['type'].'_'.$invoice['price'];
-
-        if(isset($payments_list_pac[$key])){
-          $payments_list_pac[$key]['quantity']+=1;
-        }else{
-          $item=[
-            'title'=>$title,
-            'price'=>number_format($invoice['price'],2,'.',''),
-            'quantity'=>1,
-            'qst'=>number_format($invoice['qst'],2,'.',''),
-            'gst'=>number_format($invoice['gst'],2,'.',''),
-          ];
-          $payments_list_pac[$key]=$item;
-        }
-
-        $total['price']+=$invoice['price'];
-        $total['qst']+=$invoice['qst'];
-        $total['gst']+=$invoice['gst'];
-      }
-
-      $total['price']=number_format($total['price'],2,'.','');
-      $total['vat']=number_format($total['qst']+$total['gst'],2,'.','');
-      $total['qst']=number_format($total['qst'],2,'.','');
-      $total['gst']=number_format($total['gst'],2,'.','');
-      $total['total']=number_format($total['price']+$total['vat'],2,'.','');
-
-      $paypal_tax=$total['total']*Yii::$app->config->get('paypal_commision_dolia')/100
-                  +Yii::$app->config->get('paypal_commision_fixed');
-      $total['paypal']=number_format($total['total']+$paypal_tax,2,'.','');
-
-      if(Yii::$app->user->id==$user){
-        $user_data=Yii::$app->user->identity;
+      $key=$pac['price'];
+      if(isset($payments_list_pac[$key])){
+        $payments_list_pac[$key]['quantity']+=1;
       }else{
-        $user_data=User::find()->where(['id'=>$user])->one();
+        foreach (Yii::$app->params['pac_title'] as $k=>$title){
+          if($k>=$pac['weight'])break;
+        };
+        $item=[
+          'title'=>$title,
+          'quantity'=>1,
+          'price'=>number_format($pac['price'],2,'.',''),
+          'qst'=>number_format($pac['qst'],2,'.',''),
+          'gst'=>number_format($pac['gst'],2,'.',''),
+        ];
+        $payments_list_pac[$key]=$item;
       }
 
-      return [
-        'total'=>$total,
-        'pay_list'=>array_merge($payments_list_pac,$payments_list),
-        'data'=>json_decode($this->detail,true),
-        'user_id'=>$user,
-        'invoice_id'=>$this->id,
-        'user'=>$user_data,
-        'kurs'=>$kurs,
-        'date'=>$this->create,
-      ];
+      $total['price']+=$pac['price'];
+      $total['qst']+=$pac['qst'];
+      $total['gst']+=$pac['gst'];
     }
 
-    public function getParcelList(){
-      $sel_pac=[];
-
-      $services_list=explode(',',$this->services_list);
-      $parcels_list=explode(',',$this->parcels_list);
-
-      $orderElement=AdditionalServices::find()
-        ->where(['id'=>$services_list])
-        ->asArray()
-        ->all();
-
-      foreach ($orderElement as $pac){
-        $pacs_id=explode(',',$pac['parcel_id_lst']);
-        foreach ($pacs_id as $id){
-          if(!in_array($id,$sel_pac)){
-            $sel_pac[]=$id;
-          }
-        }
+    $kurs=false;
+    $payments_list=[];
+    $invoices=AdditionalServices::find()->where(['id'=>explode(',',$this->services_list)])->all();
+    foreach ($invoices as $invoice){
+      if(!$user){
+        $user=$invoice->client_id;
       };
 
-      foreach ($parcels_list as $id){
+      if(!$kurs){
+        $kurs=$invoice->kurs;
+      };
+      if($invoice->type==1){
+        $dop=json_decode($invoice->detail,true);
+        $title=$dop['track_company'].
+          ' shipping label '.
+          $dop['track_number'].
+          ' - $'.
+          number_format($dop['price_tk'],2,'.','').
+          ' USD ';
+        $item=[
+          'title'=>$title,
+          'quantity'=>1,
+          'price'=>number_format($invoice['dop_price'],2,'.',''),
+          'qst'=>number_format($invoice['dop_qst'],2,'.',''),
+          'gst'=>number_format($invoice['dop_gst'],2,'.',''),
+        ];
+
+        $total['price']+=$invoice['dop_price'];
+        $total['qst']+=$invoice['dop_qst'];
+        $total['gst']+=$invoice['dop_gst'];
+        $payments_list[]=$item;
+
+        $title='Flat rate service fee';
+      }else{
+        $title=$invoice->getTitle();
+      }
+
+      $key=$invoice['type'].'_'.$invoice['price'];
+
+      if(isset($payments_list_pac[$key])){
+        $payments_list_pac[$key]['quantity']+=1;
+      }else{
+        $item=[
+          'title'=>$title,
+          'price'=>number_format($invoice['price'],2,'.',''),
+          'quantity'=>1,
+          'qst'=>number_format($invoice['qst'],2,'.',''),
+          'gst'=>number_format($invoice['gst'],2,'.',''),
+        ];
+        $payments_list_pac[$key]=$item;
+      }
+
+      $total['price']+=$invoice['price'];
+      $total['qst']+=$invoice['qst'];
+      $total['gst']+=$invoice['gst'];
+    }
+
+    $total['price']=number_format($total['price'],2,'.','');
+    $total['vat']=number_format($total['qst']+$total['gst'],2,'.','');
+    $total['qst']=number_format($total['qst'],2,'.','');
+    $total['gst']=number_format($total['gst'],2,'.','');
+    $total['total']=number_format($total['price']+$total['vat'],2,'.','');
+
+    $paypal_tax=$total['total']*Yii::$app->config->get('paypal_commision_dolia')/100
+                +Yii::$app->config->get('paypal_commision_fixed');
+    $total['paypal']=number_format($total['total']+$paypal_tax,2,'.','');
+
+    if(Yii::$app->user->id==$user){
+      $user_data=Yii::$app->user->identity;
+    }else{
+      $user_data=User::find()->where(['id'=>$user])->one();
+    }
+
+    return [
+      'total'=>$total,
+      'pay_list'=>array_merge($payments_list_pac,$payments_list),
+      'data'=>json_decode($this->detail,true),
+      'user_id'=>$user,
+      'invoice_id'=>$this->id,
+      'user'=>$user_data,
+      'kurs'=>$kurs,
+      'date'=>$this->create,
+    ];
+  }
+
+  public function getParcelList(){
+    $sel_pac=[];
+
+    $services_list=explode(',',$this->services_list);
+    $parcels_list=explode(',',$this->parcels_list);
+
+    $orderElement=AdditionalServices::find()
+      ->where(['id'=>$services_list])
+      ->asArray()
+      ->all();
+
+    foreach ($orderElement as $pac){
+      $pacs_id=explode(',',$pac['parcel_id_lst']);
+      foreach ($pacs_id as $id){
         if(!in_array($id,$sel_pac)){
           $sel_pac[]=$id;
         }
       }
+    };
 
-      return $sel_pac;
+    foreach ($parcels_list as $id){
+      if(!in_array($id,$sel_pac)){
+        $sel_pac[]=$id;
+      }
     }
 
-  public function beforeValidate()
-  {
+    return $sel_pac;
+  }
+
+  public function getTextStatus(){
+    $status=Invoice::statusList();
+    return $status[$this->pay_status];
+  }
+
+  public function beforeValidate(){
     $this->price=0;
     if(strlen($this->parcels_list)) {
       $sql = "
@@ -245,10 +263,6 @@ class Invoice extends \yii\db\ActiveRecord
     return parent::beforeValidate(); // TODO: Change the autogenerated stub
   }
 
-  public function beforeValidate_()
-    {
-      return parent::beforeSave(); // TODO: Change the autogenerated stub
-    }
 
 
 

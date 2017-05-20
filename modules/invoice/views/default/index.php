@@ -20,15 +20,25 @@ $this->params['breadcrumbs'][] = $this->title;
           //'filterModel' => $searchModel,
           'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'id',
+            //'id',
+            [ 'attribute'=> 'user_id',
+              'format'=> 'raw',
+              'content' => function($data){
+                return $data->getUser()->getLineInfo();
+              }
+            ],
+            [
+              'attribute' => 'price',
+              'format'=>['decimal',2]
+            ],
               //'type',
               //'pay_status',
-            /*[
+            [
               'attribute' => 'pay_status',
               'content' => function($data){
-                  return date(Yii::$app->config->get('data_time_format_php'),$data->updated);
+                  return $data->getTextStatus();
               }
-            ],*/
+            ],
               [
                 'attribute' => 'create',
                 'content' => function($data){
