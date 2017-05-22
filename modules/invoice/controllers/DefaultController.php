@@ -12,6 +12,7 @@ use app\modules\order\models\Order;
 use app\modules\additional_services\models\AdditionalServicesList;
 use app\modules\user\models\User;
 use kartik\mpdf\Pdf;
+use \yii\web\Response;
 
 /**
  * Default controller for the `invoice` module
@@ -198,6 +199,21 @@ class DefaultController extends Controller
   /**
    * обновление инвосов
    **/
+  public function actionUpdateStatus(){
+    $request = Yii::$app->request;
+    if($request->isAjax) {
+      Yii::$app->response->format = Response::FORMAT_JSON;
+      if ($request->isPost){
+        $model = Invoice::findOne($request->post('id'));
+        $model->pay_status = $request->post('value');
+        $model->save();
+        return $request->post('id');
+      }
+      return "{}";
+    }
+    return "{}";
+  }
+
   public function actionUpdate($id) {
     if (Yii::$app->user->isGuest || !Yii::$app->user->can('trackInvoice')) {
       throw new NotFoundHttpException('Access is denied.');
