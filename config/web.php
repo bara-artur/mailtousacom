@@ -81,10 +81,11 @@ $config = [
           'invoice/default/<action>'=>'404',
           'invoice/default/<action>/<action2>'=>'404',
 
-          '/' => '/site/landing',
+          //'/' => '/site/landing',
+          '/' => '/site/login',
           '/parcels'=>'/site/index',
-          '/pricing'=>'/site/pricing',
-          '/login'=>'/site/login',
+          //'/pricing'=>'/site/pricing',
+          //'/login'=>'/site/login',
           //получение города по стране
           'city/get/<id:\d+>' => 'city/get',
           //Взаимодействия с пользователем на сайте
