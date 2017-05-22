@@ -547,7 +547,7 @@ $submitOption = [
                     if($order_id) {
                         ?>
                         <?= Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/' . $order_id], ['class' => 'btn btn-default pull-left']) ?>
-                        <?= Html::a('Return to parcel list', ['/parcel'], ['class' => 'btn btn-info pull-left margin-left-10']); ?>
+                        <?= Html::a('Return to parcel list', ['/parcels'], ['class' => 'btn btn-info pull-left margin-left-10']); ?>
                         <?php
                     }else{
                         ?>
