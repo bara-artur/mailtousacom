@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\modules\config\models\SearchConfig */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'System configuration';
+$this->title = 'Invoices ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="config-index">
