@@ -42,7 +42,7 @@ class DefaultController extends Controller
 
     $order = Order::findOne($id);
 
-    if (strlen($order->el_group) < 1) {
+    if (!$order || strlen($order->el_group) < 1) {
       throw new NotFoundHttpException('There is no data.');
     };
 
@@ -136,6 +136,11 @@ class DefaultController extends Controller
     }
 
     $invoice=Invoice::find()->where(['id'=>$id])->one();
+
+    if (!$invoice) {
+      throw new NotFoundHttpException('There is no data.');
+    };
+
     $sel_pac=$invoice->getParcelList();
     $order=Order::find()->where(['el_group'=>implode(',',$sel_pac)])->one();
 
