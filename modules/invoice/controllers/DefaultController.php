@@ -101,7 +101,13 @@ class DefaultController extends Controller
           'contract_number' => $session['contract_number_' . $id],
         ]);
       $inv->save();
-      return $this->redirect(['/invoice/pdf/' . $inv->id]);
+
+      if($request->post('submit')=='pdf'){
+        return $this->redirect(['/invoice/pdf/' . $invoice->id]);
+      }
+      if($request->post('submit')=='pay'){
+        return $this->redirect(['/payment/invoice/' . $invoice->id]);
+      }
 
     }
 
@@ -190,7 +196,7 @@ class DefaultController extends Controller
       if($request->post('submit')=='pay'){
         return $this->redirect(['/payment/invoice/' . $invoice->id]);
       }
-      ddd($request->post());
+      //ddd($request->post());
     }
     //ddd($invoice_data);
     return $this->render('invoiceCreate', $invoice_data);
