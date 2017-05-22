@@ -24,6 +24,7 @@ $(document).ready(function() {
   init_cookie_clean_on_signup_button();
   init_superCheckbox_processing();
   init_scaner();
+  init_update_status_ajax();
 
   //в модалках запрет отправки по Enter
   $('body').on('keydown','.modal-content input',function(event){
@@ -1157,5 +1158,28 @@ function init_invoice_save(order_id){
       console.log(date);
     },'JSON');
   })
+}
+
+function init_update_status_ajax(){
+  $(".table_status_refresh").on("change", "[name='pay_status']", function(){
+    save_url=this.closest('table').getAttribute('save_url');
+    id = this.getAttribute('id');
+    value = this.value;
+    $(this).css("color", "#FAA523");
+    $(this).addClass('waiting');
+    $.ajax({
+      type: 'POST',
+      url: save_url,
+      data: { id: id, value: value},
+      success: function(data) {
+        $('[id='+id+']').css("color", '#3EB249');
+        $('[id='+id+']').removeClass('waiting');
+      },
+      error:  function(xhr, str){
+        $('[id='+id+']').css("color", "red");
+        $('[id='+id+']').removeClass('waiting');
+      }
+    });
+  });
 }
 

@@ -81,10 +81,11 @@ $config = [
           'invoice/default/<action>'=>'404',
           'invoice/default/<action>/<action2>'=>'404',
 
-          '/' => '/site/landing',
+          //'/' => '/site/landing',
+          '/' => '/site/login',
           '/parcels'=>'/site/index',
-          '/pricing'=>'/site/pricing',
-          '/login'=>'/site/login',
+          //'/pricing'=>'/site/pricing',
+          //'/login'=>'/site/login',
           //получение города по стране
           'city/get/<id:\d+>' => 'city/get',
           //Взаимодействия с пользователем на сайте
@@ -134,6 +135,7 @@ $config = [
 
           'logs/<id:\d+>'=>'logs/default/index/',
 
+          'invoice/<action:update-status>'=>'invoice/default/<action>/',
           'invoice/<action:create|update|pdf|edit>/<id:\d+>'=>'invoice/default/<action>/',
           'invoice/<action:add-service-to-parcel|add-service-to-all>/<id:\d+>/<service:\d+>'=>'invoice/default/<action>/',
         ],
