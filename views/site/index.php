@@ -31,6 +31,7 @@ $this->title = 'Shipping to USA and Canada';
                   'toggle'=>'tooltip',
               ])?>
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
+              <br> <div class="font-size11">&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OPEN ARCHIVE</div>
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
 
@@ -63,7 +64,22 @@ $this->title = 'Shipping to USA and Canada';
                 ]
               ); ?>
             </div>
-            <?=Html::a('<i class="icon-metro-remove"></i> Delete',
+              <?=Html::a('<i class="fa fa-file-archive-o"></i> Arhive',
+                  ['/orderElement/group/archive'],
+                  [
+                      'id'=>'group-delete',
+                      'class' => 'btn btn-dark-border btn-md but_tab_marg Draft_show difUserIdHide group-delete',
+                      'data' => [
+                          'confirm-message' => 'Shall we move this items to archive?',
+                          'confirm-title'=>"Move to archive",
+                          'pjax'=>'false',
+                          'toggle'=>"tooltip",
+                          'request-method'=>"post",
+                      ],
+                      'disabled'=>true,
+                      'role'=>"modal-remote",
+                  ]); ?>
+            <?=Html::a('<i class="icon-metro-remove"></i> Del',
                 ['/orderElement/group/delete'],
                 [
                     'id'=>'group-delete',
@@ -78,21 +94,7 @@ $this->title = 'Shipping to USA and Canada';
                     'disabled'=>true,
                     'role'=>"modal-remote",
                 ]); ?>
-            <?=Html::a('<i class="icon-metro-remove"></i> To arhive',
-                ['/orderElement/group/archive'],
-                [
-                    'id'=>'group-delete',
-                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide group-delete',
-                    'data' => [
-                        'confirm-message' => 'Shall we move this items to archive?',
-                        'confirm-title'=>"Move to archive",
-                        'pjax'=>'false',
-                        'toggle'=>"tooltip",
-                        'request-method'=>"post",
-                    ],
-                    'disabled'=>true,
-                    'role'=>"modal-remote",
-                ]); ?>
+
             <div class="col-md-12 group_text"><div class="group_text3">group management</div></div>
             <?php }?>
         </div>

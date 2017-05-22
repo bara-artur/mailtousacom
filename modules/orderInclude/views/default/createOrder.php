@@ -192,7 +192,7 @@ $submitOption = [
                 </div>
               </div>
             </div>
-          </div>
+
 <div class="row">
           <div class="col-md-12">
             <h5 class="total_package padding-top-10">Total</h5>
@@ -247,6 +247,7 @@ $submitOption = [
               </div>
           </div>
 </div>
+
               <hr class="bor_bottom">
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
@@ -495,7 +496,7 @@ Parcel will be moved back to the list of parcels.',
               ]
             ]);
             ?>
-
+                    </div>
                     </div>
             </div>
             </div>
