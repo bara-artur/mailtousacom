@@ -59,10 +59,10 @@ class PaymentsList extends \yii\db\ActiveRecord
   public static function getTextStatusParcel(){
     return array(
       ''=>'All',
-      '0'=>"<div class='dan_pay'>Not pay</div>",
+      '0'=>'<div class="dan_pay">Not pay</div>',
       '1'=>'<div class="awa_pay">Awaiting</div>',
       '2'=>'<div class="acc_pay">Accepted</div>',
-      '3'=>'Pending payment once a month',
+      '3'=>'<div class="mon_pay">Pending</div><small>payment monthly</small>',
     );
   }
 

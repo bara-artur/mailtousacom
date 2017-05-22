@@ -1135,9 +1135,10 @@ table{font-size:14px;}
 }
 .ui-tooltip-content{font-family: "PT Sans Narrow", Helvetica, Arial, sans-serif !important;font-size:16px;}
 .ui-tooltip{padding:2px 6px !important;background-color:#FFC800 !important;color:#354346;border:0;}
-div.acc_pay{border: 2px solid #199900;background-color:#ffffff;max-width:100%;}
-div.dan_pay {border: 2px solid #E51400;background-color:#ffffff;max-width:100%;}
-div.awa_pay{border: 2px solid #006AC1;background-color:#ffffff;max-width:100%;}
+div.acc_pay{border: 1px solid #7BAD18;max-width:100%;}
+div.dan_pay {border: 1px solid #FA6800;max-width:100%;}
+div.awa_pay{border:1px solid #006AC1;max-width:100%;}
+div.mon_pay{border:1px solid #006AC1;max-width:100%;}
 .marg_but2
 {
     margin-right: 4px;
@@ -1247,3 +1248,29 @@ ul.breadcrumb{display:none !important;}
     border-color: #F1B400;
 }
 .padding-right-20{padding-right:20px;}
+.mac input[type=checkbox]{display:none;}
+.pagination > li > a, .pagination > li > span
+{
+    padding: 6px 12px;
+}
+.tile2 {
+    width: 110px;
+    height: 60px;
+    margin: 3px 6px 7px 0;
+    position: relative;
+    overflow: hidden;
+    display: block;
+    float: left;
+    text-align: center;
+    padding: 8px 0 0 0;
+    cursor: pointer;
+    background:  #006ac1;
+    line-height: 1.3;
+    color:#fff !important;
+    font-size: 15px;
+    font-weight: 400;
+    text-decoration: none !important;
+}
+.tile2:hover{background:#0076D6;}
+.tile2 i{font-size: 20px;}
+.tile2 div{margin-top: -6px;}

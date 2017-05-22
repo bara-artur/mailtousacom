@@ -39,7 +39,7 @@ $this->title = 'Shipping to USA and Canada';
               ]); ?>
             <?php }?>
             <?php if ($show_view_button==true){ ?>
-                <?=Html::a('<i class="fa fa-credit-card"></i> Invoice', ['/orderElement/group/invoice'], [
+                <?=Html::a('<i class="icon-metro-clipboard-2"></i> Invoice', ['/orderElement/group/invoice'], [
                     'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide_',
                     'id'=>'group-admin-view',
                 ]); ?>
@@ -51,10 +51,10 @@ $this->title = 'Shipping to USA and Canada';
               'disabled'=>true,
             ]); ?>
             <div class="btn-group">
-              <?=Html::a('Print', ['/orderElement/group/print'],
+              <?=Html::a('<i class="fa fa-print"></i> Print', ['/orderElement/group/print'],
                 [
                   'role'=>'modal-remote',
-                  'class'=>'btn btn-info InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
+                  'class'=>'btn btn-science-blue-border InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
                 ]
               ); ?>
             </div>
@@ -146,6 +146,7 @@ $this->title = 'Shipping to USA and Canada';
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },
+                  'options' => ['width' => '37'],
                   'visible' => ($admin==1),
                   'contentOptions' =>['class'=>'table_check'],
                 ],
@@ -193,6 +194,7 @@ $this->title = 'Shipping to USA and Canada';
                     'visible' => $showTable->showCreatedAt,
                 ],
                 ['attribute'=> 'payment_state',
+                    'options' => ['width' => '90'],
                     'label'=> 'Payment',
                     'contentOptions' =>['class'=>'table_check'],
                   'content' => function($data){

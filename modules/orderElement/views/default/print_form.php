@@ -12,7 +12,7 @@ use kartik\widgets\DatePicker;
 $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
 $day_delta=24-Yii::$app->config->get($param_name);
 ?>
-
+<label>Choose date which will be specified in documents</label>
 <?php echo DatePicker::widget([
   'id'=>'transport_date_group',
   'name' => 'transport_date_for_print',
@@ -31,36 +31,34 @@ $day_delta=24-Yii::$app->config->get($param_name);
   ]
 ]);?>
 <hr>
-<div>
-      <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest', ['/orderElement/group/print'], [
-        'class' => 'btn btn-blue-gem margin-bottom-10 agreement_dis',
+<div class="row">
+    <div class="col-md-12 text-center">
+      <?=Html::a('<i class="fa fa-print push-up-tiny"></i><br>Cargo manifest', ['/orderElement/group/print'], [
+        'class' => 'tile2 agreement_dis',
         'id'=>'group-print',
         'target' => '_blank',
       ]); ?>
-</div>
-<div>
-      <?=Html::a('<i class="icon-metro-clipboard-2"></i> Print cargo manifest(for each)', ['/orderElement/group/print_for_each'], [
-        'class' => 'btn btn-blue-gem margin-bottom-10 agreement_dis',
+
+      <?=Html::a('<i class="fa fa-print"></i><br>Cargo manifest<div>for each parcel</div>', ['/orderElement/group/print_for_each'], [
+        'class' => 'tile2 agreement_dis',
         'target' => '_blank',
       ]); ?>
-</div>
-<div>
-      <?=Html::a('<i class="fa fa-list"></i> Print table data', ['/orderElement/group/advanced_print'],
-        [
-          'class' => 'btn btn-blue-gem margin-bottom-10 InSystem_show Draft_show difUserIdHide group-print-advanced',
-          'id'=>'group-print-advanced',
-          'target' => '_blank',
-        ]); ?>
-</div>
-<div>
-      <?=Html::a('<i class="fa fa-list"></i> Commercial Invoice', ['/orderElement/group/commercial_inv_print'],
-        [
-          'class' => 'btn btn-blue-gem InSystem_show Draft_show difUserIdHide group-print-advanced',
-          'id'=>'group-print-advanced',
-          'target' => '_blank',
-        ]); ?>
-</div>
 
+      <?=Html::a('<i class="fa fa-print push-up-tiny"></i><br>Table data', ['/orderElement/group/advanced_print'],
+        [
+          'class' => 'tile2 InSystem_show Draft_show difUserIdHide group-print-advanced',
+          'id'=>'group-print-advanced',
+          'target' => '_blank',
+        ]); ?>
+
+      <?=Html::a('<i class="fa fa-print push-up-tiny"></i><br>Commercial Invoice', ['/orderElement/group/commercial_inv_print'],
+        [
+          'class' => 'tile2 InSystem_show Draft_show difUserIdHide group-print-advanced',
+          'id'=>'group-print-advanced',
+          'target' => '_blank',
+        ]); ?>
+</div>
+</div>
 <?php
 echo "
     <script>

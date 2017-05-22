@@ -89,7 +89,7 @@ $submitOption = [
                     if($paySuccessful AND count($paySuccessful)>0){
                         ?>
                         <tr>
-                            <td class="right" colspan="<?=$order_id?5:6;?>">
+                            <td align="right" class="bg-white" colspan="<?=$order_id?5:6;?>">
                                 <b>Paid</b>
                             </td>
                             <td align="right">-<?=number_format($paySuccessful[0]['sum'],2);?></td>
