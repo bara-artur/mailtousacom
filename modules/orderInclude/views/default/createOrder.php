@@ -138,7 +138,7 @@ $submitOption = [
             <h5 class="order_include">What is inside in shipping package</h5>
             <div id="ajaxCrudDatatable_<?=$percel->id;?>">
               <div class="" id="crud-datatable-pjax">
-                <?php Pjax::begin(); ?>
+
                 <div class="table-responsive">
                   <table class="table table-bordered">
                     <tr>
@@ -190,7 +190,6 @@ $submitOption = [
                     <?php }?>
                   </table>
                 </div>
-
               </div>
             </div>
           </div>
@@ -500,7 +499,6 @@ Parcel will be moved back to the list of parcels.',
                     </div>
             </div>
             </div>
-        <?php Pjax::end(); ?>
         </div>
         <hr>
       <?php } ?>

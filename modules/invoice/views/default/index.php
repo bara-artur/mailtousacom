@@ -18,13 +18,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= GridView::widget([
           'dataProvider' => $dataProvider,
           //'filterModel' => $searchModel,
+          'tableOptions' => [
+            'class' => 'table table-striped table-bordered table_status_refresh',
+            'save_url' => 'invoice/update-status',
+          ],
           'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             //'id',
             [ 'attribute'=> 'user_id',
               'format'=> 'raw',
               'content' => function($data){
-                return $data->getUser()->getLineInfo();
+                if ($data->getUser()!= null) return $data->getUser()->getLineInfo();
+                else return 0;
               }
             ],
             [
@@ -36,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'pay_status',
               'content' => function($data){
-                  return $data->getTextStatus();
+                return Html::dropDownList("pay_status",$data->pay_status,$data->statusList(),['id'=>$data->id]);
               }
             ],
               [
@@ -45,7 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return date(Yii::$app->config->get('data_time_format_php'),$data->create);
                 }
               ],
-
             [
               'attribute' => 'Action',
               'content' => function($data){
