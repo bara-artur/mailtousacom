@@ -3,19 +3,23 @@
 namespace app\controllers;
 
 use app\modules\receiving_points\models\ReceivingPointsSearch;
+use EasyPost\Error;
 use Yii;
+use yii\base\ErrorException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
+use app\modules\user\models\forms\LoginForm;
 use app\models\ContactForm;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\order\models\Order;
 use app\modules\orderElement\models\OrderElementSearch;
 use app\modules\user\models\User;
 use app\modules\orderElement\models\ElementFilterForm;
 use app\modules\user\models\ShowParcelTableForm;
 use app\modules\address\models\Address;
 use app\modules\receiving_points\models\ReceivingPoints;
+use easypost\EasyPost;
 
 class SiteController extends Controller
 {
@@ -67,7 +71,14 @@ class SiteController extends Controller
      * @return string
      */
     public $show = 0;
-    public function actionIndex()
+
+  public function exception_error_handler() {
+
+    throw new ErrorException('hello');
+    return 1;
+  }
+
+  public function actionIndex()
     {
       $gritter = Yii::$app->request->cookies['showTheGritter'];
       Yii::$app->response->cookies->remove('showTheGritter');
@@ -207,18 +218,16 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+        if (!Yii::$app->user->isGuest) {   // если мы уже авторизованы
+          return $this->redirect('/parcels');
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if ($model->load(Yii::$app->request->post()) && ($model->login())) { // если форма авторизация была отправлена с данными
+          return $this->redirect('/parcels');
+        }else{
+          return $this->render('index_login');   // начало авторизации
         }
-
-        return $this->render('login', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -264,6 +273,16 @@ class SiteController extends Controller
     public function actionConfidentiality()
     {
       return $this->render('confidentiality');
+    }
+
+    public function actionLanding()
+    {
+      return $this->render('landing');
+    }
+
+    public function actionPricing()
+    {
+      return $this->render('pricing');
     }
 
 }

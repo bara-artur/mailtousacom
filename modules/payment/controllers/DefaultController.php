@@ -180,12 +180,12 @@ class DefaultController extends Controller
         //Проверяем оплачено ли все. Если принимать деньги не надо то редиректим на стротовую и выдаем сообщение
         if($pay_data['total']['price']==0) {
           \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //проверяем возможность приема платежа при приеме. Если нет то перебрасываем на стртовую.
         if(!Yii::$app->user->can("takePay") && $pay_data['total']['sum']>0) {
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         };
 
         //если есть раздрешения и выбрали оплату за месяц
@@ -195,7 +195,7 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //в остальных случаях создаем платеж и проводим его
@@ -208,6 +208,7 @@ class DefaultController extends Controller
           'price' => $pay_data['pays_total']['price'],
           'qst' => $pay_data['pays_total']['qst'],
           'gst' => $pay_data['pays_total']['gst'],
+          'invoice'=>0,
         ]);
         $pays->save();
 
@@ -230,7 +231,7 @@ class DefaultController extends Controller
         ]);
 
         \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse.');
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
 
       }else{
         //для пользователя
@@ -242,7 +243,7 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and successfully issued.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //Когда выбрали оплату на точке
@@ -250,7 +251,7 @@ class DefaultController extends Controller
           //помечаем посылки как ожидаемые к принятию
           $order->setData(['status'=>1,'payment_state'=>1]);
           \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         };
 
         //Когда выбрали оплату paypal
@@ -267,6 +268,7 @@ class DefaultController extends Controller
             'price' => $pay_data['pays_total']['price'],
             'qst' => $pay_data['pays_total']['qst'],
             'gst' => $pay_data['pays_total']['gst'],
+            'invoice'=>0,
           ]);
           $pays->save();
 
@@ -307,53 +309,32 @@ class DefaultController extends Controller
 
     $invoice=Invoice::find()->where(['id'=>$id])->one();
 
-    $sel_pac=[];
-
-    $services_list=explode(',',$invoice->services_list);
-    $parcels_list=explode(',',$invoice->parcels_list);
-
-    $orderElement=AdditionalServices::find()
-      ->where(['id'=>$services_list])
-      ->asArray()
-      ->all();
-
-    foreach ($orderElement as $pac){
-      $pacs_id=explode(',',$pac['parcel_id_lst']);
-      foreach ($pacs_id as $id){
-        if(!in_array($id,$sel_pac)){
-          $sel_pac[]=$id;
-        }
-      }
-    };
-
-    foreach ($parcels_list as $id){
-      if(!in_array($id,$sel_pac)){
-        $sel_pac[]=$id;
-      }
-    }
+    $sel_pac=$invoice->getParcelList();
 
     $order=new Order();
     $order->el_group=implode(',',$sel_pac);
     $order->user_id=Yii::$app->user->id;
 
+    $services_list=explode(',',$invoice->services_list);
+    $parcels_list=explode(',',$invoice->parcels_list);
     $pay_data=$order->getPaymentData($services_list,$parcels_list);
 
     $pay_data['inv_id']=$id;
 
     //если пост запрос
-    if($request->isPost) {
+    if($request->isPost || !Yii::$app->user->identity->isManager()) {
       if(Yii::$app->user->identity->isManager()){
         //Для админа
 
         //Проверяем оплачено ли все. Если принимать деньги не надо то редиректим на стротовую и выдаем сообщение
         if($pay_data['total']['price']==0) {
           \Yii::$app->getSession()->setFlash('success', 'The order is accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //проверяем возможность приема платежа при приеме. Если нет то перебрасываем на стртовую.
         if(!Yii::$app->user->can("takePay") && $pay_data['$total']['sum']>0) {
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         };
 
         //если есть раздрешения и выбрали оплату за месяц
@@ -363,7 +344,7 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and accepted to the warehouse and is waiting for dispatch.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
         //в остальных случаях создаем платеж и проводим его
@@ -376,6 +357,7 @@ class DefaultController extends Controller
           'price' => $pay_data['pays_total']['price'],
           'qst' => $pay_data['pays_total']['qst'],
           'gst' => $pay_data['pays_total']['gst'],
+          'invoice'=>$id,
         ]);
         $pays->save();
 
@@ -398,7 +380,7 @@ class DefaultController extends Controller
         ]);
 
         \Yii::$app->getSession()->setFlash('success', 'The order is pay and accepted to the warehouse.');
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
 
       }else{
         //для пользователя
@@ -410,19 +392,12 @@ class DefaultController extends Controller
           ]);
 
           \Yii::$app->getSession()->setFlash('success', 'The order is marked for payment once a month and successfully issued.');
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
         }
 
-        //Когда выбрали оплату на точке
-        if($request->post('payment_type')==2){
-          //помечаем посылки как ожидаемые к принятию
-          $order->setData(['status'=>1,'payment_state'=>1]);
-          \Yii::$app->getSession()->setFlash('success', 'Your order is successfully issued');
-          return $this->redirect(['/']);
-        };
 
         //Когда выбрали оплату paypal
-        if($request->post('payment_type')==1){
+        //if($request->post('payment_type')==1){
           //Создоем экземпляр для оплаты через PayPal
           $pay = new DoPayment();
 
@@ -435,6 +410,7 @@ class DefaultController extends Controller
             'price' => $pay_data['pays_total']['price'],
             'qst' => $pay_data['pays_total']['qst'],
             'gst' => $pay_data['pays_total']['gst'],
+            'invoice'=>$id,
           ]);
           $pays->save();
 
@@ -460,7 +436,7 @@ class DefaultController extends Controller
           $approvalUrl = $payment->getApprovalLink();
           return $this->redirect($approvalUrl);
 
-        }
+        //}
       }
 
     }
@@ -488,126 +464,43 @@ class DefaultController extends Controller
     if($payment->getState()=='approved') {
       $pay->status = 1;
       $pay->pay_time = time();
-      $pay->save();
-      $pay->setData(['status'=>1]);
+      //$pay->setData(['status'=>1]);
+
+      $parcels=[];
+      $service=[];
 
       $pays_in=PaymentInclude::find()->where(['payment_id'=>$pay->id])->all();
       foreach ($pays_in as $include){
         $include->status=1;
         $include->save();
+
+        if($include->element_type==0){
+          $parcels[]=$include->element_id;
+        }
+        if($include->element_type==1){
+          $service[]=$include->element_id;
+        }
       };
 
+      sort($parcels);
+      sort($service);
+      $parcels=implode(',',$parcels);
+      $service=implode(',',$service);
+
+      $inv=Invoice::find()->where(['parcels_list'=>$parcels,'services_list'=>$service])->one();
+      if($inv){
+        $inv->pay_status=2;
+        $inv->save();
+        $pay->invoice=$inv->id;
+      }
+
+      $pay->save();
+
       \Yii::$app->getSession()->setFlash('success', 'Payment for your order was successful.');
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }
     return $this->return_last_order('Try later or contact your administrator.');
   }
-
-  /*public function actionTrackInvoice($id){
-    $order = Order::findOne($id);
-
-    $session = Yii::$app->session;
-    $session->set('last_order', $id);
-
-    if (strlen($order->el_group) < 1) {
-      throw new NotFoundHttpException('There is no data.');
-    };
-
-    $model = $order->getOrderElement();
-
-    $user_id=Yii::$app->user->id;
-    if($model[0]['user_id']!=$user_id){
-      throw new NotFoundHttpException('Access is denied. Try to log in with your account.');
-    };
-
-    $pay_array=[];
-    $pays_total=array(
-      'price'=>0,
-      'gst'=>0,
-      'qst'=>0
-    );
-    foreach ($model as $pac){
-      $invoice=$pac->trackInvoice;
-      if(!$invoice->isNewRecord){
-        //для инвойса  храним все в промежуточном массиве
-        $invoice_total=array();
-
-        $invoice_total['price']=$invoice->price;
-        $invoice_total['qst']=$invoice->qst;
-        $invoice_total['gst']=$invoice->gst;
-
-        $invoice_total['price']+=$invoice->dop_price;
-        $invoice_total['qst']+=$invoice->dop_qst;
-        $invoice_total['gst']+=$invoice->dop_gst;
-
-        //получаем данные о уже осуществленных платежах
-        $paySuccessful=$invoice->paySuccessful;
-        if($paySuccessful AND count($paySuccessful)>0){
-          $invoice_total['price']-=$paySuccessful[0]['price'];
-          $invoice_total['qst']-=$paySuccessful[0]['qst'];
-          $invoice_total['gst']-=$paySuccessful[0]['gst'];
-        };
-
-        //если есть сумма к оплате добовляем ее к глобальному массиву платежа
-        if($invoice_total['price']>0) {
-          $pay_array[] = [
-            'element_id' => $invoice->id,
-            'element_type' => 1,
-            'status' => 0,
-            'comment' => '',
-            'price' => $invoice_total['price'],
-            'qst' => $invoice_total['qst'],
-            'gst' => $invoice_total['gst'],
-          ];
-          $pays_total['price']+=$invoice_total['price'];
-          $pays_total['qst']+=$invoice_total['qst'];
-          $pays_total['gst']+=$invoice_total['gst'];
-        }
-        break;
-      }
-    }
-
-    if(count($pay_array)==0){
-      throw new NotFoundHttpException('Everything has already been paid for this invoice');
-    };
-
-    //Создоем экземпляр для оплаты через PayPal
-    $pay = new DoPayment();
-
-    //Генерируем новый платеж оплаты налом
-    $pays = PaymentsList::create([
-      'client_id' => $user_id,
-      'type' => 3,
-      'status' => 0,
-      'pay_time' => time(),
-      'price' => $pays_total['price'],
-      'qst' => $pays_total['qst'],
-      'gst' => $pays_total['gst'],
-    ]);
-    $pays->save();
-
-    //Сохраняем детали платежа
-    foreach ($pay_array as $item) {
-      $pay_include = new PaymentInclude();
-      $pay_include->attributes=$item;
-      $pay_include->payment_id = $pays->id;
-      $pay_include->save();
-      $item_ = [
-        'name' => 'Type '.$item['element_type'].' id#' . $item['element_id'],
-        'vat' => $item['gst']+ $item['qst'],
-        'price'=>$item['price']
-      ];
-      $pay->addItem($item_);
-    };
-
-    $payment = $pay->make_payment();
-    $pays->code=$payment->getId();
-    $pays->save();
-
-    $session->set('last_pays',$pays->id);
-    $approvalUrl = $payment->getApprovalLink();
-    return $this->redirect($approvalUrl);
-  }*/
 
   /**
    * Finds the PaymentsList model based on its primary key value.
@@ -633,7 +526,7 @@ class DefaultController extends Controller
     $session = Yii::$app->session;
     $last_order=$session->get('last_order');
     if(!$last_order){
-      return $this->redirect(['/']);
+      return $this->redirect(['/parcels']);
     }else{
       $last_pays=$session->get('last_pays');
       $pay=PaymentsList::findOne($last_pays);

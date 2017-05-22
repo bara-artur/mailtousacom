@@ -4,6 +4,7 @@ namespace app\modules\invoice\controllers;
 
 use app\modules\additional_services\models\AdditionalServices;
 use app\modules\invoice\models\Invoice;
+use app\modules\invoice\models\SearchInvoice;
 use app\modules\orderElement\models\OrderElement;
 use yii\web\Controller;
 use Yii;
@@ -21,7 +22,7 @@ class DefaultController extends Controller
   public function beforeAction($action)
   {
     if (Yii::$app->user->isGuest) {
-      $this->redirect(['/']);
+      $this->redirect(['/parcels']);
       return false;
     }
     return parent::beforeAction($action);
@@ -44,32 +45,28 @@ class DefaultController extends Controller
       throw new NotFoundHttpException('There is no data.');
     };
 
-    $model = $order->getOrderElement();
-    $data=[
-      'invoice'=>'',
-      'ref_code'=>'',
-      'contract_number'=>'',
-    ];
+    $invoice_data=$order->getInvoiceData();
 
     $request = Yii::$app->request;
-    if($request->isPost) {
+    if ($request->isPost) {
       $order_service=$order->getAdditionalService();
 
       $invoice=[];
       $parcel=[];
 
       foreach ($order_service as $as) {
-        if($request->post('ch_invoice_'.$as->id)==1){
+        if ($request->post('ch_invoice_'.$as->id)==1){
           $invoice[]=$as->id;
         }
       }
 
+      $model=$order->getOrderElement();
       foreach ($model as $pac) {
-        if($request->post('ch_parcel_'.$pac->id)==1){
+        if ($request->post('ch_parcel_'.$pac->id)==1){
           $parcel[]=$pac->id;
         }
         $as = $pac->trackInvoice;
-        if($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1){
+        if(($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1)){
           $invoice[]=$as->id;
         }
 
@@ -95,47 +92,107 @@ class DefaultController extends Controller
         $inv->services_list=$invoice;
         $inv->create=time();
       }
+        $session = Yii::$app->session;
 
-      $session = Yii::$app->session;
-
-      $inv->detail=json_encode([
-        'invoice'=>$session['invoice_'.$id],
-        'ref_code'=>$session['ref_code_'.$id],
-        'contract_number'=>$session['contract_number_'.$id],
-      ]);
+        $inv->detail = json_encode([
+          'invoice' => $session['invoice_' . $id],
+          'ref_code' => $session['ref_code_' . $id],
+          'contract_number' => $session['contract_number_' . $id],
+        ]);
       $inv->save();
+      return $this->redirect(['/invoice/pdf/' . $inv->id]);
 
-      return $this->redirect(['/invoice/pdf/'.$inv->id]);
     }
 
-    $usluga=[
-      'parcel'=>[],
-      'many'=>[],
-    ];
-    $uslugaList=AdditionalServicesList::find()
-      ->where(['active'=>1])
-      //->andWhere(['!=', 'id', 1])
-      ->asArray()
-      ->all();
-    foreach ($uslugaList as $item){
-      if($item['id']==1){
-        continue;
-      }
-      if($item['type']==1){
-        $usluga['parcel'][]=$item;
-      }else{
-        $usluga['many'][]=$item;
-      }
-    };
+    return $this->render('invoiceCreate', $invoice_data);
+  }
 
-    return $this->render('invoiceCreate', [
-      'users_parcel'=>$model,
-      'order_id'=>$id,
-      'data'=>$data,
-      'usluga'=>$usluga,
-      'order_service'=>$order->getAdditionalService(),
-      'session'=>Yii::$app->session,
+  /**
+   * Lists all Config models.
+   * @return mixed
+   */
+  public function actionIndex()
+  {
+    $searchModel = new SearchInvoice();
+    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+    return $this->render('index', [
+      'searchModel' => $searchModel,
+      'dataProvider' => $dataProvider,
     ]);
+  }
+
+  public function actionEdit($id)
+  {
+    if (!Yii::$app->user->can('trackInvoice')){
+      throw new NotFoundHttpException('Access is denied.');
+    }
+
+    $invoice=Invoice::find()->where(['id'=>$id])->one();
+    $sel_pac=$invoice->getParcelList();
+    $order=Order::find()->where(['el_group'=>implode(',',$sel_pac)])->one();
+
+
+    if(!$order) {
+      $order = new Order();
+      $order->el_group = implode(',', $sel_pac);
+      $order->user_id = Yii::$app->user->id;
+      $order->save();
+    }
+
+    $invoice_data=$order->getInvoiceData($invoice);
+
+    $request = Yii::$app->request;
+    if($request->isPost){
+      $order_service=$order->getAdditionalService();
+
+      $inv=[];
+      $parcel=[];
+
+      foreach ($order_service as $as) {
+        if(($request->post('ch_invoice_'.$as->id)==1)){
+          $inv[]=$as->id;
+        }
+      }
+
+      $model=$order->getOrderElement();
+      foreach ($model as $pac) {
+        if ($request->post('ch_parcel_'.$pac->id)==1){
+          $parcel[]=$pac->id;
+        }
+        $as = $pac->trackInvoice;
+        if($as && !$as->isNewRecord && $request->post('ch_invoice_track_'.$pac->id)==1){
+          $inv[]=$as->id;
+        }
+
+        $services=$pac->getAdditionalServiceList(false);
+
+        foreach ($services as $as){
+          if($request->post('ch_invoice_'.$as->id)==1){
+            $inv[]=$as->id;
+          }
+        }
+      }
+
+      sort($parcel);
+      sort($inv);
+
+      $parcel=implode(',',$parcel);
+      $inv=implode(',',$inv);
+
+      $invoice->parcels_list=$parcel;
+      $invoice->services_list=$invoice;
+
+      if($request->post('submit')=='pdf'){
+        return $this->redirect(['/invoice/pdf/' . $invoice->id]);
+      }
+      if($request->post('submit')=='pay'){
+        return $this->redirect(['/payment/invoice/' . $invoice->id]);
+      }
+      ddd($request->post());
+    }
+    //ddd($invoice_data);
+    return $this->render('invoiceCreate', $invoice_data);
   }
 
   /**
@@ -200,7 +257,7 @@ class DefaultController extends Controller
 
       if(!$tax){
         Yii::$app->getSession()->setFlash('error', 'Missing billing address.');
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
 
       $inv->qst=round($inv->price*$tax['qst']/100,2);
@@ -228,7 +285,6 @@ class DefaultController extends Controller
 
     return $id;
   }
-
 
   /*
    * Печать PDF с инвойсом
@@ -282,10 +338,14 @@ class DefaultController extends Controller
     }
 
     $pac=OrderElement::find()->where(['id'=>$id])->one();
-    $this_service=$pac->addAdditionalService($service,true);
+    //$this_service=$pac->addAdditionalService($service,true);
 
     $request = Yii::$app->request;
-    return $this->redirect(['/invoice/create/'.$request->get('order')]);
+    if($request->get('order')) {
+      return $this->redirect(['/invoice/create/' . $request->get('order')]);
+    }else{
+      return $this->redirect(['/invoice/edit/' . $request->get('invoice')]);
+    }
   }
 
   //добавление услуги к заказу/всем посылкам в заказе
@@ -297,7 +357,12 @@ class DefaultController extends Controller
     $order=Order::find()->where(['id'=>$id])->one();
     $order->addAdditionalService($service);
 
-    return $this->redirect(['/invoice/create/'.$id]);
+    $request = Yii::$app->request;
+    if($request->get('invoice')) {
+      return $this->redirect(['/invoice/edit/' . $request->get('invoice')]);
+    }else{
+      return $this->redirect(['/invoice/create/'.$id]);
+    }
   }
 
 }

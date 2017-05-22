@@ -81,7 +81,10 @@ $config = [
           'invoice/default/<action>'=>'404',
           'invoice/default/<action>/<action2>'=>'404',
 
-          '/'=>'/site/index',
+          '/' => '/site/landing',
+          '/parcels'=>'/site/index',
+          '/pricing'=>'/site/pricing',
+          '/login'=>'/site/login',
           //получение города по стране
           'city/get/<id:\d+>' => 'city/get',
           //Взаимодействия с пользователем на сайте
@@ -107,6 +110,7 @@ $config = [
           'orderElement/group/<act:\w+>'=>'orderElement/default/group',
           'orderElement/<action:(file-upload|file-delete|files)>/<parcels_id:\d+>'=>'orderElement/default/<action>',
           //Дополнить всеми ф-ями
+          'orderElement/<action:group-delete>/<parcels_id:\d+>/<to_archive:\d+>'=>'orderElement/default/<action>',
           'orderElement/<action:group-view|group-print-advanced|commercial_inv_print|group-print|group-update|group-delete>/<parcels_id:\d+>'=>'orderElement/default/<action>',
 
           'receiving_points/<action>'=>'receiving_points/default/<action>',
@@ -130,7 +134,7 @@ $config = [
 
           'logs/<id:\d+>'=>'logs/default/index/',
 
-          'invoice/<action:create|update|pdf>/<id:\d+>'=>'invoice/default/<action>/',
+          'invoice/<action:create|update|pdf|edit>/<id:\d+>'=>'invoice/default/<action>/',
           'invoice/<action:add-service-to-parcel|add-service-to-all>/<id:\d+>/<service:\d+>'=>'invoice/default/<action>/',
         ],
     ],

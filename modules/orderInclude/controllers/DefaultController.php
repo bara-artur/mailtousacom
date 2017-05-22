@@ -75,6 +75,13 @@ class DefaultController extends Controller
     $admin = Yii::$app->user->identity->isManager();
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
 */
+
+    $request = Yii::$app->request;
+    $session = Yii::$app->session;
+    if($request->get('invoice')) {
+      $session->set('CreateOrder' . $id,$request->get('invoice'));
+      return $this->redirect(['/orderInclude/create-order/' . $id]);
+    }
     $model = new OrderElement();
     $hideNext =0 ;
     $order = Order::find()->where(['id'=>$id])->one();
@@ -89,7 +96,7 @@ class DefaultController extends Controller
     else{
       if ((!$admin)&&(Yii::$app->user->id != $order->user_id)){
         Yii::$app->response->cookies->add(new \yii\web\Cookie(['name' => 'showTheGritter','value' => "gritterAdd('Error','Unknown order ID','gritter-danger')",]));
-        return $this->redirect(['/']);
+        return $this->redirect(['/parcels']);
       }
     }
     $numbers = explode(',',$order->el_group);
@@ -145,6 +152,7 @@ class DefaultController extends Controller
       'scaner_data_list' => $scaner_data_list,
       'last' => $last,
       'admin' => $admin,
+      'invoice_id'=>$session['CreateOrder' . $id]
       /*'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
       'order' => $model,*/
@@ -419,7 +427,7 @@ class DefaultController extends Controller
           /*
           *   Process for non-ajax request
           */
-          return $this->redirect(['index']);
+          return $this->redirect(['/parcels']);
       }
   }
 
@@ -443,7 +451,7 @@ class DefaultController extends Controller
 
     $arr = explode(',', $order->el_group);
     if ($order->el_group=='') {
-      return $this->redirect('/');
+      return $this->redirect('/parcels');
     }
 
     $total=array(

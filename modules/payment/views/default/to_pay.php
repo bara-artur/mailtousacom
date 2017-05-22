@@ -383,26 +383,31 @@ $submitOption = [
                         <i class="icon-metro-warning"></i> Parcel isn't paid yet
                     </h6>
                 </div>
+                    <?php
+                    if($order_id) {
+                        ?>
 
-
-                    <div class="col-md-10 block_adm">
-                        <?= Html::checkbox('agree_'.$pac->id, false, [
-                            'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
-                            'class'=>"hidden_block_communication",
-                            'price'=>$pac->sub_total['price'],
-                            'sum'=>$pac->sub_total['sum'],
-                            'qst'=>$pac->sub_total['qst'],
-                            'gst'=>$pac->sub_total['gst'],
-                        ]);?>
-                        <div class="agree_<?=$pac->id;?> vertic" style="display: none;">
-                            <label>Please, enter the non-payment reason</label>
-                            <div class="row">
-                                <div class="col-md-12 full_width">
-                                    <?= Html::textarea('text_not_agree_'.$pac->id, "",['class'=>'']); ?>
+                        <div class="col-md-10 block_adm">
+                            <?= Html::checkbox('agree_' . $pac->id, false, [
+                              'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
+                              'class' => "hidden_block_communication",
+                              'price' => $pac->sub_total['price'],
+                              'sum' => $pac->sub_total['sum'],
+                              'qst' => $pac->sub_total['qst'],
+                              'gst' => $pac->sub_total['gst'],
+                            ]); ?>
+                            <div class="agree_<?= $pac->id; ?> vertic" style="display: none;">
+                                <label>Please, enter the non-payment reason</label>
+                                <div class="row">
+                                    <div class="col-md-12 full_width">
+                                        <?= Html::textarea('text_not_agree_' . $pac->id, "", ['class' => '']); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <?php
+                    }
+                    ?>
 
                 <!--<div class="notpaid_img"></div>-->
 
@@ -538,14 +543,26 @@ $submitOption = [
         <div class="col-md-12">
             <hr>
             <div class="form-group">
-                <?=Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/'.$order_id], ['class' => 'btn btn-default pull-left']) ?>
-                <?=Html::a('Return to payment list', ['/'], ['class' => 'btn btn-info pull-left margin-left-10']);?>
                 <?php
-                if(Yii::$app->user->identity->isManager()){
-                    if (Yii::$app->user->can('trackInvoice') && $order_id) {
-                        echo Html::a('Create invoice', ['/invoice/create/' . $order_id], ['class' => 'btn btn-info pull-left margin-left-10']);
+                    if($order_id) {
+                        ?>
+                        <?= Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Back', ['/orderInclude/border-form/' . $order_id], ['class' => 'btn btn-default pull-left']) ?>
+                        <?= Html::a('Return to parcel list', ['/parcel'], ['class' => 'btn btn-info pull-left margin-left-10']); ?>
+                        <?php
                     }else{
-                        //echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Edit invoice', ['/invoice/edit/' . $inv_id], ['class' => 'btn btn-default pull-left']);
+                        ?>
+                        <?= Html::a('Return to invoice list', ['/invoice'], ['class' => 'btn btn-info pull-left margin-left-10']); ?>
+                <?php
+                    }
+                ?>
+                <?php
+                if(Yii::$app->user->identity->isManager()) {
+                    if(Yii::$app->user->can('trackInvoice')){
+                        if ($order_id) {
+                            echo Html::a('Create invoice', ['/invoice/create/' . $order_id], ['class' => 'btn btn-info pull-left margin-left-10']);
+                        } else {
+                            echo Html::a('<i class="glyphicon glyphicon-chevron-left"></i> Edit invoice', ['/invoice/edit/' . $inv_id], ['class' => 'btn btn-default pull-left']);
+                        }
                     }
                     if($total['price']>0){
                         //админ может принимать платеж и это необходимо сделать

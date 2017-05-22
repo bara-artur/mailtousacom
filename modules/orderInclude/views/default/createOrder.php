@@ -24,16 +24,17 @@ use yii\bootstrap\Collapse;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\orderInclude\models\OrderIncludeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+CrudAsset::register($this);
 $this->title = 'Order';
 $this->params['breadcrumbs'][] = $this->title;
-CrudAsset::register($this);
+
 $submitOption = [
   'class' => 'btn btn-lg btn-success'
 ];
 ?>
   <div class="row">
       <div class="col-md-4 col-sm-12">
-          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],
+          <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
             [
               'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
               'id' => 'updateParcelsIdCookie',
@@ -85,7 +86,6 @@ $submitOption = [
 <?php } ?>
 
   <div id=crud-datatable-pjax>
-
     <?php
     Pjax::begin();
     if($order_elements){
@@ -121,6 +121,17 @@ $submitOption = [
                   'id' => 'open_add_order_address',
                 ])?>
             <?php } ?>
+            <label>
+              <?php if ($percel->address_verification == 0) {
+                      echo 'Verification failed';
+                    }else{
+                      if ($percel->address_verification == 1){
+                        echo 'Verification success';
+                      }else{
+                        echo 'Parcel from scanner';
+                      }
+                    }  ?>
+            </label>
           </div>
 
           <div class="order-include-index col-md-9 border_left">
@@ -503,6 +514,22 @@ Parcel will be moved back to the list of parcels.',
 ])?>
 <?php Modal::end(); ?>
 
+<?php
+if(isset($invoice_id)) {
+  ?>
+  <?= Html::a('To edit invoice',
+    ['/invoice/edit/' . $invoice_id],
+    [
+      'class' => 'btn btn-info'
+    ]); ?>
+  <?php
+}
+?>
+<?= Html::a('Create new invoice',
+  ['/invoice/create/' . $order_id],
+  [
+    'class' => 'btn btn-info'
+  ]); ?>
 
 <?php if ($edit_not_prohibited) {?>
   <?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
@@ -627,7 +654,9 @@ if($createNewAddress){
        }
      //}else{
        if ((event.keyCode || event.charCode) == 13) {
-         if ($('.scaner_data').length>0) scaner_enter_button();
+         if ($('.scaner_data').is( ":focus" )) {
+           scaner_enter_button();
+         }
        }
       //}
     });

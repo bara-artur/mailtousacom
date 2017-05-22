@@ -76,36 +76,16 @@ class OrderInclude extends \yii\db\ActiveRecord
     if ($emptyOrder!=null) {
       return $this_->redirect('/orderInclude/create-order/'.$emptyOrder['id']);
     }
-    // actionCreateOrder2
-     /* ->select(['`order_element`.`order_id`','`order`.`id`'])
-      ->leftJoin('order_element', '`order`.`id` = `order_element`.`order_id`')
-      ->where(['user_id'=>$user_id,'order_id'=>null])
-      ->asArray()
-      ->all();
 
-    if(count($orderTable)>0){
-      foreach ($orderTable as $order){
-        if ($order['id']!=null){
-          if($request->isAjax){
-            $this_->redirect('/orderInclude/create-order/' . $order['id']);
-            return "Redirecting to create an order";
-          }else {
-            return $this_->redirect('/orderInclude/create-order/' . $order['id']);
-          }
-        }
-      }
-    }
-*/
-    $request = Yii::$app->request;
     if(!Yii::$app->user->isGuest) {
       $address = Address::find()->where('user_id = :id', [':id' => $user_id])->one();
       if($address) {
-        $last_order = Order::find()->where('user_id = :id', [':id' => $user_id])->orderBy('created_at DESC')->one();
-        $address_id = $address->id;
+        //$last_order = Order::find()->where('user_id = :id', [':id' => $user_id])->orderBy('created_at DESC')->one();
+        //$address_id = $address->id;
         $model = new Order();
         $model->user_id = $user_id;
         $model->client_id = $user_id;
-        $model->created_at = time();
+
         if ($model->save()) {
           //$log = new Log;
           //$log->createLog($model->user_id, $model->id, "Draft");
@@ -116,6 +96,8 @@ class OrderInclude extends \yii\db\ActiveRecord
           } else {
             return $this_->redirect('/orderInclude/create-order/' . $model->id);
           }
+        }else {
+          return ['title'=> 'Order save error'];
         }
       }
       //return ddd($model);

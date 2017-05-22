@@ -7,9 +7,14 @@
 
 namespace app\commands;
 
+use app\modules\logs\models\Log;
+use app\modules\payment\models\PaymentInclude;
 use Yii;
 use yii\console\Controller;
+use app\modules\order\models\Order;
+use app\modules\user\models\User;
 use app\modules\orderElement\models\OrderElement;
+use app\modules\invoice\models\Invoice;
 use keltstr\simplehtmldom\SimpleHTMLDom as SHD;
 use app\modules\config\components\DConfig;
 use yii\helpers\Console;
@@ -42,7 +47,7 @@ class CronController extends Controller
   {
     $tot_time=time();
     $data=OrderElement::find()
-      ->where(['status'=>[4,5]])
+      ->andWhere(['status'=>[4,5]])
       ->orderBy(['cron_refresh' => SORT_ASC])
       ->limit(Yii::$app->config->get('track_refresh_count'))// берем 10 посылок (надо будет исключить доставленные)
       ->all();
@@ -112,12 +117,69 @@ class CronController extends Controller
   }
 
   public function actionMonthInvoice(){
-
+    $users = User::find()->all();
+    foreach ($users as $user){
+      var_dump("User ID -".$user->id);
+      $this_month_begin = strtotime(date('Y-m-01'));
+      $parcels_for_email = [];
+      $services_for_email = [];
+      $parcels = OrderElement::find()
+        ->andWhere(['user_id' => $user->id])
+        ->andWhere(['payment_state' => 3])         // работа с пользователями с месячным типом оплаты
+        ->andWhere(['status'=> 2])             // берем посылки со статусом 2
+        ->andWhere(['>=', 'created_at', $this_month_begin])   // посылки созданные после начала текущего месяца
+        ->all();
+      if ($parcels){
+        foreach ($parcels as $parcel){
+          $payment = PaymentInclude::find()
+            ->andWhere(['element_id' => $parcel->id])
+            ->andWhere(['element_type' => 0])   // тип платежа - за посылку
+            ->andWhere(['status' => 0])    //  поиск посылок ожидающих оплаты
+            ->one();
+          if ($payment){
+            $parcels_for_email[] = $parcel->id;
+          }
+        }
+      }else{
+        var_dump("No parcels");
+      }
+      if ($parcels_for_email){
+          $inv = new Invoice();
+          $inv->create = time();
+          $inv->parcels_list = implode(',',$parcels_for_email);
+          $inv->services_list = '';
+          $inv->detail = json_encode(['cron' => 1]);
+          $inv->save();
+      } else{
+        echo 'empty';
+      }
+    }
   }
+
   public function actionClearOrder(){
-
+    $two_month = 60*24*60*60;
+    Order::deleteAll('created_at < '.(time()-$two_month));  // удаление Заказов старее двух месяцев
   }
-  public function actionMoveToArhiv(){
 
+  public function actionMoveToArhiv(){
+    $one_month = 30*24*60*60;
+    $parcels = OrderElement::find()
+      ->andWhere(['created_at' < (time()-$one_month)])  // берем все посылки старше 1 месяца
+      ->andWhere(['>=', 'status', 6])
+      ->all(); // все посылки старше месяца со статусом 2
+    if ($parcels){
+      foreach ($parcels as $parcel){
+        $old_parcel_log = Log::find()
+          ->andWhere(['order_id' => $parcel->id])
+          ->andWhere(['description' => 'Change status'])   //  берем запись с изменением статуса
+          ->andWhere(['>=', 'status_id', 6])                     // берем статус больше либо равным 2
+          ->orderBy('created_at DESC')                // сортируем по убыванию даты
+          ->one();                                      // берем первую запись
+        if ($old_parcel_log->created_at < (time()-$one_month)) {
+          $model = OrderElement::findOne($parcel->id);
+          $model->archive = 1;
+        }
+      }
+    }
   }
 }

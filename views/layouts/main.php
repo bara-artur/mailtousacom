@@ -40,14 +40,14 @@ AppAsset::register($this);
     ]);
     $user_menu=[];
     if(Yii::$app->user->isGuest){
-        $user_menu[]='<li>'.Html::a('<i class="icon-metro-enter"></i> Sign In', ['/']).'</li>';
+        $user_menu[]='<li>'.Html::a('<i class="icon-metro-enter"></i> Sign In', ['/login']).'</li>';
         $user_menu[]='<li>'. Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration']). '</li>';
     }else{
         if(Yii::$app->user->identity->isManager()) {
             if (Yii::$app->user->can('userManager')) {
                 $user_req=User::find()->where(['month_pay'=>2])->asArray()->all();
                 $user_req_cnt=count($user_req);
-                $user_menu[] = '<li>' .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Parcels', ['/'], ['class' => 'profile-link']). '</li>'
+                $user_menu[] = '<li>' .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Parcels', ['/parcels'], ['class' => 'profile-link']). '</li>'
                     .'<li>'
                     . Html::a('
                         <i class="fa fa-users"></i>
@@ -95,7 +95,7 @@ AppAsset::register($this);
 
         }else{
             $user_menu[] = '<li>'
-            .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/'], ['class' => 'profile-link'])
+            .Html::a('<i class="fa fa-briefcase"></i>&nbsp;&nbsp;Му Orders', ['/parcels'], ['class' => 'profile-link'])
             .'</li>'
             .'<li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="icon-metro-user-2"></i>&nbsp;&nbsp;My Profile <span class="caret"></span></a>

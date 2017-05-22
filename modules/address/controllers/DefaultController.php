@@ -57,7 +57,7 @@ class DefaultController extends Controller
     public function actionCreateOrderBilling()
     {
       if(Yii::$app->user->identity->isManager()){
-          return $this->redirect(['/']);
+          return $this->redirect(['/parcels']);
       }
       $order = Order::find()->where(['user_id'=>Yii::$app->user->id])->one();
       $update_button =0;
@@ -71,7 +71,7 @@ class DefaultController extends Controller
       $request = Yii::$app->request;
       if($request->getIsPost()){
         if($model->load($request->post()) && $model->save()){
-            if ($update_button) return $this->redirect(['/']);
+            if ($update_button) return $this->redirect(['/parcels']);
             else return $this->redirect(['addressusa']);
         }
         \Yii::$app->getSession()->setFlash('error', 'Error saving. Check the correctness of filling');
