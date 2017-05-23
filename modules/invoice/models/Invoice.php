@@ -30,6 +30,7 @@ class Invoice extends \yii\db\ActiveRecord
 
     static function statusList(){
       return [
+        ''=>'',
         0=>"Created",
         1=>"Sent to customer",
         2=>"Paid",
@@ -43,9 +44,7 @@ class Invoice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pay_status', 'create','user_id'], 'integer'],
-            [['price'], 'number'],
-            [['parcels_list', 'services_list','detail'], 'string', 'max' => 500],
+          [['price'], 'integer'],
         ];
     }
 

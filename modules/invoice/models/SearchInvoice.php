@@ -18,7 +18,9 @@ class SearchInvoice extends Invoice
   public function rules()
   {
     return [
-      [['pay_status', 'create'], 'integer'],
+      [['id','user_id','price','price_end',
+        'create','created_at_to',
+        'pay_status','user_input'], 'safe'],
       [['parcels_list', 'services_list','detail'], 'string', 'max' => 500],
     ];
   }
@@ -39,30 +41,38 @@ class SearchInvoice extends Invoice
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $time_to)
     {
-        $query = Invoice::find();
+      $query = Invoice::find();
 
-        // add conditions that should always apply here
+      // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+      $dataProvider = new ActiveDataProvider([
+          'query' => $query,
+      ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
+      $this->load($params);
+      $date_from = strtotime($this['create']);
+      $date_to =   strtotime($time_to['created_at_to']);
+      $price = (int)$this->price;
+      if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
+      if ($date_from!=null) $query->andFilterWhere(['>=', 'create', $date_from]);
+      if ($date_to!=null) $query->andFilterWhere(['<=', 'create', $date_to+24*3600]);
+      if (isset($time_to['price_end'])) {
+        $query->andFilterWhere(['<=', 'price', $time_to['price_end']]);
+      }
+      $query->andFilterWhere(['>=', 'price', $price]);
+      $query->andFilterWhere([
+        'id' => $this->id,
+        'user_id' => $this->user_id,
+        'pay_status' => $this->pay_status,
+      ]);
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-        ]);
 
-
-        return $dataProvider;
+      return $dataProvider;
     }
 }
