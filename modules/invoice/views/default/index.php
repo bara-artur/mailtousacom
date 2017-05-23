@@ -65,7 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'pay_status',
               'content' => function($data){
-                return Html::dropDownList("pay_status",$data->pay_status,$data->statusList(),['id'=>$data->id]);
+                if(Yii::$app->user->can('trackInvoice')) {
+                  return Html::dropDownList("pay_status", $data->pay_status, $data->statusList(), ['id' => $data->id]);
+                }else{
+                  return $data->getTextStatus();
+                }
               }
             ],
               [
@@ -77,11 +81,15 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'Action',
               'content' => function($data){
-                  return Html::a(
+                $out='';
+                if(Yii::$app->user->can('trackInvoice')){
+                  $out=Html::a(
                     '<span class="glyphicon glyphicon-pencil"></span> Update',
                     ['/invoice/edit/' . $data->id],
                     ['class' => 'btn btn-sm btn-science-blue marg_but']
                   );
+                }
+                return $out;
               }
             ]
           ],

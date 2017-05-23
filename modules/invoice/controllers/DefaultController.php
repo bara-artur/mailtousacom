@@ -249,7 +249,7 @@ class DefaultController extends Controller
    **/
   public function actionUpdateStatus(){
     $request = Yii::$app->request;
-    if($request->isAjax) {
+    if($request->isAjax && Yii::$app->user->can('trackInvoice')) {
       Yii::$app->response->format = Response::FORMAT_JSON;
       if ($request->isPost){
         $model = Invoice::findOne($request->post('id'));
