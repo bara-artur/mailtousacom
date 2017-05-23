@@ -767,20 +767,20 @@ input.hidden_block_communication{display:none !important;}
 .full_width textarea{width:360px;height:50px}
 .vertic{padding-top:10px;color:#05389F;}
 .hidden_block_communication{padding-top:20px;}
-div.paid_img{background: url("/img/paid.png");
-    width: 120px;
-    background-size: cover !important;
-    height: 101px;
-    position: absolute;
-    top: 100px;
-    right: 34%;}
+div.paid_img{background:url("/img/paid.png");
+width: 94px;
+background-size: cover !important;
+height: 80px;
+position: absolute;
+bottom: 20px;
+left: 42%;}
 div.notpaid_img{background: url("/img/notpaid.png");
-    width: 120px;
+    width: 94px;
     background-size: cover !important;
-    height: 101px;
+    height: 80px;
     position: absolute;
-    top: 100px;
-    right: 34%;}
+    bottom: 20px;
+    left: 42%;}
 .block_adm{
     top:6px;
 }
@@ -1027,23 +1027,24 @@ button.navbar-toggle{margin-right:30px;}
 .pay_list5
 {
     padding: 4px 15px;
-    border-right: 1px dotted #454545;
-    border-bottom: 1px dotted #454545;
-    background-color: #F5F5F5;
-    font-size:14px;
+    border-right: 1px dotted #ddd;
+    border-bottom: 1px dotted #ddd;
+    background-color: #4c648e;
+    font-size: 14px;
+    color: #fff;
 }
 .pay_list6
 {
     padding: 4px 15px;
-    border-bottom: 1px dotted #454545;
-    background-color: #F5F5F5;
+    border-bottom: 1px dotted #ddd;
+    background-color: #4c648e;
     font-size:14px;
+    color: #fff;
 }
 .font_nor{font-size:16px !important;}
-.mac
-{
-    border: 1px solid rgba(76, 100, 142, 0.39);
-    margin-bottom: 14px;
+.mac {
+    border: 1px solid #777;
+    margin-bottom: 40px;
     background-color: rgba(235, 235, 235, 0.26);
 }
 /*21042017*/
@@ -1276,3 +1277,5 @@ ul.breadcrumb{display:none !important;}
 .tile2 div{margin-top: -6px;}
 
 .font-size11{font-size:11px;}
+/*23052017*/
+.sub_price,.sub_qst,.sub_gst{color:#05389F !important;font-weight: 700;}
