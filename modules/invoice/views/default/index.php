@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
       <div class="col-md-12">
-        <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 margin-top-10 text-left">
+        <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 text-left">
           <?php if ($dataProvider) { ?>
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
           <?php } ?>
@@ -84,26 +84,34 @@ $this->params['breadcrumbs'][] = $this->title;
                 $out='';
                 if(Yii::$app->user->can('trackInvoice')){
                   $out=Html::a(
-                    '<span class="glyphicon glyphicon-pencil"></span> Update',
+                    '<span class="glyphicon glyphicon-pencil"></span>',
                     ['/invoice/edit/' . $data->id],
-                    ['class' => 'btn btn-sm btn-science-blue marg_but']
+                    ['class' => 'btn btn-sm btn-science-blue marg_but',
+                        'title'=>'Upgrade',
+                        'data-toggle'=>'tooltip',
+                    ]
+
                   );
                 }
                 $out.=Html::a(
-                  '<span class="glyphicon glyphicon-pencil"></span> PDF',
+                  '<i class="fa fa-print"></i>',
                   ['/invoice/pdf/' . $data->id],
                   [
-                    'class' => 'btn btn-sm btn-science-blue marg_but',
-                    'target'=>'_blank',
+                    'class' => 'btn btn-sm btn btn-science-blue-border marg_but',
+                    'title'=>'PDF',
+                    'data-toggle'=>'tooltip',
                   ]
+
                 );
                 if($data->pay_status==0) {
                   $out .= Html::a(
-                    '<span class="glyphicon glyphicon-pencil"></span> To pay',
+                    '<i class="fa fa-credit-card"></i>',
                     ['/payment/invoice/' . $data->id],
                     [
-                      'class' => 'btn btn-sm btn-science-blue marg_but',
+                      'class' => 'btn btn-sm btn-success marg_but',
                       'target' => '_blank',
+                      'title'=>'To pay',
+                      'data-toggle'=>'tooltip',
                     ]
                   );
                 }
