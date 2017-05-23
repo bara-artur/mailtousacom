@@ -13,6 +13,7 @@ use app\modules\additional_services\models\AdditionalServicesList;
 use app\modules\user\models\User;
 use kartik\mpdf\Pdf;
 use \yii\web\Response;
+use app\modules\invoice\models\InvoiceFilterForm;
 
 /**
  * Default controller for the `invoice` module
@@ -120,12 +121,47 @@ class DefaultController extends Controller
    */
   public function actionIndex()
   {
+    $admin = Yii::$app->user->identity->isManager();
+
+    $query['OrderElementSearch'] = Yii::$app->request->queryParams;
+    $time_to['created_at_to'] = null;
+    $time_to['transport_date_to'] = null;
+    // Загружаем фильтр из формы
+    $filterForm = new InvoiceFilterForm();
+    if(Yii::$app->request->post()) {
+      $filterForm = new InvoiceFilterForm(); // форма фильтра
+    //  $showTable = new ShowParcelTableForm(-1); // форма настройки столбцов таблицы
+    //  $showTable->load(Yii::$app->request->post());
+    //  if (($showTable->getAllFlags() != $user->parcelTableOptions)) {
+      //  $user->parcelTableOptions = $showTable->getAllFlags();
+     //   if ($user)$user->save();
+     // }
+      $filterForm->load(Yii::$app->request->post());
+
+      $query['SearchInvoice'] = $filterForm->toArray();
+      $time_to = ['created_at_to' => $filterForm->created_at_to];
+      $time_to += ['price_end' => $filterForm->price_end];
+    }
+
+    //$query = Yii::$app->request->queryParams;
+    if ($admin==0) {
+      if (array_key_exists('SearchInvoice', $query)) $query['SearchInvoice'] += ['user_id' => Yii::$app->user->id];
+      else $query['SearchInvoice'] = ['user_id' => Yii::$app->user->id];
+    }
+    //$query['OrderElementSearch']['archive'] = 1; //  не выводим архивные посылки на главную
+
+    //$showTable = new ShowParcelTableForm($user->parcelTableOptions);
     $searchModel = new SearchInvoice();
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    $dataProvider = $searchModel->search($query,$time_to);
+
+  //  $searchModel = new SearchInvoice();
+  //  $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
     return $this->render('index', [
       'searchModel' => $searchModel,
       'dataProvider' => $dataProvider,
+      'filterForm' => $filterForm,
+      'admin' => $admin,
     ]);
   }
 

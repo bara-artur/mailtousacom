@@ -13,6 +13,30 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="config-index">
 
     <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 margin-top-10 text-left">
+          <?php if ($dataProvider) { ?>
+            <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
+          <?php } ?>
+          <?= ''/*Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn2 btn-neutral-border ','data-toggle' => 'collapse'])*/ ?>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 scrit">
+        <?= $this->render('invoiceFilterForm', ['model' => $filterForm, 'admin' => $admin]);?>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 scrit">
+        <?= /*$this->render('showInvoiceTableForm', ['model' => $showTable, 'admin' => $admin]);*/ '' ?>
+      </div>
+    </div>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <div class="table-responsive">
         <?= GridView::widget([
