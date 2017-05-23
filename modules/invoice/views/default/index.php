@@ -89,6 +89,24 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'btn btn-sm btn-science-blue marg_but']
                   );
                 }
+                $out.=Html::a(
+                  '<span class="glyphicon glyphicon-pencil"></span> PDF',
+                  ['/invoice/pdf/' . $data->id],
+                  [
+                    'class' => 'btn btn-sm btn-science-blue marg_but',
+                    'target'=>'_blank',
+                  ]
+                );
+                if($data->pay_status==0) {
+                  $out .= Html::a(
+                    '<span class="glyphicon glyphicon-pencil"></span> To pay',
+                    ['/payment/invoice/' . $data->id],
+                    [
+                      'class' => 'btn btn-sm btn-science-blue marg_but',
+                      'target' => '_blank',
+                    ]
+                  );
+                }
                 return $out;
               }
             ]
