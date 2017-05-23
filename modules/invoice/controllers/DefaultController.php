@@ -103,10 +103,10 @@ class DefaultController extends Controller
       $inv->save();
 
       if($request->post('submit')=='pdf'){
-        return $this->redirect(['/invoice/pdf/' . $invoice->id]);
+        return $this->redirect(['/invoice/pdf/' . $inv->id]);
       }
       if($request->post('submit')=='pay'){
-        return $this->redirect(['/payment/invoice/' . $invoice->id]);
+        return $this->redirect(['/payment/invoice/' . $inv->id]);
       }
 
     }
@@ -193,7 +193,8 @@ class DefaultController extends Controller
       $inv=implode(',',$inv);
 
       $invoice->parcels_list=$parcel;
-      $invoice->services_list=$invoice;
+      $invoice->services_list=$inv;
+      $invoice->save();
 
       if($request->post('submit')=='pdf'){
         return $this->redirect(['/invoice/pdf/' . $invoice->id]);
