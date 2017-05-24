@@ -108,6 +108,7 @@ class DefaultController extends Controller
     $user_ids = '';
     $track_number_types = '';
     $scaner_data_list = '';
+    $archive_data_list = '';
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
@@ -116,6 +117,7 @@ class DefaultController extends Controller
           $user_ids = $user_ids.$parcel->user_id.',';
           $track_number_types = $track_number_types.$parcel->track_number_type.',';
           $scaner_data_list = $scaner_data_list.((strcasecmp($parcel->first_name,'[default]')==0)?(1):(0)).',';
+          $archive_data_list = $archive_data_list.((($parcel->status==0)||($parcel->status>=6))?(1):(0)).',';
           $order_elements[] = $parcel;
           if ($parcel->status > 1){
             $edit_not_prohibited = 0;
@@ -150,6 +152,7 @@ class DefaultController extends Controller
       'user_ids' => $user_ids,
       'track_number_types' => $track_number_types,
       'scaner_data_list' => $scaner_data_list,
+      'archive_data_list' => $archive_data_list,
       'last' => $last,
       'admin' => $admin,
       'invoice_id'=>$session['CreateOrder' . $id]

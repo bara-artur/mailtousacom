@@ -63,7 +63,7 @@ $this->title = 'Shipping to USA and Canada';
                 ['/orderElement/group/delete'],
                 [
                     'id'=>'group-delete',
-                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide group-delete',
+                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show group-delete',
                     'data' => [
                         'confirm-message' => 'Are you sure to delete this item?',
                         'confirm-title'=>"Delete",
@@ -78,7 +78,7 @@ $this->title = 'Shipping to USA and Canada';
                 ['/orderElement/group/archive'],
                 [
                     'id'=>'group-delete',
-                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difUserIdHide group-delete',
+                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difArchiveHide',
                     'data' => [
                         'confirm-message' => 'Shall we move this items to archive?',
                         'confirm-title'=>"Move to archive",
@@ -159,6 +159,7 @@ $this->title = 'Shipping to USA and Canada';
                       'user'=> $data->user_id,
                       'invoice'=> $data->track_number_type,
                       'scaner_data'=> ((strcasecmp($data->first_name,'[default]')==0)?(1):(0)),
+                      'archive'=> ((($data->status==0)||($data->status>=6))?(1):(0)),
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },

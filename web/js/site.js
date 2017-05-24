@@ -765,6 +765,7 @@ function init_button_clearParcelsIdCookie(){
     setCookie('parcelCheckedUser','',1);
     setCookie('parcelCheckedInvoice','',1);
     setCookie('parcelCheckedScaner','',1);
+    setCookie('parcelCheckedArchive','',1);
     setCookie('doNotShowDifUserGritter','',1);
   })
 }
@@ -774,34 +775,40 @@ function init_button_updateParcelsIdCookie(){
     setCookie('parcelCheckedUser',$("#updateParcelsIdCookie").data('forusercookie'),1);
     setCookie('parcelCheckedInvoice',$("#updateParcelsIdCookie").data('forinvoicecookie'),1);
     setCookie('parcelCheckedScaner',$("#updateParcelsIdCookie").data('forscanercookie'),1);
+    setCookie('parcelCheckedArchive',$("#updateParcelsIdCookie").data('forarchivecookie'),1);
 
   })
 }
 
-function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieInvoice, oldCookieScaner){
+function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieInvoice, oldCookieScaner, oldCookieArchive){
   var stringCoockies = '';
   var stringUsers = '';
   var stringInvoices = '';
   var stringScaner = '';
-  var difUser = 0, firstParcelUser="", difInvoice = 0, difScaner = 0, firstParcelInvoice="", firstParcelScaner="";
+  var stringArchive = '';
+  var difUser = 0, firstParcelUser="", difInvoice = 0, difScaner = 0, difArchive = 0,
+      firstParcelInvoice="", firstParcelScaner="", firstParcelArchive ="";
   if (oldCookieUser[0]!='') {    //  берем первую попавшуюся выделенную посылку и запоминаем юзера
     firstParcelUser = oldCookieUser[0];
     firstParcelInvoice = oldCookieInvoice[0];
     firstParcelScaner = oldCookieScaner[0];
+    firstParcelArchive = oldCookieArchive[0];
   }else{
     if (elem_checked.length>0){
       firstParcelUser = elem_checked[0].getAttribute('user');
       firstParcelInvoice = elem_checked[0].getAttribute('invoice');
       firstParcelScaner = elem_checked[0].getAttribute('scaner_data');
+      firstParcelArchive = elem_checked[0].getAttribute('archive');
     }
   }
   if (getCookie('parcelCheckedId')!='') {
-    for (i = 0; i < oldCookie.length; i++) {          //  занесли все номера посылок , которых нет на данной странице пагинации
+    for (i = 0; i < oldCookie.length; i++) {          //  занесли все номера посылок , которых НЕТ на данной странице пагинации
       if (($("#" + oldCookie[i]).length == 0) && (oldCookie[i] != '')) {
         stringCoockies = stringCoockies + oldCookie[i] + ',';
         stringUsers = stringUsers + oldCookieUser[i] + ',';
         stringInvoices = stringInvoices + oldCookieInvoice[i] + ',';
         stringScaner = stringScaner + oldCookieScaner[i] + ',';
+        stringArchive = stringArchive + oldCookieArchive[i] + ',';
         if (firstParcelUser != oldCookieUser[i]) {
           difUser = 1;
         }
@@ -811,18 +818,18 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
         if ((firstParcelScaner != oldCookieScaner[i])||(firstParcelScaner==1)) {
           difScaner = 1;
         }
+        if ((firstParcelArchive != oldCookieArchive[i])||(firstParcelArchive==0)) {
+          difArchive = 1;
+        }
       }
     }
   }
-  parcelsID= getCookie('parcelCheckedId');
-  parcelsUsers = getCookie('parcelCheckedUser');
-  parcelsInvoice = getCookie('parcelCheckedInvoice');
-  parcelsScaner = getCookie('parcelCheckedScaner');
-  for(var i = 0; i <elem_checked.length; i++) {     // заносим все номера посылок, которые есть на данной странице пагинации
+  for(var i = 0; i <elem_checked.length; i++) {     // заносим все номера посылок, которые ЕСТЬ на данной странице пагинации
     stringCoockies = stringCoockies + elem_checked[i].getAttribute('id')+',';
     stringUsers = stringUsers + elem_checked[i].getAttribute('user')+',';
     stringInvoices = stringInvoices + elem_checked[i].getAttribute('invoice')+',';
     stringScaner = stringScaner + elem_checked[i].getAttribute('scaner_data')+',';
+    stringArchive = stringArchive + elem_checked[i].getAttribute('archive')+',';
     if (firstParcelUser!=elem_checked[i].getAttribute('user')) {
       difUser = 1;
     }
@@ -832,15 +839,20 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
     if ((firstParcelScaner!=elem_checked[i].getAttribute('scaner_data'))||(firstParcelScaner==1)) {
       difScaner = 1;
     }
+    if ((firstParcelArchive!=elem_checked[i].getAttribute('archive'))||(firstParcelArchive==0)) {
+      difArchive = 1;
+    }
   }
   stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1); // удаляем запятую
   stringUsers = stringUsers.substring(0, stringUsers.length - 1); // удаляем запятую
   stringInvoices = stringInvoices.substring(0, stringInvoices.length - 1); // удаляем запятую
   stringScaner = stringScaner.substring(0, stringScaner.length - 1); // удаляем запятую
+  stringArchive = stringArchive.substring(0, stringArchive.length - 1); // удаляем запятую
   setCookie('parcelCheckedId',stringCoockies,1);
   setCookie('parcelCheckedUser',stringUsers,1);
   setCookie('parcelCheckedInvoice',stringInvoices,1);
   setCookie('parcelCheckedScaner',stringScaner,1);
+  setCookie('parcelCheckedArchive',stringArchive,1);
   if ((getCookie('multiUserMode')=='1')&&(difUser==0)&&(getCookie('parcelCheckedId'))){    // выдаем гриттер при переключении многопользовательского режима
     gritterAdd('One user mode', '', 'gritter-success');
   }else {
@@ -866,6 +878,7 @@ function sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieIn
   setCookie('multiUserMode',difUser,1);
  // setCookie('multiTrackNumberMode',difInvoice,1); // отказались от управление кнопкой Tracking
   setCookie('multiScanerMode',difScaner,1);
+  setCookie('multiArchiveMode',difArchive,1);
   if (elem_checked.length>0) {
     setCookie('parcel_elem_type', elem_checked[0].getAttribute('name'), 1);
     setCookie('parcel_user_id', elem_checked[0].getAttribute('user'), 1);
@@ -885,6 +898,7 @@ function main_table_checkbox(current_element){
   oldCookieUser = getCookie('parcelCheckedUser').split(',');        // все юзеры со всех страниц
   oldCookieInvoice = getCookie('parcelCheckedInvoice').split(',');        // все юзеры со всех страниц
   oldCookieScaner = getCookie('parcelCheckedScaner').split(',');        // все отсканированные со всех страниц
+  oldCookieArchive = getCookie('parcelCheckedArchive').split(',');        // все посылки со всех страниц для архивации
   for (i = 0; i < oldCookie.length; i++) {                           // выделяем чекбоксы - для обновления по f5
     if (oldCookie[i] != current_id) {
       $("#" + oldCookie[i]).prop("checked", true);
@@ -897,10 +911,11 @@ function main_table_checkbox(current_element){
     oldCookieUser.splice(refreshParcel, 1);
     oldCookieInvoice.splice(refreshParcel, 1);
     oldCookieScaner.splice(refreshParcel, 1);
+    oldCookieArchive.splice(refreshParcel, 1);
   }
 
   elem_checked = $(".checkBoxParcelMainTable:checked");// выделенные чекбоксы на этой странице
-  sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieInvoice, oldCookieScaner);
+  sendCheckedToCookie(elem_checked, oldCookie, oldCookieUser, oldCookieInvoice, oldCookieScaner, oldCookieArchive);
   elem_cookie_type = getCookie('parcel_elem_type');
   user_id = getCookie('parcel_user_id');
   if (getCookie('parcelCheckedId')!=''){ // если выделена хотя бы одна посылка
@@ -938,27 +953,14 @@ function main_table_checkbox(current_element){
     elems_prohibeted.removeClass('select_prohibited');
   }
 
-  parcel_ids ="";
   stringCoockies = getCookie('parcelCheckedId');
   if (stringCoockies.length>0){
     if (stringCoockies.substr(-1)==',') stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1);
     string = stringCoockies.split(',').length;
-    parcel_ids = '/'+stringCoockies.replace(/,/g,'_');
   }else{
     string = "empty";
-    parcel_ids = '/'+this.id;
   }
- /* elem_checked.each(function(i,elem) {
-    if (parcel_ids == "") {
-      parcel_ids = '/'+this.id;
-      //string = this.id;
-      string=1;
-    }else {
-      parcel_ids = parcel_ids + "_" + this.id;
-      //string = string + " " + this.id;
-      string++;
-    }
-  });*/
+
  if (getCookie('multiUserMode') == '1'){
   $('.difUserIdHide').attr('disabled',true);
  }else {
@@ -974,15 +976,15 @@ function main_table_checkbox(current_element){
      } else {
        $('.gr_update_text').html('<span class="glyphicon glyphicon-pencil"></span> Update')
      }
-  //   if (getCookie('multiTrackNumberMode') == '1'){  // Работа с кнопкой Tracking
-  //     $('.difInvoiceHide').attr('disabled',true);
-  //   }else {
-  //     $('.difInvoiceHide').attr('disabled', false); // Работа с кнопкой Tracking
-  //   }
      if (getCookie('multiScanerMode') == '1'){  // Работа с кнопкой Print
        $('.difScanerHide').attr('disabled',true);
      }else {
        $('.difScanerHide').attr('disabled', false); // Работа с кнопкой Print
+     }
+     if (getCookie('multiArchiveMode') == '1'){  // Работа с кнопкой Print
+       $('.difArchiveHide').attr('disabled',true);
+     }else {
+       $('.difArchiveHide').attr('disabled', false); // Работа с кнопкой Print
      }
    } else {
      $('.InSystem_show,.Draft_show').attr('disabled', true);
@@ -991,11 +993,6 @@ function main_table_checkbox(current_element){
  }
 
  $("#for_group_actions").html('<b>Checked parcels:</b> ' + string);
- // $(".group-admin-view").attr("href","/orderElement/group-view"+parcel_ids);
- // $(".group-update").attr("href","/orderElement/group-update"+parcel_ids);
- // $(".group-print").attr("href","/orderElement/group-print"+parcel_ids);
- // $(".group-print-advanced").attr("href","/orderElement/group-print-advanced"+parcel_ids);
- // $(".group-delete").attr("href","/orderElement/group-delete"+parcel_ids);
 }
 
 function init_main_table_checkbox(){
@@ -1043,6 +1040,7 @@ function clear_cookie_checkboxes() {
   setCookie('parcelCheckedId', '', 1);
   setCookie('parcelCheckedUser', '', 1);
   setCookie('parcelCheckedScaner', '', 1);
+  setCookie('parcelCheckedArchive', '', 1);
   setCookie('parcelCheckedInvoice', '', 1);
   setCookie('doNotShowDifUserGritter', '', 1);
 }
@@ -1053,6 +1051,7 @@ function init_cookie_clean_on_signup_button(){
         (getCookie('parcelCheckedUser')!='')||
         (getCookie('parcelCheckedInvoice')!='')||
         (getCookie('parcelCheckedScaner')!='')||
+        (getCookie('parcelCheckedArchive')!='')||
         (getCookie('doNotShowDifUserGritter')!='')) {
       clear_cookie_checkboxes();
       gritterAdd('Clear old checkboxes', '', 'gritter-success');
@@ -1061,11 +1060,12 @@ function init_cookie_clean_on_signup_button(){
 }
 
 function superCheckboxProcessing(){
-  var stringCoockies = '',stringUsers = '',stringInvoices = '',stringScaner = '';
+  var stringCoockies = '',stringUsers = '',stringInvoices = '',stringScaner = '', stringArchive = '';
   oldCookie = getCookie('parcelCheckedId').split(',');        // все чекбоксы со всех страниц
   oldCookieUser = getCookie('parcelCheckedUser').split(',');        // все юзеры со всех страниц
   oldCookieInvoice = getCookie('parcelCheckedInvoice').split(',');        // все юзеры со всех страниц
   oldCookieScaner = getCookie('parcelCheckedScaner').split(',');        // все юзеры со всех страниц
+  oldCookieArchive = getCookie('parcelCheckedArchive').split(',');        // все юзеры со всех страниц
   els=$(".checkBoxParcelMainTable:checked");
   if ($("#superCheckbox").prop("checked")) {
     if (getCookie('parcel_elem_type')=='') { // если нет выбранного то берем первый попавшийся
@@ -1102,15 +1102,18 @@ function superCheckboxProcessing(){
     stringUsers = stringUsers + oldCookieUser[i] + ',';
     stringInvoices = stringInvoices + oldCookieInvoice[i] + ',';
     stringScaner = stringScaner + oldCookieScaner[i] + ',';
+    stringArchive = stringArchive + oldCookieArchive[i] + ',';
   }
   stringCoockies = stringCoockies.substring(0, stringCoockies.length - 1); // удаляем запятую
   stringUsers = stringUsers.substring(0, stringUsers.length - 1); // удаляем запятую
   stringInvoices = stringInvoices.substring(0, stringInvoices.length - 1); // удаляем запятую
   stringScaner = stringScaner.substring(0, stringScaner.length - 1); // удаляем запятую
+  stringArchive = stringArchive.substring(0, stringArchive.length - 1); // удаляем запятую
   setCookie('parcelCheckedId',stringCoockies,1);
   setCookie('parcelCheckedUser',stringUsers,1);
   setCookie('parcelCheckedInvoice',stringInvoices,1);
   setCookie('parcelCheckedScaner',stringScaner,1);
+  setCookie('parcelCheckedArchive',stringArchive,1);
   main_table_checkbox();
 }
 

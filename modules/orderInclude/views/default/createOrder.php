@@ -42,6 +42,7 @@ $submitOption = [
               'data-forusercookie'=> $user_ids,
               'data-forinvoicecookie'=> $track_number_types,
               'data-forscanercookie'=> $scaner_data_list,
+              'data-forarchivecookie'=> $archive_data_list,
             ])?>
       </div>
       <div class="col-md-4 col-sm-12 text-center">
