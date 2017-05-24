@@ -87,9 +87,6 @@ AppAsset::register($this);
                 .'</li>';
             }
             $user_menu[] = '<li>'
-              . Html::a('<i class="fa fa-info"></i>&nbsp;&nbsp;Services', ['/additional_services//'], ['class' => 'profile-link'])
-              . '</li>';
-            $user_menu[] = '<li>'
               . Html::a('<i class="fa fa-credit-card"></i>&nbsp;&nbsp;Payments', ['/payment/'], ['class' => 'profile-link'])
               . '</li>';
 
@@ -121,6 +118,9 @@ AppAsset::register($this);
               . '</li>';
         };
 
+        $user_menu[] = '<li>'
+          . Html::a('<i class="fa fa-info"></i>&nbsp;&nbsp;Invoices', ['/invoice//'], ['class' => 'profile-link'])
+          . '</li>';
         $user_menu[] ='<li>'
         . Html::beginForm(['/logout'], 'post')
         . Html::submitButton(

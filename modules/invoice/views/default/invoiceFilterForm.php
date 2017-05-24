@@ -74,7 +74,8 @@ use app\modules\invoice\models\Invoice;
 
             </div>
         </div>
-        <div class="col-md-offset-4 col-md-4 col-sm-12">
+        <div class=" col-md-3 col-sm-8">
+            <label class="control-label">Search</label>
           <div class="row">
 
             <div class="col-xs-3 padding-off-right">

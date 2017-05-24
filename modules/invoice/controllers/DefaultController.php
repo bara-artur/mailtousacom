@@ -43,7 +43,7 @@ class DefaultController extends Controller
 
     $order = Order::findOne($id);
 
-    if (strlen($order->el_group) < 1) {
+    if (!$order || strlen($order->el_group) < 1) {
       throw new NotFoundHttpException('There is no data.');
     };
 
@@ -102,7 +102,13 @@ class DefaultController extends Controller
           'contract_number' => $session['contract_number_' . $id],
         ]);
       $inv->save();
-      return $this->redirect(['/invoice/pdf/' . $inv->id]);
+
+      if($request->post('submit')=='pdf'){
+        return $this->redirect(['/invoice/pdf/' . $inv->id]);
+      }
+      if($request->post('submit')=='pay'){
+        return $this->redirect(['/payment/invoice/' . $inv->id]);
+      }
 
     }
 
@@ -166,6 +172,11 @@ class DefaultController extends Controller
     }
 
     $invoice=Invoice::find()->where(['id'=>$id])->one();
+
+    if (!$invoice) {
+      throw new NotFoundHttpException('There is no data.');
+    };
+
     $sel_pac=$invoice->getParcelList();
     $order=Order::find()->where(['el_group'=>implode(',',$sel_pac)])->one();
 
@@ -218,7 +229,8 @@ class DefaultController extends Controller
       $inv=implode(',',$inv);
 
       $invoice->parcels_list=$parcel;
-      $invoice->services_list=$invoice;
+      $invoice->services_list=$inv;
+      $invoice->save();
 
       if($request->post('submit')=='pdf'){
         return $this->redirect(['/invoice/pdf/' . $invoice->id]);
@@ -226,7 +238,7 @@ class DefaultController extends Controller
       if($request->post('submit')=='pay'){
         return $this->redirect(['/payment/invoice/' . $invoice->id]);
       }
-      ddd($request->post());
+      //ddd($request->post());
     }
     //ddd($invoice_data);
     return $this->render('invoiceCreate', $invoice_data);
@@ -237,7 +249,7 @@ class DefaultController extends Controller
    **/
   public function actionUpdateStatus(){
     $request = Yii::$app->request;
-    if($request->isAjax) {
+    if($request->isAjax && Yii::$app->user->can('trackInvoice')) {
       Yii::$app->response->format = Response::FORMAT_JSON;
       if ($request->isPost){
         $model = Invoice::findOne($request->post('id'));

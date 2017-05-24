@@ -10,7 +10,7 @@ use app\modules\payment\models\PaymentsList;
  */
 ?>
 
-<h1>Archive</h1>
+<h4 class="modernui-neutral2">Archive</h4>
 <div class="row">
   <div class="col-md-12">
     <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 margin-top-10 text-left">

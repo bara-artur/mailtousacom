@@ -25,8 +25,13 @@ $this->title = 'Shipping to USA and Canada';
                   <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
               <?php } ?>
               <?= Html::a('<span class="glyphicon glyphicon-resize-horizontal"></span>', ['#collapseTableOptions'], ['id'=>'collapse_columns', 'class' => 'btn btn2 btn-neutral-border ','data-toggle' => 'collapse']) ?>
+              <?=Html::a('<i class="fa fa-file-archive-o"></i>', ['/archive'],['class'=>'btn btn-neutral-border',
+                  'title'=> 'My archive',
+                  'pjax'=>'false',
+                  'toggle'=>'tooltip',
+              ])?>
               <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
-              <?=Html::a('<i class="icon-metro-remove"></i>View archive', ['/archive'],['class'=>'btn btn-neutral-border',])?>
+              <br> <div class="font-size11">&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OPEN ARCHIVE</div>
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
 
@@ -40,7 +45,7 @@ $this->title = 'Shipping to USA and Canada';
               ]); ?>
             <?php }?>
             <?php if ($show_view_button==true){ ?>
-                <?=Html::a('<i class="fa fa-credit-card"></i> Invoice', ['/orderElement/group/invoice'], [
+                <?=Html::a('<i class="icon-metro-clipboard-2"></i> Invoice', ['/orderElement/group/invoice'], [
                     'class' => 'btn btn-md btn-info group_100 InSystem_show Draft_show difUserIdHide difInvoiceHide_',
                     'id'=>'group-admin-view',
                 ]); ?>
@@ -52,14 +57,29 @@ $this->title = 'Shipping to USA and Canada';
               'disabled'=>true,
             ]); ?>
             <div class="btn-group">
-              <?=Html::a('Print', ['/orderElement/group/print'],
+              <?=Html::a('<i class="fa fa-print"></i> Print', ['/orderElement/group/print'],
                 [
                   'role'=>'modal-remote',
-                  'class'=>'btn btn-info InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
+                  'class'=>'btn btn-science-blue-border InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
                 ]
               ); ?>
             </div>
-            <?=Html::a('<i class="icon-metro-remove"></i> Delete',
+              <?=Html::a('<i class="fa fa-file-archive-o"></i> Arhive',
+                  ['/orderElement/group/archive'],
+                  [
+                      'id'=>'group-delete',
+                      'class' => 'btn btn-dark-border btn-md but_tab_marg Draft_show difArchiveHide',
+                      'data' => [
+                          'confirm-message' => 'Shall we move this items to archive?',
+                          'confirm-title'=>"Move to archive",
+                          'pjax'=>'false',
+                          'toggle'=>"tooltip",
+                          'request-method'=>"post",
+                      ],
+                      'disabled'=>true,
+                      'role'=>"modal-remote",
+                  ]); ?>
+            <?=Html::a('<i class="icon-metro-remove"></i> Del',
                 ['/orderElement/group/delete'],
                 [
                     'id'=>'group-delete',
@@ -74,21 +94,7 @@ $this->title = 'Shipping to USA and Canada';
                     'disabled'=>true,
                     'role'=>"modal-remote",
                 ]); ?>
-            <?=Html::a('<i class="icon-metro-remove"></i> To arhive',
-                ['/orderElement/group/archive'],
-                [
-                    'id'=>'group-delete',
-                    'class' => 'btn btn-danger btn-md but_tab_marg Draft_show difArchiveHide',
-                    'data' => [
-                        'confirm-message' => 'Shall we move this items to archive?',
-                        'confirm-title'=>"Move to archive",
-                        'pjax'=>'false',
-                        'toggle'=>"tooltip",
-                        'request-method'=>"post",
-                    ],
-                    'disabled'=>true,
-                    'role'=>"modal-remote",
-                ]); ?>
+
             <div class="col-md-12 group_text"><div class="group_text3">group management</div></div>
             <?php }?>
         </div>
@@ -163,6 +169,7 @@ $this->title = 'Shipping to USA and Canada';
                       'label' => '<span class="fa fa-check"></span>',
                     ]);
                   },
+                  'options' => ['width' => '37'],
                   'visible' => ($admin==1),
                   'contentOptions' =>['class'=>'table_check'],
                 ],
@@ -210,6 +217,7 @@ $this->title = 'Shipping to USA and Canada';
                     'visible' => $showTable->showCreatedAt,
                 ],
                 ['attribute'=> 'payment_state',
+                    'options' => ['width' => '90'],
                     'label'=> 'Payment',
                     'contentOptions' =>['class'=>'table_check'],
                   'content' => function($data){
@@ -307,10 +315,10 @@ $this->title = 'Shipping to USA and Canada';
                             ],
                             'role'=>"modal-remote",
                         ]);
-                    $button_move_to_archive = Html::a('<i class="icon-metro-remove"></i>A',
+                    $button_move_to_archive = Html::a('<i class="fa fa-file-archive-o"></i>',
                       ['/orderElement/group-delete/' . $data->id.'/'.'1'],
                       [
-                        'class' => 'btn btn-danger btn-sm marg_but',
+                        'class' => 'btn btn-dark-border btn-md marg_but',
                         'title'=> 'Move to archive',
                         'data' => [
                           'confirm-message' => 'Shall we move this parcel to archive?',
@@ -325,8 +333,8 @@ $this->title = 'Shipping to USA and Canada';
                             (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
                             ($filesCount>0?$button_files:"").                                    //документы на печать
                             ((strcasecmp($data->first_name,'[default]')!=0)?($button_print_pdf):("")).                                                // печать PDF
-                            (($data->payment_state==0)?($button_delete_parcel):("")).         // удаление посылок
-                            ((($data->status==0)||($data->status>=6))?($button_move_to_archive):(''));                                          // удаление в архив
+                            $button_move_to_archive.                                         // удаление в архив
+                            (($data->payment_state==0)?($button_delete_parcel):(""));         // удаление посылок
                 }],
             ],
         ]); ?>

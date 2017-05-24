@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\modules\config\models\SearchConfig */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'System configuration';
+$this->title = 'Invoices ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="config-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
       <div class="col-md-12">
-        <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 margin-top-10 text-left">
+        <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 text-left">
           <?php if ($dataProvider) { ?>
             <?= Html::a('<i class="fa fa-search"></i>', ['#collapse'], ['id'=>'collapse_filter', 'class' => 'btn btn-neutral-border ','data-toggle' => 'collapse']) ?>
           <?php } ?>
@@ -67,7 +67,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'pay_status',
               'content' => function($data){
-                return Html::dropDownList("pay_status",$data->pay_status,$data->statusList(),['id'=>$data->id]);
+                if(Yii::$app->user->can('trackInvoice')) {
+                  return Html::dropDownList("pay_status", $data->pay_status, $data->statusList(), ['id' => $data->id]);
+                }else{
+                  return $data->getTextStatus();
+                }
               }
             ],
               [
@@ -79,11 +83,41 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'Action',
               'content' => function($data){
-                  return Html::a(
-                    '<span class="glyphicon glyphicon-pencil"></span> Update',
+                $out='';
+                if(Yii::$app->user->can('trackInvoice')){
+                  $out=Html::a(
+                    '<span class="glyphicon glyphicon-pencil"></span>',
                     ['/invoice/edit/' . $data->id],
-                    ['class' => 'btn btn-sm btn-science-blue marg_but']
+                    ['class' => 'btn btn-sm btn-science-blue marg_but',
+                        'title'=>'Upgrade',
+                        'data-toggle'=>'tooltip',
+                    ]
+
                   );
+                }
+                $out.=Html::a(
+                  '<i class="fa fa-print"></i>',
+                  ['/invoice/pdf/' . $data->id],
+                  [
+                    'class' => 'btn btn-sm btn btn-science-blue-border marg_but',
+                    'title'=>'PDF',
+                    'data-toggle'=>'tooltip',
+                  ]
+
+                );
+                if($data->pay_status==0) {
+                  $out .= Html::a(
+                    '<i class="fa fa-credit-card"></i>',
+                    ['/payment/invoice/' . $data->id],
+                    [
+                      'class' => 'btn btn-sm btn-success marg_but',
+                      'target' => '_blank',
+                      'title'=>'To pay',
+                      'data-toggle'=>'tooltip',
+                    ]
+                  );
+                }
+                return $out;
               }
             ]
           ],
