@@ -44,7 +44,7 @@ class Invoice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-          [['price'], 'integer'],
+          [['price'], 'number'],
         ];
     }
 

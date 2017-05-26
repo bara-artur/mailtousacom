@@ -184,7 +184,7 @@ $config = [
     ],
     'ebay' => [
       'class'        => 'app\modules\ebay\Module',
-      'mode'         =>'sandbox',
+      'mode'         =>'live',//'sandbox',
       'config'       => $personal['ebay']
     ],
     'tariff' => [
