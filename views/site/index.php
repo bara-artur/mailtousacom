@@ -147,7 +147,7 @@ $this->title = 'Shipping to USA and Canada';
     </div>
 
       </div>
-
+ <?php Pjax::begin(); ?>
     <div class="table-responsive check_hide">
         <?= GridView::widget([
             'dataProvider' => $orderElements,
@@ -339,7 +339,7 @@ $this->title = 'Shipping to USA and Canada';
             ],
         ]); ?>
     </div>
-
+ <?php Pjax::end(); ?>
     <script>
        $(document).ready(function() {
          <?php

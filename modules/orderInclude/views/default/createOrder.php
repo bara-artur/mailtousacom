@@ -277,7 +277,8 @@ $submitOption = [
             <?php if ($edit_not_prohibited) {?>
 
                 <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item', ['create?order-id='.$percel->id],
-                  ['role'=>'modal-remote','title'=> 'Add item to Parcel','data' => [
+                  ['role'=>'modal-remote',
+                    'title'=> 'Add item to Parcel','data' => [
                       'toggle'=>"tooltip",
                   ],'class'=>'btn btn btn-md btn-science-blue text-center margin-bottom-10'])?>
                 <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
