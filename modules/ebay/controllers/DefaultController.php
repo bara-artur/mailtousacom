@@ -10,6 +10,8 @@ use app\modules\order\models\Order;
 use yii\web\NotFoundHttpException;
 
 use app\modules\user\models\User;
+use app\modules\importAccount\models\ImportParcelAccount;
+
 /**
  * DefaultController implements the CRUD actions for Order model.
  */
@@ -18,7 +20,7 @@ class DefaultController extends Controller
 
   public function beforeAction($action)
   {
-    if (Yii::$app->user->isGuest) {
+    if (Yii::$app->user->isGuest || Yii::$app->user->identity->isManager()) {
       $this->redirect(['/parcels']);
       return false;
     }
@@ -62,7 +64,7 @@ class DefaultController extends Controller
         $user=User::findOne(\Yii::$app->user->identity->id);
         $user->ebay_last_update=time()-(int)$request->post('days')*24*60*60;
         if($user->save()){
-          return $this->getTocken($id);
+          return $this->actionGetToken($id);
         };
       }
       Yii::$app
@@ -79,6 +81,7 @@ class DefaultController extends Controller
         'order_id' => $id
       ]);
     };
+
     $model=\Yii::$app->getModule('ebay');;
     global $EBAY;
     $EBAY=$model->config;
@@ -222,7 +225,6 @@ class DefaultController extends Controller
           }
           $el_group[]=$box->id;
         }
-        ddd($box);
       }
 
       $order->el_group=implode(',',$el_group);
@@ -241,13 +243,13 @@ class DefaultController extends Controller
     return $this->redirect('/orderInclude/create-order/'.$id);
   }
 
-  private function getTocken($order){
+  public function actionGetToken($id){
     $model=\Yii::$app->getModule('ebay');;
     global $EBAY;
     $EBAY=$model->config;
 
     // your private parameters
-    $params = array('order_id' => $order);
+    $params = array('order_id' => $id);
 
     // eBay's required parameters
     $query = array('RuName' => $EBAY['RuName']);
@@ -329,12 +331,37 @@ class DefaultController extends Controller
         }else{
           break;
         }
-        $user=User::findOne(\Yii::$app->user->identity->id);
-        $user->ebay_token=$this->TradeAPI('FetchToken', $body, 'eBayAuthToken');
-        if($user->save()){
+
+        $eBayUser=$_GET['username'];
+        $token=$this->TradeAPI('FetchToken', $body, 'eBayAuthToken');
+
+        $import=ImportParcelAccount::find()->where(['type'=>1,'name'=>$eBayUser])->one();
+        if($import){
+          Yii::$app
+            ->getSession()
+            ->setFlash(
+              'error',
+              'This binding already exists in the system.'
+            );
+        }else{
+          $import=new ImportParcelAccount();
+          $import->type=1;
+          $import->name=$eBayUser;
+          $import->token=$token;
+          $import->save();
+
+          Yii::$app
+            ->getSession()
+            ->setFlash(
+              'info',
+              'Account successfully linked.'
+            );
+        }
+
+        if((int)$_GET['order_id']>0){
           return $this->redirect('/ebay/get-order/'.$_GET['order_id']);
         }else{
-          NotFoundHttpException('Error saving token');
+          return $this->redirect('/importAccount');
         }
       }
       break;
