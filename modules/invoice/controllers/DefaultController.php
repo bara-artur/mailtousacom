@@ -101,7 +101,9 @@ class DefaultController extends Controller
           'ref_code' => $session['ref_code_' . $id],
           'contract_number' => $session['contract_number_' . $id],
         ]);
-      $inv->save();
+      if(!$inv->save()){
+        ddd($inv);
+      }
 
       if($request->post('submit')=='pdf'){
         return $this->redirect(['/invoice/pdf/' . $inv->id]);

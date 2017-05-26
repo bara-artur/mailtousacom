@@ -72,7 +72,7 @@ class DefaultController extends Controller
           'The number of days should be a positive number.'
         );
     }
-
+    
     //Если нет то получаем новый токен
     if (strlen(\Yii::$app->user->identity->ebay_token)<30){
       return $this->render('view', [
@@ -96,6 +96,8 @@ class DefaultController extends Controller
       \Yii::$app->user->identity->ebay_last_update>100?
         \Yii::$app->user->identity->ebay_last_update:
         time()-60*60*24*7;
+        
+    //$TimeFrom=time()-60*60*24*70;
     $CreateTimeFrom = gmdate("Y-m-d\TH:i:s",$TimeFrom); //current time minus 30 minutes
     $CreateTimeTo = gmdate("Y-m-d\TH:i:s");
 
@@ -204,29 +206,48 @@ class DefaultController extends Controller
         $box->created_at=time();
         $box->address_type=0;
         $box->source=1;
+        
         $transactions = $order_->TransactionArray;
+        
+        if(
+          $transactions &&
+          $transactions->Transaction &&
+          $transactions->Transaction->ShippingDetails &&
+          $transactions->Transaction->ShippingDetails->ShipmentTrackingDetails &&
+          $transactions->Transaction->ShippingDetails->ShipmentTrackingDetails->ShipmentTrackingNumber
+        ){
+          $box->track_number=(String)$transactions->Transaction->ShippingDetails->ShipmentTrackingDetails->ShipmentTrackingNumber;
+        };
 
-        if($box->save() && $transactions){
-          foreach ($transactions->Transaction as $transaction) {
-            $item = new OrderInclude;
-            $item->order_id = $box->id;
-            $item->name = (String)$transaction->Item->Title;
-            $item->price = (String)$transaction->TransactionPrice;
-            $item->quantity = (int)$transaction->QuantityPurchased;
-            $item->country = "none";
-
-            /*d($transaction);
-            d($item);
-            d($transaction->Item);*/
-            $item->save();
-          }
+        
+        if($box->save()){
           $el_group[]=$box->id;
-        }
-        ddd($box);
+          //d($box);
+          //d($el_group);
+          if($transactions){
+            foreach ($transactions->Transaction as $transaction) {
+              $item = new OrderInclude;
+              $item->order_id = $box->id;
+              $item->name = (String)$transaction->Item->Title;
+              $item->price = (String)$transaction->TransactionPrice;
+              $item->quantity = (int)$transaction->QuantityPurchased;
+              $item->country = "none";
+
+              /*d($transaction);
+              d($item);
+              d($transaction->Item);*/
+              $item->save();
+            }
+          }
+        }/*else{
+          ddd($box);
+        }*/
       }
+
 
       $order->el_group=implode(',',$el_group);
       $order->save();
+      //ddd($order);
 
       \Yii::$app
         ->getSession()
@@ -251,9 +272,10 @@ class DefaultController extends Controller
 
     // eBay's required parameters
     $query = array('RuName' => $EBAY['RuName']);
-
+    
     $query['SessID'] = $params['SessionID'] =
       $this->TradeAPI('GetSessionID', "\n  <RuName>{$EBAY['RuName']}</RuName>\n", 'SessionID');
+    
 
     $query['ruparams'] = http_build_query($params);
 

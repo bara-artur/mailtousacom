@@ -260,17 +260,17 @@ $submitOption = [
                     <tr style="background: #F5F5F5;">
                         <?php
                         if(!$order_id){
-                            $ch=in_array($as->id,$services_list);
+                            $ch=in_array($invoice->id,$services_list);
                             ?>
                             <td rowspan="2">
-                                <?=Html::checkbox('v_ch_invoice_'.$as->id,$ch,[
+                                <?=Html::checkbox('v_ch_invoice_'.$invoice->id,$ch,[
                                   'label' => '<span class="fa fa-check"></span>',
                                   'class'=>'invoice_check_to_pay',
                                   'disabled'=>$ch||$is_admin,
-                                  'price'=>$as->price,
-                                  'sum'=>$as->price+$as->qst+$as->gst,
-                                  'qst'=>$as->qst,
-                                  'gst'=>$as->gst,
+                                  'price'=>$invoice->price,
+                                  'sum'=>$invoice->price+$as->qst+$invoice->gst,
+                                  'qst'=>$invoice->qst,
+                                  'gst'=>$invoice->gst,
                                 ]);;?>
                             </td>
                             <?php
