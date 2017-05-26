@@ -100,6 +100,9 @@ AppAsset::register($this);
              <li>'
                 . Html::a('Update my profile', ['/profile/'], ['class' => 'profile-link'])
                 .'</li>'
+              .'<li>'
+                . Html::a('Import аccounts', ['/importAccount/'], ['class' => 'profile-link'])
+                .'</li>'
                 .'</ul>'
                 .'</li>'
                 .'<li class="dropdown">

@@ -130,7 +130,7 @@ $config = [
           'additional_services/<action:invoice>/<id:\d+>'=>'additional_services/default/<action>/',
           //'additional_services/<action:transport-invoice>/'=>'additional_services/default/<action>/',
 
-          'ebay/<action:get-order|connection>/<id:\d+>'=>'ebay/default/<action>/',
+          'ebay/<action:get-order|connection|get-token>/<id:\d+>'=>'ebay/default/<action>/',
           'ebay/<action:callback>'=>'ebay/default/<action>/',
 
           'logs/<id:\d+>'=>'logs/default/index/',
@@ -184,7 +184,7 @@ $config = [
     ],
     'ebay' => [
       'class'        => 'app\modules\ebay\Module',
-      'mode'         =>'live',//'sandbox',
+      'mode'         =>'sandbox', // development (sandbox) or production (live) mode
       'config'       => $personal['ebay']
     ],
     'tariff' => [
@@ -222,6 +222,9 @@ $config = [
     ],
     'invoice' => [
       'class' => 'app\modules\invoice\Module',
+    ],
+    'importAccount' => [
+      'class' => 'app\modules\importAccount\Module',
     ],
   ],
 ];

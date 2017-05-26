@@ -98,3 +98,13 @@ month_pay - разрешение на оплату раз в месяц
 /////////////////////
 #log - логи
 'order_id'  id посылки из orderElement (не из order!)
+
+////////////////////
+#import_parcel_account - ключи для импорта из сторонних сервисов
+  'client_id' - id клиента
+  'type' - система
+    1 - ebay
+    2 - amazon
+    3 -
+  'token' => $this->string(255)->defaultValue(''),
+  'last_update' => $this->integer()->defaultValue(0)
