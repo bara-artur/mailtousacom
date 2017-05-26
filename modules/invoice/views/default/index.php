@@ -50,7 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             //'id',
             [ 'attribute'=> 'user_id',
+              'header' => 'User',
               'format'=> 'raw',
+              'visible' => (($admin)?(1):(0)),
               'content' => function($data){
                 if ($data->getUser()!= null) return $data->getUser()->getLineInfo();
                 else return 0;

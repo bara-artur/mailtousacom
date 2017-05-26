@@ -32,6 +32,7 @@ $submitOption = [
   'class' => 'btn btn-lg btn-success'
 ];
 ?>
+<?php if ($only_table==0){?>
   <div class="row">
       <div class="col-md-4 col-sm-12">
           <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
@@ -42,6 +43,7 @@ $submitOption = [
               'data-forusercookie'=> $user_ids,
               'data-forinvoicecookie'=> $track_number_types,
               'data-forscanercookie'=> $scaner_data_list,
+              'data-forarchivecookie'=> $archive_data_list,
             ])?>
       </div>
       <div class="col-md-4 col-sm-12 text-center">
@@ -84,7 +86,7 @@ $submitOption = [
     ?>
   </div>
 <?php } ?>
-
+<?php } /*only_table==0*/ ?>
   <div id=crud-datatable-pjax>
     <?php
     Pjax::begin();
@@ -276,7 +278,8 @@ $submitOption = [
             <?php if ($edit_not_prohibited) {?>
 
                 <?=Html::a('<i class="glyphicon glyphicon-plus"></i>Add Item', ['create?order-id='.$percel->id],
-                  ['role'=>'modal-remote','title'=> 'Add item to Parcel','data' => [
+                  ['role'=>'modal-remote',
+                    'title'=> 'Add item to Parcel','data' => [
                       'toggle'=>"tooltip",
                   ],'class'=>'btn btn btn-md btn-science-blue text-center margin-bottom-10'])?>
                 <?=Html::a('<i class="glyphicon glyphicon-trash"></i> Delete', ['/orderElement/delete?id='.$percel->id.'&order_id='.$order_id],
@@ -506,7 +509,7 @@ Parcel will be moved back to the list of parcels.',
     <?php } ?>
     <?php Pjax::end(); ?>
   </div>
-
+<?php if ($only_table == 0) {?>
 <?php Modal::begin([
   "id"=>"ajaxCrudModal",
   "footer"=>"",// always need it for jquery plugin
@@ -666,3 +669,5 @@ if($createNewAddress){
    $('#last_anchor').find('#lb').focus().select();
   });
 </script>
+
+<?php } /* only_table == 0 */ ?>

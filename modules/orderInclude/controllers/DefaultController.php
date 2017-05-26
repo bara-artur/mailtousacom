@@ -71,6 +71,7 @@ class DefaultController extends Controller
     //$totalPriceArray = [0];
    // if (isset(Yii::$app->response->cookies['parcelAnchorId'])) var_dump(Yii::$app->response->cookies['parcelIdAnchor']->value);
    // else var_dump($_COOKIE);
+
     $totalPriceArray=[];
     $admin = Yii::$app->user->identity->isManager();
 /*     $model = OrderElement::find()->where(['order_id'=>$id])->with(['orderInclude'])->all();
@@ -108,6 +109,7 @@ class DefaultController extends Controller
     $user_ids = '';
     $track_number_types = '';
     $scaner_data_list = '';
+    $archive_data_list = '';
     if ($order->el_group != '') {
       foreach ($numbers as $parcel_id) {
         $parcel = OrderElement::find()->where(['id' => $parcel_id])->with(['orderInclude'])->one();
@@ -116,6 +118,7 @@ class DefaultController extends Controller
           $user_ids = $user_ids.$parcel->user_id.',';
           $track_number_types = $track_number_types.$parcel->track_number_type.',';
           $scaner_data_list = $scaner_data_list.((strcasecmp($parcel->first_name,'[default]')==0)?(1):(0)).',';
+          $archive_data_list = $archive_data_list.((($parcel->status==0)||($parcel->status>=6))?(1):(0)).',';
           $order_elements[] = $parcel;
           if ($parcel->status > 1){
             $edit_not_prohibited = 0;
@@ -138,25 +141,51 @@ class DefaultController extends Controller
     }
     $message_for_edit_prohibited_order = 'Editing order prohibited';
 
-    return $this->render('createOrder', [
-      'edit_not_prohibited' => $edit_not_prohibited,
-      'order_elements' => $order_elements,
-      'createNewAddress'=>!$order_elements,
-      'order_id'=>$id,
-      'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
-      'totalPriceArray' => $totalPriceArray,
-      'hideNext' => $hideNext,
-      'ids' =>$ids,
-      'user_ids' => $user_ids,
-      'track_number_types' => $track_number_types,
-      'scaner_data_list' => $scaner_data_list,
-      'last' => $last,
-      'admin' => $admin,
-      'invoice_id'=>$session['CreateOrder' . $id]
-      /*'searchModel' => $searchModel,
-      'dataProvider' => $dataProvider,
-      'order' => $model,*/
-    ]);
+    if($request->isAjax){
+      return $this->renderAjax('createOrder', [
+        'only_table' =>1,
+        'edit_not_prohibited' => $edit_not_prohibited,
+        'order_elements' => $order_elements,
+        'createNewAddress' => !$order_elements,
+        'order_id' => $id,
+        'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
+        'totalPriceArray' => $totalPriceArray,
+        'hideNext' => $hideNext,
+        'ids' => $ids,
+        'user_ids' => $user_ids,
+        'track_number_types' => $track_number_types,
+        'scaner_data_list' => $scaner_data_list,
+        'archive_data_list' => $archive_data_list,
+        'last' => $last,
+        'admin' => $admin,
+        'invoice_id' => $session['CreateOrder' . $id]
+        /*'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+        'order' => $model,*/
+      ]);
+    } else {
+        return $this->render('createOrder', [
+        'only_table' => 0,
+        'edit_not_prohibited' => $edit_not_prohibited,
+        'order_elements' => $order_elements,
+        'createNewAddress' => !$order_elements,
+        'order_id' => $id,
+        'message_for_edit_prohibited_order' => $message_for_edit_prohibited_order,
+        'totalPriceArray' => $totalPriceArray,
+        'hideNext' => $hideNext,
+        'ids' => $ids,
+        'user_ids' => $user_ids,
+        'track_number_types' => $track_number_types,
+        'scaner_data_list' => $scaner_data_list,
+        'archive_data_list' => $archive_data_list,
+        'last' => $last,
+        'admin' => $admin,
+        'invoice_id' => $session['CreateOrder' . $id]
+        /*'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+        'order' => $model,*/
+      ]);
+    }
   }
 
 
