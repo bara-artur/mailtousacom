@@ -20,6 +20,7 @@ class m170526_083906_import_parcel_account extends Migration
       $this->dropColumn('user', 'ebay_token');
 
       $this->addColumn('order_element', 'import_code', $this->string()->defaultValue(''));
+      $this->addColumn('order_element', 'import_id', $this->integer()->defaultValue(0));
     }
 
     public function down()
@@ -31,6 +32,7 @@ class m170526_083906_import_parcel_account extends Migration
       $this->addColumn('user', 'ebay_token', $this->string(1000)->defaultValue(''));
 
       $this->dropColumn('order_element', 'import_code');
+      $this->dropColumn('order_element', 'import_id');
       return false;
     }
 

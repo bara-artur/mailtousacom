@@ -28,6 +28,7 @@ class DefaultController extends Controller
   }
 
   public function actionConnection($id){
+    return $id;
     $order=Order::findOne($id);
 
     if($order->user_id!=\Yii::$app->user->identity->id){
@@ -38,12 +39,14 @@ class DefaultController extends Controller
       throw new NotFoundHttpException('You can not edit your order.');
     }*/
 
+    $ebay_tokens=ImportParcelAccount::find()->where(['type'=>1,'client_id'=>Yii::$app->user->identity->id])->all();
+    ddd($ebay_tokens);
     //Если нет то получаем новый токен
-    if (strlen(\Yii::$app->user->identity->ebay_token)<30){
+    /*if (strlen(\Yii::$app->user->identity->ebay_token)<30){
       return $this->getTocken($id);
     }else{
       return $this->redirect('/orderInclude/create-order/'.$id);
-    }
+    }*/
 
   }
 
@@ -53,12 +56,8 @@ class DefaultController extends Controller
     if($order->user_id!=\Yii::$app->user->identity->id){
       throw new NotFoundHttpException('Order can editing only by creator.');
     }
-/*
-    if($order->payment_state>0 || $order->order_status>1){
-      throw new NotFoundHttpException('You can not edit your order.');
-    }*/
 
-    $request = Yii::$app->request;
+    /*$request = Yii::$app->request;
     if($request->isPost){
       if((int)$request->post('days')>0){
         $user=User::findOne(\Yii::$app->user->identity->id);
@@ -73,172 +72,196 @@ class DefaultController extends Controller
           'error',
           'The number of days should be a positive number.'
         );
-    }
+    }*/
+
+    $ebay_tokens=ImportParcelAccount::find()->where(['type'=>1,'client_id'=>Yii::$app->user->identity->id])->all();
 
     //Если нет то получаем новый токен
-    if (strlen(\Yii::$app->user->identity->ebay_token)<30){
-      return $this->render('view', [
+    if (!$ebay_tokens){
+      return $this->actionGetToken($id);
+      /*return $this->render('view', [
         'order_id' => $id
-      ]);
+      ]);*/
     };
 
-    $model=\Yii::$app->getModule('ebay');;
-    global $EBAY;
-    $EBAY=$model->config;
+    if (strlen($order->el_group) < 1) {
+      $el_group = [];
+    } else {
+      $el_group = explode(',', $order->el_group);
+    };
 
-    //SiteID must also be set in the Request's XML
-    //SiteID = 0  (US) - UK = 3, Canada = 2, Australia = 15, ....
-    //SiteID Indicates the eBay site to associate the call with
-    $siteID = 0;
-    //the call being made:
-    $verb = 'GetOrders';
+    $new_parcel_count=0;
+    foreach ($ebay_tokens as $ebay_token) {
+      $model = \Yii::$app->getModule('ebay');;
+      global $EBAY;
+      $EBAY = $model->config;
 
-    //Time with respect to GMT
-    //by default retreive orders in last 7 day
-    $TimeFrom=
-      \Yii::$app->user->identity->ebay_last_update>100?
-        \Yii::$app->user->identity->ebay_last_update:
-        time()-60*60*24*7;
-    $CreateTimeFrom = gmdate("Y-m-d\TH:i:s",$TimeFrom); //current time minus 30 minutes
-    $CreateTimeTo = gmdate("Y-m-d\TH:i:s");
+      //SiteID must also be set in the Request's XML
+      //SiteID = 0  (US) - UK = 3, Canada = 2, Australia = 15, ....
+      //SiteID Indicates the eBay site to associate the call with
+      $siteID = 0;
+      //the call being made:
+      $verb = 'GetOrders';
 
-    ///Build the request Xml string
-    $requestXmlBody = '<?xml version="1.0" encoding="utf-8" ?>';
-    $requestXmlBody .= '<GetOrdersRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-    $requestXmlBody .= '<DetailLevel>ReturnAll</DetailLevel>';
-    $requestXmlBody .= "<CreateTimeFrom>$CreateTimeFrom</CreateTimeFrom><CreateTimeTo>$CreateTimeTo</CreateTimeTo>";
-    $requestXmlBody .= '<OrderRole>Seller</OrderRole><OrderStatus>'.$EBAY['orderStatus'].'</OrderStatus>';
-    $requestXmlBody .= "<RequesterCredentials><eBayAuthToken>".\Yii::$app->user->identity->ebay_token."</eBayAuthToken></RequesterCredentials>";
-    $requestXmlBody .= '</GetOrdersRequest>';
+      //Time with respect to GMT
+      //by default retreive orders in last 7 day
 
-    //Create a new eBay session with all details pulled in from included keys.php
-    $session = new eBaySession(
-      \Yii::$app->user->identity->ebay_token,
-      $EBAY['credentials']['devId'],
-      $EBAY['credentials']['appId'],
-      $EBAY['credentials']['certId'],
-      $EBAY['tradeUrl'],
-      $EBAY['compatabilityLevel'],
-      $siteID,
-      $verb
-    );
+      $TimeFrom = $ebay_token->last_update > 100 ? $ebay_token->last_update : time() - 60 * 60 * 24 * 30;
+      $ebay_token->last_update=time();
+      $ebay_token->save();
+      //$TimeFrom = time() - 60 * 60 * 24 * 300;
 
-    //send the request and get response
-    $responseXml = $session->sendHttpRequest($requestXmlBody);
-    if (stristr($responseXml, 'HTTP 404') || $responseXml == '') {
-      Yii::$app
-        ->getSession()
-        ->setFlash(
-          'error',
-          'eBay not found'
-        );
-      return $this->redirect('/orderInclude/create-order/'.$id);
-    }
+      $CreateTimeFrom = gmdate("Y-m-d\TH:i:s", $TimeFrom); //current time minus 30 minutes
+      $CreateTimeTo = gmdate("Y-m-d\TH:i:s");
 
-    //Xml string is parsed and creates a DOM Document object
-    $responseDoc = new \DomDocument();
-    $responseDoc->loadXML($responseXml);
+      ///Build the request Xml string
+      $requestXmlBody = '<?xml version="1.0" encoding="utf-8" ?>';
+      $requestXmlBody .= '<GetOrdersRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
+      $requestXmlBody .= '<DetailLevel>ReturnAll</DetailLevel>';
+      $requestXmlBody .= "<CreateTimeFrom>$CreateTimeFrom</CreateTimeFrom><CreateTimeTo>$CreateTimeTo</CreateTimeTo>";
+      $requestXmlBody .= '<OrderRole>Seller</OrderRole><OrderStatus>' . $EBAY['orderStatus'] . '</OrderStatus>';
+      $requestXmlBody .= "<RequesterCredentials><eBayAuthToken>" . $ebay_token->token . "</eBayAuthToken></RequesterCredentials>";
+      $requestXmlBody .= '</GetOrdersRequest>';
+
+      //Create a new eBay session with all details pulled in from included keys.php
+      $session = new eBaySession(
+        $ebay_token->token,
+        $EBAY['credentials']['devId'],
+        $EBAY['credentials']['appId'],
+        $EBAY['credentials']['certId'],
+        $EBAY['tradeUrl'],
+        $EBAY['compatabilityLevel'],
+        $siteID,
+        $verb
+      );
+
+      //send the request and get response
+      $responseXml = $session->sendHttpRequest($requestXmlBody);
+      if (stristr($responseXml, 'HTTP 404') || $responseXml == '') {
+        continue;
+        /*Yii::$app
+          ->getSession()
+          ->setFlash(
+            'error',
+            'eBay not found'
+          );
+        return $this->redirect('/orderInclude/create-order/' . $id);*/
+      }
+
+      //Xml string is parsed and creates a DOM Document object
+      $responseDoc = new \DomDocument();
+      $responseDoc->loadXML($responseXml);
 
 
-    //get any error nodes
-    $errors = $responseDoc->getElementsByTagName('Errors');
-    $response = simplexml_import_dom($responseDoc);
-    $entries = $response->PaginationResult->TotalNumberOfEntries;
+      //get any error nodes
+      $errors = $responseDoc->getElementsByTagName('Errors');
+      $response = simplexml_import_dom($responseDoc);
+      $entries = $response->PaginationResult->TotalNumberOfEntries;
 
 
-    //if there are error nodes
-    if ($errors->length > 0) {
-      //display each error
-      //Get error code, ShortMesaage and LongMessage
-      $code = $errors->item(0)->getElementsByTagName('ErrorCode');
-      $shortMsg = $errors->item(0)->getElementsByTagName('ShortMessage');
-      $longMsg = $errors->item(0)->getElementsByTagName('LongMessage');
+      //if there are error nodes
+      if ($errors->length > 0) {
+        //display each error
+        //Get error code, ShortMesaage and LongMessage
+        /*$code = $errors->item(0)->getElementsByTagName('ErrorCode');
+        $shortMsg = $errors->item(0)->getElementsByTagName('ShortMessage');
+        $longMsg = $errors->item(0)->getElementsByTagName('LongMessage');
 
-      Yii::$app
-        ->getSession()
-        ->setFlash(
-          'error',
-          'eBay returned error(s)'
-        );
-      return $this->redirect('/orderInclude/create-order/'.$id);
-    }else { //If there are no errors, continue
-      if ($entries == 0) {
         Yii::$app
           ->getSession()
           ->setFlash(
-            'info',
-            'New orders were found'
+            'error',
+            'eBay returned error(s)'
           );
-        return $this->redirect('/orderInclude/create-order/'.$id);
-      }
-      $orders = $response->OrderArray->Order;
-      if ($orders == null){
-        Yii::$app
-          ->getSession()
-          ->setFlash(
-            'info',
-            'No Order Found.'
-          );
-        return $this->redirect('/orderInclude/create-order/'.$id);
-      }
-
-      if(strlen($order->el_group)<1){
-        $el_group=[];
-      }else{
-        $el_group=explode(',',$order->el_group);
-      };
-
-      foreach ($orders as $order_) {
-        $box = new OrderElement();
-        $shippingAddress = $order_->ShippingAddress;
-        $name=explode(' ',$shippingAddress->Name );
-        //$box->order_id=$id;
-        $box->first_name=$name[0];
-        unset($name[0]);
-        $box->last_name=implode(' ',$name);
-        $box->company_name='Personal address';
-        $box->adress_1=(String)$shippingAddress->Street1;
-        $box->adress_2=(String)$shippingAddress->Street2;
-        $box->city=(String)$shippingAddress->CityName;
-        $box->zip=(String)$shippingAddress->PostalCode;
-        $box->phone=(String)$shippingAddress->Phone;
-        $box->state=(String)$shippingAddress->StateOrProvince;
-        $box->user_id=Yii::$app->user->identity->id;
-        $box->created_at=time();
-        $box->address_type=0;
-        $box->source=1;
-        $transactions = $order_->TransactionArray;
-
-        if($box->save() && $transactions){
-          foreach ($transactions->Transaction as $transaction) {
-            $item = new OrderInclude;
-            $item->order_id = $box->id;
-            $item->name = (String)$transaction->Item->Title;
-            $item->price = (String)$transaction->TransactionPrice;
-            $item->quantity = (int)$transaction->QuantityPurchased;
-            $item->country = "none";
-
-            /*d($transaction);
-            d($item);
-            d($transaction->Item);*/
-            $item->save();
-          }
-          $el_group[]=$box->id;
+        return $this->redirect('/orderInclude/create-order/' . $id);*/
+        continue;
+      } else { //If there are no errors, continue
+        if ($entries == 0) {
+          /*Yii::$app
+            ->getSession()
+            ->setFlash(
+              'info',
+              'New orders were found'
+            );
+          return $this->redirect('/orderInclude/create-order/' . $id);*/
+          continue;
         }
+        $orders = $response->OrderArray->Order;
+        if ($orders == null) {
+          /*Yii::$app
+            ->getSession()
+            ->setFlash(
+              'info',
+              'No Order Found.'
+            );
+          return $this->redirect('/orderInclude/create-order/' . $id);*/
+          continue;
+        }
+
+        foreach ($orders as $order_) {
+          $box = new OrderElement();
+          $shippingAddress = $order_->ShippingAddress;
+          $name = explode(' ', $shippingAddress->Name);
+          //$box->order_id=$id;
+          $box->first_name = $name[0];
+          unset($name[0]);
+          $box->import_code=(string)$order_->OrderID;
+          $box->import_id=$ebay_token->id;
+          $box->last_name = implode(' ', $name);
+          $box->company_name = 'Personal address';
+          $box->adress_1 = (String)$shippingAddress->Street1;
+          $box->adress_2 = (String)$shippingAddress->Street2;
+          $box->city = (String)$shippingAddress->CityName;
+          $box->zip = (String)$shippingAddress->PostalCode;
+          $box->phone = (String)$shippingAddress->Phone;
+          $box->state = (String)$shippingAddress->StateOrProvince;
+          $box->user_id = Yii::$app->user->identity->id;
+          $box->created_at = time();
+          $box->address_type = 0;
+          $box->source = 1;
+          $transactions = $order_->TransactionArray;
+
+          if ($box->save() && $transactions) {
+            foreach ($transactions->Transaction as $transaction) {
+              $item = new OrderInclude;
+              $item->order_id = $box->id;
+              $item->name = (String)$transaction->Item->Title;
+              $item->price = (String)$transaction->TransactionPrice;
+              $item->quantity = (int)$transaction->QuantityPurchased;
+              $item->country = "none";
+
+              /*d($transaction);
+              d($item);
+              d($transaction->Item);*/
+              $item->save();
+            }
+            $el_group[] = $box->id;
+          }
+          $new_parcel_count++;
+        }
+
+        //$user = User::findOne(\Yii::$app->user->identity->id);
+        //$user->ebay_last_update = time();
+        //$user->save();
       }
+    }
+    $order->el_group = implode(',', $el_group);
+    $order->save();
 
-      $order->el_group=implode(',',$el_group);
-      $order->save();
-
+    if($new_parcel_count==0){
+      \Yii::$app
+        ->getSession()
+        ->setFlash(
+          'info',
+          'New parcel not found'
+        );
+    }else {
       \Yii::$app
         ->getSession()
         ->setFlash(
           'success',
           'Check imported from eBay'
         );
-      $user=User::findOne(\Yii::$app->user->identity->id);
-      $user->ebay_last_update=time();
-      $user->save();
     }
     return $this->redirect('/orderInclude/create-order/'.$id);
   }
