@@ -254,12 +254,20 @@ class DefaultController extends Controller
   }
 
   public function actionGetToken($id){
+
+    $request = Yii::$app->request;
+    if(!$request->isPost) {
+      return $this->render('view', [
+        'order_id' => $id
+      ]);
+    }
+
     $model=\Yii::$app->getModule('ebay');;
     global $EBAY;
     $EBAY=$model->config;
 
     // your private parameters
-    $params = array('order_id' => $id);
+    $params = array('order_id' => $id,'days'=>(int)$request->post('days'));
 
     // eBay's required parameters
     $query = array('RuName' => $EBAY['RuName']);
@@ -358,6 +366,7 @@ class DefaultController extends Controller
           $import->type=1;
           $import->name=$eBayUser;
           $import->token=$token;
+          $import->last_update=time() - 60 * 60 * 24*(int)$_GET['days'];
           $import->save();
 
           Yii::$app

@@ -21,10 +21,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <h4 class="modernui-neutral2">eBay import configuration</h4>
     <div class="row">
         <div class="col-md-4 col-md-offset-4 text-center">
-            <div class="trans_text">
-                This is your first import from eBay ....
-            </div>
-            <hr class="podes">
+            <?php
+            if($order_id>0){
+                ?>
+                <div class="trans_text">
+                    This is your first import from eBay ....
+                </div>
+                <hr class="podes">
+                <?php
+            }else{
+                ?>
+
+                <?php
+            }
+            ?>
             <div class="trans_text">
                 I would like to import orders for the last
             </div>
@@ -40,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <hr>
     <div class="form-group">
-        <?=Html::a('< Back', ['/orderInclude/create-order/'.$order_id],
+        <?=Html::a('< Back', [$order_id>0?'/orderInclude/create-order/'.$order_id:'/importAccount'],
             ['class' => 'btn btn-default pull-left'])?>
 
         <?= Html::submitButton('NEXT<i class="icon-metro-arrow-right-5"></i>', ['class' => 'btn btn-success pull-right']) ?>
