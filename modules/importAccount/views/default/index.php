@@ -15,7 +15,7 @@ CrudAsset::register($this);
 ?>
 <div class="import-parcel-account-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
 
 
     <div class="form_parcel_create_type_0 push-up-margin-thin" >
