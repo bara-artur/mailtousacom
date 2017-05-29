@@ -12,8 +12,17 @@ CrudAsset::register($this);
 $this->title = 'Personal Payments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="payments-list-index">
-    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
+    <div class="payments-list-index">
+    <div class="col-md-4 col-sm-12 padding-off-left">
+        <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
+            [
+                'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
+            ])?>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+        <h4 class="modernui-neutral5"><?= Html::encode($this->title) ?></h4>
+    </div>
+    <hr class="bottom_line3">
   <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <div class="row">
         <div class="col-xs-2">

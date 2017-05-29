@@ -1136,10 +1136,10 @@ table{font-size:14px;}
 }
 .ui-tooltip-content{font-family: "PT Sans Narrow", Helvetica, Arial, sans-serif !important;font-size:16px;}
 .ui-tooltip{padding:2px 6px !important;background-color:#FFC800 !important;color:#354346;border:0;}
-div.acc_pay{border: 1px solid #7BAD18;max-width:100%;}
-div.dan_pay {border: 1px solid #FA6800;max-width:100%;}
-div.awa_pay{border:1px solid #006AC1;max-width:100%;}
-div.mon_pay{border:1px solid #006AC1;max-width:100%;}
+div.acc_pay{border: 1px solid #7BAD18;max-width:100%;text-align: center;}
+div.dan_pay {border: 1px solid #FA6800;max-width:100%;text-align: center;}
+div.awa_pay{border:1px solid #006AC1;max-width:100%;text-align: center;}
+div.mon_pay{border:1px solid #006AC1;max-width:100%;text-align: center;}
 .marg_but2
 {
     margin-right: 4px;
@@ -1281,3 +1281,13 @@ ul.breadcrumb{display:none !important;}
 .sub_price,.sub_qst,.sub_gst{color:#05389F !important;font-weight: 700;}
 /*29052017*/
 .marg_but{line-height: 2.2}
+.bottom_line3 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    z-index: 20;
+    position: relative;
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+.modernui-neutral5 {
+    color: #696969;}

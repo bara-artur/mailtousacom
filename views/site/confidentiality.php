@@ -2,17 +2,16 @@
 use yii\helpers\Html;
 ?>
 
-<div class="row">
-    <div class="col-md-2 col-sm-12">
-        <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],['class'=>'btn btn-md btn-neutral-border pull-left hidden-xs'])?>
-    </div>
-    <div class="col-md-8 col-sm-12 text-center">
-        <h4 class="">Privacy Notice </h4>
-    </div>
-
+<div class="col-md-4 col-sm-12 padding-off-left">
+    <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/'],
+        [
+            'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
+        ])?>
 </div>
-<hr class="bottom_line2">
-
+<div class="col-md-4 col-sm-12 text-center">
+    <h4 class="modernui-neutral5">Privacy Notice</h4>
+</div>
+<hr class="bottom_line3">
 <div class="row">
 <div class="col-md-12 padding-bottom-10 padding-top-10">
     •  Mailtousa.com (MTU) acknowledges the importance of protecting the privacy of mailtousa.com members and potential members. The information that we collect during your registration or during continued use of our service is used to improve the services we (MTU) offer, to improve the mailtousa.com website's content, and to communicate with you with updates to our website, Terms and Conditions of use, MTU services and activities and to use in other MTU marketing, promotional and informational activities as described in this Privacy Policy.

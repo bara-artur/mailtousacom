@@ -15,9 +15,16 @@ CrudAsset::register($this);
 ?>
 <div class="import-parcel-account-index">
 
-    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
-
-
+    <div class="col-md-4 col-sm-12 padding-off-left">
+        <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
+            [
+                'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
+            ])?>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+        <h4 class="modernui-neutral5"><?= Html::encode($this->title) ?></h4>
+    </div>
+    <hr class="bottom_line3">
     <div class="form_parcel_create_type_0 push-up-margin-thin" >
         <div class="row">
             <div class="col-md-12"><h6 class="modernui-neutral4">You can connect stores with our WMS ( warehouse

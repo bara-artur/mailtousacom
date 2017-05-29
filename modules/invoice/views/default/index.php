@@ -12,8 +12,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="config-index">
 
-    <h4 class="modernui-neutral2"><?= Html::encode($this->title) ?></h4>
-
+    <div class="col-md-4 col-sm-12 padding-off-left">
+        <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
+            [
+                'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
+            ])?>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+        <h4 class="modernui-neutral5"><?= Html::encode($this->title) ?></h4>
+    </div>
+    <hr class="bottom_line3">
     <div class="row">
       <div class="col-md-12">
         <div class="col-md-3 col-xs-12 padding-off-left padding-off-right margin-bottom-10 text-left">

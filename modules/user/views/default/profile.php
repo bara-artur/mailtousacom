@@ -15,7 +15,16 @@ $form = ActiveForm::begin([
 ]); ?>
 
 <?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
-<h4 class="modernui-neutral2">Profile <i class="icon-metro-user-2"></i></h4>
+<div class="col-md-4 col-sm-12 padding-off-left">
+    <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
+        [
+            'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
+        ])?>
+</div>
+<div class="col-md-4 col-sm-12 text-center">
+    <h4 class="modernui-neutral5">Profile <i class="icon-metro-user-2"></i></h4>
+</div>
+<hr class="bottom_line3">
 <div class="container">
 <?= $form->field($model, 'username') ?>
 <?= $form->field($model, 'first_name') ?>
