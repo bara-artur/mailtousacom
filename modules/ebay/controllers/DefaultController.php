@@ -343,7 +343,8 @@ class DefaultController extends Controller
       return "eBay error access";
     } else { //If there are no errors, continue
       if ($rers['entries'] == 0) {
-        return "not found orders on eBay";
+        return "Not found orders on eBay";
+
       }
       $orders = $rers['response']->OrderArray->Order;
       if ($orders == null) {
@@ -383,10 +384,10 @@ class DefaultController extends Controller
       }
       $out='';
       if($upd_parcel_count){
-        $out.="Parcels update - ".$upd_parcel_count;
+        $out.="Parcels update : ".$upd_parcel_count;
       }
       if($new_parcel_count){
-        $out.="Parcels not import - ".$new_parcel_count;
+        $out.="Parcels not import : ".$new_parcel_count;
       }
       if($upd_parcel_count || $new_parcel_count) {
         return $out;
