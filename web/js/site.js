@@ -247,8 +247,36 @@ $(document).ready(function() {
             val+=price*parseFloat(paypal_sum.attr('paypal_commision_dolia'))/100;
             paypal_sum.text(val.toFixed(2));
         }
-    })
+    });
+
+  $('body').on('click','.update_parcel_track',function(e){
+    e.preventDefault();
+    els=$('#w0 .info_line[data]');
+    for(var i=0;i<els.length;i++) {
+      el = els.eq(i);
+      if (!el.hasClass('loading')) {
+        el.addClass('loading');
+        el.text('');
+        el.removeClass('showMsg');
+        fn= trackUpdateRequest.bind(el)
+        $.post('/ebay/track-update/' + el.attr('data'),fn)
+      }
+    }
+  })
 });
+
+function trackUpdateRequest(data){
+  el=$(this);
+  el.removeClass('loading');
+  el.text(data);
+  el.addClass('showMsg');
+  setTimeout(clearText.bind(el),5000);
+}
+function clearText(){
+  el=$(this);
+  el.removeClass('showMsg');
+  el.text('');
+}
 
 function show_err(el,txt){
   if(!el.hasClass('has-error')) {

@@ -40,6 +40,15 @@ CrudAsset::register($this);
             </div>
         </div>
     </div>
+
+  <div>
+    <?=Html::a('<i class="icon-metro-remove"></i> Update track number information',
+      [''],
+      [
+        'class' => 'btn btn-danger btn-sm update_parcel_track',
+        'title'=> 'Update information for parcel sending in last 14 days',
+      ]);?>
+  </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -80,7 +89,8 @@ CrudAsset::register($this);
                       'request-method'=>"post",
                     ],
                     'role'=>"modal-remote",
-                  ]);
+                  ]).
+                  "<div class='info_line' data='".$data->id."''></div>";
             }],
         ],
     ]); ?>

@@ -768,12 +768,12 @@ input.hidden_block_communication{display:none !important;}
 .vertic{padding-top:10px;color:#05389F;}
 .hidden_block_communication{padding-top:20px;}
 div.paid_img{background:url("/img/paid.png");
-width: 94px;
-background-size: cover !important;
-height: 80px;
-position: absolute;
-bottom: 20px;
-left: 42%;}
+    width: 94px;
+    background-size: cover !important;
+    height: 80px;
+    position: absolute;
+    bottom: 20px;
+    left: 42%;}
 div.notpaid_img{background: url("/img/notpaid.png");
     width: 94px;
     background-size: cover !important;
@@ -1279,3 +1279,19 @@ ul.breadcrumb{display:none !important;}
 .font-size11{font-size:11px;}
 /*23052017*/
 .sub_price,.sub_qst,.sub_gst{color:#05389F !important;font-weight: 700;}
+
+.loading{
+    background: url(../extra/owl-carousel/AjaxLoader.gif) center center no-repeat;
+}
+.info_line.loading{
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.showMsg{
+    display:inline-block;
+    background:#585858;
+    padding:5px;
+    color:#fff;
+}
