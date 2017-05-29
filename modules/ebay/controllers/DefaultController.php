@@ -160,40 +160,14 @@ class DefaultController extends Controller
 
       //if there are error nodes
       if ($errors->length > 0) {
-        //display each error
-        //Get error code, ShortMesaage and LongMessage
-        /*$code = $errors->item(0)->getElementsByTagName('ErrorCode');
-        $shortMsg = $errors->item(0)->getElementsByTagName('ShortMessage');
-        $longMsg = $errors->item(0)->getElementsByTagName('LongMessage');
-
-        Yii::$app
-          ->getSession()
-          ->setFlash(
-            'error',
-            'eBay returned error(s)'
-          );
-        return $this->redirect('/orderInclude/create-order/' . $id);*/
         continue;
       } else { //If there are no errors, continue
         if ($entries == 0) {
-          /*Yii::$app
-            ->getSession()
-            ->setFlash(
-              'info',
-              'New orders were found'
-            );
-          return $this->redirect('/orderInclude/create-order/' . $id);*/
+
           continue;
         }
         $orders = $response->OrderArray->Order;
         if ($orders == null) {
-          /*Yii::$app
-            ->getSession()
-            ->setFlash(
-              'info',
-              'No Order Found.'
-            );
-          return $this->redirect('/orderInclude/create-order/' . $id);*/
           continue;
         }
 
@@ -253,15 +227,8 @@ class DefaultController extends Controller
               $item->save();
             }
           }
-        }/*else{
-          ddd($box);
-        }*/
-      }
-
-
-        //$user = User::findOne(\Yii::$app->user->identity->id);
-        //$user->ebay_last_update = time();
-        //$user->save();
+          $new_parcel_count++;
+        }
       }
     }
     $order->el_group = implode(',', $el_group);
@@ -286,12 +253,20 @@ class DefaultController extends Controller
   }
 
   public function actionGetToken($id){
+
+    $request = Yii::$app->request;
+    if(!$request->isPost) {
+      return $this->render('view', [
+        'order_id' => $id
+      ]);
+    }
+
     $model=\Yii::$app->getModule('ebay');;
     global $EBAY;
     $EBAY=$model->config;
 
     // your private parameters
-    $params = array('order_id' => $id);
+    $params = array('order_id' => $id,'days'=>(int)$request->post('days'));
 
     // eBay's required parameters
     $query = array('RuName' => $EBAY['RuName']);
@@ -390,6 +365,7 @@ class DefaultController extends Controller
           $import->type=1;
           $import->name=$eBayUser;
           $import->token=$token;
+          $import->last_update=time() - 60 * 60 * 24*(int)$_GET['days'];
           $import->save();
 
           Yii::$app
