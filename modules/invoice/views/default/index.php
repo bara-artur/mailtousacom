@@ -110,6 +110,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'btn btn-sm btn btn-science-blue-border marg_but',
                     'title'=>'PDF',
                     'data-toggle'=>'tooltip',
+                    'target' => '_blank',
+
                   ]
 
                 );
