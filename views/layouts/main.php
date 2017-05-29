@@ -40,7 +40,7 @@ AppAsset::register($this);
     ]);
     $user_menu=[];
     if(Yii::$app->user->isGuest){
-        $user_menu[]='<li>'.Html::a('<i class="icon-metro-enter"></i> Sign In', ['/login']).'</li>';
+        $user_menu[]='<li>'.Html::a('<i class="icon-metro-enter"></i> Sign In', ['/']).'</li>';
         $user_menu[]='<li>'. Html::a('<i class="icon-metro-clipboard-2"></i> Registration', ['/registration']). '</li>';
     }else{
         if(Yii::$app->user->identity->isManager()) {
