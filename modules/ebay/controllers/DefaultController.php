@@ -39,13 +39,13 @@ class DefaultController extends Controller
     }*/
 
     $ebay_tokens=ImportParcelAccount::find()->where(['type'=>1,'client_id'=>Yii::$app->user->identity->id])->all();
-    ddd($ebay_tokens);
+
     //Если нет то получаем новый токен
-    /*if (strlen(\Yii::$app->user->identity->ebay_token)<30){
+    if (strlen(\Yii::$app->user->identity->ebay_token)<30){
       return $this->getTocken($id);
     }else{
       return $this->redirect('/orderInclude/create-order/'.$id);
-    }*/
+    }
 
   }
 
@@ -188,9 +188,9 @@ class DefaultController extends Controller
       ]);
     }
 
-    $model=\Yii::$app->getModule('ebay');;
+    $ebay=\Yii::$app->getModule('ebay');;
     global $EBAY;
-    $EBAY=$model->config;
+    $EBAY=$ebay->config;
 
     // your private parameters
     $params = array('order_id' => $id,'days'=>(int)$request->post('days'));
@@ -199,7 +199,7 @@ class DefaultController extends Controller
     $query = array('RuName' => $EBAY['RuName']);
 
     $query['SessID'] = $params['SessionID'] =
-      $this->TradeAPI('GetSessionID', "\n  <RuName>{$EBAY['RuName']}</RuName>\n", 'SessionID');
+      $ebay->TradeAPI('GetSessionID', "\n  <RuName>{$EBAY['RuName']}</RuName>\n", 'SessionID');
 
     $query['ruparams'] = http_build_query($params);
 
@@ -207,51 +207,10 @@ class DefaultController extends Controller
     return $this->redirect($url);
   }
 
-  private function TradeAPI($call, $body, $field)
-  {
-    global $EBAY;
-
-    if (($response = @file_get_contents($EBAY['tradeUrl'], 'r', stream_context_create(array('http' => array(
-      'method' => 'POST',
-
-      'header' =>
-        "Content-Type: text/xml; charset=utf-8\r\n"
-      . "X-EBAY-API-SITEID: 0\r\n"
-      . "X-EBAY-API-COMPATIBILITY-LEVEL: 689\r\n"
-      . "X-EBAY-API-CALL-NAME: {$call}\r\n"
-
-  // these headers are only required for GetSessionID and FetchToken
-  . "X-EBAY-API-DEV-NAME: {$EBAY['credentials']['devId']}\r\n"
-  . "X-EBAY-API-APP-NAME: {$EBAY['credentials']['appId']}\r\n"
-  . "X-EBAY-API-CERT-NAME: {$EBAY['credentials']['certId']}\r\n",
-
-      'content' => $request =
-    "<?xml version='1.0' encoding='utf-8'?>\n"
-    . "<{$call} xmlns='urn:ebay:apis:eBLBaseComponents'>{$body}</{$call}>"
-    ))))) === FALSE)
-    {
-      throw new NotFoundHttpException('No response from eBay server!');
-    }
-
-    // found open tag?
-    if (($begin = strpos($response, "<{$field}>")) !== FALSE)
-    {
-      // skip open tag
-      $begin += strlen($field) + 2;
-
-      // found close tag?
-      if (($end = strpos($response, "</{$field}>", $begin)) !== FALSE)
-      {
-        return substr($response, $begin, $end - $begin);
-      }
-    }
-    throw new NotFoundHttpException("Field {$field} not found in eBay response!");
-  }
-
   public function actionCallback(){
-    $model=\Yii::$app->getModule('ebay');;
+    $ebay=\Yii::$app->getModule('ebay');;
     global $EBAY;
-    $EBAY=$model->config;
+    $EBAY=$ebay->config;
 
     while (isset($_GET['ebaytkn']))
     {
@@ -277,7 +236,7 @@ class DefaultController extends Controller
         }
 
         $eBayUser=$_GET['username'];
-        $token=$this->TradeAPI('FetchToken', $body, 'eBayAuthToken');
+        $token=$ebay->TradeAPI('FetchToken', $body, 'eBayAuthToken');
 
         $import=ImportParcelAccount::find()->where(['type'=>1,'name'=>$eBayUser])->one();
         if($import){
@@ -398,5 +357,6 @@ class DefaultController extends Controller
 
     return $id;
   }
+
 }
 

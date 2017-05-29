@@ -104,6 +104,103 @@ class Module extends \yii\base\Module
       'response'=>$response,
     ];
   }
+
+  private function TradeAPI($call, $body, $field=false)
+  {
+    global $EBAY;
+
+    if (($response = @file_get_contents($EBAY['tradeUrl'], 'r', stream_context_create(array('http' => array(
+        'method' => 'POST',
+
+        'header' =>
+          "Content-Type: text/xml; charset=utf-8\r\n"
+          . "X-EBAY-API-SITEID: 0\r\n"
+          . "X-EBAY-API-COMPATIBILITY-LEVEL: 959\r\n"
+          . "X-EBAY-API-CALL-NAME: {$call}\r\n"
+
+          // these headers are only required for GetSessionID and FetchToken
+          . "X-EBAY-API-DEV-NAME: {$EBAY['credentials']['devId']}\r\n"
+          . "X-EBAY-API-APP-NAME: {$EBAY['credentials']['appId']}\r\n"
+          . "X-EBAY-API-CERT-NAME: {$EBAY['credentials']['certId']}\r\n",
+
+        'content' => $request =
+          "<?xml version='1.0' encoding='utf-8'?>\n".
+          "  <RequesterCredentials>
+    <TransactionID>AgAAAA**AQAAAA**aAAAAA**3jkoWQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4GlCZmAoA2dj6x9nY+seQ**ex0EAA**AAMAAA**GGp5yVwOGDfZgFsdrPjpRuP24IXNDkqrJWluDAZjXre5WZTSJUgzCUgmrZGTja78edBv0UMNACiIIK3asEuWpXDjgCdvByOAE3A1w7eFFl8PT4aDCU28OuyuyoEPB9JEAsDlR2IHObTdWXqUsyxSlHi65cE3NJmY9w5ugkzU5dffb5IPdgowMHl9wMEKxCyBEcC1ZOD8x44gKBYqJd/i4YnjBYclYLUxWA98f2zvjR9P2CzGSYGzC58OsuUJlxEBQULPXumUhPsQXoWcwqmD52ay2ma7NTPOWNvHGUMFEtEPNmlZmZHwaJApn2ByB8Hvk21PrbvaA0XttYP5m6J/tEhqUi5EC5JH4aLtoPBrBtMSz2nCaasskjqsWnzSHkReN8kcQfHM7rKjXlmFuB/hOBjhsgM0VyNF/uauZ0k+pKUjSNoPGAMsWZjSIp9I6itH2olyX7tZ7PG+8CvCddWpAiOWTsRp/pGYNJ0oaLQ2Uq2we7J0ORrNt3S+BDf6UQ465RHGAdz27qt+UlUPZDvn8onM2Df+LMkeD4txYyUXVi/TkPjemnT/TLVn37oHl/ZPzRD69+ljU7SO83215awE+Fh94B2g4AectfeNFZEBvInUh61TPTM+PWILpQ4V4Pth3SiEkO4nLgeRfzPGIwWb95O59D5blzCQMK1yaILktzBtfwWR8mtSW16wZcQM3+RqTJyZTbhcYvzyb+uw2wGyiA8gFMA7hF0VBLWW+UdXJyxUlL84nmEshJKagw1A39QI</TransactionID>
+  </RequesterCredentials>\n".
+          "<{$call} xmlns=\"urn:ebay:apis:eBLBaseComponents\">{$body}</{$call}>"
+      ))))) === FALSE)
+    {
+      throw new NotFoundHttpException('No response from eBay server!');
+    }
+
+    if($field) {
+      // found open tag?
+      if (($begin = strpos($response, "<{$field}>")) !== FALSE) {
+        // skip open tag
+        $begin += strlen($field) + 2;
+
+        // found close tag?
+        if (($end = strpos($response, "</{$field}>", $begin)) !== FALSE) {
+          return substr($response, $begin, $end - $begin);
+        }
+      }
+      throw new NotFoundHttpException("Field {$field} not found in eBay response!");
+    }else{
+      return $response;
+    }
+  }
+
+  public function setTracNumber($orderId,$token,$ShippingCarrier,$trackNumber){
+
+    $EBAY = $this->config;
+
+    //SiteID must also be set in the Request's XML
+    //SiteID = 0  (US) - UK = 3, Canada = 2, Australia = 15, ....
+    //SiteID Indicates the eBay site to associate the call with
+    $siteID = 0;
+    //the call being made:
+    $verb = 'CompleteSale';
+
+    ///Build the request Xml string
+    $requestXmlBody =   '<?xml version="1.0" encoding="utf-8" ?>';
+    $requestXmlBody .=  '<CompleteSaleRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
+    $requestXmlBody .=      '<RequesterCredentials>';
+    $requestXmlBody .=          '<eBayAuthToken>' . $token . '</eBayAuthToken>';
+    $requestXmlBody .=      '</RequesterCredentials>';
+
+    $requestXmlBody .=      '<ItemID>' . $orderId . '</ItemID>';
+    $requestXmlBody .=      '<OrderID>' . $orderId . '</OrderID>';
+
+    $requestXmlBody .=      '<Shipment>';
+    $requestXmlBody .=          '<ShipmentTrackingDetails>';
+    $requestXmlBody .=              '<ShipmentTrackingNumber>' . $trackNumber . '</ShipmentTrackingNumber>';
+    $requestXmlBody .=              '<ShippingCarrierUsed>' . $ShippingCarrier . '</ShippingCarrierUsed>';
+    $requestXmlBody .=          '</ShipmentTrackingDetails>';
+    $requestXmlBody .=      '</Shipment>';
+
+    $requestXmlBody .=  '</CompleteSaleRequest>';
+
+    //Create a new eBay session with all details pulled in from included keys.php
+    $session = new eBaySession(
+      $token,
+      $EBAY['credentials']['devId'],
+      $EBAY['credentials']['appId'],
+      $EBAY['credentials']['certId'],
+      $EBAY['tradeUrl'],
+      $EBAY['compatabilityLevel'],
+      $siteID,
+      $verb
+    );
+
+    //send the request and get response
+    $responseXml = $session->sendHttpRequest($requestXmlBody);
+    if (stristr($responseXml, 'HTTP 404') || $responseXml == '') {
+      return false;
+    }
+
+    return $responseXml;
+  }
 }
 
 class eBaySession
