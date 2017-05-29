@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\config\models\SearchConfig */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -127,6 +127,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                   );
                 }
+                $out .= Html::a('<span class="glyphicon glyphicon-pencil"></span>',['send-mail/'.$data->id], [
+                  'class' => 'btn btn-danger',
+                  'data' => [
+                    'confirm' => 'Do you want to send the Email with this Invoice?',
+                    'method' => 'post',
+                  ],
+                ]);
                 return $out;
               }
             ]
@@ -134,3 +141,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
     </div>
 </div>
+<?php Modal::begin([
+  "id"=>"ajaxCrudModal",
+  "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>

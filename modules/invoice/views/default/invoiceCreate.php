@@ -322,6 +322,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
       }
       ?>
+    <?= Html::submitButton('Save',                ['name'=>'submit','value'=>'save','class' => 'btn btn-success pull-right margin-left-10']) ?>
+    <?= Html::submitButton('Save and send Email', ['name'=>'submit','value'=>'send','class' => 'btn btn-success pull-right margin-left-10']) ?>
     <?= Html::submitButton('Generate invoice(PDF)', ['name'=>'submit','value'=>'pdf','class' => 'btn btn-success pull-right margin-left-10']) ?>
     <?= Html::submitButton('Generate invoice(to pay)', ['name'=>'submit','value'=>'pay','class' => 'btn btn-success pull-right']) ?>
   </div>

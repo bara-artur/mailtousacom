@@ -667,6 +667,7 @@ if($createNewAddress){
 
    });
    $('#last_anchor').find('#lb').focus().select();
+
   });
 </script>
 

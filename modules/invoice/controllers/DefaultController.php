@@ -111,6 +111,13 @@ class DefaultController extends Controller
       if($request->post('submit')=='pay'){
         return $this->redirect(['/payment/invoice/' . $inv->id]);
       }
+      if($request->post('submit')=='send'){
+        $inv->sendMail();
+        return $this->redirect(['/invoice']);
+      }
+      if($request->post('submit')=='save'){
+        return $this->redirect(['/invoice']);
+      }
 
     }
 
@@ -431,4 +438,8 @@ class DefaultController extends Controller
     }
   }
 
+  public function actionSendMail($id){
+   // Invoice::findOne($id)->sendMail();
+    return $this->redirect(['/invoice']);
+  }
 }

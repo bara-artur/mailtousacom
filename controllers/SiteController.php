@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\modules\invoice\models\Invoice;
 use app\modules\receiving_points\models\ReceivingPointsSearch;
 use EasyPost\Error;
 use Yii;

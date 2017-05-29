@@ -130,13 +130,13 @@ $config = [
           'additional_services/<action:invoice>/<id:\d+>'=>'additional_services/default/<action>/',
           //'additional_services/<action:transport-invoice>/'=>'additional_services/default/<action>/',
 
-          'ebay/<action:get-order|connection|get-token>/<id:\d+>'=>'ebay/default/<action>/',
+          'ebay/<action:get-order|connection|get-token|track-update>/<id:\d+>'=>'ebay/default/<action>/',
           'ebay/<action:callback>'=>'ebay/default/<action>/',
 
           'logs/<id:\d+>'=>'logs/default/index/',
 
           'invoice/<action:update-status>'=>'invoice/default/<action>/',
-          'invoice/<action:create|update|pdf|edit>/<id:\d+>'=>'invoice/default/<action>/',
+          'invoice/<action:create|update|pdf|edit|send-mail>/<id:\d+>'=>'invoice/default/<action>/',
           'invoice/<action:add-service-to-parcel|add-service-to-all>/<id:\d+>/<service:\d+>'=>'invoice/default/<action>/',
         ],
     ],
