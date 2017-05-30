@@ -64,6 +64,14 @@ class AdditionalServices extends \yii\db\ActiveRecord
     return $this->hasOne(User::className(), ['id' => 'user_id']);
   }
 
+  public function getDetailList(){
+    if(strlen($this->detail)>6){
+      return json_decode($this->detail,true);
+    }else{
+      return [];
+    }
+  }
+
   public function getClient(){
     return $this->hasOne(User::className(), ['id' => 'client_id']);
   }
@@ -102,13 +110,31 @@ class AdditionalServices extends \yii\db\ActiveRecord
   /**
    * Получам название услуги
    */
-  public function getTitle()
+  public function getTitle($dop_text=true)
   {
     $title=AdditionalServicesList::find()->where(['id'=>$this->type])->one();
     if(!$title)return 'error';
-    return $title->name;
+
+    $text=$title->name;
+
+    if($dop_text){
+      $serv_det=$this->getAdditionalServicesInfo();
+      if($serv_det->dop_connection==2){
+        $detail=$this->getDetailList();
+        if(isset($detail['dop_text'])){
+          $text.=' ('.$detail['dop_text'].')';
+        }
+      }
+    }
+    return $text;
   }
 
+  public function getAdditionalServicesInfo(){
+    if(!$this->additionalInfo){
+      $this->additionalInfo=AdditionalServicesList::find()->where(['id'=>$this->type])->one();
+    }
+    return $this->additionalInfo;
+  }
     /**
      * @inheritdoc
      */
@@ -130,10 +156,24 @@ class AdditionalServices extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getName(){
+    public function getName($dop_text=true){
       if(!$this->additionalInfo){
         $this->additionalInfo=AdditionalServicesList::find()->where(['id'=>$this->type])->one();
       }
-      return $this->additionalInfo->name;
+
+
+      $text=$this->additionalInfo->name;
+
+      if($dop_text){
+        $serv_det=$this->getAdditionalServicesInfo();
+        if($serv_det->dop_connection==2){
+          $detail=$this->getDetailList();
+          if(isset($detail['dop_text'])){
+            $text.=' ('.$detail['dop_text'].')';
+          }
+        }
+      }
+
+      return $text;
     }
 }

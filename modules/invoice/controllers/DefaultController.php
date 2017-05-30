@@ -101,6 +101,8 @@ class DefaultController extends Controller
           'ref_code' => $session['ref_code_' . $id],
           'contract_number' => $session['contract_number_' . $id],
         ]);
+
+
       if(!$inv->save()){
         ddd($inv);
       }
@@ -116,7 +118,7 @@ class DefaultController extends Controller
         return $this->redirect(['/invoice']);
       }
       if($request->post('submit')=='save'){
-        return $this->redirect(['/invoice']);
+        return $this->redirect(['/invoice/edit/' . $inv->id]);
       }
 
     }
@@ -247,6 +249,13 @@ class DefaultController extends Controller
       if($request->post('submit')=='pay'){
         return $this->redirect(['/payment/invoice/' . $invoice->id]);
       }
+      if($request->post('submit')=='send'){
+        $inv->sendMail();
+        return $this->redirect(['/invoice']);
+      }
+      if($request->post('submit')=='save'){
+        return $this->redirect(['/invoice/edit/' . $invoice->id]);
+      }
       //ddd($request->post());
     }
     //ddd($invoice_data);
@@ -317,7 +326,7 @@ class DefaultController extends Controller
       }
 
       if (!$inv) {
-        return false;
+        return;
       };
 
       if($is_invoice) {
@@ -352,6 +361,18 @@ class DefaultController extends Controller
           'track_company'=>$order_element->GetShippingCarrierName(true)
         ];
         $inv->detail=json_encode($detail);
+      }
+
+      $additional=$inv->getAdditionalServicesInfo();
+
+
+      if(
+        $additional->dop_connection==2 &&
+        strpos($request->post('name'), 'tr_invoice_text_') !== false
+      ){
+        $inv->detail = json_encode([
+          'dop_text'=>$request->post('value'),
+        ]);
       }
       $inv->save();
     }
@@ -411,7 +432,7 @@ class DefaultController extends Controller
     }
 
     $pac=OrderElement::find()->where(['id'=>$id])->one();
-    //$this_service=$pac->addAdditionalService($service,true);
+    $this_service=$pac->addAdditionalService($service,true);
 
     $request = Yii::$app->request;
     if($request->get('order')) {

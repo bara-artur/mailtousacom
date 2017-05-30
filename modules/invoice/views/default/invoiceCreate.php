@@ -109,6 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
           <th>Name</th>
           <th>Date</th>
           <th>Status</th>
+          <th>Additional information</th>
           <th>Price, USD</th>
         </tr>
         <?php
@@ -116,6 +117,8 @@ $this->params['breadcrumbs'][] = $this->title;
         $item_i = 0;
         foreach ($order_service as $as) {
           $item_i += 1;
+          $detail=$as->getDetailList();
+          $type_service=$as->getAdditionalServicesInfo();
           ?>
           <tr>
             <td><?=Html::checkbox('ch_invoice_'.$as->id,true,[
@@ -123,9 +126,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class'=>'invoice_check'
               ]);;?></td>
             <td><?= $item_i; ?></td>
-            <td><?= $as->getName(); ?></td>
+            <td><?= $as->getName(false); ?></td>
             <td><?= date(Yii::$app->config->get('data_time_format_php'), $as->create); ?></td>
             <td><?= $as->getTextStatus(); ?></td>
+            <td>
+              <?php
+              if($type_service->dop_connection==2) {
+                echo Html::input('text', 'tr_invoice_text_' . $as->id,isset($detail['dop_text'])?$detail['dop_text']:"", [
+                  'class' => 'tr_input'
+                ]);
+              }else{
+                echo '-';
+              }
+              ?>
+            </td>
             <td>
               <?= Html::input('text', 'tr_invoice_'.$as->id, number_format((float)$as->price, 2, '.', ''), [
                 'class' => 'tr_input'
@@ -265,6 +279,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 $services=$parcel->getAdditionalServiceList(false);
                 foreach ($services as $as){
                   $item_i+=1;
+                  $type_service=$as->getAdditionalServicesInfo();
+                  $detail=$as->getDetailList();
                   ?>
                   <tr>
                     <td><?=Html::checkbox('ch_invoice_'.$as->id,true,[
@@ -272,7 +288,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class'=>'invoice_check'
                       ]);;?></td>
                     <td><?=$item_i;?></td>
-                    <td><?=$as->getName();?></td>
+                    <td><?=$as->getName(false);?></td>
                     <td><?=date(Yii::$app->config->get('data_time_format_php'),$as->create);?></td>
                     <td><?= $as->getTextStatus(); ?></td>
                     <td>
@@ -280,7 +296,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'tr_input'
                       ]); ?>
                     </td>
-                    <td>-</td>
+                    <td>
+                      <?php
+                      if($type_service->dop_connection==2) {
+                        echo Html::input('text', 'tr_invoice_text_' . $as->id,isset($detail['dop_text'])?$detail['dop_text']:"", [
+                          'class' => 'tr_input'
+                        ]);
+                      }else{
+                        echo '-';
+                      }
+                      ?>
+                    </td>
                     <td>-</td>
                   </tr>
                   <?php

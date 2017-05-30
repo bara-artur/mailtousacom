@@ -70,7 +70,6 @@ class Invoice extends \yii\db\ActiveRecord
   public function getEmail(){
     return $this->getUser()->email;
   }
-
   /*
    * Вывод общих данных с платежами по инвойсу
    */
