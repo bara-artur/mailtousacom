@@ -439,7 +439,7 @@ class DefaultController extends Controller
   }
 
   public function actionSendMail($id){
-   // Invoice::findOne($id)->sendMail();
+    Invoice::findOne($id)->sendMail();
     return $this->redirect(['/invoice']);
   }
 }

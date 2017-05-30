@@ -8,6 +8,7 @@ use Yii;
 use app\modules\orderElement\models\OrderElement;
 use app\modules\user\models\User;
 use yii\db\Query;
+use kartik\mpdf\Pdf;
 
 /**
  * This is the model class for table "invoices".
@@ -269,8 +270,7 @@ class Invoice extends \yii\db\ActiveRecord
   public function sendMail($mail=false)
   {
     $data = $this->getTable();
-
-    $content = $this->renderPartial('invoicePdf', $data);
+    $content = Yii::$app->controller->renderPartial('invoicePdf', $data);
     $pdf = new Pdf([
       'content' => $content,
       //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
@@ -282,12 +282,13 @@ class Invoice extends \yii\db\ActiveRecord
         //'SetFooter'=>['{PAGENO}'],
       ],
     ]);
-
+    $path = $pdf->Output('', 'S'); // отсюда https://stackoverflow.com/questions/41058147/yii2-generate-pdf-on-the-fly-and-attach-to-email
+                                        //   http://demos.krajee.com/mpdf
     if ($mail == false) {
       $mail = $this->getEmail();
     }
     $message = Yii::$app->mailer->compose();
-    $message->attachContent($pdf, ['fileName' => 'invoice.pdf', 'contentType' => 'text/plain']);
+    $message->attachContent($path, ['fileName' => 'invoice.pdf', 'contentType' => 'application/pdf']);
     $message->setFrom(\Yii::$app->config->get('adminEmail'))
       ->setTo($mail)
       ->setSubject('Invoice')
