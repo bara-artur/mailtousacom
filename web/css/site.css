@@ -1279,3 +1279,34 @@ ul.breadcrumb{display:none !important;}
 .font-size11{font-size:11px;}
 /*23052017*/
 .sub_price,.sub_qst,.sub_gst{color:#05389F !important;font-weight: 700;}
+
+.loading{
+    background: url(../extra/owl-carousel/AjaxLoader.gif) center center no-repeat;
+}
+.info_line.loading{
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.showMsg{
+    display:inline-block;
+    font-weight:700;
+    color:#05389F;
+    font-size: 16px;
+    /*background:#585858;
+    padding:5px;
+    color:#fff;*/
+}
+/*29052017*/
+.marg_but{line-height: 2.2}
+.bottom_line3 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    z-index: 20;
+    position: relative;
+    width: 100%;
+    border-top: 1px solid #ccc;
+}
+.modernui-neutral5 {
+    color: #696969;}

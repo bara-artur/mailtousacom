@@ -15,14 +15,24 @@ CrudAsset::register($this);
 ?>
 <div class="import-parcel-account-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="col-md-4 col-sm-12 padding-off-left">
+        <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
+            [
+                'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
+            ])?>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+        <h4 class="modernui-neutral5"><?= Html::encode($this->title) ?></h4>
+    </div>
 
 
+    <hr class="bottom_line3">
     <div class="form_parcel_create_type_0 push-up-margin-thin" >
-        <div class="row">
+            <div class="row">
             <div class="col-md-12"><h6 class="modernui-neutral4">You can connect stores with our WMS ( warehouse
                     management software )</h6>
             </div>
+                <div class="col-md-offset-3 col-md-6">
             <div class="col-md-4 col-xs-4  text-center">
                 <a href="/ebay/get-token/0">
                     <div class="icon_integ_ebay"></div>
@@ -38,8 +48,22 @@ CrudAsset::register($this);
                     <div class="icon_integ_shop"></div>
                 </a>
             </div>
-        </div>
+                </div>
+            </div>
     </div>
+
+  <div>
+      <hr class="bottom_line3">
+      <div class="text-right">
+    <?=Html::a('<i class="fa fa-refresh"></i> Update track number information',
+      [''],
+      [
+        'class' => 'btn btn-success btn-md update_parcel_track',
+        'title'=> 'Update information for parcel sending in last 14 days',
+          'data-toggle'=>'tooltip',
+      ]);?>
+  </div>
+  </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
@@ -47,7 +71,7 @@ CrudAsset::register($this);
           ['attribute'=> 'type',
             'content'=> function($data){
                if($data->type==1){
-                   return '<img src="/img/ebay_from.jpg">';
+                   return '<img src="/img/ebay_imp.png" width="60">';
                }
                return "-";
             },
@@ -64,6 +88,18 @@ CrudAsset::register($this);
                 'format' => 'raw'
               ],
             // 'last_update',
+
+            ['attribute' => 'Info track number( manual updating)',
+                'content' => function($data){
+                    return  Html::a('',
+                            [''],
+                            [
+                                'class' => '',
+                                'title'=> '',
+
+                            ]).
+                        "<div class='info_line' data='".$data->id."''>Not defined (update information)</div>";
+                }],
 
           ['attribute' => 'Action',
             'content' => function($data){
@@ -82,6 +118,7 @@ CrudAsset::register($this);
                     'role'=>"modal-remote",
                   ]);
             }],
+
         ],
     ]); ?>
 </div>

@@ -39,13 +39,13 @@ class DefaultController extends Controller
     }*/
 
     $ebay_tokens=ImportParcelAccount::find()->where(['type'=>1,'client_id'=>Yii::$app->user->identity->id])->all();
-    ddd($ebay_tokens);
+
     //Если нет то получаем новый токен
-    /*if (strlen(\Yii::$app->user->identity->ebay_token)<30){
+    if (strlen(\Yii::$app->user->identity->ebay_token)<30){
       return $this->getTocken($id);
     }else{
       return $this->redirect('/orderInclude/create-order/'.$id);
-    }*/
+    }
 
   }
 
@@ -55,23 +55,6 @@ class DefaultController extends Controller
     if($order->user_id!=\Yii::$app->user->identity->id){
       throw new NotFoundHttpException('Order can editing only by creator.');
     }
-
-    /*$request = Yii::$app->request;
-    if($request->isPost){
-      if((int)$request->post('days')>0){
-        $user=User::findOne(\Yii::$app->user->identity->id);
-        $user->ebay_last_update=time()-(int)$request->post('days')*24*60*60;
-        if($user->save()){
-          return $this->actionGetToken($id);
-        };
-      }
-      Yii::$app
-        ->getSession()
-        ->setFlash(
-          'error',
-          'The number of days should be a positive number.'
-        );
-    }*/
 
     $ebay_tokens=ImportParcelAccount::find()->where(['type'=>1,'client_id'=>Yii::$app->user->identity->id])->all();
 
@@ -93,107 +76,25 @@ class DefaultController extends Controller
     foreach ($ebay_tokens as $ebay_token) {
       $model = \Yii::$app->getModule('ebay');;
       global $EBAY;
-      $EBAY = $model->config;
 
-      //SiteID must also be set in the Request's XML
-      //SiteID = 0  (US) - UK = 3, Canada = 2, Australia = 15, ....
-      //SiteID Indicates the eBay site to associate the call with
-      $siteID = 0;
-      //the call being made:
-      $verb = 'GetOrders';
+      $rers=$model->getOrders($ebay_token->token,$ebay_token->last_update);
 
-      //Time with respect to GMT
-      //by default retreive orders in last 7 day
-
-      $TimeFrom = $ebay_token->last_update > 100 ? $ebay_token->last_update : time() - 60 * 60 * 24 * 30;
-      $ebay_token->last_update=time();
-      $ebay_token->save();
-      //$TimeFrom = time() - 60 * 60 * 24 * 300;
-
-      $CreateTimeFrom = gmdate("Y-m-d\TH:i:s", $TimeFrom); //current time minus 30 minutes
-      $CreateTimeTo = gmdate("Y-m-d\TH:i:s");
-
-      ///Build the request Xml string
-      $requestXmlBody = '<?xml version="1.0" encoding="utf-8" ?>';
-      $requestXmlBody .= '<GetOrdersRequest xmlns="urn:ebay:apis:eBLBaseComponents">';
-      $requestXmlBody .= '<DetailLevel>ReturnAll</DetailLevel>';
-      $requestXmlBody .= "<CreateTimeFrom>$CreateTimeFrom</CreateTimeFrom><CreateTimeTo>$CreateTimeTo</CreateTimeTo>";
-      $requestXmlBody .= '<OrderRole>Seller</OrderRole><OrderStatus>' . $EBAY['orderStatus'] . '</OrderStatus>';
-      $requestXmlBody .= "<RequesterCredentials><eBayAuthToken>" . $ebay_token->token . "</eBayAuthToken></RequesterCredentials>";
-      $requestXmlBody .= '</GetOrdersRequest>';
-
-      //Create a new eBay session with all details pulled in from included keys.php
-      $session = new eBaySession(
-        $ebay_token->token,
-        $EBAY['credentials']['devId'],
-        $EBAY['credentials']['appId'],
-        $EBAY['credentials']['certId'],
-        $EBAY['tradeUrl'],
-        $EBAY['compatabilityLevel'],
-        $siteID,
-        $verb
-      );
-
-      //send the request and get response
-      $responseXml = $session->sendHttpRequest($requestXmlBody);
-      if (stristr($responseXml, 'HTTP 404') || $responseXml == '') {
+      if(!$rers){
         continue;
-        /*Yii::$app
-          ->getSession()
-          ->setFlash(
-            'error',
-            'eBay not found'
-          );
-        return $this->redirect('/orderInclude/create-order/' . $id);*/
       }
 
-      //Xml string is parsed and creates a DOM Document object
-      $responseDoc = new \DomDocument();
-      $responseDoc->loadXML($responseXml);
-
-
-      //get any error nodes
-      $errors = $responseDoc->getElementsByTagName('Errors');
-      $response = simplexml_import_dom($responseDoc);
-      $entries = $response->PaginationResult->TotalNumberOfEntries;
-
+      $ebay_token->last_update=time();
+      $ebay_token->save();
 
       //if there are error nodes
-      if ($errors->length > 0) {
-        //display each error
-        //Get error code, ShortMesaage and LongMessage
-        /*$code = $errors->item(0)->getElementsByTagName('ErrorCode');
-        $shortMsg = $errors->item(0)->getElementsByTagName('ShortMessage');
-        $longMsg = $errors->item(0)->getElementsByTagName('LongMessage');
-
-        Yii::$app
-          ->getSession()
-          ->setFlash(
-            'error',
-            'eBay returned error(s)'
-          );
-        return $this->redirect('/orderInclude/create-order/' . $id);*/
+      if ($rers['errors']->length > 0) {
         continue;
       } else { //If there are no errors, continue
-        if ($entries == 0) {
-          /*Yii::$app
-            ->getSession()
-            ->setFlash(
-              'info',
-              'New orders were found'
-            );
-          return $this->redirect('/orderInclude/create-order/' . $id);*/
+        if ($rers['entries'] == 0) {
           continue;
         }
-        $orders = $response->OrderArray->Order;
+        $orders = $rers['response']->OrderArray->Order;
         if ($orders == null) {
-          /*Yii::$app
-            ->getSession()
-            ->setFlash(
-              'info',
-              'No Order Found.'
-            );
-          return $this->redirect('/orderInclude/create-order/' . $id);*/
           continue;
         }
 
@@ -253,15 +154,8 @@ class DefaultController extends Controller
               $item->save();
             }
           }
-        }/*else{
-          ddd($box);
-        }*/
-      }
-
-
-        //$user = User::findOne(\Yii::$app->user->identity->id);
-        //$user->ebay_last_update = time();
-        //$user->save();
+          $new_parcel_count++;
+        }
       }
     }
     $order->el_group = implode(',', $el_group);
@@ -286,18 +180,26 @@ class DefaultController extends Controller
   }
 
   public function actionGetToken($id){
-    $model=\Yii::$app->getModule('ebay');;
+
+    $request = Yii::$app->request;
+    if(!$request->isPost) {
+      return $this->render('view', [
+        'order_id' => $id
+      ]);
+    }
+
+    $ebay=\Yii::$app->getModule('ebay');;
     global $EBAY;
-    $EBAY=$model->config;
+    $EBAY=$ebay->config;
 
     // your private parameters
-    $params = array('order_id' => $id);
+    $params = array('order_id' => $id,'days'=>(int)$request->post('days'));
 
     // eBay's required parameters
     $query = array('RuName' => $EBAY['RuName']);
 
     $query['SessID'] = $params['SessionID'] =
-      $this->TradeAPI('GetSessionID', "\n  <RuName>{$EBAY['RuName']}</RuName>\n", 'SessionID');
+      $ebay->TradeAPI('GetSessionID', "\n  <RuName>{$EBAY['RuName']}</RuName>\n", 'SessionID');
 
     $query['ruparams'] = http_build_query($params);
 
@@ -305,51 +207,10 @@ class DefaultController extends Controller
     return $this->redirect($url);
   }
 
-  private function TradeAPI($call, $body, $field)
-  {
-    global $EBAY;
-
-    if (($response = @file_get_contents($EBAY['tradeUrl'], 'r', stream_context_create(array('http' => array(
-      'method' => 'POST',
-
-      'header' =>
-        "Content-Type: text/xml; charset=utf-8\r\n"
-      . "X-EBAY-API-SITEID: 0\r\n"
-      . "X-EBAY-API-COMPATIBILITY-LEVEL: 689\r\n"
-      . "X-EBAY-API-CALL-NAME: {$call}\r\n"
-
-  // these headers are only required for GetSessionID and FetchToken
-  . "X-EBAY-API-DEV-NAME: {$EBAY['credentials']['devId']}\r\n"
-  . "X-EBAY-API-APP-NAME: {$EBAY['credentials']['appId']}\r\n"
-  . "X-EBAY-API-CERT-NAME: {$EBAY['credentials']['certId']}\r\n",
-
-      'content' => $request =
-    "<?xml version='1.0' encoding='utf-8'?>\n"
-    . "<{$call} xmlns='urn:ebay:apis:eBLBaseComponents'>{$body}</{$call}>"
-    ))))) === FALSE)
-    {
-      throw new NotFoundHttpException('No response from eBay server!');
-    }
-
-    // found open tag?
-    if (($begin = strpos($response, "<{$field}>")) !== FALSE)
-    {
-      // skip open tag
-      $begin += strlen($field) + 2;
-
-      // found close tag?
-      if (($end = strpos($response, "</{$field}>", $begin)) !== FALSE)
-      {
-        return substr($response, $begin, $end - $begin);
-      }
-    }
-    throw new NotFoundHttpException("Field {$field} not found in eBay response!");
-  }
-
   public function actionCallback(){
-    $model=\Yii::$app->getModule('ebay');;
+    $ebay=\Yii::$app->getModule('ebay');;
     global $EBAY;
-    $EBAY=$model->config;
+    $EBAY=$ebay->config;
 
     while (isset($_GET['ebaytkn']))
     {
@@ -375,7 +236,7 @@ class DefaultController extends Controller
         }
 
         $eBayUser=$_GET['username'];
-        $token=$this->TradeAPI('FetchToken', $body, 'eBayAuthToken');
+        $token=$ebay->TradeAPI('FetchToken', $body, 'eBayAuthToken');
 
         $import=ImportParcelAccount::find()->where(['type'=>1,'name'=>$eBayUser])->one();
         if($import){
@@ -390,6 +251,7 @@ class DefaultController extends Controller
           $import->type=1;
           $import->name=$eBayUser;
           $import->token=$token;
+          $import->last_update=time() - 60 * 60 * 24*(int)$_GET['days'];
           $import->save();
 
           Yii::$app
@@ -411,112 +273,91 @@ class DefaultController extends Controller
 
     throw new NotFoundHttpException('Page not found');
   }
+
+  public function actionTrackUpdate($id){
+    $ebay_token=ImportParcelAccount::find()->where([
+      'type'=>1,
+      'client_id'=>Yii::$app->user->identity->id,
+      'id'=>$id
+    ])->one();
+
+    if(!$ebay_token){
+      return "Error access.";
+    }
+
+    $model = \Yii::$app->getModule('ebay');;
+    global $EBAY;
+
+    $rers=$model->getOrders($ebay_token->token,time()-5*30*24*60*60);
+
+    if(!$rers){
+      return "eBay error access";
+    }
+
+    $upd_parcel_count=0;
+    $new_parcel_count=0;
+
+    //if there are error nodes
+    if ($rers['errors']->length > 0) {
+      return "eBay error access";
+    } else { //If there are no errors, continue
+      if ($rers['entries'] == 0) {
+        return "Not found orders on eBay";
+
+      }
+      $orders = $rers['response']->OrderArray->Order;
+      if ($orders == null) {
+        return "Not found orders on eBay";
+      }
+
+      foreach ($orders as $order_) {
+        $w=[
+          'import_code'=>(string)$order_->OrderID,
+          'import_id'=>$ebay_token->id,
+          'user_id'=>Yii::$app->user->identity->id
+        ];
+        $pac=OrderElement::find()->where($w)->one();
+
+        if($pac) {
+          $transactions = $order_->TransactionArray;
+          if (
+            $transactions &&
+            $transactions->Transaction &&
+            $transactions->Transaction->ShippingDetails &&
+            $transactions->Transaction->ShippingDetails->ShipmentTrackingDetails &&
+            $transactions->Transaction->ShippingDetails->ShipmentTrackingDetails->ShipmentTrackingNumber
+          ) {
+            $track_number = (String)$transactions->Transaction->ShippingDetails->ShipmentTrackingDetails->ShipmentTrackingNumber;
+
+            if ($pac->track_number != $track_number) {
+              $pac->track_number = $track_number;
+              $pac->track_number_type = 0;
+              if($pac->save()){
+                $upd_parcel_count++;
+              }
+            }
+          }
+        }else{
+          $new_parcel_count++;
+        }
+      }
+      $out='';
+      if($upd_parcel_count){
+        $out.="Parcels update : ".$upd_parcel_count;
+      }
+      if($new_parcel_count){
+        $out.="Parcels not import : ".$new_parcel_count;
+      }
+      if($upd_parcel_count || $new_parcel_count) {
+        return $out;
+      }else{
+        return 'Not found new data on eBay';
+      }
+    }
+
+
+    return $id;
+  }
+
 }
 
-class eBaySession
-{
-  private $requestToken;
-  private $devID;
-  private $appID;
-  private $certID;
-  private $serverUrl;
-  private $compatLevel;
-  private $siteID;
-  private $verb;
-
-  /**	__construct
-  Constructor to make a new instance of eBaySession with the details needed to make a call
-  Input:	$userRequestToken - the authentication token fir the user making the call
-  $developerID - Developer key obtained when registered at http://developer.ebay.com
-  $applicationID - Application key obtained when registered at http://developer.ebay.com
-  $certificateID - Certificate key obtained when registered at http://developer.ebay.com
-  $useTestServer - Boolean, if true then Sandbox server is used, otherwise production server is used
-  $compatabilityLevel - API version this is compatable with
-  $siteToUseID - the Id of the eBay site to associate the call iwht (0 = US, 2 = Canada, 3 = UK, ...)
-  $callName  - The name of the call being made (e.g. 'GeteBayOfficialTime')
-  Output:	Response string returned by the server
-   */
-  public function __construct($userRequestToken, $developerID, $applicationID, $certificateID, $serverUrl,
-                              $compatabilityLevel, $siteToUseID, $callName)
-  {
-    $this->requestToken = $userRequestToken;
-    $this->devID = $developerID;
-    $this->appID = $applicationID;
-    $this->certID = $certificateID;
-    $this->compatLevel = $compatabilityLevel;
-    $this->siteID = $siteToUseID;
-    $this->verb = $callName;
-    $this->serverUrl = $serverUrl;
-  }
-
-
-  /**	sendHttpRequest
-  Sends a HTTP request to the server for this session
-  Input:	$requestBody
-  Output:	The HTTP Response as a String
-   */
-  public function sendHttpRequest($requestBody)
-  {
-    //build eBay headers using variables passed via constructor
-    $headers = $this->buildEbayHeaders();
-
-    //initialise a CURL session
-    $connection = curl_init();
-    //set the server we are using (could be Sandbox or Production server)
-    curl_setopt($connection, CURLOPT_URL, $this->serverUrl);
-
-    //stop CURL from verifying the peer's certificate
-    curl_setopt($connection, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($connection, CURLOPT_SSL_VERIFYHOST, 0);
-
-    //set the headers using the array of headers
-    curl_setopt($connection, CURLOPT_HTTPHEADER, $headers);
-
-    //set method as POST
-    curl_setopt($connection, CURLOPT_POST, 1);
-
-    //set the XML body of the request
-    curl_setopt($connection, CURLOPT_POSTFIELDS, $requestBody);
-
-    //set it to return the transfer as a string from curl_exec
-    curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
-
-    //Send the Request
-    $response = curl_exec($connection);
-
-    //close the connection
-    curl_close($connection);
-
-    //return the response
-    return $response;
-  }
-
-
-
-  /**	buildEbayHeaders
-  Generates an array of string to be used as the headers for the HTTP request to eBay
-  Output:	String Array of Headers applicable for this call
-   */
-  private function buildEbayHeaders()
-  {
-    $headers = array (
-      //Regulates versioning of the XML interface for the API
-      'X-EBAY-API-COMPATIBILITY-LEVEL: ' . $this->compatLevel,
-
-      //set the keys
-      'X-EBAY-API-DEV-NAME: ' . $this->devID,
-      'X-EBAY-API-APP-NAME: ' . $this->appID,
-      'X-EBAY-API-CERT-NAME: ' . $this->certID,
-
-      //the name of the call we are requesting
-      'X-EBAY-API-CALL-NAME: ' . $this->verb,
-
-      //SiteID must also be set in the Request's XML
-      //SiteID = 0  (US) - UK = 3, Canada = 2, Australia = 15, ....
-      //SiteID Indicates the eBay site to associate the call with
-      'X-EBAY-API-SITEID: ' . $this->siteID,
-    );
-
-    return $headers;
-  }
-}
