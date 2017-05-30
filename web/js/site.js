@@ -270,14 +270,7 @@ function trackUpdateRequest(data){
   el.removeClass('loading');
   el.text(data);
   el.addClass('showMsg');
-  setTimeout(clearText.bind(el),5000);
 }
-function clearText(){
-  el=$(this);
-  el.removeClass('showMsg');
-  el.text('');
-}
-
 function show_err(el,txt){
   if(!el.hasClass('has-error')) {
     el.addClass('has-error');
