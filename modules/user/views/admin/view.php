@@ -50,8 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'phone',
             'docs',
             'ebay_account',
-            'ebay_last_update',
-            'ebay_token',
         ],
     ]) ?>
 

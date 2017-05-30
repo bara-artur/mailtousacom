@@ -20,8 +20,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at', 'last_online', 'ebay_account', 'ebay_last_update','month_pay'], 'integer'],
-            [['username', 'email', 'first_name', 'last_name', 'fullName', 'password_hash', 'photo', 'password_reset_token', 'email_confirm_token', 'auth_key', 'login_at', 'ip', 'phone', 'docs', 'ebay_token','role'], 'safe'],
+            [['id', 'status', 'created_at', 'updated_at', 'last_online', 'ebay_account', 'month_pay'], 'integer'],
+            [['username', 'email', 'first_name', 'last_name', 'fullName', 'password_hash', 'photo', 'password_reset_token', 'email_confirm_token', 'auth_key', 'login_at', 'ip', 'phone', 'docs', 'role'], 'safe'],
         ];
     }
 
@@ -78,7 +78,6 @@ class UserSearch extends User
             'login_at' => $this->login_at,
             'last_online' => $this->last_online,
             'ebay_account' => $this->ebay_account,
-            'ebay_last_update' => $this->ebay_last_update,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
@@ -92,8 +91,7 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'ip', $this->ip])
             ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'docs', $this->docs])
-            ->andFilterWhere(['like', 'ebay_token', $this->ebay_token]);
+            ->andFilterWhere(['like', 'docs', $this->docs]);
 
         if($this->role && strlen(trim($this->role))>0) {
           $query->leftJoin('auth_assignment', 'user.id= auth_assignment.user_id');
