@@ -35,7 +35,7 @@ Email: sendmailtousa@gmail.com
 
 
 <b>
-  Invoice <?=$data['invoice'];?>
+  Invoice <?= (isset($data['invoice'])?($data['invoice']):('No invoice'));?>
 </b>
 
 <br><br>
@@ -51,14 +51,14 @@ Email: sendmailtousa@gmail.com
       Get discounts by referring a friend using this code:
         </td>
         <td style="padding:2px 6px;border-right:1px solid #878787;">
-        <?=$data['ref_code'];?>
+        <?=(isset($data['ref_code'])?($data['ref_code']):('No ref_code'));?>
         </td>
 
     <td align="right" style="padding:2px 6px;border-right:1px solid #878787;">
       <?=date('d/m/Y',$date);?>
     </td>
     <td align="right" style="padding:2px 6px;">
-      <?=$data['contract_number'];?>
+      <?=(isset($data['contract_number'])?($data['contract_number']):('No contract_number'));?>
     </td>
 </tr>
 
