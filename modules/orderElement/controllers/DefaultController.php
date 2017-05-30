@@ -199,9 +199,8 @@ class DefaultController extends Controller
                   if ($order->save()) {
                     return [
                       'forceReload' => '#crud-datatable-pjax',
-                      'title' => "Adding new packages",
-                      'content' => '<span class="text-success">Create packages success</span>',
-                      'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+                      'content' => '<script> $(document).ready(function() {$(".close").click()})</script>',
+                      'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left close', 'data-dismiss' => "modal"])
                     ];
                   } else  throw new NotFoundHttpException('Order not requested');
                 }else{
