@@ -174,13 +174,13 @@ use yii\widgets\Pjax;
         );
         $button_print_pdf = Html::a('<i class="fa fa-print"></i>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-science-blue-border marg_but','title'=> 'Print cargo manifest',
           'data' => ['toggle'=>"tooltip"],'target' => '_blank',]);
-        $button_regeneration = Html::a('<i class="fa fa-file-archive-o"></i>',
+        $button_regeneration = Html::a('<i class="fa fa-share-square-o"></i>',
           ['/orderElement/group-delete/' . $data->id.'/'.'2'],
           [
             'class' => 'btn btn-dark-border btn-md marg_but',
-            'title'=> 'Move to main table',
+            'title'=> 'Remove from archive',
             'data' => [
-              'confirm-message' => 'Shall we move this parcel from archive to main table?',
+              'confirm-message' => 'To return back a parcel in the working table?',
               'confirm-title'=>"Move to main table",
               'pjax'=>'false',
               'toggle'=>"tooltip",
