@@ -158,7 +158,8 @@ class DefaultController extends Controller
         'archive_data_list' => $archive_data_list,
         'last' => $last,
         'admin' => $admin,
-        'invoice_id' => $session['CreateOrder' . $id]
+        'invoice_id' => $session['CreateOrder' . $id],
+        'createInvoice' => Yii::$app->user->can('trackInvoice'),
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
@@ -180,7 +181,8 @@ class DefaultController extends Controller
         'archive_data_list' => $archive_data_list,
         'last' => $last,
         'admin' => $admin,
-        'invoice_id' => $session['CreateOrder' . $id]
+        'invoice_id' => $session['CreateOrder' . $id],
+        'createInvoice' => Yii::$app->user->can('trackInvoice'),
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
@@ -351,9 +353,8 @@ class DefaultController extends Controller
               ]));
               return [
                   'forceReload'=>'#crud-datatable-pjax',
-                  'title'=> "Create new OrderInclude",
-                  'content'=>'<span class="text-success">Create OrderInclude success</span>',
-                  'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+                  'content'=>'<script> $(document).ready(function() {$(".close").click()})</script>',
+                  'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left close','data-dismiss'=>"modal"])
               ];
           }else{
                return [

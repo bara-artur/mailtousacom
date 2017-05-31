@@ -527,11 +527,12 @@ if(isset($invoice_id)) {
   <?php
 }
 ?>
-<?= Html::a('Create new invoice',
-  ['/invoice/create/' . $order_id],
-  [
-    'class' => 'btn btn-info'
-  ]); ?>
+<?= ($createInvoice)?( Html::a('Create new invoice',
+      ['/invoice/create/' . $order_id],
+      [
+        'class' => 'btn btn-info',
+        'data' =>[ 'pjax'=>'false'],
+      ])):(''); ?>
 
 <?php if ($edit_not_prohibited) {?>
   <?=Html::a('<i class="glyphicon glyphicon-plus"></i> Add another Attachment in Order', ['/orderElement/create/'.$order_id],
