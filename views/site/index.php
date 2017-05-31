@@ -323,7 +323,6 @@ $this->title = 'Shipping to USA and Canada';
                         'data' => [
                           'confirm-message' => 'Shall we move this parcel to archive?',
                           'confirm-title'=>"Move to archive",
-                          'pjax'=>'false',
                           'toggle'=>"tooltip",
                           'request-method'=>"post",
                         ],

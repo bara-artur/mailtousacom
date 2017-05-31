@@ -84,7 +84,7 @@ class DefaultController extends Controller
                     'content'=>'<span class="text-success">Create OrderInclude success</span>',
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                             Html::a('Edit',['Update','id'=>$id],['class'=>'btn btn-science-blue','role'=>'modal-remote'])
-                ];    
+                ];
         }else{
             return $this->render('view', [
                 'model' => $this->findModel($id),
@@ -548,7 +548,14 @@ class DefaultController extends Controller
             OrderInclude::deleteAll(['order_id' => $parcel_id]);
             OrderElement::deleteAll(['id' => $parcel_id]);
           }else{
-            $parcel->archive = 1;
+            if ($to_archive == 1) {
+              $parcel->archive = 1;    //  удаляем в архив
+            }else {
+              $parcel->archive = 0;   //  перемещаем в из архива в главную таблицу
+              $parcel->save();
+              $this->redirect(['/archive']);
+              return 'OK';
+            }
             $parcel->save();
           }
         }
