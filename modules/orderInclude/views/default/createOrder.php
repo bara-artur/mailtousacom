@@ -459,7 +459,7 @@ Parcel will be moved back to the list of parcels.',
                 'showCancel' => false,
                 'browseOnZoneClick'=> true,
                 'maxFileSize'=>2800,
-                "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
+                "allowedFileExtensions"=> ["pdf", "jpg", "jpeg", "doc", "docx", "rtf"],
                 /*'previewFileIconSettings'=>[
                   'doc'=> '<i class="fa fa-file-word-o text-primary"></i>',
                   'xls'=> '<i class="fa fa-file-excel-o text-success"></i>',
