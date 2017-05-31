@@ -2,6 +2,9 @@
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use app\modules\payment\models\PaymentsList;
+use yii\bootstrap\Modal;
+use johnitvn\ajaxcrud\CrudAsset;
+use yii\widgets\Pjax;
 /**
  * Created by PhpStorm.
  * User: Tolik
@@ -9,6 +12,9 @@ use app\modules\payment\models\PaymentsList;
  * Time: 1:30
  */
 ?>
+
+
+<?php CrudAsset::register($this); ?>
 <div class="col-md-4 col-sm-12 padding-off-left">
     <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
         [
@@ -168,10 +174,31 @@ use app\modules\payment\models\PaymentsList;
         );
         $button_print_pdf = Html::a('<i class="fa fa-print"></i>', ['/orderElement/group-print/' . $data->id], ['class' => 'btn btn-sm btn btn-science-blue-border marg_but','title'=> 'Print cargo manifest',
           'data' => ['toggle'=>"tooltip"],'target' => '_blank',]);
+        $button_regeneration = Html::a('<i class="fa fa-file-archive-o"></i>',
+          ['/orderElement/group-delete/' . $data->id.'/'.'2'],
+          [
+            'class' => 'btn btn-dark-border btn-md marg_but',
+            'title'=> 'Move to main table',
+            'data' => [
+              'confirm-message' => 'Shall we move this parcel from archive to main table?',
+              'confirm-title'=>"Move to main table",
+              'pjax'=>'false',
+              'toggle'=>"tooltip",
+              'request-method'=>"post",
+            ],
+            'role'=>"modal-remote",
+          ]);
         return  (($data->status>2)?($button_payments):("")).                       // история платежей
           (($data->status>1)?($button_view_parcel):("")). // просмотр или редактирование посылок
           ($filesCount>0?$button_files:"").                                    //документы на печать
-          ((strcasecmp($data->first_name,'[default]')!=0)?($button_print_pdf):(""));         // удаление посылок
+          ((strcasecmp($data->first_name,'[default]')!=0)?($button_print_pdf):("")).         // удаление посылок
+          $button_regeneration;
       }],
   ],
 ]); ?>
+
+<?php Modal::begin([
+  "id"=>"ajaxCrudModal",
+  "footer"=>"",// always need it for jquery plugin
+])?>
+<?php Modal::end(); ?>

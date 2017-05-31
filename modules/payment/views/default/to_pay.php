@@ -130,26 +130,30 @@ $submitOption = [
                         </h5>
                     </div>-->
                     <div class="notpaid_img"></div>
-
+                    <?php
+                    if($order_id) {
+                        ?>
                         <div class="col-md-12 padding-off-left">
                             <?= Html::checkbox('agree_service', false, [
                               'label' => '<span class="fa fa-check otst"></span> Client has refused payment',
-                              'class'=>"hidden_block_communication",
-                              'price'=>$total['service_price'],
-                              'sum'=>$total['service_sum'],
-                              'qst'=>$total['service_qst'],
-                              'gst'=>$total['service_gst'],
-                            ]);?>
+                              'class' => "hidden_block_communication",
+                              'price' => $total['service_price'],
+                              'sum' => $total['service_sum'],
+                              'qst' => $total['service_qst'],
+                              'gst' => $total['service_gst'],
+                            ]); ?>
                             <div class="agree_service vertic" style="display: none;">
                                 <label>Please, enter the non-payment reason</label>
                                 <div class="row">
                                     <div class="col-md-12 full_width">
-                                        <?= Html::textarea('text_not_agree_service', "",['class'=>'']); ?>
+                                        <?= Html::textarea('text_not_agree_service', "", ['class' => '']); ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        <?php
+                    }
+                    ?>
 
                     <?php
                 }

@@ -38,6 +38,7 @@ class AdditionalServicesList extends \yii\db\ActiveRecord
     return [
       0=>"none",
       1=>'Track number',
+      2=>'With arbitrary text',
     ];
   }
     /**

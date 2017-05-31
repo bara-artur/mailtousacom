@@ -38,7 +38,7 @@ $config = [
       // send all mails to a file by default. You have to set
       // 'useFileTransport' to false and configure a transport
       // for the mailer to send real emails.
-      'useFileTransport' => true,
+      'useFileTransport' => false,
       'transport' => $personal['MailTransport'],
       'messageConfig' => [
         //'from' => ['admin@website.com' => 'Admin'], // this is needed for sending emails
@@ -184,7 +184,7 @@ $config = [
     ],
     'ebay' => [
       'class'        => 'app\modules\ebay\Module',
-      'mode'         =>'sandbox', // development (sandbox) or production (live) mode
+      'mode'         =>'live', // development (sandbox) or production (live) mode
       'config'       => $personal['ebay']
     ],
     'tariff' => [
