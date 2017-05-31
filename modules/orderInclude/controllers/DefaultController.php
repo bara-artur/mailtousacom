@@ -158,7 +158,8 @@ class DefaultController extends Controller
         'archive_data_list' => $archive_data_list,
         'last' => $last,
         'admin' => $admin,
-        'invoice_id' => $session['CreateOrder' . $id]
+        'invoice_id' => $session['CreateOrder' . $id],
+        'createInvoice' => Yii::$app->user->can('trackInvoice'),
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
@@ -180,7 +181,8 @@ class DefaultController extends Controller
         'archive_data_list' => $archive_data_list,
         'last' => $last,
         'admin' => $admin,
-        'invoice_id' => $session['CreateOrder' . $id]
+        'invoice_id' => $session['CreateOrder' . $id],
+        'createInvoice' => Yii::$app->user->can('trackInvoice'),
         /*'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'order' => $model,*/
