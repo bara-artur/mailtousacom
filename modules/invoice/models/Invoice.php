@@ -283,10 +283,12 @@ class Invoice extends \yii\db\ActiveRecord
     ]);
     $path = $pdf->Output('', 'S'); // отсюда https://stackoverflow.com/questions/41058147/yii2-generate-pdf-on-the-fly-and-attach-to-email
                                         //   http://demos.krajee.com/mpdf
+    //ddd($path);
     if ($mail == false) {
       $mail = $this->getEmail();
     }
-    $message = Yii::$app->mailer->compose();
+    $message=\Yii::$app->mailer->compose('invoice', $data);
+    //$message = Yii::$app->mailer->compose();
     $message->attachContent($path, ['fileName' => 'invoice.pdf', 'contentType' => 'application/pdf']);
     $message->setFrom(\Yii::$app->config->get('adminEmail'))
       ->setTo($mail)
