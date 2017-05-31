@@ -127,13 +127,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                   );
                 }
-                $out .= Html::a('<span class="glyphicon glyphicon-pencil"></span>',['send-mail/'.$data->id], [
-                  'class' => 'btn btn-danger',
-                  'data' => [
-                    'confirm' => 'Do you want to send the Email with this Invoice?',
-                    'method' => 'post',
-                  ],
-                ]);
+                  $out .= Html::a('<i class="fa fa-envelope-o"></i>',['send-mail/'.$data->id], [
+                      'class' => 'btn btn-sm btn-info marg_but',
+                      'title'=>'Send mail',
+                      'data-toggle'=>'tooltip',
+                      'data' => [
+                          'confirm' => 'Do you want to send the Email with this Invoice?',
+                          'method' => 'post',
+                      ],
+                  ]);
                 return $out;
               }
             ]

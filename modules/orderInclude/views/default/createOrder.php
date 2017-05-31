@@ -123,14 +123,14 @@ $submitOption = [
                   'id' => 'open_add_order_address',
                 ])?>
             <?php } ?>
-            <label>
+            <label class="pull-right">
               <?php if ($percel->address_verification == 0) {
-                      echo 'Verification failed';
+                      echo '<div class="verif_failed">Verification failed !</div>';
                     }else{
                       if ($percel->address_verification == 1){
-                        echo 'Verification success';
+                        echo '<div class="verif_success">Verification success</div>';
                       }else{
-                        echo 'Parcel from scanner';
+                        echo '<div class="verif_success">Parcel from scanner</div>';
                       }
                     }  ?>
             </label>
