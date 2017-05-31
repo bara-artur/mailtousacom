@@ -1310,3 +1310,12 @@ ul.breadcrumb{display:none !important;}
 }
 .modernui-neutral5 {
     color: #696969;}
+/*31052017*/
+.verif_failed{
+border: 2px solid #E51400;
+color:#E51400;
+padding: 0 10px;}
+.verif_success{
+border: 2px solid #05389F;
+color:#05389F;
+padding: 0 10px;}
