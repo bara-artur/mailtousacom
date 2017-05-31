@@ -634,8 +634,8 @@ function init_js_validation()
 }
 
 function init_ajax_send_lb_oz_tn(){
-  $( ".lb-oz-tn-onChange" ).on("change",function(){ajax_send_lb_oz_tn(this)});
-  $( ".lb-oz-tn-onChange" ).on("keypress", function (e){
+  $( "body" ).on("change",'.lb-oz-tn-onChange',function(){ajax_send_lb_oz_tn(this)});
+  $( "body" ).on("keypress",".lb-oz-tn-onChange" , function (e){
     code = e.keyCode||e.charCode;  // для Chrome || Firefox
     if (code == 13) {
       ajax_send_lb_oz_tn(this);
