@@ -147,7 +147,7 @@ class SiteController extends Controller
 
       $searchModel = new OrderElementSearch();
       $dataProvider = $searchModel->search($query,$time_to);
-
+      $dataProvider->pagination->pageSize=200;
       $showTable = new ShowParcelTableForm($user->parcelTableOptions);
       return $this->render('index', [
         'searchModel' => $searchModel,
