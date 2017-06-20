@@ -105,7 +105,7 @@ class Module extends \yii\base\Module
     ];
   }
 
-  private function TradeAPI($call, $body, $field=false)
+  public function TradeAPI($call, $body, $field=false)
   {
     global $EBAY;
 
@@ -125,9 +125,6 @@ class Module extends \yii\base\Module
 
         'content' => $request =
           "<?xml version='1.0' encoding='utf-8'?>\n".
-          "  <RequesterCredentials>
-    <TransactionID>AgAAAA**AQAAAA**aAAAAA**3jkoWQ**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6wFk4GlCZmAoA2dj6x9nY+seQ**ex0EAA**AAMAAA**GGp5yVwOGDfZgFsdrPjpRuP24IXNDkqrJWluDAZjXre5WZTSJUgzCUgmrZGTja78edBv0UMNACiIIK3asEuWpXDjgCdvByOAE3A1w7eFFl8PT4aDCU28OuyuyoEPB9JEAsDlR2IHObTdWXqUsyxSlHi65cE3NJmY9w5ugkzU5dffb5IPdgowMHl9wMEKxCyBEcC1ZOD8x44gKBYqJd/i4YnjBYclYLUxWA98f2zvjR9P2CzGSYGzC58OsuUJlxEBQULPXumUhPsQXoWcwqmD52ay2ma7NTPOWNvHGUMFEtEPNmlZmZHwaJApn2ByB8Hvk21PrbvaA0XttYP5m6J/tEhqUi5EC5JH4aLtoPBrBtMSz2nCaasskjqsWnzSHkReN8kcQfHM7rKjXlmFuB/hOBjhsgM0VyNF/uauZ0k+pKUjSNoPGAMsWZjSIp9I6itH2olyX7tZ7PG+8CvCddWpAiOWTsRp/pGYNJ0oaLQ2Uq2we7J0ORrNt3S+BDf6UQ465RHGAdz27qt+UlUPZDvn8onM2Df+LMkeD4txYyUXVi/TkPjemnT/TLVn37oHl/ZPzRD69+ljU7SO83215awE+Fh94B2g4AectfeNFZEBvInUh61TPTM+PWILpQ4V4Pth3SiEkO4nLgeRfzPGIwWb95O59D5blzCQMK1yaILktzBtfwWR8mtSW16wZcQM3+RqTJyZTbhcYvzyb+uw2wGyiA8gFMA7hF0VBLWW+UdXJyxUlL84nmEshJKagw1A39QI</TransactionID>
-  </RequesterCredentials>\n".
           "<{$call} xmlns=\"urn:ebay:apis:eBLBaseComponents\">{$body}</{$call}>"
       ))))) === FALSE)
     {

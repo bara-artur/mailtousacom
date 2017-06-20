@@ -195,14 +195,14 @@ $submitOption = [
               </div>
             </div>
 
-<div class="row">
+<form class="row">
           <div class="col-md-12">
             <h5 class="total_package padding-top-10">Total</h5>
             <?php if ($totalPriceArray[$k] > Yii::$app->config->get('parcelMaxPrice')) {?>
               <h5 class="btn-warning max_price">
                 Мaximum total price of parcel is <?= Yii::$app->config->get('parcelMaxPrice') ?>$ (USD)
               </h5> <?php } ?>
-            <form id="lb-oz-tn-form" title="" method="post">
+            <div>
               <div class="label_valid col-md-5 padding-off-left padding-off-right">
                 <div class="form-control-addon-fill">
                   <div class="input-group">
@@ -272,7 +272,7 @@ $submitOption = [
                     </span>
               </div>
 
-            </form>
+            </div>
                 <div class="col-md-12 col-lg-7 col-sm-12 col-xs-12 bord_butt text-center">
 
             <?php if ($edit_not_prohibited) {?>
@@ -459,7 +459,7 @@ Parcel will be moved back to the list of parcels.',
                 'showCancel' => false,
                 'browseOnZoneClick'=> true,
                 'maxFileSize'=>2800,
-                "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
+                "allowedFileExtensions"=> ["pdf", "jpg", "jpeg", "doc", "docx", "rtf"],
                 /*'previewFileIconSettings'=>[
                   'doc'=> '<i class="fa fa-file-word-o text-primary"></i>',
                   'xls'=> '<i class="fa fa-file-excel-o text-success"></i>',
@@ -501,7 +501,7 @@ Parcel will be moved back to the list of parcels.',
             ?>
                     </div>
                     </div>
-            </div>
+            </form>
             </div>
         </div>
         <hr>
@@ -546,7 +546,7 @@ if(isset($invoice_id)) {
     <?=Html::a('Next <i class="glyphicon glyphicon-chevron-right"></i>', ['/orderInclude/border-form/'.$order_id],
       [
         'class'=>'btn btn-success pull-right go_to_order',
-        'disabled' => (count($order_elements)==0),
+        //'disabled' => (count($order_elements)==0),
       ])?>
      <?php } ?>
 <?php } ?>

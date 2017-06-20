@@ -30,7 +30,7 @@ $this->title = 'Shipping to USA and Canada';
                   'pjax'=>'false',
                   'toggle'=>'tooltip',
               ])?>
-              <?=Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])?>
+              <?=($admin)?(Html::a('<i class="fa fa-refresh"></i>', [''],['class'=>'btn btn-warning clearParcelsIdCookie',])):('')?>
               <br> <div class="font-size11">&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OPEN ARCHIVE</div>
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">

@@ -252,14 +252,14 @@ class Invoice extends \yii\db\ActiveRecord
       $sql = "
           SELECT
             sum(price+dop_price) as price,
-            user_id
+            client_id
           FROM additional_services
           WHERE id in (" . $this->services_list . ")
-          GROUP BY user_id
+          GROUP BY client_id
           ";
       $command = Yii::$app->db->createCommand($sql)->queryOne();
 
-      $this->user_id=$command['user_id'];
+      $this->user_id=$command['client_id'];
       $this->price+=$command['price'];
     }
 
@@ -271,7 +271,7 @@ class Invoice extends \yii\db\ActiveRecord
     $data = $this->getTable();
     $content = Yii::$app->controller->renderPartial('invoicePdf', $data);
     $pdf = new Pdf([
-      'content' => $content,
+      //'content' => $content,
       //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
       'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
       'cssInline' => '.kv-heading-1{font-size:180px}',
@@ -281,19 +281,22 @@ class Invoice extends \yii\db\ActiveRecord
         //'SetFooter'=>['{PAGENO}'],
       ],
     ]);
-    $path = $pdf->Output('', 'S'); // отсюда https://stackoverflow.com/questions/41058147/yii2-generate-pdf-on-the-fly-and-attach-to-email
+
+    $pdfContent = $pdf->Output($content,'', 'S'); // отсюда https://stackoverflow.com/questions/41058147/yii2-generate-pdf-on-the-fly-and-attach-to-email
                                         //   http://demos.krajee.com/mpdf
-    //ddd($path);
+    //return $pdfContent;
     if ($mail == false) {
       $mail = $this->getEmail();
     }
+
     $message=\Yii::$app->mailer->compose('invoice', $data);
     //$message = Yii::$app->mailer->compose();
-    $message->attachContent($path, ['fileName' => 'invoice.pdf', 'contentType' => 'application/pdf']);
+    $message->attachContent($pdfContent, ['fileName' => '_invoice_' . $this->id.'.pdf', 'contentType' => 'application/pdf']);
+    //$message->attachContent($content, ['fileName' => '_invoice_' . $this->id.'.pdf', 'contentType' => 'application/pdf']);
+    //$message->attachContent($content, ['fileName' => '_invoice_' . $this->id.'.html', 'contentType' => 'application/html']);
     $message->setFrom(\Yii::$app->config->get('adminEmail'))
       ->setTo($mail)
       ->setSubject('Invoice')
-      ->setTextBody('User: ' . $this->getUser()->getLineInfo() . ', Invoice:' . $this->id)
       ->send();
 
 
