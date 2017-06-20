@@ -105,7 +105,7 @@ class Module extends \yii\base\Module
     ];
   }
 
-  private function TradeAPI($call, $body, $field=false)
+  public function TradeAPI($call, $body, $field=false)
   {
     global $EBAY;
 
