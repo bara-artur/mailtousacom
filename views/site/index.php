@@ -123,7 +123,7 @@ $this->title = 'Shipping to USA and Canada';
         <hr class="bottom_line2">
         <div class="row">
           <div class="col-md-12 scrit">
-            <?= $this->render('elementFilterForm', ['model' => $filterForm, 'admin' => $admin]);?>
+            <?= $this->render('elementFilterForm', ['model' => $filterForm, 'admin' => $admin, 'show_filter' => $show_filter]);?>
           </div>
         </div>
 
