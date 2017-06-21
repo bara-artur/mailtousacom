@@ -118,22 +118,23 @@ class SiteController extends Controller
     // Загружаем фильтр из формы
     $filterForm = new ElementFilterForm();
     if(Yii::$app->request->post()) {
+      //ddd($_POST);
       $filterForm = new ElementFilterForm(); // форма фильтра
       $showTable = new ShowParcelTableForm(-1); // форма настройки столбцов таблицы
-      $showTable->load(Yii::$app->request->post());
-      if (($showTable->getAllFlags() != $user->parcelTableOptions)) {
+      if (isset($_POST['ShowParcelTableForm'])) {
+        $showTable->load(Yii::$app->request->post());
         $user->parcelTableOptions = $showTable->getAllFlags();
-
         if ($user)$user->save();
       }
       $filterForm->load(Yii::$app->request->post());
-
+      $show_filter = isset($_POST['ElementFilterForm']);
       $query['OrderElementSearch'] = $filterForm->toArray();
       $time_to = ['created_at_to' => $filterForm->created_at_to];
       $time_to += ['transport_date_to' => $filterForm->transport_data_to];
       $time_to += ['price_end' => $filterForm->price_end];
+    }else {
+      $show_filter = false;
     }
-
     $admin = 0;
     $user = User::find()->where(['id' => Yii::$app->user->id])->one();
     if (($user!=null)&&($user->isManager())) $admin = 1;
@@ -147,7 +148,7 @@ class SiteController extends Controller
 
     $searchModel = new OrderElementSearch();
     $dataProvider = $searchModel->search($query,$time_to);
-    $dataProvider->pagination->pageSize=200;
+
     $showTable = new ShowParcelTableForm($user->parcelTableOptions);
     return $this->render('index', [
       'searchModel' => $searchModel,
@@ -160,6 +161,7 @@ class SiteController extends Controller
       'show_trackInvoice_button' => Yii::$app->user->can('trackInvoice'),
       'admin' => $admin,
       'gritter' => $gritter,
+      'show_filter' => $show_filter,
     ]);
   }
 
