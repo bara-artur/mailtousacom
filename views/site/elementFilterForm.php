@@ -100,7 +100,7 @@ use app\modules\orderElement\models\OrderElement;
           <div class="row">
 
             <div class="col-xs-3 padding-off-right">
-              <?=  Html::resetButton('<i class="fa fa-refresh"></i>',['class' => 'btn btn-neutral-border but_top fix reset_filter']) ?>
+              <?=  Html::submitButton('<i class="fa fa-refresh"></i>',['class' => 'btn btn-neutral-border but_top fix reset_filter']) ?>
             </div>
             <div class="col-xs-6 padding-off-left padding-off-right">
 

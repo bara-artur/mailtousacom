@@ -95,7 +95,7 @@ $(document).ready(function() {
   });
 
   $(".reset_filter").on("click", function (){
-    event.preventDefault();
+    //event.preventDefault();
 
     elements = $(this).parents('form:first').find("input,select");  // выборка внутри формы всех селектов и инпутов
     for (var i = 0; i < elements.length; i++) {
