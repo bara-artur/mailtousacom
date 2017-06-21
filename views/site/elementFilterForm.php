@@ -17,7 +17,7 @@ use app\modules\orderElement\models\OrderElement;
 /* @var $form ActiveForm */
 ?>
 <div class="orderFilterForm">
-  <div id="collapse" class="panel panel-collapse collapse">
+  <div id="collapse" class="panel panel-collapse collapse <?= ($show_filter)?('in'):('')?>">
     <div class="panel-body">
       <?php $form = ActiveForm::begin(['options' => ['class'=>'element-filter-form'],]); ?>
       <div class="row">
