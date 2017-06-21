@@ -118,21 +118,22 @@ class SiteController extends Controller
     // Загружаем фильтр из формы
     $filterForm = new ElementFilterForm();
     if(Yii::$app->request->post()) {
-      //ddd($_POST);
-      $filterForm = new ElementFilterForm(); // форма фильтра
       $showTable = new ShowParcelTableForm(-1); // форма настройки столбцов таблицы
       if (isset($_POST['ShowParcelTableForm'])) {
         $showTable->load(Yii::$app->request->post());
         $user->parcelTableOptions = $showTable->getAllFlags();
         if ($user)$user->save();
       }
-      $filterForm->load(Yii::$app->request->post());
-      $show_filter = isset($_POST['ElementFilterForm']);
+    }
+    if(Yii::$app->request->get()){
+      $filterForm = new ElementFilterForm(); // форма фильтра
+      $filterForm->load(Yii::$app->request->get());
+      $show_filter = isset($_GET['ElementFilterForm']);
       $query['OrderElementSearch'] = $filterForm->toArray();
       $time_to = ['created_at_to' => $filterForm->created_at_to];
       $time_to += ['transport_date_to' => $filterForm->transport_data_to];
       $time_to += ['price_end' => $filterForm->price_end];
-    }else {
+    } else {
       $show_filter = false;
     }
     $admin = 0;

@@ -19,7 +19,7 @@ use app\modules\orderElement\models\OrderElement;
 <div class="orderFilterForm">
   <div id="collapse" class="panel panel-collapse collapse <?= ($show_filter)?('in'):('')?>">
     <div class="panel-body">
-      <?php $form = ActiveForm::begin(['options' => ['class'=>'element-filter-form'],]); ?>
+      <?php $form = ActiveForm::begin(['options' => ['class'=>'element-filter-form'], 'method' => 'get']); ?>
       <div class="row">
         <?php if ($admin == 1) {?>
           <div class="col-md-2 col-sm-4">
