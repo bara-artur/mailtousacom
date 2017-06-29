@@ -274,6 +274,62 @@ class DefaultController extends Controller
     throw new NotFoundHttpException('Page not found');
   }
 
+  public function actionTest($id)
+  {
+    $order=Order::findOne($id);
+
+    if($order->user_id!=\Yii::$app->user->identity->id){
+      throw new NotFoundHttpException('Order can editing only by creator.');
+    }
+
+    $ebay_tokens=ImportParcelAccount::find()->where(['type'=>1,'client_id'=>Yii::$app->user->identity->id])->all();
+
+    //Если нет то получаем новый токен
+    if (!$ebay_tokens){
+      return $this->actionGetToken($id);
+      /*return $this->render('view', [
+        'order_id' => $id
+      ]);*/
+    };
+
+    if (strlen($order->el_group) < 1) {
+      $el_group = [];
+    } else {
+      $el_group = explode(',', $order->el_group);
+    };
+
+    $new_parcel_count=0;
+    foreach ($ebay_tokens as $ebay_token) {
+      $model = \Yii::$app->getModule('ebay');;
+      global $EBAY;
+
+      $rers = $model->getOrders($ebay_token->token, $ebay_token->last_update);
+
+      if (!$rers) {
+        continue;
+      }
+
+      $ebay_token->last_update = time();
+      $ebay_token->save();
+
+      //if there are error nodes
+      if ($rers['errors']->length > 0) {
+        continue;
+      } else { //If there are no errors, continue
+        if ($rers['entries'] == 0) {
+          continue;
+        }
+        $orders = $rers['response']->OrderArray->Order;
+        if ($orders == null) {
+          continue;
+        }
+
+        ddd($orders);
+      }
+    }
+
+  }
+
   public function actionTrackUpdate($id){
     $ebay_token=ImportParcelAccount::find()->where([
       'type'=>1,
