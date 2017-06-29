@@ -151,7 +151,8 @@ class DefaultController extends Controller
               //d($transaction);
               //d($transaction->Item);
               $item->save();
-              d($item);
+              //d($item);
+              //d($item);
 
             }
           }
