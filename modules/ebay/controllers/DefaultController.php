@@ -276,59 +276,41 @@ class DefaultController extends Controller
 
   public function actionTest($id)
   {
-    $order=Order::findOne($id);
+    $ebay_token = ImportParcelAccount::find()->where([
+      'type' => 1,
+      'client_id' => Yii::$app->user->identity->id,
+      'id' => $id
+    ])->one();
 
-    if($order->user_id!=\Yii::$app->user->identity->id){
-      throw new NotFoundHttpException('Order can editing only by creator.');
+    if (!$ebay_token) {
+      return "Error access.";
     }
 
-    $ebay_tokens=ImportParcelAccount::find()->where(['type'=>1,'client_id'=>Yii::$app->user->identity->id])->all();
+    $model = \Yii::$app->getModule('ebay');;
+    global $EBAY;
 
-    //Если нет то получаем новый токен
-    if (!$ebay_tokens){
-      return $this->actionGetToken($id);
-      /*return $this->render('view', [
-        'order_id' => $id
-      ]);*/
-    };
+    $rers = $model->getOrders($ebay_token->token, time() - 5 * 30 * 24 * 60 * 60);
 
-    if (strlen($order->el_group) < 1) {
-      $el_group = [];
-    } else {
-      $el_group = explode(',', $order->el_group);
-    };
-
-    $new_parcel_count=0;
-    foreach ($ebay_tokens as $ebay_token) {
-      $model = \Yii::$app->getModule('ebay');;
-      global $EBAY;
-
-      $rers = $model->getOrders($ebay_token->token, $ebay_token->last_update);
-
-      if (!$rers) {
-        continue;
-      }
-
-      $ebay_token->last_update = time();
-      $ebay_token->save();
-
-      //if there are error nodes
-      if ($rers['errors']->length > 0) {
-        continue;
-      } else { //If there are no errors, continue
-        if ($rers['entries'] == 0) {
-          continue;
-        }
-        $orders = $rers['response']->OrderArray->Order;
-        if ($orders == null) {
-          continue;
-        }
-
-        ddd($orders);
-      }
+    if (!$rers) {
+      return "eBay error access";
     }
 
+    $upd_parcel_count = 0;
+    $new_parcel_count = 0;
+
+    //if there are error nodes
+    if ($rers['errors']->length > 0) {
+      return "eBay error access";
+    } else { //If there are no errors, continue
+      if ($rers['entries'] == 0) {
+        return "Not found orders on eBay";
+
+      }
+      $orders = $rers['response']->OrderArray->Order;
+      ddd($orders);
+    }
   }
+
 
   public function actionTrackUpdate($id){
     $ebay_token=ImportParcelAccount::find()->where([
