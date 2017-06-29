@@ -143,13 +143,13 @@ class DefaultController extends Controller
             foreach ($transactions->Transaction as $transaction) {
               $item = new OrderInclude;
               $item->order_id = $box->id;
-              $item->name = (String)$transaction->Item->Title;
+              $item->name = substr((String)$transaction->Item->Title,0,450);
               $item->price = (String)$transaction->TransactionPrice;
               $item->quantity = (int)$transaction->QuantityPurchased;
               $item->country = "none";
 
-              d($transaction);
-              d($transaction->Item);
+              //d($transaction);
+              //d($transaction->Item);
               $item->save();
               d($item);
 
