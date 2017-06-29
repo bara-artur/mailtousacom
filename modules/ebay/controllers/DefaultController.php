@@ -149,9 +149,10 @@ class DefaultController extends Controller
               $item->country = "none";
 
               d($transaction);
-              d($item);
               d($transaction->Item);
               $item->save();
+              d($item);
+
             }
           }
           $new_parcel_count++;
