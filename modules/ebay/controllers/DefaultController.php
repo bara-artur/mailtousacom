@@ -137,7 +137,6 @@ class DefaultController extends Controller
 
         if($box->save()){
           $el_group[]=$box->id;
-          ddd($transactions);
           //d($box);
           //d($el_group);
           if($transactions){
@@ -149,9 +148,9 @@ class DefaultController extends Controller
               $item->quantity = (int)$transaction->QuantityPurchased;
               $item->country = "none";
 
-              /*d($transaction);
+              d($transaction);
               d($item);
-              d($transaction->Item);*/
+              d($transaction->Item);
               $item->save();
             }
           }
