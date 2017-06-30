@@ -143,15 +143,17 @@ class DefaultController extends Controller
             foreach ($transactions->Transaction as $transaction) {
               $item = new OrderInclude;
               $item->order_id = $box->id;
-              $item->name = (String)$transaction->Item->Title;
+              $item->name = substr((String)$transaction->Item->Title,0,450);
               $item->price = (String)$transaction->TransactionPrice;
               $item->quantity = (int)$transaction->QuantityPurchased;
               $item->country = "none";
 
-              /*d($transaction);
-              d($item);
-              d($transaction->Item);*/
+              //d($transaction);
+              //d($transaction->Item);
               $item->save();
+              //d($item);
+              //d($item);
+
             }
           }
           $new_parcel_count++;
@@ -273,6 +275,44 @@ class DefaultController extends Controller
 
     throw new NotFoundHttpException('Page not found');
   }
+
+  public function actionTest($id)
+  {
+    $ebay_token = ImportParcelAccount::find()->where([
+      'type' => 1,
+      'client_id' => Yii::$app->user->identity->id,
+      'id' => $id
+    ])->one();
+
+    if (!$ebay_token) {
+      return "Error access.";
+    }
+
+    $model = \Yii::$app->getModule('ebay');;
+    global $EBAY;
+
+    $rers = $model->getOrders($ebay_token->token, time() - 5 * 30 * 24 * 60 * 60);
+
+    if (!$rers) {
+      return "eBay error access";
+    }
+
+    $upd_parcel_count = 0;
+    $new_parcel_count = 0;
+
+    //if there are error nodes
+    if ($rers['errors']->length > 0) {
+      return "eBay error access";
+    } else { //If there are no errors, continue
+      if ($rers['entries'] == 0) {
+        return "Not found orders on eBay";
+
+      }
+      $orders = $rers['response']->OrderArray->Order;
+      ddd($orders);
+    }
+  }
+
 
   public function actionTrackUpdate($id){
     $ebay_token=ImportParcelAccount::find()->where([

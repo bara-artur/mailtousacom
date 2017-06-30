@@ -38,7 +38,7 @@ class OrderInclude extends \yii\db\ActiveRecord
             [['order_id', 'name', 'price', 'country', 'quantity'], 'required'],
             [['order_id', 'quantity'], 'integer'],
             [['price'], 'number'],
-            [['name'], 'string', 'max' => 60],
+            [['name'], 'string', 'max' => 500],
             [['reference_number'], 'string', 'max' => 32],
             [['country'], 'string', 'max' => 64],
         ];
