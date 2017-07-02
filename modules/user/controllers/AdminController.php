@@ -17,6 +17,7 @@ use app\modules\address\models\Address;
 use app\modules\order\models\Order;
 use app\modules\tariff\models\TariffsSearch;
 use app\modules\tariff\models\Tariffs;
+use yii\web\UploadedFile;
 
 /**
  * AdminController implements the CRUD actions for User model.
@@ -63,13 +64,77 @@ class AdminController extends Controller
       if(Yii::$app->user->can('rbac')){
         $user_btn.='{rbac}';
       }
-      $user_btn.='{update}{delete}{billing}{tariff}';
+      $user_btn.='{update}{delete}{user_file}{billing}{tariff}';
       return $this->render('index', [
         'searchModel' => $searchModel,
         'dataProvider' => $dataProvider,
         'user_btn'=>$user_btn,
       ]);
     }
+
+  //Выводим спсок файлов для посвлки
+  public function actionFiles($id){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return $this->redirect(['/parcels']);
+    }
+
+    $user=User::findOne($id);
+
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return [
+      'title'=> "Documents for user ".$user->getFullName(),
+      'content'=>$this->renderAjax('files_view', [
+        'model' => $user,
+      ]),
+      'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
+    ];
+  }
+
+  public function actionFileUpload($id){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return $this->redirect(['/parcels']);
+    }
+
+    $user=User::findOne([$id]);
+
+
+    $files=UploadedFile::getInstances($user, 'files');
+    return $user->loadDoc($files);
+  }
+
+  public function actionFileDelete($id){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return false;
+    }
+
+    $user=User::findOne([$id]);
+
+    $user->delFile($request->post('key'));
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return true;
+
+  }
 
     public function actionFindUser(){
       $request = Yii::$app->request;

@@ -1,44 +1,12 @@
 <?php
-use yii\bootstrap\ActiveForm;
-use yii\helpers\Html;
-//use app\components\fileImageInput\FileInput;
 use kartik\file\FileInput;
 use yii\helpers\Url;
-use yii\bootstrap\Modal;
+use yii\helpers\Html;
 
 $user_files=$model->fileList();
 
-$submitOption = [
-  'class' => 'btn btn-lg btn-success'
-];
 
-$form = ActiveForm::begin([
-  'layout' => 'horizontal',
-  'enableAjaxValidation' => false,
-  'enableClientValidation' => true,
-  'options' => ['enctype'=>'multipart/form-data']
-]); ?>
-
-<?= skinka\widgets\gritter\AlertGritterWidget::widget() ?>
-<div class="col-md-4 col-sm-12 padding-off-left">
-    <?=Html::a('<i class="icon-metro-arrow-left-3"></i> Back', ['/parcels'],
-        [
-            'class'=>'btn btn-md btn-neutral-border pull-left hidden-xs',
-        ])?>
-</div>
-<div class="col-md-4 col-sm-12 text-center">
-    <h4 class="modernui-neutral5">Profile <i class="icon-metro-user-2"></i></h4>
-</div>
-<hr class="bottom_line3">
-<div class="container">
-<?= $form->field($model, 'username') ?>
-<?= $form->field($model, 'first_name') ?>
-<?= $form->field($model, 'last_name') ?>
-<?= $form->field($model, 'phone');?>
-<div class="form-group field-user-doc0">
-  <label class="control-label col-sm-3" for="user-doc0">Document</label>
-  <div class="col-sm-6">
-<?= FileInput::widget([
+echo FileInput::widget([
   'model' => $model,
   'attribute' => 'files['.$model->id.']',
   'options' => [
@@ -46,7 +14,7 @@ $form = ActiveForm::begin([
     'accept' => 'application/pdf,image/jpeg,image/pjpeg,application/msword,application/rtf,application/x-rtf,text/richtext'
   ],
   'pluginOptions' => [
-    'uploadUrl' => Url::to(['/user/file-upload/']),
+    'uploadUrl' => Url::to(['/user/admin/file-upload?id='.$model->id]),
     'browseClass'=> "btn btn-success pull-right",
     'browseLabel'=> "Add documents",
     "layoutTemplates"=> [
@@ -62,13 +30,13 @@ $form = ActiveForm::begin([
         "</div>",
       "preview"=>
         '<div class="file-preview {class}">'.
-        //'    <div class="{dropClass}">'.
+        '    <div class="{dropClass}">'.
         '    <div class="file-preview-thumbnails">'.
         '    </div>'.
-        //'    <div class="clearfix"></div>'.
-        //'    <div class="file-preview-status text-center text-success"></div>'.
-        //'    <div class="kv-fileinput-error"></div>'.
-        //'    </div>'.
+        '    <div class="clearfix"></div>'.
+        '    <div class="file-preview-status text-center text-success"></div>'.
+        '    <div class="kv-fileinput-error"></div>'.
+        '    </div>'.
         '</div>',
       "modal"=>'<div class="modal-dialog" role="document">'.
         '  <div class="modal-content">'.
@@ -84,10 +52,9 @@ $form = ActiveForm::begin([
         '  </div>'.
         '</div>'.
         '<script>
-                      $(\'#kvFileinputModal\').addClass("modal-lg");
-                      $(\'#kvFileinputModal\').css(\'padding\',0);
-                    </script>',
-      //"footer"=>"123",
+          $(\'#kvFileinputModal\').addClass("modal-lg");
+          $(\'#kvFileinputModal\').css(\'padding\',0);
+        </script>',
       "actions"=>"{delete}".
         Html::a('<i class="glyphicon glyphicon-download-alt"></i>', "{data}",[
           "target"=>"_blank",
@@ -96,11 +63,10 @@ $form = ActiveForm::begin([
           'title'=> 'Download document'
 
         ]).
-        '{zoom}'
-      ,
-      "actionDelete"=>
-        '<a
-                href="'.'/user/file-delete"
+        '{zoom}',
+        "actionDelete"=>
+          '<a
+                href="'.'/user/admin/file-delete?id='.$model->id.'"
                 title= "Delete document"
                 class="btn btn-sm file-remove_ bg-danger pull-right popup-modal" 
                 confirm-message="Are you sure to delete this document?"
@@ -128,15 +94,7 @@ $form = ActiveForm::begin([
     'showCancel' => false,
     'browseOnZoneClick'=> true,
     'maxFileSize'=>2800,
-    "allowedFileExtensions"=> ["pdf", "jpg", "jpeg", "doc", "docx", "rtf"],
-    /*'previewFileIconSettings'=>[
-      'doc'=> '<i class="fa fa-file-word-o text-primary"></i>',
-      'xls'=> '<i class="fa fa-file-excel-o text-success"></i>',
-      'ppt'=> '<i class="fa fa-file-powerpoint-o text-danger"></i>',
-      'jpg'=> '<i class="fa fa-file-photo-o text-warning"></i>',
-      'pdf'=> '<i class="fa fa-file-pdf-o text-danger"></i>',
-      'zip'=> '<i class="fa fa-file-archive-o text-muted"></i>',
-    ],*/
+    "allowedFileExtensions"=> ["pdf", "jpg", "jepg", "doc", "docx", "rtf"],
     'initialPreview'=>$user_files['initialPreview'],
     'initialPreviewConfig'=>$user_files['initialPreviewConfig'],
     'append'=>$user_files['append'],
@@ -145,13 +103,18 @@ $form = ActiveForm::begin([
   "pluginEvents"=>[
     'filebatchuploadcomplete' => "function(event, files, extra) {
                   $('.kv-upload-progress .progress').hide()
+                  k=$('.file-preview-thumbnails>.file-preview-frame').length
+                  $('#user_file_".$model->id." span[col_file]').attr('col_file',k)
                  }",
     "filebatchselected"=>'function(event, files) {
+                  k=$(\'.file-preview-thumbnails>.file-preview-frame\').length
+                  $(\'#user_file_'.$model->id.' span[col_file]\').attr(\'col_file\',k)
                   $this=$(this).fileinput("upload");
                 }',
     "filebatchuploadsuccess"=>'function(event, data, previewId, index) {
                   $this=$(this)
                   col_file=data.response.initialPreview.length
+                  $(\'#user_file_'.$model->id.' span[col_file]\').attr(\'col_file\',col_file)
                   $this.closest(\'.order-include-index\').find(\'[col_file]\').attr("col_file",col_file)
                 }',
     "filebatchuploaderror"=>"
@@ -162,70 +125,11 @@ $form = ActiveForm::begin([
                       $('.file-error-message').remove();
                       
                       event.preventDefault();
+                      k=$('.file-preview-thumbnails>.file-preview-frame').length
+                      $('#user_file_".$model->id." span[col_file]').attr('col_file',k)
                       return false;
                   }
                 "
   ]
 ]);
 ?>
-  </div>
-
-</div>
-
-
-<?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password']);?>
-
-
-
-  <div class="form-group">
-    <div class="col-xs-offset-3 col-xs-9">
-      <?= Html::submitButton('UPDATE PROFILE', $submitOption) ?>
-    </div>
-  </div>
-</div>
-<?php ActiveForm::end(); ?>
-
-
-<?php
-
-Modal::begin([
-  "id"=>"modal-delete",
-  'header' => '<h4 class="modal-title"></h4>',
-  'footer' => Html::a('YES', '', ['class' => 'btn btn-danger', 'id' => 'delete-confirm']).
-    Html::a('NO', '', ['class' => 'btn']),
-]);
-echo 'Are you sure to delete this document?';
-Modal::end();
-?>
-
-<?php
-$this->registerJs("
-    $(function() {
-        $('body').on('click','.popup-modal',function(e) {
-            e.preventDefault();
-            var modal = $('#modal-delete')//.modal('show');
-            modal.find('.modal-body').load($('.modal-dialog'));
-            var that = $(this);
-            var url = that.attr('href');
-            var upd = that.data('upd');
-            var name = that.data('key');
-            modal.find('.modal-title').text('Delete \"' + name + '\"');
-
-            $('#delete-confirm')
-            .unbind('click')
-            .click(function(e) {
-                e.preventDefault();
-                $('#modal-delete').modal('hide');
-                $.post(url,{key:name});
-                $('[data-key=\"'+name+'\"]').closest(\".file-preview-frame\").remove()
-                k=$('.file-preview-thumbnails>.file-preview-frame').length
-                $(upd+' span[col_file]').attr('col_file',k)
-            });
-        });
-        
-        $('#modal-delete .btn').click(function(e) {
-            $('#modal-delete').modal('hide');
-            return false;
-        });
-    });"
-);
