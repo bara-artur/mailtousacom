@@ -89,7 +89,7 @@ class AdminController extends Controller
 
     Yii::$app->response->format = Response::FORMAT_JSON;
     return [
-      'title'=> "Documents for user ".$user->getFullName(),
+      'title'=> "Documents user ".$user->getFullName(),
       'content'=>$this->renderAjax('files_view', [
         'model' => $user,
       ]),

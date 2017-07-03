@@ -1320,3 +1320,8 @@ border: 2px solid #05389F;
 color:#05389F;
 padding: 0 10px;}
 div.acc_pay,div.dan_pay,div.awa_pay,div.mon_pay{text-align:center;}
+/*03072017*/
+a.btn.btn-sm.file-remove_.bg-danger.pull-right.popup-modal{
+    background-color:#e51400 !important ;
+}
+a.btn.btn-sm.file-remove_.bg-danger.pull-right.popup-modal i.text-danger{color:#ffffff !important;}

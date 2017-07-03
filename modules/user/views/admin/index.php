@@ -157,12 +157,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
                 $filesCount = $model->getDocsCount();
                 return Html::a('
-                    <i class="icon-metro-attachment"></i>
+                    <i class="icon-metro-attachment"></i> Docs
                     <span col_file=' . $filesCount . '></span>
                     ', ['/user/admin/files?id=' . $model->id . ''],
                   [
                     'title' => 'Show users documents',
-                    'class' => 'btn btn-primary btn-sm marg_but2 big_model',
+                    'class' => 'btn btn-sm btn-primary but_tab_marg_inl big_model',
                     'role' => 'modal-remote',
                     'data-target' => '#ajaxFileModal',
                     'data-pjax' => 0,
@@ -189,8 +189,8 @@ $this->params['breadcrumbs'][] = $this->title;
   Modal::begin([
     "id"=>"modal-delete",
     'header' => '<h4 class="modal-title"></h4>',
-    'footer' => Html::a('YES', '', ['class' => 'btn btn-danger', 'id' => 'delete-confirm']).
-                Html::a('NO', '', ['class' => 'btn']),
+    'footer' => Html::a('Yes', '', ['class' => 'btn btn-danger', 'id' => 'delete-confirm']).
+                Html::a('No', '', ['class' => 'btn btn-default']),
   ]);
   echo 'Are you sure to delete this document?';
   Modal::end();

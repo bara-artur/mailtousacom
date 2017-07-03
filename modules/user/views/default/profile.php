@@ -30,7 +30,7 @@ $form = ActiveForm::begin([
     <h4 class="modernui-neutral5">Profile <i class="icon-metro-user-2"></i></h4>
 </div>
 <hr class="bottom_line3">
-<div class="container">
+<div class="container col-md-offset-1 col-md-10">
 <?= $form->field($model, 'username') ?>
 <?= $form->field($model, 'first_name') ?>
 <?= $form->field($model, 'last_name') ?>
