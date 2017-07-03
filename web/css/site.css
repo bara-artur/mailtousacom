@@ -1328,3 +1328,8 @@ div.acc_pay,div.dan_pay,div.awa_pay,div.mon_pay{text-align:center;}
 [name=return_address_type]:checked+div.ch_show{
     display: block;
 }
+/*03072017*/
+a.btn.btn-sm.file-remove_.bg-danger.pull-right.popup-modal{
+    background-color:#e51400 !important ;
+}
+a.btn.btn-sm.file-remove_.bg-danger.pull-right.popup-modal i.text-danger{color:#ffffff !important;}
