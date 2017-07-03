@@ -71,6 +71,7 @@ $config = [
           //закрываем пямой доступ к /user/user
           'user/default/<action>'=>'404',
           'user/user/<action>'=>'404',
+          'user/user/<action>'=>'404',
           'user/user/<action>/<action2>'=>'404',
           'ebay/default/<action>/<action2>'=>'404',
           'ebay/default/<action>'=>'404',
@@ -100,7 +101,7 @@ $config = [
           //Страница пользователя
           '<action:(user)>/<id:\d+>' => 'site/user/',
           '<action:(profile)>' => 'user/default/<action>',
-          'user/<action:(request-month-pay)>' => 'user/default/<action>',
+          'user/<action:(request-month-pay|file-delete|file-upload)>' => 'user/default/<action>',
 
           'address/<action>'=>'address/default/<action>',
           'order/<action>'=>'order/default/<action>',

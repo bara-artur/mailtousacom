@@ -15,6 +15,7 @@ use yii\jui\AutoComplete;
 use app\modules\user\models\User;
 use kartik\file\FileInput;
 use yii\bootstrap\Collapse;
+
 //http://demos.krajee.com/widget-details/fileinput
 //http://plugins.krajee.com/file-input-ajax-demo/10
 //http://plugins.krajee.com/file-input#options

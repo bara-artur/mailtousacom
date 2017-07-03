@@ -151,7 +151,26 @@ $this->params['breadcrumbs'][] = $this->title;
                   'data-pjax'=>0,
                 ]);
               },
-            ],
+              'user_file'=>function ($url, $model) {
+                if (count($model->getRoleOfUserArray()) > 0) {
+                  return;
+                }
+                $filesCount = $model->getDocsCount();
+                return Html::a('
+                    <i class="icon-metro-attachment"></i>
+                    <span col_file=' . $filesCount . '></span>
+                    ', ['/user/admin/files?id=' . $model->id . ''],
+                  [
+                    'title' => 'Show users documents',
+                    'class' => 'btn btn-primary btn-sm marg_but2 big_model',
+                    'role' => 'modal-remote',
+                    'data-target' => '#ajaxFileModal',
+                    'data-pjax' => 0,
+                    'id'=>'user_file_'.$model->id
+                  ]);
+              }
+
+    ],
               //'updateOptions' => ['label'=>\Yii::t('app', 'Edit')],
           ],
         ],
@@ -166,4 +185,45 @@ $this->params['breadcrumbs'][] = $this->title;
     "footer"=>"",// always need it for jquery plugin
   ]);
   Modal::end();
+
+  Modal::begin([
+    "id"=>"modal-delete",
+    'header' => '<h4 class="modal-title"></h4>',
+    'footer' => Html::a('YES', '', ['class' => 'btn btn-danger', 'id' => 'delete-confirm']).
+                Html::a('NO', '', ['class' => 'btn']),
+  ]);
+  echo 'Are you sure to delete this document?';
+  Modal::end();
 ?>
+
+<?php
+$this->registerJs("
+    $(function() {
+        $('body').on('click','.popup-modal',function(e) {
+            e.preventDefault();
+            var modal = $('#modal-delete')//.modal('show');
+            modal.find('.modal-body').load($('.modal-dialog'));
+            var that = $(this);
+            var url = that.attr('href');
+            var upd = that.data('upd');
+            var name = that.data('key');
+            modal.find('.modal-title').text('Delete \"' + name + '\"');
+
+            $('#delete-confirm')
+            .unbind('click')
+            .click(function(e) {
+                e.preventDefault();
+                $('#modal-delete').modal('hide');
+                $.post(url,{key:name});
+                $('[data-key=\"'+name+'\"]').closest(\".file-preview-frame\").remove()
+                k=$('.file-preview-thumbnails>.file-preview-frame').length
+                $(upd+' span[col_file]').attr('col_file',k)
+            });
+        });
+        
+        $('#modal-delete .btn').click(function(e) {
+            $('#modal-delete').modal('hide');
+            return false;
+        });
+    });"
+);

@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use app\modules\user\models\Profile;
 use \yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * DefaultController implements the CRUD actions for User model.
@@ -90,5 +91,46 @@ class DefaultController extends Controller
       'forceClose'=>true,
       'forceReload'=>'#crud-datatable-pjax'
     ];
+  }
+
+  public function actionFileDelete(){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return false;
+    }
+
+    $id=Yii::$app->user->id;
+    $user=User::findOne([$id]);
+
+    $user->delFile($request->post('key'));
+    Yii::$app->response->format = Response::FORMAT_JSON;
+    return true;
+
+  }
+
+  public function actionFileUpload(){
+    $request=Yii::$app->request;
+    if(!$request->isPost && !$request->isAjax){
+      Yii::$app
+        ->getSession()
+        ->setFlash(
+          'error',
+          'Document not found'
+        );
+      return $this->redirect(['/parcels']);
+    }
+
+    $id=Yii::$app->user->id;
+    $user=User::findOne([$id]);
+
+
+    $files=UploadedFile::getInstances($user, 'files');
+    return $user->loadDoc($files);
   }
 }
