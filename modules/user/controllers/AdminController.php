@@ -344,23 +344,27 @@ class AdminController extends Controller
             'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
               Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
           ];
-        }else if($model->load($request->post())&&($model->save())){
-          return [
-            'forceReload'=>'#crud-datatable-pjax',
-            'title'=> "Create new user",
-            'content'=>'<span class="text-success">Update user success</span>',
-            'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"])
-          ];
-        }else{
-          return [
-            'title' => "Update user " . $model->getFullName(),
-            'content' => $this->renderAjax('update', [
-              'model' => $model,
-            ]),
-            'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-              Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
-          ];
+        }else if($model->load($request->post())){
+          $model->return_address_type=(int)$request->post('return_address_type');
+          if($model->save()) {
+            return [
+              'forceReload' => '#crud-datatable-pjax',
+              'title' => "Create new user",
+              'content' => '<span class="text-success">Update user success</span>',
+              'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"])
+            ];
+          }
         }
+
+        return [
+          'title' => "Update user " . $model->getFullName(),
+          'content' => $this->renderAjax('update', [
+            'model' => $model,
+          ]),
+          'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+            Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
+        ];
+
       }else{
         throw new NotFoundHttpException('The requested page does not exist.');
       }

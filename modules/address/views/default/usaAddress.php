@@ -22,23 +22,23 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="col-md-6">
         <div class="form-group">
         <label>First name</label>
-        <input class="form-control" placeholder="<?=$user->first_name;?>" disabled>
+        <input class="form-control" placeholder="<?=$return_address->first_name;?>" disabled>
         </div>
             </div>
             <div class="col-md-6">
         <div class="form-group">
         <label>Last name</label>
-        <input class="form-control" placeholder="<?=$user->last_name;?>" disabled>
+        <input class="form-control" placeholder="<?=$return_address->last_name;?>" disabled>
         </div>
             </div>
         </div>
         <div class="form-group">
             <label>Address</label>
-            <input class="form-control" placeholder="100 Walnut St, Door 18, Champlain, NY, 12919" disabled>
+            <input class="form-control" placeholder="<?=$return_address->return_address;?>" disabled>
         </div>
         <div class="form-group">
             <label>Phone</label>
-            <input class="form-control" placeholder="<?=$user->phone;?>" disabled>
+            <input class="form-control" placeholder="<?=$return_address->phone;?>" disabled>
         </div>
 <!--<p> <?= $user->first_name.' '.$user->last_name ?></p>-->
         <div class="col-md-2"><h3 class="pred2"><span class="glyphicon glyphicon-info-sign"></span></h3>

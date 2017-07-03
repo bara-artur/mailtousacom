@@ -35,6 +35,32 @@ use yii\widgets\ActiveForm;
       "autocomplete"=>"off"
     ]) ?>
 
+    <input
+      type="checkbox"
+      name="return_address_type"
+      value="1"
+      <?=$model->return_address_type==1?'checked':'';?>
+    >Personal return address
+    <div class="ch_show">
+        <?= $form->field($model, 'return_address_f_name')->textInput([
+          'maxlength' => true,
+          "autocomplete"=>"off"
+        ]) ?>
+        <?= $form->field($model, 'return_address_l_name')->textInput([
+          'maxlength' => true,
+          "autocomplete"=>"off"
+        ]) ?>
+        <?= $form->field($model, 'return_address')->textInput([
+          'maxlength' => true,
+          "autocomplete"=>"off"
+        ]) ?>
+
+        <?= $form->field($model, 'return_address_phone')->textInput([
+          'maxlength' => true,
+          "autocomplete"=>"off"
+        ]) ?>
+    </div>
+
     <?php ActiveForm::end(); ?>
 <script>
     $('[autocomplete=off]').attr('readonly',true).on('focus',function(){$(this).removeAttr('readonly')})

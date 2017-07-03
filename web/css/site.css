@@ -1320,3 +1320,11 @@ border: 2px solid #05389F;
 color:#05389F;
 padding: 0 10px;}
 div.acc_pay,div.dan_pay,div.awa_pay,div.mon_pay{text-align:center;}
+
+[name=return_address_type]+div.ch_show{
+    display: none;
+}
+
+[name=return_address_type]:checked+div.ch_show{
+    display: block;
+}

@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 use app\modules\order\models\Order;
-
+use app\modules\user\models\User;
 
 /**
  * DefaultController implements the CRUD actions for Address model.
@@ -100,9 +100,27 @@ class DefaultController extends Controller
         return $this->redirect(['create-order-billing']);
       }
 
+      $user = User::find()->where('id = :id', [':id' => Yii::$app->user->id])->one();
+
+      if($user->return_address_type==1){
+        $return_address=[
+          'first_name'=>$user->return_address_f_name,
+          'last_name'=>$user->return_address_l_name,
+          'return_address'=>$user->return_address,
+          'phone'=>$user->return_address_phone,
+        ];
+      }else{
+        $return_address=[
+          'first_name'=>$model->first_name,
+          'last_name'=>$model->last_name,
+          'return_address'=>Yii::$app->config->get('return_address'),
+          'phone'=>$model->phone,
+        ];
+      }
       return $this->render('usaAddress', [
-          'user' => $model,
-          'show_button' => $show_button
+        'user' => $model,
+        'show_button' => $show_button,
+        'return_address' => (object)$return_address,
       ]);
     }
 

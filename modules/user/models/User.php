@@ -57,8 +57,8 @@ class User extends ActiveRecord  implements IdentityInterface
       [['email', 'password_hash', 'first_name', 'last_name', 'phone', 'user_id'], 'string', 'max' => 100],
       ['email', 'email'],
       ['password', 'string', 'min' => 6, 'max' => 61],
-      ['parcelTableOptions', 'string', 'max' => 256],
-      [['ebay_account', 'month_pay'], 'integer'],
+      [['parcelTableOptions','return_address','return_address_phone','return_address_f_name','return_address_l_name'], 'string', 'max' => 256],
+      [['ebay_account', 'month_pay','return_address_type'], 'integer'],
       [['doc1', 'doc2'], 'image',
         'minHeight' => 600,
         'minWidth' => 600,
@@ -87,6 +87,11 @@ class User extends ActiveRecord  implements IdentityInterface
       'fullName' => 'Full Name',
       'doc0' => 'First document',
       'doc1' => 'Second document',
+      'return_address_type' => 'Return address type',
+      'return_address' => 'Return address',
+      'return_address_phone' => 'Return address phone',
+      'return_address_f_name' => 'Return address first name',
+      'return_address_l_name' => 'Return address last name',
     ];
   }
 
