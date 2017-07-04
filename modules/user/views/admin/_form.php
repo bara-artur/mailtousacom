@@ -34,31 +34,38 @@ use yii\widgets\ActiveForm;
       'maxlength' => true,
       "autocomplete"=>"off"
     ]) ?>
-    <p class="custom-checkbox">
-    <label><input
-      type="checkbox"
-      name="return_address_type"
-      value="1"
-      <?=$model->return_address_type==1?'checked':'';?>
-        > <span class="fa fa-check"></span> Creation/Editing Personal Return address</label></p>
-    <div class="ch_show">
-        <?= $form->field($model, 'return_address_f_name')->textInput([
-          'maxlength' => true,
-          "autocomplete"=>"off"
-        ]) ?>
-        <?= $form->field($model, 'return_address_l_name')->textInput([
-          'maxlength' => true,
-          "autocomplete"=>"off"
-        ]) ?>
-        <?= $form->field($model, 'return_address')->textInput([
-          'maxlength' => true,
-          "autocomplete"=>"off"
-        ]) ?>
+    <div class="custom-checkbox">
 
-        <?= $form->field($model, 'return_address_phone')->textInput([
-          'maxlength' => true,
-          "autocomplete"=>"off"
-        ]) ?>
+        <input
+          id="return_address_type"
+          type="checkbox"
+          name="return_address_type"
+          value="1"
+          <?=$model->return_address_type==1?'checked':'';?>
+        >
+        <label for="return_address_type">
+            <span class="fa fa-check"></span>
+            Creation/Editing Personal Return address
+        </label>
+        <div class="ch_show">
+            <?= $form->field($model, 'return_address_f_name')->textInput([
+              'maxlength' => true,
+              "autocomplete"=>"off"
+            ]) ?>
+            <?= $form->field($model, 'return_address_l_name')->textInput([
+              'maxlength' => true,
+              "autocomplete"=>"off"
+            ]) ?>
+            <?= $form->field($model, 'return_address')->textInput([
+              'maxlength' => true,
+              "autocomplete"=>"off"
+            ]) ?>
+
+            <?= $form->field($model, 'return_address_phone')->textInput([
+              'maxlength' => true,
+              "autocomplete"=>"off"
+            ]) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>
