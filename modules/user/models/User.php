@@ -89,9 +89,9 @@ class User extends ActiveRecord  implements IdentityInterface
       'doc1' => 'Second document',
       'return_address_type' => 'Return address type',
       'return_address' => 'Return address',
-      'return_address_phone' => 'Return address phone',
-      'return_address_f_name' => 'Return address first name',
-      'return_address_l_name' => 'Return address last name',
+      'return_address_phone' => 'Return address Phone',
+      'return_address_f_name' => 'Return address First name',
+      'return_address_l_name' => 'Return address Last name',
     ];
   }
 
