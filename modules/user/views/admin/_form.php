@@ -9,27 +9,32 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="user-form_">
     <?php $form = ActiveForm::begin(); ?>
-
+    <div class="row">
+<div class="col-md-6">
     <?= $form->field($model, 'email')->textInput([
       'maxlength' => true,
       "autocomplete"=>"off",
     ]) ?>
-
+</div>
+<div class="col-md-6">
     <?= $form->field($model, 'password')->passwordInput([
       'maxlength' => true,
       "autocomplete"=>"off"
     ]) ?>
-
+</div>
+<div class="col-md-6">
     <?= $form->field($model, 'first_name')->textInput([
       'maxlength' => true,
       "autocomplete"=>"off"
     ]) ?>
-
+</div>
+<div class="col-md-6">
     <?= $form->field($model, 'last_name')->textInput([
       'maxlength' => true,
       "autocomplete"=>"off"
     ]) ?>
-
+</div>
+    </div>
     <?= $form->field($model, 'phone')->textInput([
       'maxlength' => true,
       "autocomplete"=>"off"
@@ -44,18 +49,24 @@ use yii\widgets\ActiveForm;
           <?=$model->return_address_type==1?'checked':'';?>
         >
         <label for="return_address_type">
-            <span class="fa fa-check"></span>
+            <span class="fa fa-check otst"></span>
             Creation/Editing Personal Return address
         </label>
         <div class="ch_show">
+            <div class="row">
+                <div class="col-md-6">
             <?= $form->field($model, 'return_address_f_name')->textInput([
               'maxlength' => true,
               "autocomplete"=>"off"
             ]) ?>
+                </div>
+                <div class="col-md-6">
             <?= $form->field($model, 'return_address_l_name')->textInput([
               'maxlength' => true,
               "autocomplete"=>"off"
             ]) ?>
+                </div>
+                </div>
             <?= $form->field($model, 'return_address')->textInput([
               'maxlength' => true,
               "autocomplete"=>"off"
