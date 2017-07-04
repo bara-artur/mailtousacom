@@ -254,7 +254,7 @@ $submitOption = [
               <hr class="bor_bottom">
               <input type="hidden" name = "percel_id" value=<?=$percel->id?>>
               <input type="hidden" name = "order_id" value=<?=$order_id?>>
-            <div class="row">
+
               <div class="col-md-5 cost_del"><b>Cost of delivery : </b>
                 <span id="results" class="resInd<?=$k?>">
                         <?php
@@ -273,7 +273,7 @@ $submitOption = [
                     </span>
               </div>
 
-            </div>
+
                 <div class="col-md-12 col-lg-7 col-sm-12 col-xs-12 bord_butt text-center">
 
             <?php if ($edit_not_prohibited) {?>

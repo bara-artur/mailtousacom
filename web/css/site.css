@@ -1333,3 +1333,4 @@ a.btn.btn-sm.file-remove_.bg-danger.pull-right.popup-modal{
     background-color:#e51400 !important ;
 }
 a.btn.btn-sm.file-remove_.bg-danger.pull-right.popup-modal i.text-danger{color:#ffffff !important;}
+.file-drop-zone{min-height: 100px;}
