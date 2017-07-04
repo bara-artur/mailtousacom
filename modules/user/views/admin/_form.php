@@ -34,13 +34,13 @@ use yii\widgets\ActiveForm;
       'maxlength' => true,
       "autocomplete"=>"off"
     ]) ?>
-
-    <input
+    <p class="custom-checkbox">
+    <label><input
       type="checkbox"
       name="return_address_type"
       value="1"
       <?=$model->return_address_type==1?'checked':'';?>
-    >Personal return address
+        > <span class="fa fa-check"></span> Creation/Editing Personal Return address</label></p>
     <div class="ch_show">
         <?= $form->field($model, 'return_address_f_name')->textInput([
           'maxlength' => true,

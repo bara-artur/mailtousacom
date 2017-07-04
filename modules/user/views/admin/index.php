@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   ]);
               },
               'delete' => function ($url, $model) {
-                  return Html::a('<span class="glyphicon glyphicon-trash"></span> Delete', $url, [
+                  return Html::a('<span class="glyphicon glyphicon-trash"></span> Del', $url, [
                     'role'=>'modal-remote',
                     'title'=> 'Delete',
                     'data-pjax'=>0,
