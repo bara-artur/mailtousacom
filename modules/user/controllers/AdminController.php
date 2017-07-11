@@ -331,14 +331,18 @@ class AdminController extends Controller
 
     public function actionUpdate($id)
     {
-      $placeholder=array(
-        'return_address_phone'=>"Какая нибудь лабудень"
-      );
-
       $model = $this->findModel($id);
       $request = Yii::$app->request;
       if($request->isAjax) {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $address=Address::find()->where(['user_id'=>$id])->one(); //тут все данные билинг адреса
+        //http://prntscr.com/fualhh вот такие там данные.
+        Yii::$app->config->get('return_address'); // это строка из конфига
+        $placeholder=array(
+          'return_address_phone'=>"PortableBay ID".($id+750)
+        );
+
         if ($request->isGet) {
           return [
             'title' => "Update user " . $model->getFullName(),
