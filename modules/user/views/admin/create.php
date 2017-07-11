@@ -15,7 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h5 class="modernui-neutral4"><?= Html::encode($this->title) ?></h5>
 
     <?= $this->render('_form', [
-        'model' => $model,
+      'model' => $model,
+      'placeholder' => $placeholder,
     ]) ?>
 
 </div>
