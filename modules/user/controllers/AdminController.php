@@ -331,6 +331,10 @@ class AdminController extends Controller
 
     public function actionUpdate($id)
     {
+      $placeholder=array(
+        'return_address_phone'=>"Какая нибудь лабудень"
+      );
+
       $model = $this->findModel($id);
       $request = Yii::$app->request;
       if($request->isAjax) {
@@ -338,9 +342,10 @@ class AdminController extends Controller
         if ($request->isGet) {
           return [
             'title' => "Update user " . $model->getFullName(),
-            'content' => $this->renderAjax('update', [
+            'content' => $this->renderAjax('update', array(
+              'placeholders' => $placeholder,
               'model' => $model,
-            ]),
+            )),
             'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
               Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
           ];
@@ -356,11 +361,13 @@ class AdminController extends Controller
           }
         }
 
+
         return [
           'title' => "Update user " . $model->getFullName(),
-          'content' => $this->renderAjax('update', [
+          'content' => $this->renderPartial('update', array(
+            'placeholders' => $placeholder,
             'model' => $model,
-          ]),
+          )),
           'footer' => Html::button('Close', ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
             Html::button('Save', ['class' => 'btn btn-primary', 'type' => "submit"])
         ];

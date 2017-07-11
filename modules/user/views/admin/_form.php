@@ -74,7 +74,8 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'return_address_phone')->textInput([
               'maxlength' => true,
-              "autocomplete"=>"off"
+              "autocomplete"=>"off",
+              "placeholder"=>$placeholder['return_address_phone'],
             ]) ?>
         </div>
     </div>
