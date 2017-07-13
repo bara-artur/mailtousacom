@@ -196,7 +196,7 @@ $this->title = 'Shipping to USA and Canada';
                      $itemString = '<ul class="list-group">';
                      if ($data->includes) {
                        foreach ($data->includes as $item) {
-                         if ($itemString) $itemString=$itemString.'<li class="list-group-item2"><i class="fa fa-angle-right"></i> ';
+                         if ($itemString) $itemString=$itemString.'<li class="list-group-item2"><span class="glyphicon glyphicon-minus"></span> ';
                          $itemString = $itemString . $item['name'].'</li></ol>';
                        }
                      }
