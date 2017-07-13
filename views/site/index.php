@@ -58,6 +58,8 @@ $this->title = 'Shipping to USA and Canada';
                 [
                   'role'=>'modal-remote',
                   'class'=>'btn btn-science-blue-border InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
+                   'title'=>'Group printing PDF document',
+                    'data' => ['toggle'=>"tooltip"],
                 ]
               ); ?>
             </div>
@@ -66,6 +68,7 @@ $this->title = 'Shipping to USA and Canada';
                   [
                       'id'=>'group-delete',
                       'class' => 'btn btn-dark-border btn-md but_tab_marg Draft_show difArchiveHide',
+                      'title'=>'Archiving group parcels',
                       'data' => [
                           'confirm-message' => 'Shall we move this items to archive?',
                           'confirm-title'=>"Move to archive",
