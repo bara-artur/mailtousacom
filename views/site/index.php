@@ -131,16 +131,18 @@ $this->title = 'Shipping to USA and Canada';
         </div>
 
       <div class="row pad_row">
-        <div class="col-md-3 col-xs-12">
+        <div class="col-md-4 col-xs-12">
           <?php if($admin==1){?>
             <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
           <?php }?>
         </div>
-<div class="col-md-6 col-xs-12 ">
+<div class="col-md-4 col-xs-12 ">
  <?php if(Yii::$app->user->can("takeParcel")){?>
      <span><b>Current Receiving point :</b> <?= $receiving_point ?></span>
  <?php }?>
-    <span class="labelDifUserId">"Different user" choosing mode</span>
+</div>
+<div class="col-md-4 col-xs-12 ">
+    <span class="labelDifUserId">Attention! Different users are chosen</span>
     </div>
 
       </div>

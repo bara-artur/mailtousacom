@@ -1340,3 +1340,5 @@ a.btn.btn-sm.file-remove_.bg-danger.pull-right.popup-modal i.text-danger{color:#
 /*04072017*/
 .file-drop-zone{min-height: 100px;}
 label[for=return_address_type]{color:#05389F;font-size:18px;margin-bottom:10px;}
+/*13072017*/
+span.labelDifUserId{background-color: #FA6800 !important;color:#fff;margin-left:20px; padding:4px 10px;}
