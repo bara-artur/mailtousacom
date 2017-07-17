@@ -131,9 +131,9 @@ foreach ($order_elements as $order_k=>$include) {
 }
 ?>
 <div class="user_inp p10">
-<?php foreach ($order_elements as $order_element){
-  foreach ($order_element->includes_packs as $pack) { ?>
-    <div class="pack_name"> <?= $pack['name'] ?> <div class="break"></div> </div>
-  <?php }
-} ?>
+    <?php foreach ($order_elements as $order_element){
+        foreach ($order_element->includes_packs as $pack) { ?>
+            <div class="pack_name"> <?= $pack['name'] ?> <div class="break"></div> </div>
+        <?php }
+    } ?>
 </div>
