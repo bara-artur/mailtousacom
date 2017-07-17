@@ -7,3 +7,5 @@
 .p7{position:absolute;top:348px;left:30px;font-size:13px;font-family: "CourierNewPSMT";width:140px;z-index: 100;}
 .p8{position:absolute;top:348px;left:252px;font-size:13px;font-family: "CourierNewPSMT";width:240px;z-index: 100;}
 .p9{position:absolute;top:348px;left:492px;font-size:13px;font-family: "CourierNewPSMT";width:150px;z-index: 100;}
+.p10{position:absolute;top:386px;left:252px;width:240px;}
+.pack_name{font-size:13px;font-family: "CourierNewPSMT";height:37px;line-height:11px}
