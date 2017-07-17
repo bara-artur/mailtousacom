@@ -130,3 +130,9 @@ foreach ($order_elements as $order_k=>$include) {
   <?php
 }
 ?>
+
+<?php foreach ($order_elements as $order_element){
+  foreach ($order_element->includes_packs as $pack) { ?>
+    <div class="pack_name"> <?= $pack['name'] ?>  </div>
+  <?php }
+} ?>
