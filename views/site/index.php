@@ -188,6 +188,12 @@ $this->title = 'Shipping to USA and Canada';
                     }
                   }
                 ],
+                ['attribute'=> 'id',
+                  'visible' => ($showTable->showParcelID),
+                  'content'=> function($data){
+                      return $data->id;
+                  }
+                ],
                 ['attribute'=> 'status',
                   'content' => function($data){
                         //return $data::elementStatusText($data->status);

@@ -48,6 +48,9 @@ use app\modules\orderElement\models\OrderElement;
           </div>
         <?php } ?>
         <div class="col-md-2 col-sm-4">
+            <?= $form->field($model, 'id')->textInput() ?>
+        </div>
+        <div class="col-md-2 col-sm-4">
             <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
         </div>
         <div class="col-md-3 col-sm-4">
