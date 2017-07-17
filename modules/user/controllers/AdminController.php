@@ -340,7 +340,10 @@ class AdminController extends Controller
         //http://prntscr.com/fualhh вот такие там данные.
         Yii::$app->config->get('return_address'); // это строка из конфига
         $placeholder=array(
-          'return_address_phone'=>"PortableBay ID".($id+750)
+         'return_address'=>"PortableBay ID".($id+750)." ".Yii::$app->config->get('return_address'),
+         'return_address_phone' =>$address->phone,
+         'return_address_l_name'=>$address->last_name,
+         'return_address_f_name'=>$address->first_name
         );
 
         if ($request->isGet) {

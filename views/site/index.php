@@ -34,10 +34,6 @@ $this->title = 'Shipping to USA and Canada';
               <br> <div class="font-size11">&nbsp;&nbsp;&nbsp;&nbsp;SEARCH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;COLUMN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;OPEN ARCHIVE</div>
           </div>
         <div class="col-md-6 col-xs-12 padding-off-left padding-off-right text-center">
-
-          <?php
-          if(Yii::$app->user->identity->isManager()){
-          ?>
             <?php if ($show_view_button==true){ ?>
               <?=Html::a('<i class="fa fa-list"></i> Group', ['/orderElement/group/view'], [
                 'class' => 'btn btn-md btn-info group_100 group-admin-view',
@@ -50,17 +46,20 @@ $this->title = 'Shipping to USA and Canada';
                     'id'=>'group-admin-view',
                 ]); ?>
             <?php }?>
-
+            <?php if ($show_view_button==true){ ?>
             <?=Html::a('<span class="glyphicon glyphicon-pencil"></span> Update', ['/orderElement/group/update'], [
               'class' => 'btn btn-md btn-science-blue InSystem_show Draft_show gr_update_text difUserIdHide group-update',
               'id'=>'group-update',
               'disabled'=>true,
             ]); ?>
+            <?php }?>
             <div class="btn-group">
               <?=Html::a('<i class="fa fa-print"></i> Print', ['/orderElement/group/print'],
                 [
                   'role'=>'modal-remote',
                   'class'=>'btn btn-science-blue-border InSystem_show Draft_show difUserIdHide difScanerHide show_modal',
+                   'title'=>'Group printing PDF document',
+                    'data' => ['toggle'=>"tooltip"],
                 ]
               ); ?>
             </div>
@@ -69,6 +68,7 @@ $this->title = 'Shipping to USA and Canada';
                   [
                       'id'=>'group-delete',
                       'class' => 'btn btn-dark-border btn-md but_tab_marg Draft_show difArchiveHide',
+                      'title'=>'Archiving group parcels',
                       'data' => [
                           'confirm-message' => 'Shall we move this items to archive?',
                           'confirm-title'=>"Move to archive",
@@ -79,10 +79,11 @@ $this->title = 'Shipping to USA and Canada';
                       'disabled'=>true,
                       'role'=>"modal-remote",
                   ]); ?>
+            <?php if ($show_view_button==true){ ?>
             <?=Html::a('<i class="icon-metro-remove"></i> Del',
                 ['/orderElement/group/delete'],
                 [
-                    'id'=>'group-delete',
+                    'id'=>'group-admin-view group-delete',
                     'class' => 'btn btn-danger btn-md but_tab_marg Draft_show group-delete',
                     'data' => [
                         'confirm-message' => 'Are you sure to delete this item?',
@@ -94,9 +95,8 @@ $this->title = 'Shipping to USA and Canada';
                     'disabled'=>true,
                     'role'=>"modal-remote",
                 ]); ?>
-
-            <div class="col-md-12 group_text"><div class="group_text3">group management</div></div>
             <?php }?>
+            <div class="col-md-12 group_text"><div class="group_text3">group management,use checkboxes</div></div>
         </div>
 
           <div class="col-md-3 col-xs-12 margin-top-10 padding-off-right padding-off-left text-right">
@@ -134,16 +134,18 @@ $this->title = 'Shipping to USA and Canada';
         </div>
 
       <div class="row pad_row">
-        <div class="col-md-3 col-xs-12">
+        <div class="col-md-4 col-xs-12">
           <?php if($admin==1){?>
             <span id = 'for_group_actions'><b>Checked parcels:</b> empty</span>
           <?php }?>
         </div>
-<div class="col-md-6 col-xs-12 ">
+<div class="col-md-4 col-xs-12 ">
  <?php if(Yii::$app->user->can("takeParcel")){?>
      <span><b>Current Receiving point :</b> <?= $receiving_point ?></span>
  <?php }?>
-    <span class="labelDifUserId">"Different user" choosing mode</span>
+</div>
+<div class="col-md-4 col-xs-12 ">
+    <span class="labelDifUserId">Attention! Different users are chosen</span>
     </div>
 
       </div>
@@ -170,7 +172,7 @@ $this->title = 'Shipping to USA and Canada';
                     ]);
                   },
                   'options' => ['width' => '37'],
-                  'visible' => ($admin==1),
+                  //'visible' => ($admin==1),
                   'contentOptions' =>['class'=>'table_check'],
                 ],
         //        ['class' => 'yii\grid\SerialColumn',
@@ -205,7 +207,7 @@ $this->title = 'Shipping to USA and Canada';
                      $itemString = '<ul class="list-group">';
                      if ($data->includes) {
                        foreach ($data->includes as $item) {
-                         if ($itemString) $itemString=$itemString.'<li class="list-group-item2"><i class="fa fa-caret-right"></i> ';
+                         if ($itemString) $itemString=$itemString.'<li class="list-group-item2"><span class="glyphicon glyphicon-minus"></span> ';
                          $itemString = $itemString . $item['name'].'</li></ol>';
                        }
                      }
@@ -327,7 +329,9 @@ $this->title = 'Shipping to USA and Canada';
                         'class' => 'btn btn-dark-border btn-md marg_but',
                         'title'=> 'Move to archive',
                         'data' => [
-                          'confirm-message' => 'Shall we move this parcel to archive?',
+                          'confirm-message' => '<div class="row"><div class="col-md-12 text-center"><h5>Shall we move this parcel to archive?</h5></div>
+<div class="col-md-2 padding-off-right padding-off-left"><h3 class="pred2"><span class="glyphicon glyphicon-info-sign"></span></h3>
+        </div><div class="col-md-10 text-center  padding-off-left padding-off-right"><p class="hint-block ">Attention! Archiving isn&acute;t possible in course of implementation order</p></div></div>',
                           'confirm-title'=>"Move to archive",
                           'toggle'=>"tooltip",
                           'request-method'=>"post",
@@ -338,7 +342,8 @@ $this->title = 'Shipping to USA and Canada';
                             (($data->status>1)?($button_view_parcel):($button_update_parcel)). // просмотр или редактирование посылок
                             ($filesCount>0?$button_files:"").                                    //документы на печать
                             ((strcasecmp($data->first_name,'[default]')!=0)?($button_print_pdf):("")).                                                // печать PDF
-                            $button_move_to_archive.                                         // удаление в архив
+                            $button_move_to_archive.
+                            //(($data->payment_state==0)?($button_move_to_archive):("")).                // удаление в архив
                             (($data->payment_state==0)?($button_delete_parcel):(""));         // удаление посылок
                 }],
             ],

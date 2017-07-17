@@ -10,6 +10,9 @@ use yii\widgets\ActiveForm;
 <div class="user-form_">
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
+        <div class="col-md-12 text-center">
+        <h5 class="modernui-neutral2 margin-off">Portablebay ID:<?=$model->id+750;?></h5>
+        </div>
 <div class="col-md-6">
     <?= $form->field($model, 'email')->textInput([
       'maxlength' => true,
@@ -57,19 +60,22 @@ use yii\widgets\ActiveForm;
                 <div class="col-md-6">
             <?= $form->field($model, 'return_address_f_name')->textInput([
               'maxlength' => true,
-              "autocomplete"=>"off"
+              "autocomplete"=>"off",
+              "placeholder" =>$placeholder['return_address_f_name'],
             ]) ?>
                 </div>
                 <div class="col-md-6">
             <?= $form->field($model, 'return_address_l_name')->textInput([
               'maxlength' => true,
-              "autocomplete"=>"off"
+              "autocomplete"=>"off",
+              "placeholder"=>$placeholder['return_address_l_name'],
             ]) ?>
                 </div>
                 </div>
             <?= $form->field($model, 'return_address')->textInput([
               'maxlength' => true,
-              "autocomplete"=>"off"
+              "autocomplete"=>"off",
+              "placeholder"=>$placeholder['return_address'],
             ]) ?>
 
             <?= $form->field($model, 'return_address_phone')->textInput([

@@ -45,7 +45,6 @@
 
 </div>
       <div style="text-align:right;font-size:16px;font-weight:bold;margin-bottom:10px;">Invoice / Packing Slip</div>
-
     <TABLE  cellspacing=0 width="100%" class="t0" border="0" cellpadding="1" style="font-family: 'Helvetica', sans-serif !important;
     font-size:14px;width:100% !important;" >
       <tr>

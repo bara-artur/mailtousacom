@@ -12,6 +12,9 @@ use kartik\widgets\DatePicker;
 $param_name='receive_max_time'.(Yii::$app->user->identity->isManager() ? '_admin' : '');
 $day_delta=24-Yii::$app->config->get($param_name);
 ?>
+<?php
+if(Yii::$app->user->identity->isManager()){
+    ?>
 <label>Choose date which will be specified in documents</label>
 <?php echo DatePicker::widget([
   'id'=>'transport_date_group',
@@ -31,6 +34,7 @@ $day_delta=24-Yii::$app->config->get($param_name);
   ]
 ]);?>
 <hr>
+<?php }?>
 <div class="row">
     <div class="col-md-12 text-center">
       <?=Html::a('<i class="fa fa-print push-up-tiny"></i><br>Cargo manifest', ['/orderElement/group/print'], [
@@ -43,7 +47,9 @@ $day_delta=24-Yii::$app->config->get($param_name);
         'class' => 'tile2 agreement_dis',
         'target' => '_blank',
       ]); ?>
-
+      <?php
+      if(Yii::$app->user->identity->isManager()){
+          ?>
       <?=Html::a('<i class="fa fa-print push-up-tiny"></i><br>Table data', ['/orderElement/group/advanced_print'],
         [
           'class' => 'tile2 InSystem_show Draft_show difUserIdHide group-print-advanced',
@@ -57,6 +63,8 @@ $day_delta=24-Yii::$app->config->get($param_name);
           'id'=>'group-print-advanced',
           'target' => '_blank',
         ]); ?>
+      <?php }?>
+
 </div>
 </div>
 <?php

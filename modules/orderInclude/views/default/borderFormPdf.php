@@ -117,12 +117,11 @@ a
 various consignees
 </div>
 
-<?php foreach ($order_elements as $i=>$order_element){
-  ?>
-  <div class="pack<?=$i?>"> № <?=$i?>
-    <?php
-          foreach ($order_element->includes_packs as $pack) { ?>
-            <div class="pack_name"> <?= $pack['name'] ?>  </div>
-    <?php }?>
-  </div>
-<?php } ?>
+<div class="user_inp p10">
+<?php foreach ($order_elements as $order_element){
+        foreach ($order_element->includes_packs as $pack) { ?>
+          <div class="pack_name"> <?= $pack['name'] ?>  </div>
+  <?php }
+} ?>
+</div>
+

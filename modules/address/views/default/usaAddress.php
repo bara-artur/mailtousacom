@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="form-group">
             <label>Address</label>
-            <input class="form-control" placeholder="<?=$return_address->return_address;?>" disabled>
+            <input class="form-control" placeholder="PortableBay ID <?=$user->id+750;?> <?=$return_address->return_address;?>" disabled>
         </div>
         <div class="form-group">
             <label>Phone</label>
