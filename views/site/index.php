@@ -189,9 +189,9 @@ $this->title = 'Shipping to USA and Canada';
                   }
                 ],
                 ['attribute'=> 'id',
-                  'visible' => ($showTable->showParcelID),
+                  'visible' => (($showTable->showUserID)&&($admin==1)),
                   'content'=> function($data){
-                      return $data->id;
+                      return $data->user_id;
                   }
                 ],
                 ['attribute'=> 'status',
