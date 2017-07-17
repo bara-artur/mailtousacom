@@ -32,7 +32,7 @@ use kartik\widgets\SwitchInput;
             </div>
 
             <div class="col-md-2">
-              <?= $form->field($model, 'showParcelID')->checkbox(['label' => '<span class="fa fa-check otst"></span> Parcel ID','class'=>''])?>
+              <?= $form->field($model, 'showUserID')->checkbox(['label' => '<span class="fa fa-check otst"></span> User ID','class'=>''])?>
             </div>
 
             <div class="col-md-2">
