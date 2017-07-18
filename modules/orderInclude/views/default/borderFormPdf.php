@@ -117,9 +117,9 @@ a
 various consignees
 </div>
 <div class="user_inp p10">
-    <?php foreach ($order_elements as $order_element){
+<?php foreach ($order_elements as $order_element){
         foreach ($order_element->includes_packs as $pack) { ?>
-            <div class="pack_name"> <?= $pack['name'] ?>  </div>
-        <?php }
-    } ?>
+          <div class="pack_name"> <?= $pack['name'] ?>  </div>
+  <?php }
+} ?>
 </div>
