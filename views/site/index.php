@@ -188,7 +188,7 @@ $this->title = 'Shipping to USA and Canada';
                     }
                   }
                 ],
-                ['attribute'=> 'user_id',
+                ['attribute'=> 'iD',
                     'visible' => (($showTable->showUserID)&&($admin==1)),
                     'content'=> function($data){
                         return $data->user_id+750;

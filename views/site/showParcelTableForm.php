@@ -26,15 +26,13 @@ use kartik\widgets\SwitchInput;
           <div class="col-md-2">
             <?= $form->field($model, 'showID')->checkbox(['label' => '<span class="fa fa-check otst"></span> User','class'=>''])?>
           </div>
-        <?php } ?>
-            <div class="col-md-2">
-              <?= $form->field($model, 'showStatus')->checkbox(['label' => '<span class="fa fa-check otst"></span> Status','class'=>''])?>
-            </div>
-
             <div class="col-md-2">
               <?= $form->field($model, 'showUserID')->checkbox(['label' => '<span class="fa fa-check otst"></span> User ID','class'=>''])?>
             </div>
-
+              <?php } ?>
+              <div class="col-md-2">
+                  <?= $form->field($model, 'showStatus')->checkbox(['label' => '<span class="fa fa-check otst"></span> Status','class'=>''])?>
+              </div>
             <div class="col-md-2">
               <?= $form->field($model, 'showItems')->checkbox(['label' => '<span class="fa fa-check otst"></span> Items','class'=>''])?>
             </div>
@@ -42,11 +40,11 @@ use kartik\widgets\SwitchInput;
             <div class="col-md-2">
               <?= $form->field($model, 'showCreatedAt')->checkbox(['label' => '<span class="fa fa-check otst"></span> Created At','class'=>''])?>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <?= $form->field($model, 'showPaymentState')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment State','class'=>''])?>
             </div>
         <?php if (false){?>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <?= $form->field($model, 'showPaymentType')->checkbox(['label' => '<span class="fa fa-check otst"></span> Payment Type','class'=>''])?>
             </div>
         <?php }?>

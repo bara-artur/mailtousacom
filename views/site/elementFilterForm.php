@@ -47,12 +47,25 @@ use app\modules\orderElement\models\OrderElement;
             ]);?>
           </div>
         <?php } ?>
-        <div class="col-md-2 col-sm-4">
-            <?= $form->field($model, 'user_id')->textInput() ?>
+          <?php if ($admin == 1) {?>
+        <div class="col-md-1 col-sm-4">
+            <label class="control-label">ID User</label>
+            <?= $form->field($model, 'user_id')->textInput([
+            'pluginOptions' => [
+            ]
+            ])->label(false);?>
         </div>
-        <div class="col-md-2 col-sm-4">
+          <?php } ?>
+          <?php if ($admin == 1) {?>
+        <div class="col-md-1 col-sm-4">
             <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
         </div>
+          <?php } ?>
+          <?php if ($admin == 0) {?>
+              <div class="col-md-2 col-sm-4">
+                  <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
+              </div>
+          <?php } ?>
         <div class="col-md-3 col-sm-4">
             <label class="control-label">Range date created</label>
           <?= $form->field($model,'created_at')->widget(DatePicker::className(),[
