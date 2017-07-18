@@ -128,10 +128,10 @@ class SiteController extends Controller
         if(Yii::$app->request->get()){
             $filterForm = new ElementFilterForm(); // форма фильтра
             $filterForm->load(Yii::$app->request->get());
-            if ($filterForm['user_id']) $filterForm['user_id'] = $filterForm['user_id'] - 750; // поиск по измененному user_id
+            if ($filterForm['user_id_750']) $filterForm['user_id'] = $filterForm['user_id_750'] - 750; // поиск по измененному user_id
             $show_filter = isset($_GET['ElementFilterForm']);
             $query['OrderElementSearch'] = $filterForm->toArray();
-            if ($filterForm['user_id']) $filterForm['user_id'] = $filterForm['user_id'] + 750;
+            if ($filterForm['user_id_750']) $filterForm['user_id_750'] = $filterForm['user_id'] + 750;
             $time_to = ['created_at_to' => $filterForm->created_at_to];
             $time_to += ['transport_date_to' => $filterForm->transport_data_to];
             $time_to += ['price_end' => $filterForm->price_end];
