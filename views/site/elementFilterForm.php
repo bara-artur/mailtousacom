@@ -47,7 +47,7 @@ use app\modules\orderElement\models\OrderElement;
             ]);?>
           </div>
         <?php } ?>
-          <?php if ($admin == 1) {?>
+         <?php if ($admin == 1) {?>
         <div class="col-md-1 col-sm-4">
             <label class="control-label">ID User</label>
             <?= $form->field($model, 'user_id')->textInput([
