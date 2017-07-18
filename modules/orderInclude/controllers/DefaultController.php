@@ -637,7 +637,7 @@ class DefaultController extends Controller
 
         //'defaultCSS'=>'',
       //'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
-      'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
+      //'cssFile' => '@app/web/css/pdf_CBP_Form_7533.css',
       //'cssInline' => '.kv-heading-1{font-size:12px;}',
       'options' => ['title' => 'CBP Form 7533 for order #'.$id],
       'methods' => [

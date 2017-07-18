@@ -34,6 +34,7 @@ class OrderElement extends \yii\db\ActiveRecord
   public $includes_packs;
   public $sub_total;
   public $files;
+  public $user_id_750;
 
   /**
    * @inheritdoc
@@ -107,6 +108,7 @@ class OrderElement extends \yii\db\ActiveRecord
           [['track_number'], 'string'],
           [['price','qst','gst'],'double'],
           [['weight'], 'double'],
+          [['user_id_750'], 'integer'],
           [['track_number_type','status','payment_state'], 'integer'],
           [['address_type','weight','track_number','track_number_type'], 'safe'],
           [['adress_1', 'adress_2'], 'string', 'max' => 256],
@@ -121,6 +123,7 @@ class OrderElement extends \yii\db\ActiveRecord
       return [
           'id' => 'ID',
           'user_id'=>"User",
+          'user_id_750'=>"User ID",
           'first_name' => 'First Name',
           'last_name' => 'Last Name',
           'company_name' => 'Company Name',

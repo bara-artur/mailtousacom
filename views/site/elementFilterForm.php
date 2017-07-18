@@ -47,19 +47,19 @@ use app\modules\orderElement\models\OrderElement;
             ]);?>
           </div>
         <?php } ?>
-         <?php if ($admin == 1) {?>
+          <?php if ($admin == 1) {?>
         <div class="col-md-1 col-sm-4">
             <label class="control-label">ID User</label>
-            <?= $form->field($model, 'user_id')->textInput([
-            'pluginOptions' => [
-            ]
+            <?= $form->field($model, 'user_id_750')->textInput([
+                'pluginOptions' => [
+                ]
             ])->label(false);?>
         </div>
           <?php } ?>
           <?php if ($admin == 1) {?>
-        <div class="col-md-1 col-sm-4">
-            <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
-        </div>
+              <div class="col-md-1 col-sm-4">
+                  <?= $form->field($model, 'status')->dropDownList( OrderElement::getTextStatus()) ?>
+              </div>
           <?php } ?>
           <?php if ($admin == 0) {?>
               <div class="col-md-2 col-sm-4">
